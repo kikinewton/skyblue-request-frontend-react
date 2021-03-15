@@ -68,6 +68,10 @@ const EditUserPage: FunctionComponent = ()=> {
     setPayload({...payload, [eventName]: value})
   }
 
+  const payloadIsValid = ()=> {
+    return payload.firstName && payload.lastName && payload.employeeLevel && payload.departmentId && payload.phoneNo && payload.email
+  }
+
   const handleSelectChange = (event: any) => {
     const target = event.target
     const eventName: string = target.name
@@ -94,7 +98,7 @@ const EditUserPage: FunctionComponent = ()=> {
       .then(response=> {
         const {status, data, message} = response;
         console.log('data', data)
-        if(status === 'OK') {
+        if(status === 'SUCCESS') {
           if(data) {
             setPayload({email: data.email, phoneNo: data.phoneNo, firstName: data.firstName, lastName: data.lastName, departmentId: data.department, employeeId: data.employeeId, employeeLevel: data.employeeLevel})
           } else {
@@ -190,7 +194,7 @@ const EditUserPage: FunctionComponent = ()=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="email" label="Email" name="email" value={payload.email}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <TextField id="email" label="Employee ID" name="employeeId" value={payload.employeeId}
+            <TextField id="employeeId" label="Employee ID" name="employeeId" value={payload.employeeId}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <FormControl variant="outlined" className={classes.textField}>
               <InputLabel htmlFor="outlined-age-native-simple">Department</InputLabel>
@@ -224,7 +228,7 @@ const EditUserPage: FunctionComponent = ()=> {
                 })}
               </Select>
             </FormControl>
-            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={loading || !payloadIsValid()}>
               <Typography variant="button">
                 Edit Supplier
               </Typography>
@@ -237,4 +241,4 @@ const EditUserPage: FunctionComponent = ()=> {
   )
 }
 
-export default EditUserPage;
+export default EditUserPage

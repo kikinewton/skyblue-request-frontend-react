@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
 import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
@@ -39,6 +39,7 @@ const EditSupplierPage: FunctionComponent = ()=> {
   //local states
   const [payload, setPayload] = useState<StateTypes>({name: '', description: '', phone_no: '', email: '', location: ''})
   const [loading, setLoading] = useState<boolean>(false)
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
   const { supplierId } = useParams<ParamTypes>() //department id from url params
 
@@ -50,6 +51,10 @@ const EditSupplierPage: FunctionComponent = ()=> {
 
   const handleNavigateBack = ()=> {
     history.goBack()
+  }
+
+  const payloadIsValid = ()=> {
+    return payload.name && payload.description && payload.email && payload.phone_no && payload.location;
   }
 
   const handleInputChange = (event: FormEvent<EventTarget>)=> {
@@ -100,10 +105,11 @@ const EditSupplierPage: FunctionComponent = ()=> {
       name: payload.name,
       description: payload.description
     }
+    setSubmitLoading(true)
     supplierService.updateSupplier(parseInt(supplierId), payload)
       .then(response=> {
         const {status, data, message} = response
-        if(status == 'CREATED') {
+        if(status == 'SUCCESS') {
           MySwal.fire({
             icon: 'success',
             title: 'Success',
@@ -123,6 +129,9 @@ const EditSupplierPage: FunctionComponent = ()=> {
       })
       .catch(error=> {
         
+      })
+      .finally(()=> {
+        setSubmitLoading(false)
       })
   }
 
@@ -157,9 +166,10 @@ const EditSupplierPage: FunctionComponent = ()=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="department-description" label="description" name="description" value={payload.description}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading || !payloadIsValid()}>
+              {submitLoading ? <CircularProgress size={15} /> : null}
               <Typography variant="button">
-                Edit Supplier
+                 Edit Supplier
               </Typography>
             </Button>
           </form>

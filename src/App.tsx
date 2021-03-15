@@ -20,7 +20,6 @@ function App() {
     <AppProvider>
       <ThemeProvider theme={themeData}>
         <UserProvider>
-          
           <Router>
             <Switch>
               <Route exact path="/login">

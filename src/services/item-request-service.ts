@@ -7,6 +7,7 @@ const servicePath = 'requests'
 
 
 export function saveItemRequest(payload: MultiRequestItemPayload): Promise<any> {
+  console.log('payload', payload)
   return new Promise((resolve, reject) => {
     service({
       url: `/multipleRequestItems`,
@@ -57,6 +58,28 @@ export function deleteUser(id: number): Promise<any> {
     service({
       url: `/${servicePath}/${id}`,
       method: 'DELETE'
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+} 
+
+export function getUserItemRequests(userId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/employees/${userId}`,
+      method: 'get'
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function getAllItemRequests(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems`,
+      method: 'get'
     })
     .then((response: AxiosResponse) => resolve(response))
     .catch(error=> reject(error))

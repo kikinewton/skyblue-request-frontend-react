@@ -83,31 +83,34 @@ const CreateUserPage: FunctionComponent = ()=> {
 
   const handleSubmitEvent = (event: SyntheticEvent)=> {
     event.preventDefault()
-    console.log('payload', payload)
-    const department: any = departments.find(item=> item.id == payload.departmentId)
+   
+    const department: IDepartment | undefined = departments.find(item=> item.id == payload.departmentId)
+    console.log('department', department)
 
     const myPayload: UserPayload = {
       email: payload.email,
       phoneNo: payload.phoneNo,
       firstName: payload.firstName,
       lastName: payload.lastName,
-      departmentId: payload.departmentId,
       employeeLevel: payload.employeeLevel,
+      department: department,
       employeeId: payload.employeeId,
-      department: department
+      password: 'password'
     }
 
-    userService.saveUser(myPayload)
+    console.log('payload', myPayload)
+
+    userService.registerEmployee(myPayload)
       .then(response=> {
         const {status, data, message} = response
-        if(status == 'OK') {
+        if(status == 'CREATED') {
           MySwal.fire({
             icon: 'success',
             title: 'Success',
             text: message ? message : 'User Created Successfully',
             allowOutsideClick: false,
             willClose: ()=> {
-              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: '', employeeId: '', employeeLevel: EmployeeLevel.REGULAR})
+              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: departments[0].id, employeeId: '', employeeLevel: EmployeeLevel.REGULAR})
             }
           })
         } else {

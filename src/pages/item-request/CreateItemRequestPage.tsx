@@ -1,17 +1,17 @@
-import { Button, Dialog, DialogContent, DialogTitle, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useEffect, useState } from 'react'
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
-import * as userService from '../../services/user-service'
 import * as requestService from '../../services/item-request-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { EmployeeLevel, employeeLevels } from '../../types/EmployeeLevel';
-import { CreateRequestItemPayload, MultiRequestItemPayload, UserPayload } from '../../types/payloads';
-import { IDepartment, IItemRequest, ITableColumn } from '../../types/types';
-import { Console } from 'console';
-import { Add, Send } from '@material-ui/icons';
-import { request } from 'https';
+import { CreateRequestItemPayload, MultiRequestItemPayload } from '../../types/payloads';
+import { IItemRequest, ITableColumn } from '../../types/types';
+import { Add, Delete, Send } from '@material-ui/icons';
+import { RequestReason, RequestReasonList } from '../../types/RequestReason';
+import { getUserDetailsFromStorage } from '../../services/auth-service'
+import { AuthUser } from '../../types/User';
+import { showErrorAlert, showSuccessAlert } from '../../utils/common-helper';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -50,7 +50,8 @@ const headerColumns: ITableColumn[] = [
 const CreateItemRequestPage: FunctionComponent = ()=> {
 
   const [entries, setEntries] = useState<IItemRequest[]>([])
-  const [entry, setEntry] = useState<EntryState>({name: '', reason: '', purpose: '', quantity: 0})
+  const [entry, setEntry] = useState<EntryState>({name: '', reason: RequestReason.FreshNeed, purpose: '', quantity: 0})
+  const [loading, setLoading] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
   const history = useHistory()
@@ -98,28 +99,27 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
       }
       return entryPayload
     })
+    const authUser = getUserDetailsFromStorage() as AuthUser;
+    const authUserId = authUser.id as number
 
     const multiRequestPayload: MultiRequestItemPayload = {
       multipleRequestItem: multipleEntries,
-      employee_id: 1
+      employee_id: authUserId
     }
-
+    setLoading(true)
     requestService.saveItemRequest(multiRequestPayload)
       .then(response => {
         const {data, status, message} = response
         if(status === 'OK') {
-          MySwal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: message ? message : 'Request Sent!'
-          })
+          setEntries([])
+          showSuccessAlert('Send Request', message ? message : 'Request Sent!')
         }
       })
       .catch(error=> {
-
+        showErrorAlert('Failed', error)
       })
       .finally(()=> {
-
+        setLoading(false)
       })
   }
 
@@ -130,9 +130,16 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
       purpose: entry.purpose,
       quantity: entry.quantity
     }
+    
     setEntries([...entries, myEntry])
-    setEntry({name: '', reason: '', purpose: '', quantity: 0})
+    setEntry({name: '', reason: RequestReason.FreshNeed, purpose: '', quantity: 0})
   }
+
+  const handleRemoveEntry = (index: number)=> {
+    //set entries
+    setEntries(entries.filter((entry, idx) => index != idx))
+  }
+
 
   const handleCloseDialog = () => {
     setModalOpen(false)
@@ -188,6 +195,9 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
                       </TableCell>
                     )
                   })}
+                  <TableCell>
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -202,6 +212,11 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
                           </TableCell>
                         )
                       })}
+                      <TableCell>
+                        <IconButton color="secondary" onClick={()=> handleRemoveEntry(index)}>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   )
                 })}
@@ -210,7 +225,8 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
           </TableContainer>
           <Grid container style={{marginTop: '10px'}}>
             <Grid item md={12} style={{textAlign: 'right'}}>
-              <Button variant="contained" color="secondary" disabled={!requestValid()} onClick={handleSubmitEvent}>
+              <Button variant="contained" color="secondary" disabled={!requestValid() || loading} onClick={handleSubmitEvent}>
+                {loading ?<CircularProgress size={20} /> : null}
                 <Send /> <span style={{marginLeft: '5px'}}>Send Request</span>
               </Button>
             </Grid>
@@ -223,11 +239,27 @@ const CreateItemRequestPage: FunctionComponent = ()=> {
         </DialogTitle>
         <DialogContent dividers>
           <div style={{width: '400px'}}>
+            <FormControl variant="outlined" className={classes.textField}>
+              <InputLabel htmlFor="outlined-age-native-simple">Department</InputLabel>
+              <Select
+                native
+                value={entry.reason}
+                onChange={handleSelectChange}
+                label="Reason"
+                name="reason"
+              >
+                {RequestReasonList.map(reason => {
+                  return (
+                    <option key={reason.id} value={reason.id}>
+                      {reason.label}
+                    </option>
+                  )
+                })}
+              </Select>
+            </FormControl>
             <TextField id="item-name" label="Item Name" name="name" value={entry.name} autoComplete="off"
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="purpose" label="Purpose" name="purpose" value={entry.purpose} autoComplete="off"
-              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <TextField id="reason" label="Reson" name="reason" value={entry.reason} autoComplete="off"
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="quantity" label="Quantity" name="quantity" value={entry.quantity} autoComplete="off" type="number"
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>

@@ -21,6 +21,7 @@ export interface UserPayload {
   employeeId: string
   departmentId?: number | string
   department?: IDepartment
+  password?: string
 }
 
 export interface DepartmentPayload {

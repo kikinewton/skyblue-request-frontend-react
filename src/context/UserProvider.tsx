@@ -1,28 +1,38 @@
 import { createContext, FC, useState } from "react";
-import { UserContextState } from "../types/types";
-import { User } from "../types/User";
+import { IDepartment, UserContextState } from "../types/types";
+import { AuthUser, User } from "../types/User";
+
+const defaultDepartment: IDepartment = {
+  id: null,
+  name: '',
+  description: ''
+}
 
 const defaultContextValues: UserContextState = {
   user: {
     id: '',
     firstName: '',
     lastName: '',
+    fullName: '',
     email: '',
-    username: '',
     employeeLevel: '',
     employeeId: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    roles: '',
+    department: defaultDepartment,
+    createdAt: '',
+    token: ''
   },
-  saveUser: ()=> {},
+  saveUser: (authUser: AuthUser)=> {},
   removeUser: ()=> {}
 }
-
+//
 export const UserContext = createContext<UserContextState>(defaultContextValues);
 
 const UserProvider: FC = ({children}) => {
-  const [user, setUser] = useState<User>(defaultContextValues.user);
+  const [user, setUser] = useState<AuthUser>(defaultContextValues.user);
 
-  const saveUser = (userVal: User)=> setUser(userVal);
+  const saveUser = (userVal: AuthUser)=> setUser(userVal);
   const removeUser = ()=> setUser(defaultContextValues.user)
   
   return (

@@ -125,39 +125,12 @@ const MenuListItems = () => {
               <ListItemText primary="New Request" />
             </ListItem>
           </Link>
-          <Link to="/request-management/employee-requests" className={classes.link}>
+          <Link to="/request-management/all-item-requests" className={classes.link}>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
                 <SubMenuItemIcon />
               </ListItemIcon>
-              <ListItemText primary="Employee Requests" />
-            </ListItem>
-          </Link>
-        </List>
-      </Collapse>
-      <ListItem button onClick={handleExpandUserAdmin}>
-        <ListItemIcon>
-          <AdminUserIcon />
-        </ListItemIcon>
-        <ListItemText primary="Admin"/>
-        {userAdminOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={userAdminOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <Link to="/user-management" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="User Management" />
-            </ListItem>
-          </Link>
-          <Link to="/role-management" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="Role Management" />
+              <ListItemText primary="All Item Requests" />
             </ListItem>
           </Link>
         </List>

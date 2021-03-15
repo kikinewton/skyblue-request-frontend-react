@@ -79,19 +79,30 @@ const ListUserPage: FunctionComponent = ()=> {
   }
 
   const deleteUser = (id: number): void => {
+    setLoading(true)
     userService.deleteUser(id)
       .then(response => {
         const {message, status} = response
-        if(status === 'SUCCESS') {
+        if(status == 'OK') {
+          setUsers(users.filter(user => user.id === id))
           MySwal.fire({
             icon: 'success',
             title: 'Success',
             text: message ? message : 'Deleted Successfully!'
           })
+        } else {
+          MySwal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: message ? message : 'Delete Failed!'
+          })
         }
       })
       .catch(error=> {
 
+      })
+      .finally(()=> {
+        setLoading(false)
       })
   }
 
@@ -170,10 +181,10 @@ const ListUserPage: FunctionComponent = ()=> {
                       )
                     })}
                     <TableCell align="right">
-                      <IconButton onClick={(e)=> handleEdit(row.id, e)} size="small">
+                      <IconButton onClick={(e)=> handleEdit(row.id, e)} size="small" disabled={loading}>
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton onClick={(e)=> handleDelete(row.id, e)} size="small">
+                      <IconButton onClick={(e)=> handleDelete(row.id, e)} size="small" disabled={loading}>
                         <DeleteIcon fontSize="small"/>
                       </IconButton>
                     </TableCell>

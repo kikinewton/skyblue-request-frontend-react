@@ -1,15 +1,15 @@
-import { AppBar, Badge, Container, CssBaseline, Divider, Drawer, IconButton, List, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Badge, Button, ClickAwayListener, Container, CssBaseline, Divider, Drawer, Grow, IconButton, List, makeStyles, Menu, MenuItem, MenuList, Paper, Popper, Toolbar, Typography } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import clsx from 'clsx';
-import React, { FunctionComponent, useState, useContext } from 'react'
+import React, { FunctionComponent, useState, useContext, createRef, useEffect, useRef, Ref, SyntheticEvent } from 'react'
 import MenuListItems from '../core/MenuListItems';
 import CopyRight from '../core/CopyRight';
 import { AppContext } from '../../context/AppProvider';
 import { UserContext } from '../../context/UserProvider';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import HomePage from '../../pages/HomePage';
 import SettingsPage from '../../pages/SettingsPage';
 import DepartmentListPage from '../../pages/department/DepartmentListPage';
@@ -21,10 +21,13 @@ import EditSupplierPage from '../../pages/supplier/EditSupplierPage';
 import ListUserPage from '../../pages/user/ListUserPage';
 import CreateUserPage from '../../pages/user/CreateUserPage';
 import EditUserPage from '../../pages/user/EditUserPage';
-import { appPages, APP_MODULES } from '../../utils/constants';
-import CreateRequestItem from '../../pages/item-request/CreateItemRequestPage';
+import { APP_MODULES } from '../../utils/constants';
 import ItemRequestIndexPage from '../../pages/item-request/ItemRequestIndexPage';
 import CreateItemRequestPage from '../../pages/item-request/CreateItemRequestPage';
+import { Person } from '@material-ui/icons';
+import * as authService from '../../services/auth-service'
+import { AuthUser } from '../../types/User';
+import MyRequestListPage from '../../pages/item-request/MyRequestListPage';
 
 const drawerWidth = 240;
 
@@ -132,15 +135,28 @@ const useStyles = makeStyles(theme=> ({
 const AppLayout:FunctionComponent = ()=> {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(true);
+  const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false)
+  const [anchorEl, setAnchorEl] = useState<any>(null)
+  
+
+  const menuAchorRef = useRef(null)
 
   //get location
   const location = useLocation();
   const { path } = useRouteMatch()
+  const history = useHistory()
 
   const appContext = useContext(AppContext)
   const userContext = useContext(UserContext)
 
-  console.log('user', userContext.user)
+  const handleProfileMenuButtonClick = (event: SyntheticEvent) => {
+    setAnchorEl(event.currentTarget);
+  }
+
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null)
+  }
+
   const handleDrawerOpen = ()=> {
     setOpen(true);
   }
@@ -148,6 +164,31 @@ const AppLayout:FunctionComponent = ()=> {
   const handleDrawerClose = ()=> {
     setOpen(false);
   }
+
+
+  const initUserState = ()=> {
+    if(authService.getUserDetailsFromStorage()) {
+      userContext.saveUser(authService.getUserDetailsFromStorage() as AuthUser)
+    } else {
+      history.push('/login')
+    }
+  }
+
+  const handleLogout = ()=> {
+    handleProfileMenuClose()
+    authService.logout()
+    history.push('/login')
+  }
+
+  const handleProfileClick = ()=> {
+    console.log('profile')
+  }
+
+  useEffect(() => {
+    initUserState()
+  }, [])
+
+
 
   //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -176,6 +217,22 @@ const AppLayout:FunctionComponent = ()=> {
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <div style={{marginLeft: '10px'}}>
+            <Button style={{color: '#ffffff'}} aria-haspopup="true" onClick={handleProfileMenuButtonClick}>
+              {userContext.user.fullName}
+              <Person />
+            </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleProfileMenuClose}
+            >
+              <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -217,6 +274,8 @@ const AppLayout:FunctionComponent = ()=> {
                   <Route path={`${path}user-management/users/:userId/edit`} component={EditUserPage}/>
                   <Route path={`${path}user-management/users`} component={ListUserPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests/create`} component={CreateItemRequestPage}/>
+                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests`} component={MyRequestListPage}/>
+                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/all-item-requests`} component={MyRequestListPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}`} component={ItemRequestIndexPage}/>
                   <Route exact path={`${path}`} component={HomePage}/>
                 </Switch>
@@ -232,4 +291,4 @@ const AppLayout:FunctionComponent = ()=> {
   );
 }
 
-export default AppLayout;
+export default AppLayout; //

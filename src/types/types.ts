@@ -1,5 +1,7 @@
 import { EmployeeLevel } from "./EmployeeLevel"
-import { User } from "./User"
+import { EndorsementStatus, RequestApproval, RequestStatus } from "./enums"
+import { RequestReason } from "./RequestReason"
+import { AuthUser, User } from "./User"
 
 export type AppContextState = {
   currentPage: string
@@ -9,8 +11,8 @@ export type AppContextState = {
 }
 
 export type UserContextState = {
-  user: User,
-  saveUser: (user: User) => void;
+  user: AuthUser,
+  saveUser: (user: AuthUser) => void;
   removeUser: ()=> void;
 }
 
@@ -62,6 +64,7 @@ export interface IUser {
   employeeLevel: EmployeeLevel
   departmentId: number
   enabled: boolean
+  department: IDepartment
 }
 
 export interface IItemRequest {
@@ -71,4 +74,20 @@ export interface IItemRequest {
   purpose: string
   quantity: number
   employee?: IUser
+}
+
+export interface IRequestItem {
+  id: number | string
+  name: string
+  reason: RequestReason
+  purpose: string
+  quantity: number
+  unitPrice: number
+  amount: number
+  status: RequestStatus
+  approval: RequestApproval
+  endorsement: EndorsementStatus
+  requestDate: string
+  employee: IUser
+  
 }

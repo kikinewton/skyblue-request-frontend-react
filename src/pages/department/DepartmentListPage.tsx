@@ -1,14 +1,10 @@
-import { Box, Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton, CircularProgress, LinearProgress } from '@material-ui/core';
+import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton, LinearProgress } from '@material-ui/core';
 import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext} from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import {IDepartment, ITableColumn  } from '../../types/types'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import * as departmentService from '../../services/department-service'
-import { ServerResponse } from 'http';
-import { Alert } from '@material-ui/lab';
-import {ResponseData} from '../../types/types'
-import { faColumns } from '@fortawesome/free-solid-svg-icons';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { AppContext } from '../../context/AppProvider';

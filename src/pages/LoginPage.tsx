@@ -1,9 +1,14 @@
 import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox, Link } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
-import React, { ChangeEvent, FormEvent, FunctionComponent, SyntheticEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, FunctionComponent, SyntheticEvent, useContext, useState } from 'react'
+import { useHistory, useRouteMatch } from 'react-router';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import backgroungImg from '../assets/images/shopping2.jpg'
 import CopyRight from '../components/core/CopyRight';
+import { UserContext } from '../context/UserProvider';
 import * as authservice from '../services/auth-service'
+import { AuthUser, User } from '../types/User';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,8 +50,16 @@ const LoginPage: FunctionComponent = ()=> {
   const [payload, setPayload] = useState<StateType>({email: '', password: '', rememberMe: false})
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const classes = useStyles();
+  const history = useHistory()
+  const { path } = useRouteMatch()
+  const MySwal = withReactContent(Swal)
+
+  const userContext = useContext(UserContext)
+
+  const payloadValid = ()=> {
+    return payload.email && payload.password
+  }
 
   //handle onChange event on inputs
   const handleInputChange = (event: FormEvent<EventTarget>)=> {
@@ -63,30 +76,55 @@ const LoginPage: FunctionComponent = ()=> {
       .then(response => {
         console.log('res', response)
         const {data, message, status} = response
-        if(status === 'OK') {
-          authservice.saveToken(data.token)
+        if(status === 'SUCCESS') {
+          if(status === 'SUCCESS') {
+            const employee = data.employee as User
+            //construct authuser
+            const authUser: AuthUser = {
+              id: employee.id,
+              firstName: employee.firstName,
+              lastName: employee.lastName,
+              fullName: employee.fullName,
+              email: employee.email,
+              phoneNumber: employee.phoneNumber,
+              roles: employee.roles,
+              employeeId: employee.employeeId,
+              employeeLevel: employee.employeeLevel,
+              department: employee.department,
+              createdAt: employee.createdAt,
+              token: data.token
+            }
+            
+            window.localStorage.setItem("user", JSON.stringify(authUser));
+            userContext.saveUser(authUser)
+            history.push(`/`)
+            
+          } else {
+            MySwal.fire({
+              icon: 'error',
+              title: 'Login',
+              text: message ? message : 'Failed to login'
+            })
+          }
+          
+        } else {
+          MySwal.fire({
+            icon: 'error',
+            title: 'Login',
+            text: message ? message : 'Error'
+          })
         }
       })
       .catch(error => {
-
+        MySwal.fire({
+          icon: 'error',
+          title: 'Login',
+          text: 'Login Failed'
+        })
       })
       .finally(()=> {
         setLoading(false)
       })
-    // login({username, password})
-    //   .then(response=> {
-    //     let responseData = response.data || {}
-    //     setLoading(false)
-    //     if(response.code === 0) {
-          
-    //       UpdateLocalStoreAccessToken(responseData.token)
-    //       history.push('/')
-    //     }
-    //   })
-    //   .catch(error=> {
-    //     setLoading(false)
-    //     console.log(error)
-    //   })
   }
 
   return (
@@ -136,7 +174,7 @@ const LoginPage: FunctionComponent = ()=> {
               type="submit"
               fullWidth
               variant="contained"
-              disabled={loading}
+              disabled={loading || !payloadValid()}
               color="primary"
               className={classes.submit}
             >

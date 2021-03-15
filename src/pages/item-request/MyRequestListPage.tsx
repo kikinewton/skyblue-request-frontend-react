@@ -1,29 +1,29 @@
-import { Box, Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton } from '@material-ui/core';
+import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton } from '@material-ui/core';
 import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext} from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import {IDepartment, ITableColumn  } from '../../types/types'
-import EditIcon from '@material-ui/icons/Edit'
-import DeleteIcon from '@material-ui/icons/Delete'
-import * as departmentService from '../../services/department-service'
-import { ServerResponse } from 'http';
-import { Alert } from '@material-ui/lab';
-import {ResponseData} from '../../types/types'
-import { faColumns } from '@fortawesome/free-solid-svg-icons';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
+import {IRequestItem, ITableColumn  } from '../../types/types'
+import * as requestService from '../../services/item-request-service'
+import * as authService from '../../services/auth-service'
 import { AppContext } from '../../context/AppProvider';
+import { prettifyDateTime, showErrorAlert } from '../../utils/common-helper';
+import { AuthUser } from '../../types/User';
 
 
 const tableColumns: ITableColumn[] = [
   {id: 'name', label: 'Name', minWidth: 170, align: 'left'},
-  {id: 'description', label: 'Description', minWidth: 100, align: 'left'},
+  {id: 'reason', label: 'Reason', minWidth: 100, align: 'left'},
+  {id: 'quantity', label: 'Quantity', minWidth: 100, align: 'left'},
+  {id: 'status', label: 'Status', minWidth: 100, align: 'left'},
+  {id: 'approval', label: 'Approval', minWidth: 100, align: 'left'},
+  {id: 'endorsement', label: 'Endorsement', minWidth: 100, align: 'left'},
+  {id: 'requestDate', label: 'Date Requested', minWidth: 100, align: 'left', format: (value: string)=> prettifyDateTime(value)},
 ]
 
 const useStyles = makeStyles(theme=> ({
   headerBar: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   tableContainer: {
@@ -32,10 +32,10 @@ const useStyles = makeStyles(theme=> ({
   }
 }))
 
-const initDepartments: IDepartment[] = []
+const initDepartments: IRequestItem[] = []
 
 const MyRequestListPage: FunctionComponent = ()=> {
-  const [departments, setDepartments] = useState<IDepartment[]>([])
+  const [requests, setRequests] = useState<IRequestItem[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -45,9 +45,9 @@ const MyRequestListPage: FunctionComponent = ()=> {
   const { path } = useRouteMatch()
   const classes = useStyles()
 
-  const appContext = useContext(AppContext)
+  const authUser = authService.getUserDetailsFromStorage() as AuthUser;
 
-  const MySwal = withReactContent(Swal)
+  const appContext = useContext(AppContext)
 
   const handleNavigateToCreatePageClick = ()=> {
     history.push(`${path}/create`)
@@ -63,59 +63,29 @@ const MyRequestListPage: FunctionComponent = ()=> {
     setPage(0);
   };
 
-  const handleEdit = (id: number, event: any): void => {
-    history.push(`${path}/${id}/edit`)
-  }
 
-  const handleDelete = (id: number, event: any): void => {
-    MySwal.fire({
-      title: `Are you sure you want to delete department?`,
-      showDenyButton: true,
-      confirmButtonText: 'Yes',
-      preConfirm: ()=> {
-        console.log('left confirm')
-        deleteDepartment(id)
-      }
-    })
-    
-  }
-
-  const deleteDepartment = (id: number): void => {
-    departmentService.deleteDepartment(id)
-      .then(response => {
-        const {data, message, status} = response
-        if(status === 'SUCCESS') {
-          MySwal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: message ? message : 'Deleted Successfully!'
-          })
-        }
-      })
-      .catch(error=> {
-
-      })
-  }
-
-  const fetchAllDepartments = ()=> {
-    departmentService.getAllDepartments()
+  const fetchMyRequests = ()=> {
+    setLoading(true)
+    requestService.getUserItemRequests(authUser.id as number)
       .then((response)=> {
-        //if(response.status == 'OK') {}
         const { status, data } = response
-        if(status === 'OK') {
-          setDepartments(data)
+        console.log('res', data)
+        if(status === 'FOUND') {
+          setRequests(data)
         }
         //return (<Alert severity="error">Hey</Alert>)
-        console.log('departments', departments)
+        console.log('requests', requests)
       })
       .catch(error=> {
-        
-      });
+        showErrorAlert('My requests', 'Failed to Fetch Requests!')
+      })
+      .finally(()=> {
+        setLoading(false)
+      })
   }
 
   useEffect(() => {
-    appContext.updateCurrentPage('DEPARTMENT')
-    fetchAllDepartments();
+    fetchMyRequests();
     return () => {
       
     }
@@ -125,10 +95,13 @@ const MyRequestListPage: FunctionComponent = ()=> {
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
+          <Typography variant="h6">
+            My Requests
+          </Typography>
           <Button variant="contained" color="primary" 
-          disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
+            disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
             <Typography variant="button">
-              Add Department
+              New Request
             </Typography>
           </Button>
         </div>
@@ -148,34 +121,21 @@ const MyRequestListPage: FunctionComponent = ()=> {
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell
-                align="right"
-                >
-                  Actions
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {departments && departments.slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage).map((row) => {
+              {requests && requests.slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage).map((row) => {
                 return (
-                  <TableRow hover role="chckbox" tabIndex={-1} key={row.id}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {tableColumns.map((column) => {
                       const id: any = column.id
-                      const value: any = row[column.id as keyof IDepartment]
+                      const value: any = row[column.id as keyof IRequestItem]
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {value}
+                          {column.format ? column.format(value) : value}
                         </TableCell>
                       )
                     })}
-                    <TableCell align="right">
-                      <IconButton onClick={(e)=> handleEdit(row.id, e)} size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton onClick={(e)=> handleDelete(row.id, e)} size="small">
-                        <DeleteIcon fontSize="small"/>
-                      </IconButton>
-                    </TableCell>
                   </TableRow>
                 )
               })}
@@ -185,7 +145,7 @@ const MyRequestListPage: FunctionComponent = ()=> {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={departments.length}
+          count={requests.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

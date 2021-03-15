@@ -35,6 +35,10 @@ const CreateSupplierPage: FunctionComponent = ()=> {
     history.goBack()
   }
 
+  const payloadIsValid = ()=> {
+    return payload.name && payload.description && payload.email && payload.phone_no && payload.location;
+  }
+
   const handleInputChange = (event: FormEvent<EventTarget>)=> {
     const target = event.target as HTMLInputElement
     const eventName: string = target.name;
@@ -98,7 +102,7 @@ const CreateSupplierPage: FunctionComponent = ()=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="department-description" label="Description" name="description" value={payload.description}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading}>
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading || !payloadIsValid()}>
               {submitLoading ? <CircularProgress size={20} /> : null}
               <Typography variant="button">
                 Create Department

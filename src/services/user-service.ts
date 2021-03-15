@@ -18,6 +18,19 @@ export function saveUser(payload: UserPayload): Promise<any> {
   })
 }
 
+export function registerEmployee(payload: UserPayload): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/auth/admin/signup`,
+      method: 'POST',
+      data: payload
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+
 export function getAllUsers(): Promise<any> {
   return new Promise((resolve, reject) => {
     service({
