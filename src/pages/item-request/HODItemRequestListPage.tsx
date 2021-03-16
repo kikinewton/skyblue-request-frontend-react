@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme=> ({
 
 const initDepartments: IRequestItem[] = []
 
-const MyRequestListPage: FunctionComponent = ()=> {
+const HODItemRequestListPage: FunctionComponent = ()=> {
   const [requests, setRequests] = useState<IRequestItem[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
@@ -62,12 +62,10 @@ const MyRequestListPage: FunctionComponent = ()=> {
     setPage(0);
   };
 
-  
-
 
   const fetchMyRequests = ()=> {
     setLoading(true)
-    requestService.getUserItemRequests(authUser.id as number)
+    requestService.getAllDepartmentItemRequests(authUser.department.id as number, authUser.id as number)
       .then((response)=> {
         const { status, data } = response
         console.log('res', data)
@@ -86,6 +84,8 @@ const MyRequestListPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
+    console.log('hey') 
+    appContext.updateCurrentPage('HOD ITEM REQUESTS')
     fetchMyRequests();
     return () => {
       
@@ -159,4 +159,4 @@ const MyRequestListPage: FunctionComponent = ()=> {
   );
 }
 
-export default MyRequestListPage;
+export default HODItemRequestListPage;

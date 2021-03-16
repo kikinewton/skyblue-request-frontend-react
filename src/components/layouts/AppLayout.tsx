@@ -28,6 +28,7 @@ import { Person } from '@material-ui/icons';
 import * as authService from '../../services/auth-service'
 import { AuthUser } from '../../types/User';
 import MyRequestListPage from '../../pages/item-request/MyRequestListPage';
+import HODItemRequestListPage from '../../pages/item-request/HODItemRequestListPage';
 
 const drawerWidth = 240;
 
@@ -275,8 +276,7 @@ const AppLayout:FunctionComponent = ()=> {
                   <Route path={`${path}user-management/users`} component={ListUserPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests/create`} component={CreateItemRequestPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests`} component={MyRequestListPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/all-item-requests`} component={MyRequestListPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}`} component={ItemRequestIndexPage}/>
+                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/hod-item-requests`} component={HODItemRequestListPage}/>
                   <Route exact path={`${path}`} component={HomePage}/>
                 </Switch>
               </CSSTransition>

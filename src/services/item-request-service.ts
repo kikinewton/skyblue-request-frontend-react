@@ -85,3 +85,14 @@ export function getAllItemRequests(): Promise<any> {
     .catch(error=> reject(error))
   })
 }
+
+export function getAllDepartmentItemRequests(departmentId: number, employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/departments/${departmentId}/employees/${employeeId}`,
+      method: 'get'
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}

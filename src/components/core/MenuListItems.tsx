@@ -125,12 +125,12 @@ const MenuListItems = () => {
               <ListItemText primary="New Request" />
             </ListItem>
           </Link>
-          <Link to="/request-management/all-item-requests" className={classes.link}>
+          <Link to="/request-management/hod-item-requests" className={classes.link}>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
                 <SubMenuItemIcon />
               </ListItemIcon>
-              <ListItemText primary="All Item Requests" />
+              <ListItemText primary="HOD Item Requests" />
             </ListItem>
           </Link>
         </List>
