@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/skyblue-request-frontend-react/static/css/main.8c8b27cf.chunk.css",
+    "main.js": "/skyblue-request-frontend-react/static/js/main.21adbfc2.chunk.js",
+    "main.js.map": "/skyblue-request-frontend-react/static/js/main.21adbfc2.chunk.js.map",
+    "runtime-main.js": "/skyblue-request-frontend-react/static/js/runtime-main.c243514f.js",
+    "runtime-main.js.map": "/skyblue-request-frontend-react/static/js/runtime-main.c243514f.js.map",
+    "static/css/2.1e2948f0.chunk.css": "/skyblue-request-frontend-react/static/css/2.1e2948f0.chunk.css",
+    "static/js/2.84ee59a9.chunk.js": "/skyblue-request-frontend-react/static/js/2.84ee59a9.chunk.js",
+    "static/js/2.84ee59a9.chunk.js.map": "/skyblue-request-frontend-react/static/js/2.84ee59a9.chunk.js.map",
+    "static/js/3.85f9a8c5.chunk.js": "/skyblue-request-frontend-react/static/js/3.85f9a8c5.chunk.js",
+    "static/js/3.85f9a8c5.chunk.js.map": "/skyblue-request-frontend-react/static/js/3.85f9a8c5.chunk.js.map",
+    "index.html": "/skyblue-request-frontend-react/index.html",
+    "static/css/2.1e2948f0.chunk.css.map": "/skyblue-request-frontend-react/static/css/2.1e2948f0.chunk.css.map",
+    "static/css/main.8c8b27cf.chunk.css.map": "/skyblue-request-frontend-react/static/css/main.8c8b27cf.chunk.css.map",
+    "static/js/2.84ee59a9.chunk.js.LICENSE.txt": "/skyblue-request-frontend-react/static/js/2.84ee59a9.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/skyblue-request-frontend-react/static/media/roboto-vietnamese-400-normal.52cebac0.woff2",
+    "static/media/shopping2.5af434da.jpg": "/skyblue-request-frontend-react/static/media/shopping2.5af434da.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c243514f.js",
+    "static/css/2.1e2948f0.chunk.css",
+    "static/js/2.84ee59a9.chunk.js",
+    "static/css/main.8c8b27cf.chunk.css",
+    "static/js/main.21adbfc2.chunk.js"
+  ]
+}
