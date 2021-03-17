@@ -101,3 +101,9 @@ export interface IMenuItem {
   hasSubMenu: boolean
   children?: IMenuItem[]
 }
+
+export interface IRequestPerDepartment {
+  id: number
+  Department: string
+  Num_of_Request: number
+}

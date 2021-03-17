@@ -41,3 +41,11 @@ export function formatRequestStatusColor(value: string): string {
     return '#35f50a'
   }
 }
+
+export function storeThemeInLocalStorage(value: string) {
+  localStorage.setItem('theme', value)
+}
+
+export function getLocalStorageTheme(): string | null {
+  return localStorage.getItem('theme')
+}

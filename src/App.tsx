@@ -4,7 +4,7 @@ import './App.css';
 import AppLayout from './components/layouts/AppLayout';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import LoginPage from './pages/LoginPage';
-import { ThemeProvider } from '@material-ui/core';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme } from './utils/theme';
 import AppProvider, { AppContext } from './context/AppProvider';
 import UserProvider from './context/UserProvider';
@@ -14,26 +14,24 @@ import NotAuthorizedPage from './pages/NotAuthorizedPage';
 function App() {
 
   const appContext = useContext(AppContext)
+
   
-  const themeData = appContext.theme == LIGHT_THEME_MODE ? lightTheme : darkTheme;
-  console.log('theme data', themeData)
+  console.log('APP CONTEXT THEME', appContext.theme)
+  
+  const themeData = appContext.theme === 'light' ? createMuiTheme(lightTheme) : createMuiTheme(darkTheme);
   return (
-    <AppProvider>
-      <ThemeProvider theme={themeData}>
-        <UserProvider>
-          <Router>
-            <Switch>
-              <Route exact path="/login">
-                <LoginPage />
-              </Route>
-              <Route path="/">
-                <AppLayout />
-              </Route>
-            </Switch>
-          </Router>
-        </UserProvider>
-      </ThemeProvider>
-    </AppProvider>
+    <ThemeProvider theme={themeData}>
+      <Router>
+        <Switch>
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/">
+            <AppLayout />
+          </Route>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 

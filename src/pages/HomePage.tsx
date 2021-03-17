@@ -1,7 +1,9 @@
 import { Card, CardActions, CardContent, CardHeader, Grid, makeStyles, Typography } from '@material-ui/core'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import useAuthentication from '../components/hooks/use-authentication'
 import { APP_PAGES_AND_ROLES } from '../utils/constants'
+import * as dashboardService from '../services/dashboard-service'
+import { IRequestPerDepartment } from '../types/types'
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -15,7 +17,28 @@ const useStyles = makeStyles(theme=> ({
 }))
 const HomePage: FunctionComponent = (props)=> {
   useAuthentication({roles: APP_PAGES_AND_ROLES.dashboardRoles})
+  const [requestPerDepartment, setRequestPerDepartment] = useState<IRequestPerDepartment[]>([])
+  const [loadinRequestPerDepartment, setLoadingRequestPerDepartment] = useState<boolean>(false)
   const classes = useStyles()
+
+  const fetchRequestPerCurrentMonthPerDepartment = ()=> {
+    setLoadingRequestPerDepartment(true)
+    dashboardService.requestPerCurrentMonthPerDepartment()
+      .then(response => {
+        const {status, data} = response
+        if(status === 'SUCCESS') {
+          setRequestPerDepartment(data)
+        }
+      })
+      .catch(()=> {})
+      .finally(()=> {
+        setLoadingRequestPerDepartment(false)
+      })
+  }
+
+  useEffect(()=> {
+    fetchRequestPerCurrentMonthPerDepartment()
+  }, [])
 
   return (
     <div className={classes.root}>

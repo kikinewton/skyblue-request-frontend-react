@@ -1,14 +1,14 @@
 import React, { createContext, FC, useState } from 'react'
 import { AppContextState } from '../types/types'
+import { getLocalStorageTheme } from '../utils/common-helper'
 import { appPages, DARK_THEME_MODE, LIGHT_THEME_MODE } from '../utils/constants'
 
 const contextDefaultValues: AppContextState = {
   currentPage: appPages.dashboardPage,
-  theme: DARK_THEME_MODE,
+  theme: getLocalStorageTheme() && (getLocalStorageTheme() === DARK_THEME_MODE) ? DARK_THEME_MODE : LIGHT_THEME_MODE,
   updateCurrentPage: () => {},
   updateTheme: () => {}
 }
-
 
 export const AppContext = createContext<AppContextState> (
   contextDefaultValues
