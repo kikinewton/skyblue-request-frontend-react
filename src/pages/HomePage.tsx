@@ -4,6 +4,7 @@ import useAuthentication from '../components/hooks/use-authentication'
 import { APP_PAGES_AND_ROLES } from '../utils/constants'
 import * as dashboardService from '../services/dashboard-service'
 import { IRequestPerDepartment } from '../types/types'
+import { Pie, PieChart } from 'recharts'
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -43,7 +44,22 @@ const HomePage: FunctionComponent = (props)=> {
   return (
     <div className={classes.root}>
         <Grid container spacing={3}>
-          <Grid item md={3} lg={3} sm={12} xs={12}>
+          <Grid item md={4} lg={4} sm={12} xs={12}>
+            <Card className={classes.card}>
+              <CardHeader title="Department Request" subheader="This Month"/>
+              <CardContent>
+                <PieChart width={530} height={100}>
+                  <Pie data={requestPerDepartment} dataKey="Num_of_Request" nameKey="Department" />
+                </PieChart>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Typography variant="button" color="primary" style={{textDecoration: 'underline', cursor: 'pointer'}}>
+                  View All
+                </Typography>
+              </CardActions>
+            </Card>
+          </Grid>
+          <Grid item md={4} lg={4} sm={12} xs={12}>
             <Card className={classes.card}>
               <CardHeader title="Number of Users" subheader="Total Users"/>
               <CardContent>
@@ -58,22 +74,7 @@ const HomePage: FunctionComponent = (props)=> {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item md={3} lg={3} sm={12} xs={12}>
-            <Card className={classes.card}>
-              <CardHeader title="Number of Users" subheader="Total Users"/>
-              <CardContent>
-                <Typography variant="h3" align="left">
-                    101
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing>
-                <Typography variant="button" color="primary" style={{textDecoration: 'underline', cursor: 'pointer'}}>
-                  View All
-                </Typography>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item md={6} lg={6} sm={12} xs={12}>
+          <Grid item md={4} lg={4} sm={12} xs={12}>
             <Card className={classes.card}>
               <CardHeader title="Number of Users" subheader="Total Users"/>
               <CardContent>
