@@ -1,5 +1,5 @@
-import { Button, Divider, FormControl, FormControlLabel, Grid, IconButton, InputLabel, LinearProgress, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect } from 'react'
+import { Button, Divider, FormControl, IconButton, InputLabel, LinearProgress, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect, useContext } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import * as userService from '../../services/user-service'
@@ -9,6 +9,10 @@ import Swal from 'sweetalert2';
 import { UserPayload } from '../../types/payloads';
 import { EmployeeLevel, employeeLevels } from '../../types/EmployeeLevel';
 import { IDepartment } from '../../types/types';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { showErrorAlert } from '../../utils/common-helper';
+import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -35,7 +39,7 @@ interface StateType {
   lastName: string
   email: string
   phoneNo: string
-  employeeLevel: EmployeeLevel
+  roles: EmployeeLevel
   employeeId: string
   departmentId: number | string
 }
@@ -44,15 +48,14 @@ const EditUserPage: FunctionComponent = ()=> {
   //local states
   const [payload, setPayload] = useState<StateType>(
     {firstName: '', lastName: '', phoneNo: '', email: '', 
-    employeeLevel: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
+    roles: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
   })
   const [departments, setDepartments] = useState<IDepartment[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-
   const { userId } = useParams<ParamTypes>() //department id from url params
+  const appContext = useContext(AppContext)
 
   const history = useHistory()
-  const { path } = useRouteMatch()
   const classes = useStyles()
 
   const MySwal = withReactContent(Swal)
@@ -69,7 +72,7 @@ const EditUserPage: FunctionComponent = ()=> {
   }
 
   const payloadIsValid = ()=> {
-    return payload.firstName && payload.lastName && payload.employeeLevel && payload.departmentId && payload.phoneNo && payload.email
+    return payload.firstName && payload.lastName && payload.roles && payload.departmentId && payload.phoneNo && payload.email
   }
 
   const handleSelectChange = (event: any) => {
@@ -82,7 +85,7 @@ const EditUserPage: FunctionComponent = ()=> {
   const fetchAllDepartments = () => {
     departmentService.getAllDepartments()
       .then(response=> {
-        const {data, status, message} = response
+        const {data, status} = response
         if(status == 'OK') {
           setDepartments(data)
         }
@@ -100,7 +103,7 @@ const EditUserPage: FunctionComponent = ()=> {
         console.log('data', data)
         if(status === 'SUCCESS') {
           if(data) {
-            setPayload({email: data.email, phoneNo: data.phoneNo, firstName: data.firstName, lastName: data.lastName, departmentId: data.department, employeeId: data.employeeId, employeeLevel: data.employeeLevel})
+            setPayload({email: data.email, phoneNo: data.phoneNo, firstName: data.firstName, lastName: data.lastName, departmentId: data.department, employeeId: data.employeeId, roles: data.employeeLevel})
           } else {
             MySwal.fire({
               icon: 'error',
@@ -135,7 +138,7 @@ const EditUserPage: FunctionComponent = ()=> {
       email: payload.email,
       phoneNo: payload.phoneNo,
       employeeId: payload.employeeId,
-      employeeLevel: payload.employeeLevel,
+      roles: payload.roles,
       departmentId: payload.departmentId
     }
     userService.updateUser(parseInt(userId), payloadModel)
@@ -147,9 +150,6 @@ const EditUserPage: FunctionComponent = ()=> {
             title: 'Success',
             text: message ? message : 'Supplier Created Successfully',
             allowOutsideClick: false,
-            willClose: ()=> {
-              //setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: '', employeeId: '', employeeLevel: EmployeeLevel.REGULAR})
-            }
           })
         } else {
           MySwal.fire({
@@ -160,11 +160,15 @@ const EditUserPage: FunctionComponent = ()=> {
         }
       })
       .catch(error=> {
-        
+        showErrorAlert('Update User', error)
       })
   }
 
+  
+  useAuthentication({roles: APP_PAGES_AND_ROLES.editUserRoles})
+  
   useEffect(() => {
+    appContext.updateCurrentPage('USERS / EDIT')
     initUser()
     fetchAllDepartments()
     return () => {
@@ -180,7 +184,7 @@ const EditUserPage: FunctionComponent = ()=> {
       </Paper>
       <Paper elevation={0} style={{padding: '5px', minHeight: '300px', marginTop: '10px', display:'flex', flexDirection: 'column'}}>
         <Typography variant="h5" color="textPrimary">
-          Edit Supplier Form
+          Edit User
         </Typography>
         <Divider />
         {loading ? <LinearProgress color="secondary" style={{width: '100%'}}/> : null}
@@ -216,10 +220,10 @@ const EditUserPage: FunctionComponent = ()=> {
               <InputLabel htmlFor="outlined-age-native-simple">LEVEL</InputLabel>
               <Select
                 native
-                value={payload.employeeLevel}
+                value={payload.roles}
                 onChange={handleSelectChange}
                 label="Employee Level"
-                name="employeeLevel"
+                name="roles"
               >
                 {employeeLevels.map((level)=> {
                   return (

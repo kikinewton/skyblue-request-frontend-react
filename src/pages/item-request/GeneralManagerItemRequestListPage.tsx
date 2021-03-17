@@ -1,26 +1,29 @@
 import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton, LinearProgress } from '@material-ui/core';
 import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext} from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom';
-import {IRequestItem, ITableColumn  } from '../../types/types'
+import {IRequestItem, ISupplier, ITableColumn  } from '../../types/types'
 import * as requestService from '../../services/item-request-service'
-import * as authService from '../../services/auth-service'
 import { AppContext } from '../../context/AppProvider';
 import { formatRequestStatusColor, prettifyDateTime, showErrorAlert, showSuccessAlert } from '../../utils/common-helper';
-import { AuthUser } from '../../types/User';
 import { EndorsementStatus } from '../../types/enums';
-import { CancelOutlined, Check, CheckCircleTwoTone } from '@material-ui/icons';
+import { CancelOutlined, CheckCircleTwoTone } from '@material-ui/icons';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { dangerBtnColor, successBtnColor } from '../../utils/constants';
+import { APP_PAGES_AND_ROLES, CURRENCY_CODE } from '../../utils/constants';
+import { UserContext } from '../../context/UserProvider';
+import useAuthentication from '../../components/hooks/use-authentication';
 
 
 const tableColumns: ITableColumn[] = [
   {id: 'name', label: 'Name', minWidth: 170, align: 'left'},
-  {id: 'quantity', label: 'Quantity', align: 'left'},
+  {id: 'quantity', label: 'Quantity', minWidth: 100, align: 'left'},
+  {id: 'unitPrice', label: 'Unit Price', minWidth: 100, align: 'left'},
+  {id: 'amount', label: 'Amount', minWidth: 100, align: 'left', format: (value)=> `${CURRENCY_CODE} ${value}`},
   {id: 'reason', label: 'Reason', minWidth: 100, align: 'left'},
   {id: 'purpose', label: 'Purpose', minWidth: 100, align: 'left'},
+  {id: 'supplier', label: 'Supplier', format: (value: ISupplier)=> {
+    return value.name
+  }},
   {id: 'requestDate', label: 'Date Requested', minWidth: 100, align: 'left', format: (value: string)=> prettifyDateTime(value)},
-  {id: 'endorsement', label: 'Endorsed', minWidth: 100, align: 'left'}
 ]
 
 const useStyles = makeStyles(theme=> ({
@@ -36,29 +39,16 @@ const useStyles = makeStyles(theme=> ({
   }
 }))
 
-const initDepartments: IRequestItem[] = []
-
-const HODItemRequestListPage: FunctionComponent = ()=> {
+const GeneralManagerItemRequestListPage: FunctionComponent = ()=> {
   const [requests, setRequests] = useState<IRequestItem[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-
   const MySwal = withReactContent(Swal)
-
-  //router helpers
-  const history = useHistory()
-  const { path } = useRouteMatch()
   const classes = useStyles()
-  
-
-  const authUser = authService.getUserDetailsFromStorage() as AuthUser;
 
   const appContext = useContext(AppContext)
-
-  const handleNavigateToCreatePageClick = ()=> {
-    history.push(`${path}/create`)
-  }
+  const userContext = useContext(UserContext)
 
   const handleChangePage = (event: MouseEvent | null, newPage: number): void => {
     setPage(newPage);
@@ -70,14 +60,14 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
     setPage(0);
   };
 
-  const handleEndorseClick = (id: number)=> {
+  const handleApproveClick = (requestId: number, )=> {
     MySwal.fire({
       title: `Are you sure you want to endorse request?`,
       showDenyButton: true,
       confirmButtonText: 'Yes',
       preConfirm: ()=> {
         console.log('left confirm')
-        endorseRequest(id);
+        approveRequest(requestId, userContext.user.id as number);
       }
     })
   }
@@ -89,14 +79,14 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
       confirmButtonText: 'Yes',
       preConfirm: ()=> {
         console.log('left confirm')
-        cancelRequest(id);
+        cancelRequest(id, userContext.user.id as number);
       }
     })
   }
 
-  const endorseRequest = (requestId: number) => {
+  const approveRequest = (requestId: number, employeeId: number) => {
     setLoading(true)
-    requestService.endorseItemRequest(requestId, authUser.id as number)
+    requestService.approveRequest(requestId, employeeId)
       .then(response=> {
         const {status, message} = response
         if(status === 'OK') {
@@ -112,16 +102,16 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
       .finally(()=> setLoading(false))
   }
 
-  const cancelRequest = (requestId: number) => {
+  const cancelRequest = (requestId: number, employeeId: number) => {
     setLoading(true)
-    requestService.hodCancelItemRequest(requestId, authUser.id as number)
+    requestService.cancelRequest(requestId, employeeId)
       .then(response=> {
         const {status, message} = response
         if(status === 'OK') {
           setRequests(requests.filter(item => item.id != requestId))
-          showSuccessAlert('Cancel Request', message)
+          showSuccessAlert('Endorse Request', message)
         } else {
-          showErrorAlert('Cancel Request', message)
+          showErrorAlert('Endorse Request', message)
         }
       })
       .catch(error=> {
@@ -131,13 +121,13 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
   }
 
   const fetchMyRequests = ()=> {
-    
+    console.log('Lets fetch request', userContext.user)
     setLoading(true)
-    requestService.getAllDepartmentItemRequests(authUser.department.id as number, authUser.id as number)
+    requestService.getGeneralManagerRequests(userContext.user.id as number)
       .then((response)=> {
         const { status, data } = response
         console.log('res', data)
-        if(status === 'SUCCESS') {
+        if(status === 'OK') {
           setRequests(data)
         }
         console.log('requests', requests)
@@ -150,8 +140,10 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
       })
   }
 
+  useAuthentication({roles: APP_PAGES_AND_ROLES.generalManagerApproveRoles})
+  
   useEffect(() => {
-    appContext.updateCurrentPage('HOD ITEM REQUESTS')
+    appContext.updateCurrentPage('GENERAL MANAGER ITEM REQUESTS')
     fetchMyRequests();
     return () => {
       
@@ -163,14 +155,8 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
           <Typography variant="h6">
-            My Requests
+            Item Requests
           </Typography>
-          <Button variant="contained" color="primary" 
-            disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
-            <Typography variant="button">
-              New Request
-            </Typography>
-          </Button>
         </div>
       </Paper>
       
@@ -184,7 +170,7 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
+                    style={{minWidth: column.minWidth}}
                   >
                     {column.label}
                   </TableCell>
@@ -209,15 +195,15 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
                       )
                     })}
                     <TableCell align="right">
-                      <div style={{minWidth: '150px'}}>
-                        <IconButton disabled={row.endorsement !== EndorsementStatus.PENDING} size="small"
-                        onClick={()=> handleEndorseClick(row.id as number)} style={{backgroundColor: successBtnColor, marginRight: '5px', color: '#ffffff'}}>
+                      <div style={{minWidth: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Button disabled={row.unitPrice <= 0} size="small" disableElevation
+                        variant="contained" onClick={()=> handleApproveClick(row.id as number)} style={{backgroundColor: '#30fc19', marginRight: '5px', color: '#ffffff'}}>
                           <CheckCircleTwoTone />
-                        </IconButton>
-                        <IconButton disabled={row.endorsement !== EndorsementStatus.PENDING} size="small"
-                        onClick={()=> handleCancelRequestClick(row.id as number)} style={{backgroundColor: '#fc0b03', color: '#ffffff'}}>
+                        </Button>
+                        <Button disabled={row.unitPrice <= 0} size="small" disableElevation
+                        variant="contained" onClick={()=> handleCancelRequestClick(row.id as number)} style={{backgroundColor: '#fc0b03', color: '#ffffff'}}>
                           <CancelOutlined />
-                        </IconButton>
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -241,4 +227,4 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
   );
 }
 
-export default HODItemRequestListPage;
+export default GeneralManagerItemRequestListPage;

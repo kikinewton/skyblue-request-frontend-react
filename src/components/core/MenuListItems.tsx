@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react'
+import React, { Fragment, FunctionComponent, useContext, useState } from 'react'
 
 import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -15,7 +15,9 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../../context/AppProvider';
-import { appPages } from '../../utils/constants';
+import { appPages, APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { userHasAnyOfRoles } from '../../services/auth-service';
+import { AuthUser } from '../../types/User';
 // import clsx from 'clsx';
 
 const iconSize = '25px'
@@ -41,11 +43,19 @@ const useStyles = makeStyles(theme => ({
   faNavIcon: {
     height: '50px',
     width: '50px'
+  },
+  listItem: {
+    backgroundColor: `${theme.palette.primary.main} !important`,
+    color: '#ffffff'
   }
 }));
 
+interface Props {
+  authUser: AuthUser | undefined
+}
 
-const MenuListItems = () => {
+
+const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
   const classes = useStyles();
   const [inventoryOpen, setInventoryExpand] = useState(false)
   const [reportExpand, setReportExpand] = useState(false)
@@ -55,23 +65,20 @@ const MenuListItems = () => {
   const location = useLocation();
   const appContext = useContext(AppContext)
 
-  // const activeRoute = (routeName)=> {
-  //   return location.pathname.indexOf(routeName) > -1
-  // }
-
   const handleExpandInventory = ()=> {
     let val = !inventoryOpen
     setInventoryExpand(val);
   }
 
-  const handleExpandReport = ()=> {
-    let val = !reportExpand
-    setReportExpand(val);
-  }
-  
-  const handleExpandUserAdmin = ()=> {
-    let val = !userAdminOpen
-    setUserAdminOpen(val);
+  const activeLink = (subString: string): boolean => {
+    const pathMatches = location.pathname === subString
+    if(pathMatches) {
+      return true
+    } else if((location.pathname.indexOf(subString) >= 0) && (subString.length > 1)) {
+      return true
+    } else {
+      return false
+    }
   }
 
   const handleSetExpandedMenu = (value: ExpandedMenu.inventory | ExpandedMenu.userAdmin)=> {
@@ -84,23 +91,26 @@ const MenuListItems = () => {
 
   return (
     <Fragment>
-      <Link to="/" className={classes.link}>
-        <ListItem button>
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.dashboardRoles) ? 
+      <Link to="/" className={classes.link} color="primary">
+        <ListItem button selected ={activeLink('/')}>
           <ListItemIcon>
             <DashBoardIcon />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
       </Link>
+      : null}
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listDepartmentsRoles) ?
       <Link to="/departments" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.department)}>
-        <ListItem button>
+        <ListItem button selected={activeLink('/department')}>
           <ListItemIcon>
             <DepartmentIcon />
           </ListItemIcon>
           <ListItemText primary="Department" />
         </ListItem>
-      </Link>
-      <ListItem button onClick={handleExpandInventory}>
+      </Link> : null}
+      <ListItem button onClick={handleExpandInventory} selected={activeLink('/request-management')}>
         <ListItemIcon>
           <InventoryIcon />
         </ListItemIcon>
@@ -117,46 +127,54 @@ const MenuListItems = () => {
               <ListItemText primary="My Requests" />
             </ListItem>
           </Link>
-          <Link to="/request-management/my-requests/create" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="New Request" />
-            </ListItem>
-          </Link>
-          <Link to="/request-management/hod-item-requests" className={classes.link}>
+          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.hodEndorseRoles) ? <Link to="/request-management/hod-item-requests" className={classes.link}>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
                 <SubMenuItemIcon />
               </ListItemIcon>
               <ListItemText primary="HOD Item Requests" />
             </ListItem>
-          </Link>
+          </Link> : null}
+          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.generalManagerApproveRoles) ?<Link to="/request-management/general-manager-item-requests" className={classes.link}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <SubMenuItemIcon />
+              </ListItemIcon>
+              <ListItemText primary="GM Requests" />
+            </ListItem>
+          </Link> : null}
+          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.procurementOfficerApproveRoles) ? <Link to="/request-management/procurement-officer-item-requests" className={classes.link}>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <SubMenuItemIcon />
+              </ListItemIcon>
+              <ListItemText primary="Endorsed Requests" />
+            </ListItem>
+          </Link> : null}
         </List>
       </Collapse>
-      <Link to="/supplier-management/suppliers" className={classes.link}>
-        <ListItem button>
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listSupplierRoles) ? <Link to="/supplier-management/suppliers" className={classes.link}>
+        <ListItem button selected={activeLink('/suppliers')}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faTruckMoving} style={{width: iconSize, height: iconSize}} />
           </ListItemIcon>
           <ListItemText primary="Suppliers" />
         </ListItem>
-      </Link>
-      <Link to="/user-management/users" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.userManagementPage)}>
-        <ListItem button>
+      </Link> : null}
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listUserRoles) ? <Link to="/user-management/users" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.userManagementPage)}>
+        <ListItem button selected={activeLink('/user-management')}>
           <ListItemIcon>
             <AdminUserIcon />
           </ListItemIcon>
           <ListItemText primary="User Management" />
         </ListItem>
-      </Link>
-      <Link to="/Settings" className={classes.link}>
-        <ListItem button>
+      </Link> : null}
+      <Link to="/settings" className={classes.link}>
+        <ListItem button selected={activeLink('settings')}>
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary="settings" />
         </ListItem>
       </Link>
     </Fragment>

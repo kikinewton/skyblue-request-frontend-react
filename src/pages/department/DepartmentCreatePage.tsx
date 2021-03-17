@@ -5,6 +5,10 @@ import { useHistory } from 'react-router-dom';
 import * as departmentService from '../../services/department-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AuthUser } from '../../types/User';
+import { userHasAnyOfRoles } from '../../services/auth-service';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -22,7 +26,12 @@ const useStyles = makeStyles(theme=> ({
 
 }));
 
-const DepartmentCreatePage: FunctionComponent = ()=> {
+interface Props {
+  authUser: AuthUser
+}
+
+const DepartmentCreatePage: FunctionComponent<Props> = ({authUser})=> {
+  useAuthentication({roles: APP_PAGES_AND_ROLES.createDepartmentRoles})
   const [payload, setPayload] = useState({name: '', description: ''})
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
@@ -77,9 +86,9 @@ const DepartmentCreatePage: FunctionComponent = ()=> {
   return (
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}}>
-        <IconButton color="primary" onClick={handleNavigateBack}>
+        {userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.createDepartmentRoles) ? <IconButton color="primary" onClick={handleNavigateBack}>
           <BackIcon />
-        </IconButton>
+        </IconButton> : null}
       </Paper>
       <Paper elevation={0} style={{padding: '5px', minHeight: '300px', marginTop: '10px', display:'flex', flexDirection: 'column'}}>
         <Typography variant="h5" color="textPrimary">

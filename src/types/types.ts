@@ -1,3 +1,4 @@
+import { Component } from "react"
 import { EmployeeLevel } from "./EmployeeLevel"
 import { EndorsementStatus, RequestApproval, RequestStatus } from "./enums"
 import { RequestReason } from "./RequestReason"
@@ -90,4 +91,13 @@ export interface IRequestItem {
   requestDate: string
   employee: IUser
   
+}
+
+export interface IMenuItem {
+  path: string
+  roles?: EmployeeLevel[]
+  label: string
+  icon: string
+  hasSubMenu: boolean
+  children?: IMenuItem[]
 }

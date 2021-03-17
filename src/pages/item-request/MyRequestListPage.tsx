@@ -86,6 +86,7 @@ const MyRequestListPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
+    appContext.updateCurrentPage('My Requests')
     fetchMyRequests();
     return () => {
       

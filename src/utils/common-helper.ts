@@ -8,7 +8,7 @@ const MySwal = withReactContent(Swal)
 
 export function getIndexByField(array: any[], field: string, value: any) {
   return _.findIndex(array, (item)=> {
-    return item[field] == value;
+    return item[field] === value;
   })
 }
 
@@ -33,9 +33,9 @@ export function prettifyDateTime(date: string): string {
 }
 
 export function formatRequestStatusColor(value: string): string {
-  if(value == RequestStatus.APPROVAL_CANCELLED || value == RequestStatus.ENDORSEMENT_CANCELLED) {
+  if(value === RequestStatus.APPROVAL_CANCELLED || value === RequestStatus.ENDORSEMENT_CANCELLED) {
     return '#f5210a'
-  } else if(value == RequestStatus.PENDING) {
+  } else if(value === RequestStatus.PENDING) {
     return '#f5d50a'
   } else {
     return '#35f50a'

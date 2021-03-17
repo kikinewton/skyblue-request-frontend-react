@@ -1,15 +1,19 @@
 import { Button, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect } from 'react'
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect, useContext } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import * as departmentService from '../../services/department-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { DepartmentPayload } from '../../types/payloads';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AuthUser } from '../../types/User';
+import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({
   root: {
-
+    
   },
   form: {
     width: '70%',
@@ -27,12 +31,19 @@ interface ParamTypes {
   departmentId: string
 }
 
-const EditDepartmentPage: FunctionComponent = ()=> {
+interface Props {
+  authUser: AuthUser
+}
+
+const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
+  //lets authorize user
+  useAuthentication({roles: APP_PAGES_AND_ROLES.editDepartmentRoles})
   //local states
   const [payload, setPayload] = useState({name: '', description: ''})
   const [loading, setLoading] = useState<boolean>(false)
 
   const { departmentId } = useParams<ParamTypes>() //department id from url params
+  const appContext = useContext(AppContext)
 
   const history = useHistory()
   const { path } = useRouteMatch()
@@ -119,6 +130,7 @@ const EditDepartmentPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
+    appContext.updateCurrentPage('DEPARTMENT/EDIT')
     initDepartment()
     return () => {
     }

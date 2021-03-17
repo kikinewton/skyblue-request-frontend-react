@@ -1,6 +1,6 @@
 import { RequestApproval } from "./RequestApproval";
 import { RequestStatus } from "./RequestStatus";
-import { IDepartment, IUser } from "./types";
+import { IDepartment, ISupplier, IUser } from "./types";
 
 export interface SupplierPayload {
   id?: any
@@ -16,7 +16,7 @@ export interface UserPayload {
   firstName: string
   lastName: string
   phoneNo: string
-  employeeLevel: string
+  roles: string
   email: string
   employeeId: string
   departmentId?: number | string
@@ -58,4 +58,9 @@ export interface MultiRequestItemPayload {
 export interface LoginPayload {
   email: string
   password: string
+}
+
+export interface ProcurementActOnRequestPayload {
+  unitPrice: number
+  supplier: ISupplier
 }

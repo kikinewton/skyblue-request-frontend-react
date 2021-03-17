@@ -1,11 +1,15 @@
 import { Button, CircularProgress, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect } from 'react'
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect, useContext } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import * as supplierService from '../../services/supplier-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { DepartmentPayload } from '../../types/payloads';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AuthUser } from '../../types/User';
+import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -35,11 +39,18 @@ interface StateTypes {
   location: string
 }
 
-const EditSupplierPage: FunctionComponent = ()=> {
+interface Props {
+  authUser: AuthUser
+}
+
+const EditSupplierPage: FunctionComponent<Props> = ({authUser})=> {
   //local states
   const [payload, setPayload] = useState<StateTypes>({name: '', description: '', phone_no: '', email: '', location: ''})
   const [loading, setLoading] = useState<boolean>(false)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+
+  useAuthentication({roles: APP_PAGES_AND_ROLES.editSupplierRoles})
+  const appContext = useContext(AppContext)
 
   const { supplierId } = useParams<ParamTypes>() //department id from url params
 
@@ -136,6 +147,7 @@ const EditSupplierPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
+    appContext.updateCurrentPage('SUPPLIERS / EDIT')
     initDepartment()
     return () => {
     }

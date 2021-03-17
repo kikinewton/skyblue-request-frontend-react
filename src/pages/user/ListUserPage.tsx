@@ -9,6 +9,10 @@ import * as userService from '../../services/user-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { AppContext } from '../../context/AppProvider';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { userHasAnyOfRoles } from '../../services/auth-service';
+import { UserContext } from '../../context/UserProvider';
 
 
 const tableColumns: ITableColumn[] = [
@@ -16,7 +20,7 @@ const tableColumns: ITableColumn[] = [
   {id: 'phoneNo', label: 'Phone', minWidth: 170, align: 'left'},
   {id: 'email', label: 'Email', minWidth: 170, align: 'left'},
   {id: 'department', label: 'Department', minWidth: 100, align: 'left', format: (value: any) => (value || {}).name},
-  {id: 'employeeLevel', label: 'Level', minWidth: 100, align: 'left'},
+  {id: 'roles', label: 'Role', minWidth: 100, align: 'left'},
   {id: 'enabled', label: 'Status', align: 'left', format: (value: string)=> value ? 'Active' : 'Disabled'},
 ]
 
@@ -39,12 +43,15 @@ const ListUserPage: FunctionComponent = ()=> {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
+  const appContext = useContext(AppContext)
+  const userContext = useContext(UserContext)
+  //let authorize use
+  useAuthentication({roles: APP_PAGES_AND_ROLES.listUserRoles})
+
   //router helpers
   const history = useHistory()
   const { path } = useRouteMatch()
   const classes = useStyles()
-
-  const appContext = useContext(AppContext)
 
   const MySwal = withReactContent(Swal)
 
@@ -125,23 +132,20 @@ const ListUserPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
-    appContext.updateCurrentPage('USER MANAGEMENT')
+    appContext.updateCurrentPage('USERS')
     fetchAllUsers();
-    return () => {
-      
-    }
   }, [])
 
   return (
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
-          <Button variant="contained" color="primary" 
+          {userHasAnyOfRoles(userContext.user.roles, APP_PAGES_AND_ROLES.createUserRoles) ? <Button variant="contained" color="primary" 
           disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
             <Typography variant="button">
               New User
             </Typography>
-          </Button>
+          </Button> : null}
         </div>
       </Paper>
       
@@ -172,7 +176,6 @@ const ListUserPage: FunctionComponent = ()=> {
                 return (
                   <TableRow hover role="chckbox" tabIndex={-1} key={row.id}>
                     {tableColumns.map((column) => {
-                      const id: any = column.id
                       const value: any = row[column.id as keyof IUser]
                       return (
                         <TableCell key={column.id} align={column.align}>

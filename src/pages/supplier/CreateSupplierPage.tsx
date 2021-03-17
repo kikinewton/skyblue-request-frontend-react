@@ -1,10 +1,14 @@
 import { Button, CircularProgress, Divider, Grid, IconButton, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState } from 'react'
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
 import * as supplierService from '../../services/supplier-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AuthUser } from '../../types/User';
+import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -22,10 +26,16 @@ const useStyles = makeStyles(theme=> ({
 
 }));
 
-const CreateSupplierPage: FunctionComponent = ()=> {
+interface Props {
+  authUser: AuthUser
+}
+
+const CreateSupplierPage: FunctionComponent<Props> = ({authUser})=> {
   const [payload, setPayload] = useState({name: '', description: '', email: '', phone_no: '', location: ''})
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
+  useAuthentication({roles: APP_PAGES_AND_ROLES.createSupplierRoles})
+  const appContext = useContext(AppContext)
   const history = useHistory()
   const classes = useStyles()
 
@@ -77,6 +87,10 @@ const CreateSupplierPage: FunctionComponent = ()=> {
         setSubmitLoading(false)
       })
   }
+
+  useEffect(()=> {
+    appContext.updateCurrentPage('SUPPLIERS / CREATE NEW')
+  }, [])  
 
   return (
     <Fragment>

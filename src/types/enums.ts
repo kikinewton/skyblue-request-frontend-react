@@ -17,3 +17,7 @@ export enum RequestStatus {
   APPROVAL_CANCELLED = 'APPROVAL_CANCELLED',
   PENDING = 'PENDING'
 }
+
+export enum UserRoles {
+  
+}

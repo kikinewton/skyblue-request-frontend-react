@@ -9,6 +9,7 @@ import CopyRight from '../components/core/CopyRight';
 import { UserContext } from '../context/UserProvider';
 import * as authservice from '../services/auth-service'
 import { AuthUser, User } from '../types/User';
+import { APP_PAGES_AND_ROLES } from '../utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +87,7 @@ const LoginPage: FunctionComponent = ()=> {
               lastName: employee.lastName,
               fullName: employee.fullName,
               email: employee.email,
-              phoneNumber: employee.phoneNumber,
+              phoneNumber: employee.phoneNo,
               roles: employee.roles,
               employeeId: employee.employeeId,
               employeeLevel: employee.employeeLevel,
@@ -97,8 +98,10 @@ const LoginPage: FunctionComponent = ()=> {
             
             window.localStorage.setItem("user", JSON.stringify(authUser));
             userContext.saveUser(authUser)
+            if(!authservice.userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.dashboardRoles)) {
+              return history.push('/request-management/my-requests')
+            }
             history.push(`/`)
-            
           } else {
             MySwal.fire({
               icon: 'error',

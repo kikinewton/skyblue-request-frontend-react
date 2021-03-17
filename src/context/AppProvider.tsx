@@ -4,7 +4,7 @@ import { appPages, DARK_THEME_MODE, LIGHT_THEME_MODE } from '../utils/constants'
 
 const contextDefaultValues: AppContextState = {
   currentPage: appPages.dashboardPage,
-  theme: LIGHT_THEME_MODE,
+  theme: DARK_THEME_MODE,
   updateCurrentPage: () => {},
   updateTheme: () => {}
 }

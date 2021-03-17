@@ -9,6 +9,10 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { AppContext } from '../../context/AppProvider';
 import * as _ from 'lodash'
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { userHasAnyOfRoles } from '../../services/auth-service';
+import { AuthUser } from '../../types/User';
 
 const tableColumns: ITableColumn[] = [
   {id: 'name', label: 'Name', minWidth: 170, align: 'left'},
@@ -19,7 +23,7 @@ const useStyles = makeStyles(theme=> ({
   headerBar: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   tableContainer: {
@@ -28,9 +32,14 @@ const useStyles = makeStyles(theme=> ({
   }
 }))
 
-const initDepartments: IDepartment[] = []
+interface Props{
+  authUser: AuthUser
+}
 
-const DepartmentListPage: FunctionComponent = ()=> {
+const DepartmentListPage: FunctionComponent<Props> = ({authUser})=> {
+  //lets authorize user
+  useAuthentication({roles: APP_PAGES_AND_ROLES.listDepartmentsRoles})
+
   const [departments, setDepartments] = useState<IDepartment[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
@@ -125,12 +134,15 @@ const DepartmentListPage: FunctionComponent = ()=> {
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
-          <Button variant="contained" color="primary" 
+          <Typography variant="h6">
+            Department List
+          </Typography>
+          {userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.createDepartmentRoles) ? <Button variant="contained" color="primary" 
           disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
             <Typography variant="button">
               Add Department
             </Typography>
-          </Button>
+          </Button> : null}
         </div>
       </Paper>
       

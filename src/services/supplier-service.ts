@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { SupplierPayload, UserPayload } from "../types/payloads";
+import { SupplierPayload } from "../types/payloads";
 import service from './helpers/web-api'
 
 const servicePath = 'suppliers'

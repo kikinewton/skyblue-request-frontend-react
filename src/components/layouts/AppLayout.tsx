@@ -1,9 +1,8 @@
-import { AppBar, Badge, Button, ClickAwayListener, Container, CssBaseline, Divider, Drawer, Grow, IconButton, List, makeStyles, Menu, MenuItem, MenuList, Paper, Popper, Toolbar, Typography } from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import { AppBar, Button, Container, CssBaseline, Divider, Drawer, IconButton, List, makeStyles, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import clsx from 'clsx';
-import React, { FunctionComponent, useState, useContext, createRef, useEffect, useRef, Ref, SyntheticEvent } from 'react'
+import React, { FunctionComponent, useState, useContext, useEffect, useRef, Ref, SyntheticEvent } from 'react'
 import MenuListItems from '../core/MenuListItems';
 import CopyRight from '../core/CopyRight';
 import { AppContext } from '../../context/AppProvider';
@@ -22,13 +21,16 @@ import ListUserPage from '../../pages/user/ListUserPage';
 import CreateUserPage from '../../pages/user/CreateUserPage';
 import EditUserPage from '../../pages/user/EditUserPage';
 import { APP_MODULES } from '../../utils/constants';
-import ItemRequestIndexPage from '../../pages/item-request/ItemRequestIndexPage';
 import CreateItemRequestPage from '../../pages/item-request/CreateItemRequestPage';
 import { Person } from '@material-ui/icons';
 import * as authService from '../../services/auth-service'
 import { AuthUser } from '../../types/User';
 import MyRequestListPage from '../../pages/item-request/MyRequestListPage';
 import HODItemRequestListPage from '../../pages/item-request/HODItemRequestListPage';
+import useAuthentication from '../hooks/use-authentication';
+import NotAuthorizedPage from '../../pages/NotAuthorizedPage';
+import GeneralManagerItemRequestListPage from '../../pages/item-request/GeneralManagerItemRequestListPage';
+import ProcurmentOfficerRequestListPage from '../../pages/item-request/ProcurementOfficerRequestListPage';
 
 const drawerWidth = 240;
 
@@ -138,7 +140,8 @@ const AppLayout:FunctionComponent = ()=> {
   const [open, setOpen] = useState<boolean>(true);
   const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<any>(null)
-  
+  const userContext = useContext(UserContext)
+  const appContext = useContext(AppContext)
 
   const menuAchorRef = useRef(null)
 
@@ -146,9 +149,6 @@ const AppLayout:FunctionComponent = ()=> {
   const location = useLocation();
   const { path } = useRouteMatch()
   const history = useHistory()
-
-  const appContext = useContext(AppContext)
-  const userContext = useContext(UserContext)
 
   const handleProfileMenuButtonClick = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
@@ -166,14 +166,11 @@ const AppLayout:FunctionComponent = ()=> {
     setOpen(false);
   }
 
-
-  const initUserState = ()=> {
-    if(authService.getUserDetailsFromStorage()) {
-      userContext.saveUser(authService.getUserDetailsFromStorage() as AuthUser)
-    } else {
-      history.push('/login')
-    }
-  }
+  // const initUserState = ()=> {
+  //   if(authService.getUserDetailsFromStorage()) {
+  //     userContext.saveUser(authService.getUserDetailsFromStorage() as AuthUser)
+  //   }
+  // }
 
   const handleLogout = ()=> {
     handleProfileMenuClose()
@@ -185,11 +182,14 @@ const AppLayout:FunctionComponent = ()=> {
     console.log('profile')
   }
 
+  //useAuthentication({})
   useEffect(() => {
-    initUserState()
-  }, [])
-
-
+    const authUser = authService.getUserDetailsFromStorage() as AuthUser
+    if(!authUser) {
+      return history.push('/login')
+    }
+  })
+ 
 
   //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -213,11 +213,6 @@ const AppLayout:FunctionComponent = ()=> {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             {appContext.currentPage}
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <div style={{marginLeft: '10px'}}>
             <Button style={{color: '#ffffff'}} aria-haspopup="true" onClick={handleProfileMenuButtonClick}>
               {userContext.user.fullName}
@@ -250,7 +245,7 @@ const AppLayout:FunctionComponent = ()=> {
         </div>
         <Divider />
         <List>
-          <MenuListItems />
+          <MenuListItems authUser={authService.getUserDetailsFromStorage()} />
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -265,18 +260,35 @@ const AppLayout:FunctionComponent = ()=> {
               >
                 <Switch location={location}>
                   <Route path={`${path}${APP_MODULES.SETTINGS_MODULE.path}`} component={SettingsPage}/>
-                  <Route path={`${path}departments/create`} component={DepartmentCreatePage}/>
-                  <Route path={`${path}departments/:departmentId/edit`} component={EditDepartmentPage} />
-                  <Route path={`${path}departments`} component={DepartmentListPage}/>
-                  <Route path={`${path}supplier-management/suppliers/:supplierId/edit`} component={EditSupplierPage}/>
-                  <Route path={`${path}supplier-management/suppliers/create`} component={CreateSupplierPage}/>
-                  <Route path={`${path}supplier-management/suppliers`} component={SupplierListPage}/>
+                  <Route path={`${path}departments/create`}>
+                    <DepartmentCreatePage authUser={userContext.user} />
+                  </Route>
+                  <Route path={`${path}departments/:departmentId/edit`}>
+                    <EditDepartmentPage authUser={userContext.user} />
+                  </Route>
+                  <Route path={`${path}departments`}>
+                    <DepartmentListPage authUser={userContext.user} />
+                  </Route>
+
+                  <Route path={`${path}supplier-management/suppliers/:supplierId/edit`}>
+                    <EditSupplierPage authUser={userContext.user}/>
+                  </Route>
+                  <Route path={`${path}supplier-management/suppliers/create`}>
+                    <CreateSupplierPage authUser={userContext.user} />
+                  </Route>
+                  <Route path={`${path}supplier-management/suppliers`}>
+                    <SupplierListPage authUser={userContext.user} />
+                  </Route>
+
                   <Route path={`${path}user-management/users/create`} component={CreateUserPage}/>
                   <Route path={`${path}user-management/users/:userId/edit`} component={EditUserPage}/>
                   <Route path={`${path}user-management/users`} component={ListUserPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests/create`} component={CreateItemRequestPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests`} component={MyRequestListPage}/>
                   <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/hod-item-requests`} component={HODItemRequestListPage}/>
+                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/general-manager-item-requests`} component={GeneralManagerItemRequestListPage}/>
+                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/procurement-officer-item-requests`} component={ProcurmentOfficerRequestListPage}/>
+                  <Route path="/not-authorized" component={NotAuthorizedPage} />
                   <Route exact path={`${path}`} component={HomePage}/>
                 </Switch>
               </CSSTransition>

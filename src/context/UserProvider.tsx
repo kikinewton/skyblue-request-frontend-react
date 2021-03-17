@@ -1,6 +1,8 @@
 import { createContext, FC, useState } from "react";
+import { getUserDetailsFromStorage } from "../services/auth-service";
 import { IDepartment, UserContextState } from "../types/types";
 import { AuthUser, User } from "../types/User";
+
 
 const defaultDepartment: IDepartment = {
   id: null,
@@ -8,25 +10,30 @@ const defaultDepartment: IDepartment = {
   description: ''
 }
 
+const initUser = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  fullName: '',
+  email: '',
+  employeeLevel: '',
+  employeeId: '',
+  phoneNumber: '',
+  roles: '',
+  department: defaultDepartment,
+  createdAt: '',
+  token: ''
+}
+
+const storeUser = getUserDetailsFromStorage() as AuthUser;
+
 const defaultContextValues: UserContextState = {
-  user: {
-    id: '',
-    firstName: '',
-    lastName: '',
-    fullName: '',
-    email: '',
-    employeeLevel: '',
-    employeeId: '',
-    phoneNumber: '',
-    roles: '',
-    department: defaultDepartment,
-    createdAt: '',
-    token: ''
-  },
+  user: storeUser ? storeUser : initUser,
   saveUser: (authUser: AuthUser)=> {},
   removeUser: ()=> {}
 }
 //
+
 export const UserContext = createContext<UserContextState>(defaultContextValues);
 
 const UserProvider: FC = ({children}) => {

@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { MultiRequestItemPayload, UserPayload } from "../types/payloads";
+import { MultiRequestItemPayload, ProcurementActOnRequestPayload, UserPayload } from "../types/payloads";
 import service from './helpers/web-api'
 
 const servicePath = 'requests'
@@ -96,3 +96,86 @@ export function getAllDepartmentItemRequests(departmentId: number, employeeId: n
     .catch(error=> reject(error))
   })
 }
+
+export function endorseItemRequest(requestId: number, employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/${requestId}/employees/${employeeId}/endorse`,
+      method: 'put',
+      data: {}
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function hodCancelItemRequest(requestId: number, employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/${requestId}/employees/${employeeId}/cancel`,
+      method: 'put',
+      data: {}
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function getEndorsedRequestItems(employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/endorsedItems`,
+      method: 'get',
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function procurementActOnRequest(requestId: number, payload: ProcurementActOnRequestPayload): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/procurement/${requestId}`,
+      method: 'put',
+      data: payload
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function getGeneralManagerRequests(employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/employees/${employeeId}/generalManager`,
+      method: 'get'
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function approveRequest(requestId: number, employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/${requestId}/employees/${employeeId}/approve`,
+      method: 'put',
+      data: {}
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+
+export function cancelRequest(requestId: number, employeeId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/requestItems/${requestId}/employees/${employeeId}/cancel`,
+      method: 'put',
+      data: {}
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}
+

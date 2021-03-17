@@ -12,6 +12,9 @@ import { faColumns } from '@fortawesome/free-solid-svg-icons';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { AppContext } from '../../context/AppProvider';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AuthUser } from '../../types/User';
 
 
 const tableColumns: ITableColumn[] = [
@@ -37,7 +40,12 @@ const useStyles = makeStyles(theme=> ({
 
 const initDepartments: IDepartment[] = []
 
-const SupplierListPage: FunctionComponent = ()=> {
+interface Props {
+  authUser: AuthUser
+}
+const SupplierListPage: FunctionComponent<Props> = ({authUser})=> {
+  useAuthentication({roles: APP_PAGES_AND_ROLES.listSupplierRoles})
+  
   const [suppliers, setSuppliers] = useState<ISupplier[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
@@ -125,7 +133,7 @@ const SupplierListPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
-    appContext.updateCurrentPage('SUPPLIER MANAGEMENT')
+    appContext.updateCurrentPage('SUPPLIERS')
     fetchAllSuppliers();
     return () => {
       

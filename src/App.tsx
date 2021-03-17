@@ -9,11 +9,12 @@ import { darkTheme, lightTheme } from './utils/theme';
 import AppProvider, { AppContext } from './context/AppProvider';
 import UserProvider from './context/UserProvider';
 import { LIGHT_THEME_MODE } from './utils/constants';
+import NotAuthorizedPage from './pages/NotAuthorizedPage';
 
 function App() {
 
   const appContext = useContext(AppContext)
-
+  
   const themeData = appContext.theme == LIGHT_THEME_MODE ? lightTheme : darkTheme;
   console.log('theme data', themeData)
   return (

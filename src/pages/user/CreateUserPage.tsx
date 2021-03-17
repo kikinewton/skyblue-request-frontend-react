@@ -1,5 +1,5 @@
 import { Button, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
 import * as userService from '../../services/user-service'
@@ -9,6 +9,9 @@ import Swal from 'sweetalert2';
 import { EmployeeLevel, employeeLevels } from '../../types/EmployeeLevel';
 import { UserPayload } from '../../types/payloads';
 import { IDepartment } from '../../types/types';
+import useAuthentication from '../../components/hooks/use-authentication';
+import { APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -31,7 +34,7 @@ interface StateType {
   lastName: string
   email: string
   phoneNo: string
-  employeeLevel: EmployeeLevel
+  roles: EmployeeLevel
   employeeId: string
   departmentId: number | string
 }
@@ -39,11 +42,15 @@ interface StateType {
 const CreateUserPage: FunctionComponent = ()=> {
   const [payload, setPayload] = useState<StateType>(
     {firstName: '', lastName: '', phoneNo: '', email: '', 
-    employeeLevel: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
+    roles: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
   })
 
   const [departments, setDepartments] = useState<IDepartment[]>([])
 
+  //lets authorize access
+  useAuthentication({ roles: APP_PAGES_AND_ROLES.createUserRoles })
+  const appContext = useContext(AppContext)
+  
   const history = useHistory()
   const classes = useStyles()
 
@@ -92,7 +99,7 @@ const CreateUserPage: FunctionComponent = ()=> {
       phoneNo: payload.phoneNo,
       firstName: payload.firstName,
       lastName: payload.lastName,
-      employeeLevel: payload.employeeLevel,
+      roles: payload.roles,
       department: department,
       employeeId: payload.employeeId,
       password: 'password'
@@ -110,7 +117,7 @@ const CreateUserPage: FunctionComponent = ()=> {
             text: message ? message : 'User Created Successfully',
             allowOutsideClick: false,
             willClose: ()=> {
-              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: departments[0].id, employeeId: '', employeeLevel: EmployeeLevel.REGULAR})
+              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: departments[0].id, employeeId: '', roles: EmployeeLevel.REGULAR})
             }
           })
         } else {
@@ -127,6 +134,7 @@ const CreateUserPage: FunctionComponent = ()=> {
   }
 
   useEffect(() => {
+    appContext.updateCurrentPage('USERS / CREATE')
     fetchAllDepartments()
     return () => {
       
@@ -177,10 +185,10 @@ const CreateUserPage: FunctionComponent = ()=> {
               <InputLabel htmlFor="outlined-age-native-simple">LEVEL</InputLabel>
               <Select
                 native
-                value={payload.employeeLevel}
+                value={payload.roles}
                 onChange={handleSelectChange}
-                label="Employee Level"
-                name="employeeLevel"
+                label="Role"
+                name="roles"
               >
                 {employeeLevels.map((level)=> {
                   return (
