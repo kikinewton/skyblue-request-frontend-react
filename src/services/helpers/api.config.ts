@@ -19,6 +19,6 @@ import * as qs from 'qs'
 // }
 export const apiConfig = {
   timeout: 30000,
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://bluesupply-env.eba-tykdzwp2.us-east-1.elasticbeanstalk.com/api',
   paramsSerializer: (params: PathLike) => qs.stringify(params, { indices: false }),
 }

@@ -106,7 +106,7 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
     departmentService.updateDepartment(parseInt(departmentId), payload)
       .then(response=> {
         const {status, data, message} = response
-        if(status == 'CREATED') {
+        if(status == 'SUCCESS') {
           MySwal.fire({
             icon: 'success',
             title: 'Success',

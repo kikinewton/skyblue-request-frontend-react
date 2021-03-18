@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center'
   },
+  image1: {
+    backgroundColor: '#0075c9'
+  },
   paper: {
     margin: theme.spacing(8, 4),
     display: 'flex',
