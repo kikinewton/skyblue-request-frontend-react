@@ -8,6 +8,7 @@ const HTTP_SUCCESS_CODE = 200;
 const webApi: AxiosInstance = axios.create(apiConfig)
 
 webApi.interceptors.request.use(config=> {
+  console.log('config', config)
   return config
 }, error=> {
   return Promise.reject(error)
