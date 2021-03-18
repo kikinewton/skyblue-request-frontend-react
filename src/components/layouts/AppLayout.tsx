@@ -186,7 +186,7 @@ const AppLayout:FunctionComponent = ()=> {
   useEffect(() => {
     const authUser = authService.getUserDetailsFromStorage() as AuthUser
     if(!authUser) {
-      return history.push('/login')
+      return history.push(`/login`)
     }
   })
  
