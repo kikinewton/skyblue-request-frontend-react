@@ -15,6 +15,7 @@ import { AppContext } from '../../context/AppProvider';
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { AuthUser } from '../../types/User';
+import { userHasAnyOfRoles } from '../../services/auth-service';
 
 
 const tableColumns: ITableColumn[] = [
@@ -144,7 +145,7 @@ const SupplierListPage: FunctionComponent<Props> = ({authUser})=> {
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
-          <Button variant="contained" color="primary" 
+          <Button variant="contained" color="primary" disabled={!userHasAnyOfRoles(authUser, APP_PAGES_AND_ROLES.createSupplierRoles)}
           disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
             <Typography variant="button">
               New Supplier

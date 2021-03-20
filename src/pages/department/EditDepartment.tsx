@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Divider, Grid, IconButton, LinearProgress, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
 import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect, useContext } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
@@ -41,6 +41,7 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
   //local states
   const [payload, setPayload] = useState({name: '', description: ''})
   const [loading, setLoading] = useState<boolean>(false)
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
 
   const { departmentId } = useParams<ParamTypes>() //department id from url params
   const appContext = useContext(AppContext)
@@ -103,6 +104,7 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
       name: payload.name,
       description: payload.description
     }
+    setSubmitLoading(true)
     departmentService.updateDepartment(parseInt(departmentId), payload)
       .then(response=> {
         const {status, data, message} = response
@@ -126,6 +128,9 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
       })
       .catch(error=> {
         
+      })
+      .finally(()=> {
+        setSubmitLoading(false)
       })
   }
 
@@ -155,7 +160,8 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="department-description" label="description" name="description" value={payload.description}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading}>
+              {submitLoading ? <CircularProgress size={15} /> : null}
               <Typography variant="button">
                 Edit Department
               </Typography>

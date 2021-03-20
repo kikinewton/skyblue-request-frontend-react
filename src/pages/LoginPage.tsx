@@ -9,6 +9,7 @@ import CopyRight from '../components/core/CopyRight';
 import { UserContext } from '../context/UserProvider';
 import * as authservice from '../services/auth-service'
 import { AuthUser, User } from '../types/User';
+import { showErrorAlert } from '../utils/common-helper';
 import { APP_PAGES_AND_ROLES } from '../utils/constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -81,44 +82,33 @@ const LoginPage: FunctionComponent = ()=> {
         console.log('res', response)
         const {data, message, status} = response
         if(status === 'SUCCESS') {
-          if(status === 'SUCCESS') {
-            const employee = data.employee as User
-            //construct authuser
-            const authUser: AuthUser = {
-              id: employee.id,
-              firstName: employee.firstName,
-              lastName: employee.lastName,
-              fullName: employee.fullName,
-              email: employee.email,
-              phoneNumber: employee.phoneNo,
-              roles: employee.roles,
-              employeeId: employee.employeeId,
-              employeeLevel: employee.employeeLevel,
-              department: employee.department,
-              createdAt: employee.createdAt,
-              token: data.token
-            }
-            
-            window.localStorage.setItem("user", JSON.stringify(authUser));
-            userContext.saveUser(authUser)
-            if(!authservice.userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.dashboardRoles)) {
-              return history.push('/request-management/my-requests')
-            }
-            history.push(`/`)
+          const employee = data.employee as User
+          //construct authuser
+          const authUser: AuthUser = {
+            id: employee.id,
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            fullName: employee.fullName,
+            email: employee.email,
+            phoneNumber: employee.phoneNo,
+            roles: employee.roles,
+            employeeId: employee.employeeId,
+            employeeLevel: employee.employeeLevel,
+            department: employee.department,
+            createdAt: employee.createdAt,
+            token: data.token
+          }
+          
+          window.localStorage.setItem("user", JSON.stringify(authUser));
+          userContext.saveUser(authUser)
+          if(!authservice.userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.dashboardRoles)) {
+            return history.push('/request-management/my-requests')
           } else {
-            MySwal.fire({
-              icon: 'error',
-              title: 'Login',
-              text: message ? message : 'Failed to login'
-            })
+            return history.push(`/`)
           }
           
         } else {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Login',
-            text: message ? message : 'Error'
-          })
+          showErrorAlert('Login', message ? message : 'Failed to login!')
         }
       })
       .catch(error => {

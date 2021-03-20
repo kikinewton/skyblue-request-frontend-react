@@ -127,7 +127,6 @@ const EditSupplierPage: FunctionComponent<Props> = ({authUser})=> {
             text: message ? message : 'Supplier Created Successfully',
             allowOutsideClick: false,
             willClose: ()=> {
-              setPayload({name: '', description: '', phone_no: '', email: '', location: ''})
             }
           })
         } else {

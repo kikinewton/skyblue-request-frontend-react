@@ -28,26 +28,26 @@ export const APP_MODULES = {
 }
 
 export const APP_PAGES_AND_ROLES = {
-  dashboardRoles: [EmployeeLevel.ADMIN, EmployeeLevel.PROCUREMENT_OFFICER, EmployeeLevel.HOD, EmployeeLevel.GENERAL_MANAGER],
+  dashboardRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD, EmployeeLevel.GENERAL_MANAGER],
 
-  createUserRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
-  listUserRoles: [EmployeeLevel.ADMIN, EmployeeLevel.GENERAL_MANAGER, EmployeeLevel.HOD],
+  createUserRoles: [EmployeeLevel.ADMIN],
+  listUserRoles: [EmployeeLevel.ADMIN],
   editUserRoles: [EmployeeLevel.ADMIN],
   deleteUserRoles: [EmployeeLevel.ADMIN],
 
-  listDepartmentsRoles: [EmployeeLevel.ADMIN, EmployeeLevel.GENERAL_MANAGER, EmployeeLevel.HOD],
-  editDepartmentRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
+  listDepartmentsRoles: [EmployeeLevel.ADMIN],
+  editDepartmentRoles: [EmployeeLevel.ADMIN],
   createDepartmentRoles: [EmployeeLevel.ADMIN],
-  deleteDepartmentRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
+  deleteDepartmentRoles: [EmployeeLevel.ADMIN],
 
-  listSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.GENERAL_MANAGER, EmployeeLevel.HOD],
-  editSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
-  createSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
-  deleteSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
+  listSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.PROCUREMENT_OFFICER, EmployeeLevel.GENERAL_MANAGER],
+  editSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.PROCUREMENT_OFFICER],
+  createSupplierRoles: [EmployeeLevel.ADMIN, EmployeeLevel.PROCUREMENT_OFFICER],
+  deleteSupplierRoles: [EmployeeLevel.ADMIN],
 
-  hodEndorseRoles: [EmployeeLevel.ADMIN, EmployeeLevel.GENERAL_MANAGER, EmployeeLevel.HOD],
-  generalManagerApproveRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD, EmployeeLevel.GENERAL_MANAGER],
-  procurementOfficerApproveRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD, EmployeeLevel.PROCUREMENT_OFFICER]
+  hodEndorseRoles: [EmployeeLevel.ADMIN, EmployeeLevel.HOD],
+  generalManagerApproveRoles: [EmployeeLevel.ADMIN, EmployeeLevel.GENERAL_MANAGER],
+  procurementOfficerApproveRoles: [EmployeeLevel.ADMIN, EmployeeLevel.PROCUREMENT_OFFICER]
 }
 
 
