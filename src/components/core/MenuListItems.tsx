@@ -174,7 +174,7 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="settings" />
+          <ListItemText primary="Settings" />
         </ListItem>
       </Link>
     </Fragment>

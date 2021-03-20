@@ -165,7 +165,7 @@ const SettingsPage: FunctionComponent = ()=> {
         </Grid>
       </Grid>
       <Dialog open={changePasswordDialogOpen} onClose={handleCloseChangePasswordDialog} aria-labelledby="form-dialog-title" disableBackdropClick={true}>
-        <DialogTitle id="form-dialog-title">Procurement Form</DialogTitle>
+        <DialogTitle id="form-dialog-title">Change Password Form</DialogTitle>
         <DialogContent>
           <div style={{width: '400px'}}>
               <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
