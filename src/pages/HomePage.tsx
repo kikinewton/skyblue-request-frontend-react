@@ -27,7 +27,7 @@ const HomePage: FunctionComponent = (props)=> {
     dashboardService.requestPerCurrentMonthPerDepartment()
       .then(response => {
         const {status, data} = response
-        if(status === 'SUCCESS') {
+        if(status === 'OK') {
           setRequestPerDepartment(data)
         }
       })
@@ -48,8 +48,10 @@ const HomePage: FunctionComponent = (props)=> {
             <Card className={classes.card}>
               <CardHeader title="Department Request" subheader="This Month"/>
               <CardContent>
-                <PieChart width={530} height={100}>
-                  <Pie data={requestPerDepartment} dataKey="Num_of_Request" nameKey="Department" />
+                <PieChart width={530} height={100} 
+                cx="50%"
+                cy="50%">
+                  <Pie data={requestPerDepartment} dataKey="num_of_Request" nameKey="department" />
                 </PieChart>
               </CardContent>
               <CardActions disableSpacing>

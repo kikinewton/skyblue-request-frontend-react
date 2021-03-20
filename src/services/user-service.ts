@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { UserPayload } from "../types/payloads";
+import { IUserPayload, UserPayload } from "../types/payloads";
 import service from './helpers/web-api'
 
 const servicePath = 'employees'
@@ -9,7 +9,7 @@ const servicePath = 'employees'
 export function saveUser(payload: UserPayload): Promise<any> {
   return new Promise((resolve, reject) => {
     service({
-      url: `/${servicePath}`,
+      url: `/auth/admin/signup`,
       method: 'POST',
       data: payload
     })
@@ -18,7 +18,7 @@ export function saveUser(payload: UserPayload): Promise<any> {
   })
 }
 
-export function registerEmployee(payload: UserPayload): Promise<any> {
+export function registerEmployee(payload: IUserPayload): Promise<any> {
   return new Promise((resolve, reject) => {
     service({
       url: `/auth/admin/signup`,

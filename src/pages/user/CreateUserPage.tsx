@@ -1,4 +1,4 @@
-import { Button, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
 import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
@@ -7,7 +7,7 @@ import * as departmentService from '../../services/department-service'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { EmployeeLevel, employeeLevels } from '../../types/EmployeeLevel';
-import { UserPayload } from '../../types/payloads';
+import { IUserPayload, UserPayload } from '../../types/payloads';
 import { IDepartment } from '../../types/types';
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
@@ -44,7 +44,7 @@ const CreateUserPage: FunctionComponent = ()=> {
     {firstName: '', lastName: '', phoneNo: '', email: '', 
     roles: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
   })
-
+  const [loading, setLoading] = useState<boolean>(false)
   const [departments, setDepartments] = useState<IDepartment[]>([])
 
   //lets authorize access
@@ -90,23 +90,18 @@ const CreateUserPage: FunctionComponent = ()=> {
 
   const handleSubmitEvent = (event: SyntheticEvent)=> {
     event.preventDefault()
-   
     const department: IDepartment | undefined = departments.find(item=> item.id == payload.departmentId)
-    console.log('department', department)
-
-    const myPayload: UserPayload = {
+    const myPayload: IUserPayload = {
       email: payload.email,
       phoneNo: payload.phoneNo,
       firstName: payload.firstName,
       lastName: payload.lastName,
-      roles: payload.roles,
+      employeeLevel: payload.roles,
       department: department,
       employeeId: payload.employeeId,
       password: 'password'
     }
-
-    console.log('payload', myPayload)
-
+    setLoading(true)
     userService.registerEmployee(myPayload)
       .then(response=> {
         const {status, data, message} = response
@@ -130,6 +125,9 @@ const CreateUserPage: FunctionComponent = ()=> {
       })
       .catch(error=> {
         
+      })
+      .finally(()=> {
+        setLoading(false)
       })
   }
 
@@ -198,6 +196,7 @@ const CreateUserPage: FunctionComponent = ()=> {
               </Select>
             </FormControl>
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
+              {loading ? <CircularProgress /> : null }
               <Typography variant="button">
                 Create User
               </Typography>

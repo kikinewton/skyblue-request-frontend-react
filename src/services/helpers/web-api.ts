@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { apiConfig } from './api.config'
 import { ResponseData } from '../../types/types';
+import { getUserDetailsFromStorage } from '../auth-service';
+import { AuthUser } from '../../types/User';
 const HTTP_SUCCESS_CODE = 200;
 
 
@@ -8,6 +10,13 @@ const HTTP_SUCCESS_CODE = 200;
 const webApi: AxiosInstance = axios.create(apiConfig)
 
 webApi.interceptors.request.use(config=> {
+  const authUser = getUserDetailsFromStorage() as AuthUser
+  
+  if(config.url?.indexOf('/auth/login') === -1) {
+    if(authUser) {
+      config.headers['Authorization'] = `Bearer ${authUser.token}`
+    }
+  }
   console.log('config', config)
   return config
 }, error=> {

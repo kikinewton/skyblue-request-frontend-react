@@ -24,6 +24,19 @@ export interface UserPayload {
   password?: string
 }
 
+export interface IUserPayload {
+  id?: number
+  firstName: string
+  lastName: string
+  phoneNo: string
+  employeeLevel: string
+  email: string
+  employeeId: string
+  departmentId?: number | string
+  department?: IDepartment
+  password?: string
+}
+
 export interface DepartmentPayload {
   id?: number
   name: string
