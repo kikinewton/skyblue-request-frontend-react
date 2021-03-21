@@ -19,7 +19,7 @@ import * as qs from 'qs'
 // }
 export const apiConfig = {
   timeout: 30000,
-  baseURL: 'https://warm-mesa-40121.herokuapp.com/api',
+  baseURL: 'https://blueskiesbackend.herokuapp.com/api',
   //baseURL: 'http://bluesupply-env.eba-tykdzwp2.us-east-1.elasticbeanstalk.com/api',
   paramsSerializer: (params: PathLike) => qs.stringify(params, { indices: false }),
 }
