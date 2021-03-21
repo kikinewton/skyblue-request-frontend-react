@@ -104,13 +104,13 @@ const ProcurmentOfficerRequestListPage: FunctionComponent = ()=> {
 
   const handleAddEntry = ()=> {
     const supplier = suppliers.find(supplier=> supplier.id == entry.supplierId) as ISupplier
-    console.log('supplier', supplier)
     const payload: ProcurementActOnRequestPayload = {
       supplier: supplier,
       unitPrice: Number(entry.unitPrice)
     }
+    const authUserId = authUser.id as number
     setSubmitLoading(true)
-    requestService.procurementActOnRequest(entry.id, payload)
+    requestService.procurementActOnRequest(entry.id, authUserId, payload)
       .then(response => {
         const {status, message} = response
         if(status === 'OK') {

@@ -132,10 +132,10 @@ export function getEndorsedRequestItems(employeeId: number): Promise<any> {
   })
 }
 
-export function procurementActOnRequest(requestId: number, payload: ProcurementActOnRequestPayload): Promise<any> {
+export function procurementActOnRequest(requestId: number, employeeId: number,payload: ProcurementActOnRequestPayload): Promise<any> {
   return new Promise((resolve, reject) => {
     service({
-      url: `/procurement/${requestId}`,
+      url: `/procurement/${employeeId}/requestItem/${requestId}`,
       method: 'put',
       data: payload
     })
