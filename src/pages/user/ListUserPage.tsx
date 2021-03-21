@@ -91,7 +91,7 @@ const ListUserPage: FunctionComponent = ()=> {
       .then(response => {
         const {message, status} = response
         if(status == 'OK') {
-          setUsers(users.filter(user => user.id === id))
+          setUsers(users.filter(user => user.id !== id))
           MySwal.fire({
             icon: 'success',
             title: 'Success',
