@@ -1,4 +1,4 @@
-import { Button, Divider, FormControl, IconButton, InputLabel, LinearProgress, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
+import { Button, Checkbox, CircularProgress, Divider, FormControl, FormControlLabel, IconButton, InputLabel, LinearProgress, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
 import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useState, useEffect, useContext } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
@@ -40,18 +40,19 @@ interface StateType {
   email: string
   phoneNo: string
   roles: EmployeeLevel
-  employeeId: string
   departmentId: number | string
+  enabled: boolean
 }
 
 const EditUserPage: FunctionComponent = ()=> {
   //local states
   const [payload, setPayload] = useState<StateType>(
     {firstName: '', lastName: '', phoneNo: '', email: '', 
-    roles: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
+    roles: EmployeeLevel.REGULAR, departmentId: '', enabled: false
   })
   const [departments, setDepartments] = useState<IDepartment[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const { userId } = useParams<ParamTypes>() //department id from url params
   const appContext = useContext(AppContext)
 
@@ -81,6 +82,13 @@ const EditUserPage: FunctionComponent = ()=> {
     console.log('event', event.target.value)
     setPayload({...payload, [eventName]: target.value})
   }
+
+  const handleCheckboxChange = (event: any)=> {
+    const target = event.target
+    const eventName: string = target.name
+    console.log('event', event.target.checked)
+    setPayload({...payload, [eventName]: target.checked})
+  }
   
   const fetchAllDepartments = () => {
     departmentService.getAllDepartments()
@@ -100,23 +108,12 @@ const EditUserPage: FunctionComponent = ()=> {
     userService.getUser(parseInt(userId))
       .then(response=> {
         const {status, data, message} = response;
-        console.log('data', data)
+        console.log('data user enabled', data.enabled)
         if(status === 'SUCCESS') {
-          if(data) {
-            setPayload({email: data.email, phoneNo: data.phoneNo, firstName: data.firstName, lastName: data.lastName, departmentId: data.department, employeeId: data.employeeId, roles: data.employeeLevel})
-          } else {
-            MySwal.fire({
-              icon: 'error',
-              title: 'Failed',
-              text: 'Department Not Found'
-            })
-          }
+          setPayload({email: data.email, phoneNo: data.phoneNo, firstName: data.firstName, 
+            lastName: data.lastName, departmentId: (data.department || {}).id, roles: data.roles, enabled: data.enabled})
         } else {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text: message ? message : 'Department Not Found'
-          })
+          showErrorAlert('User', message ? message : 'Failed To Fetch User')
         }
       })
       .catch(error=> {
@@ -137,10 +134,11 @@ const EditUserPage: FunctionComponent = ()=> {
       lastName: payload.lastName,
       email: payload.email,
       phoneNo: payload.phoneNo,
-      employeeId: payload.employeeId,
       roles: payload.roles,
+      enabled: payload.enabled,
       departmentId: payload.departmentId
     }
+    setSubmitLoading(true)
     userService.updateUser(parseInt(userId), payloadModel)
       .then(response=> {
         const {status, data, message} = response
@@ -162,6 +160,7 @@ const EditUserPage: FunctionComponent = ()=> {
       .catch(error=> {
         showErrorAlert('Update User', error)
       })
+      .finally(()=> setSubmitLoading(false))
   }
 
   
@@ -198,8 +197,6 @@ const EditUserPage: FunctionComponent = ()=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="email" label="Email" name="email" value={payload.email}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <TextField id="employeeId" label="Employee ID" name="employeeId" value={payload.employeeId}
-              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <FormControl variant="outlined" className={classes.textField}>
               <InputLabel htmlFor="outlined-age-native-simple">Department</InputLabel>
               <Select
@@ -232,9 +229,14 @@ const EditUserPage: FunctionComponent = ()=> {
                 })}
               </Select>
             </FormControl>
-            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={loading || !payloadIsValid()}>
+            <FormControlLabel
+              control={<Checkbox checked={payload.enabled} onChange={handleCheckboxChange} name="enabled" />}
+              label="Enabled"
+            />
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading || !payloadIsValid()}>
+              {submitLoading ? <CircularProgress size={10} /> : null}
               <Typography variant="button">
-                Edit Supplier
+                Submit
               </Typography>
             </Button>
           </form>

@@ -18,10 +18,10 @@ export interface UserPayload {
   phoneNo: string
   roles: string
   email: string
-  employeeId: string
   departmentId?: number | string
   department?: IDepartment
   password?: string
+  enabled?: boolean
 }
 
 export interface IUserPayload {

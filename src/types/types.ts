@@ -104,6 +104,6 @@ export interface IMenuItem {
 
 export interface IRequestPerDepartment {
   id: number
-  Department: string
-  Num_of_Request: number
+  department: string
+  num_of_Request: number
 }

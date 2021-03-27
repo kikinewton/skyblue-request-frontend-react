@@ -10,6 +10,7 @@ import AppProvider, { AppContext } from './context/AppProvider';
 import UserProvider from './context/UserProvider';
 import { LIGHT_THEME_MODE } from './utils/constants';
 import NotAuthorizedPage from './pages/NotAuthorizedPage';
+import SignupPage from './pages/SignupPage';
 
 function App() {
 
@@ -24,6 +25,9 @@ function App() {
         <Switch>
           <Route exact path="/login">
             <LoginPage />
+          </Route>
+          <Route exact path="/signup">
+            <SignupPage />
           </Route>
           <Route path="/">
             <AppLayout />

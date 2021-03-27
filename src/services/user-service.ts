@@ -75,3 +75,15 @@ export function deleteUser(id: number): Promise<any> {
     .catch(error=> reject(error))
   })
 }
+
+
+export function changePassword(adminId: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    service({
+      url: `/admin/${adminId}/changePassword`,
+      method: 'PUT'
+    })
+    .then((response: AxiosResponse) => resolve(response))
+    .catch(error=> reject(error))
+  })
+}

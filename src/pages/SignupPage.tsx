@@ -1,9 +1,10 @@
-import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox, Link } from '@material-ui/core';
-import { LockOutlined } from '@material-ui/icons';
+import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox, Link, InputLabel, Select, FormControl } from '@material-ui/core';
+import { CheckCircleOutlineTwoTone, CheckTwoTone, LockOutlined, PersonAdd } from '@material-ui/icons';
 import React, { ChangeEvent, FormEvent, FunctionComponent, SyntheticEvent, useState } from 'react'
 import backgroungImg from '../assets/images/shopping2.jpg'
 import CopyRight from '../components/core/CopyRight';
 import { EmployeeLevel } from '../types/EmployeeLevel';
+import { IDepartment } from '../types/types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  textField: {
+    width: '100%',
+    marginBottom: '20px'
+  }
 }));
 
 
@@ -42,15 +47,14 @@ interface StateType {
   email: string
   phoneNo: string
   password: string
-  employeeLevel: EmployeeLevel
-  employeeId: string
   departmentId: number | string
+  confirmPassword: string
 }
 
 const SignupPage: FunctionComponent = ()=> {
 
-  const [payload, setPayload] = useState<StateType>({ firstName: '', lastName: '', email: '', phoneNo: '', 
-      password: '', employeeLevel: EmployeeLevel.REGULAR, employeeId: '', departmentId: '' })
+  const [payload, setPayload] = useState<StateType>({ firstName: '', lastName: '', email: '', phoneNo: '', password: '', confirmPassword: '', departmentId: '' })
+  const [departments, setDepartments] = useState<IDepartment[]>([])
   
   const [loading, setLoading] = useState(false);
 
@@ -70,7 +74,7 @@ const SignupPage: FunctionComponent = ()=> {
     setPayload({...payload, [eventName]: target.value})
   }
 
-  const handleLoginSubmit = (e: SyntheticEvent)=> {
+  const handleSignupSubmit = (e: SyntheticEvent)=> {
     e.preventDefault();
     setLoading(true)
     
@@ -83,43 +87,47 @@ const SignupPage: FunctionComponent = ()=> {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlined />
+            <PersonAdd />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleLoginSubmit}>
-            
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={loading}
-              color="primary"
-              className={classes.submit}
-            >
-              { 
-                loading &&
-                <CircularProgress size={25} style={{marginRight: '35px'}} color="secondary" />
-              }
-              
-              Sign In
+          <form className={classes.form} autoComplete="off" onSubmit={handleSignupSubmit} autoCorrect="off">
+            <TextField id="firstName" label="First Name" name="firstName" value={payload.firstName}
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+            <TextField id="lastName" label="Last Name" name="lastName" value={payload.lastName}
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+            <TextField id="phoneNo" label="Phone" name="phoneNo" value={payload.phoneNo}
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+            <TextField id="email" label="Email" name="email" value={payload.email} autoComplete="off"
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+              <FormControl variant="outlined" className={classes.textField}>
+              <InputLabel htmlFor="outlined-age-native-simple">Department</InputLabel>
+              <Select
+                native
+                value={payload.departmentId}
+                onChange={handleSelectChange}
+                label="Department"
+                name="departmentId"
+              >
+                {departments && departments.map((department)=> {
+                  return (
+                    <option value={department.id} key={department.id}>{department.name}</option>
+                  )
+                })}
+              </Select>
+            </FormControl>
+            <TextField id="password" label="Password" name="password" value={payload.password} type="password"
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+            <TextField id="confirmPassword" label="Confirm Password" name="confirmPassword" value={payload.confirmPassword} type="password"
+              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
+            <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
+              {loading ? <CircularProgress /> : null }
+              <CheckTwoTone />
+              <Typography variant="button">
+                Sign Up
+              </Typography>
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item xs>
-                <Link href="/login" variant="body2">
-                  {"You have an account? Sign In"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Box mt={5}>
-              <CopyRight />
-            </Box>
           </form>
         </div>
       </Grid>

@@ -1,7 +1,9 @@
-import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox, Link } from '@material-ui/core';
+import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import React, { ChangeEvent, FormEvent, FunctionComponent, SyntheticEvent, useContext, useState } from 'react'
+import { useForm } from 'react-hook-form';
 import { useHistory, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import backgroungImg from '../assets/images/shopping2.jpg'
@@ -43,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main
+  }
 }));
 
 interface StateType {
@@ -51,10 +57,17 @@ interface StateType {
   rememberMe: boolean
 }
 
+interface ILoginFormInput {
+  email: string
+  password: string
+}
+
 const LoginPage: FunctionComponent = ()=> {
   const [payload, setPayload] = useState<StateType>({email: '', password: '', rememberMe: false})
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { setValue, errors, handleSubmit, register } = useForm()
+
   const classes = useStyles();
   const history = useHistory()
   const { path } = useRouteMatch()
@@ -62,20 +75,16 @@ const LoginPage: FunctionComponent = ()=> {
 
   const userContext = useContext(UserContext)
 
-  const payloadValid = ()=> {
-    return payload.email && payload.password
-  }
-
   //handle onChange event on inputs
   const handleInputChange = (event: FormEvent<EventTarget>)=> {
     const target = event.target as HTMLInputElement
     const eventName: string = target.name;
     const value: string = target.value;
-    setPayload({...payload, [eventName]: value})
+    setValue(eventName, value)
   }
 
-  const handleLoginSubmit = (event: SyntheticEvent)=> {
-    event.preventDefault();
+  const onSubmit = (data: ILoginFormInput) => {
+    console.log('data', data)
     setLoading(true)
     authservice.login(payload)
       .then(response => {
@@ -135,7 +144,7 @@ const LoginPage: FunctionComponent = ()=> {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleLoginSubmit}>
+          <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <TextField
               onChange={handleInputChange}
               variant="outlined"
@@ -144,18 +153,19 @@ const LoginPage: FunctionComponent = ()=> {
               fullWidth
               id="email"
               label="Email Address"
-              value={payload.email}
+              inputRef={register({required: true, maxLength: 60})}
               name="email"
               autoComplete="email"
               autoFocus 
             />
+            {errors.email && "Email is required"}
             <TextField
               onChange={handleInputChange}
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              value={payload.password}
+              inputRef={register({required: true})}
               name="password"
               label="Password"
               type="password"
@@ -170,7 +180,7 @@ const LoginPage: FunctionComponent = ()=> {
               type="submit"
               fullWidth
               variant="contained"
-              disabled={loading || !payloadValid()}
+              disabled={loading}
               color="primary"
               className={classes.submit}
             >
@@ -183,12 +193,12 @@ const LoginPage: FunctionComponent = ()=> {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link to="#" className={classes.link}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link to="/signup" className={classes.link}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
