@@ -11,7 +11,8 @@ import { EndorsementStatus } from '../../types/enums';
 import { CancelOutlined, Check, CheckCircleTwoTone } from '@material-ui/icons';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { dangerBtnColor, successBtnColor } from '../../utils/constants';
+import { successBtnColor } from '../../utils/constants';
+import { UserContext } from '../../context/UserProvider';
 
 
 const tableColumns: ITableColumn[] = [
@@ -50,6 +51,9 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
   const history = useHistory()
   const { path } = useRouteMatch()
   const classes = useStyles()
+
+  //states
+  const userContext = useContext(UserContext)
   
 
   const authUser = authService.getUserDetailsFromStorage() as AuthUser;
@@ -131,9 +135,10 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
   }
 
   const fetchMyRequests = ()=> {
+    console.log('user id', authUser)
     
     setLoading(true)
-    requestService.getAllDepartmentItemRequests(authUser.department.id as number, authUser.id as number)
+    requestService.getAllDepartmentItemRequests(userContext.user.department.id as number, userContext.user.id as number)
       .then((response)=> {
         const { status, data } = response
         console.log('res', data)
