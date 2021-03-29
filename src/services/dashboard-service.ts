@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-import { DepartmentPayload} from "../types/payloads";
 import service from './helpers/web-api'
 
 export function requestPerCurrentMonthPerDepartment(): Promise<any> {

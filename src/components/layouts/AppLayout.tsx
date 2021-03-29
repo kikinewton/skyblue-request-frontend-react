@@ -9,28 +9,19 @@ import { AppContext } from '../../context/AppProvider';
 import { UserContext } from '../../context/UserProvider';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import HomePage from '../../pages/HomePage';
-import SettingsPage from '../../pages/SettingsPage';
-import DepartmentListPage from '../../pages/department/DepartmentListPage';
-import DepartmentCreatePage from '../../pages/department/DepartmentCreatePage';
-import EditDepartmentPage from '../../pages/department/EditDepartment';
-import SupplierListPage from '../../pages/supplier/SupplierListPage';
-import CreateSupplierPage from '../../pages/supplier/CreateSupplierPage';
-import EditSupplierPage from '../../pages/supplier/EditSupplierPage';
-import ListUserPage from '../../pages/user/ListUserPage';
-import CreateUserPage from '../../pages/user/CreateUserPage';
-import EditUserPage from '../../pages/user/EditUserPage';
 import { APP_MODULES } from '../../utils/constants';
-import CreateItemRequestPage from '../../pages/item-request/CreateItemRequestPage';
 import { Person } from '@material-ui/icons';
 import * as authService from '../../services/auth-service'
 import { AuthUser } from '../../types/User';
-import MyRequestListPage from '../../pages/item-request/MyRequestListPage';
-import HODItemRequestListPage from '../../pages/item-request/HODItemRequestListPage';
-import useAuthentication from '../hooks/use-authentication';
 import NotAuthorizedPage from '../../pages/NotAuthorizedPage';
-import GeneralManagerItemRequestListPage from '../../pages/item-request/GeneralManagerItemRequestListPage';
-import ProcurmentOfficerRequestListPage from '../../pages/item-request/ProcurementOfficerRequestListPage';
+import ErrorBoundary from '../ErrorBoundary';
+
+const HomePage = React.lazy(()=> import('../../pages/HomePage'))
+const DepartmentIndexPage = React.lazy(() => import('../../pages/department/DapartmentIndexPage'))
+const SupplierIndexPage = React.lazy(()=> import('../../pages/supplier/SupplierIndexPage'))
+const UserIndexPage = React.lazy(() => import('../../pages/user/UserIndexPage'))
+const ItemRequestIndexPage = React.lazy(() => import('../../pages/item-request/ItemRequestIndexPage'))
+const SettingsIndexPage = React.lazy(() => import('../../pages/configuration/SettingsIndexPage'))
 
 const drawerWidth = 240;
 
@@ -259,39 +250,19 @@ const AppLayout:FunctionComponent = ()=> {
                 classNames="fade"
                 timeout={300}
               >
-                <Switch location={location}>
-                  <Route path={`${path}${APP_MODULES.SETTINGS_MODULE.path}`} component={SettingsPage}/>
-                  <Route path={`${path}departments/create`}>
-                    <DepartmentCreatePage authUser={userContext.user} />
-                  </Route>
-                  <Route path={`${path}departments/:departmentId/edit`}>
-                    <EditDepartmentPage authUser={userContext.user} />
-                  </Route>
-                  <Route path={`${path}departments`}>
-                    <DepartmentListPage authUser={userContext.user} />
-                  </Route>
-
-                  <Route path={`${path}supplier-management/suppliers/:supplierId/edit`}>
-                    <EditSupplierPage authUser={userContext.user}/>
-                  </Route>
-                  <Route path={`${path}supplier-management/suppliers/create`}>
-                    <CreateSupplierPage authUser={userContext.user} />
-                  </Route>
-                  <Route path={`${path}supplier-management/suppliers`}>
-                    <SupplierListPage authUser={userContext.user} />
-                  </Route>
-
-                  <Route path={`${path}user-management/users/create`} component={CreateUserPage}/>
-                  <Route path={`${path}user-management/users/:userId/edit`} component={EditUserPage}/>
-                  <Route path={`${path}user-management/users`} component={ListUserPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests/create`} component={CreateItemRequestPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/my-requests`} component={MyRequestListPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/hod-item-requests`} component={HODItemRequestListPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/general-manager-item-requests`} component={GeneralManagerItemRequestListPage}/>
-                  <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}/procurement-officer-item-requests`} component={ProcurmentOfficerRequestListPage}/>
-                  <Route path="/not-authorized" component={NotAuthorizedPage} />
-                  <Route exact path={`${path}`} component={HomePage}/>
-                </Switch>
+                <React.Suspense fallback={<span>Loading...</span>}>
+                  <Switch location={location}>
+                    <Route path={`${path}${APP_MODULES.SETTINGS_MODULE.path}`} component={SettingsIndexPage}/>
+                    <Route path={`${path}department-module`}>
+                      <DepartmentIndexPage authUser={userContext.user} />
+                    </Route>
+                    <Route path={`${path}supplier-module`} component={SupplierIndexPage} />
+                    <Route path={`${path}user-management-module/users`} component={UserIndexPage} />
+                    <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}`} component={ItemRequestIndexPage} />
+                    <Route path="/not-authorized" component={NotAuthorizedPage} />
+                    <Route exact path={`${path}`} component={HomePage}/>
+                  </Switch>
+                </React.Suspense>
               </CSSTransition>
             </TransitionGroup>
           </div>

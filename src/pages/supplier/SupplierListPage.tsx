@@ -145,8 +145,10 @@ const SupplierListPage: FunctionComponent<Props> = ({authUser})=> {
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
-          <Button variant="contained" color="primary" disabled={!userHasAnyOfRoles(authUser, APP_PAGES_AND_ROLES.createSupplierRoles)}
-          disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
+          <Button variant="contained" color="primary"
+            disabled={!userHasAnyOfRoles(authUser.roles, APP_PAGES_AND_ROLES.createSupplierRoles)}
+            disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}
+          >
             <Typography variant="button">
               New Supplier
             </Typography>

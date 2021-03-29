@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Divider, Grid, IconButton, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Divider, IconButton, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
 import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
@@ -9,6 +9,7 @@ import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { AuthUser } from '../../types/User';
 import { AppContext } from '../../context/AppProvider';
+import { CheckOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme=> ({
   root: {
@@ -66,7 +67,7 @@ const CreateSupplierPage: FunctionComponent<Props> = ({authUser})=> {
           MySwal.fire({
             icon: 'success',
             title: 'Success',
-            text: message ? message : 'Department Created Successfully',
+            text: message ? message : 'Supplier Created Successfully',
             allowOutsideClick: false,
             willClose: ()=> {
               setPayload({name: '', description: '', email: '', phone_no: '', location: ''})
@@ -101,7 +102,7 @@ const CreateSupplierPage: FunctionComponent<Props> = ({authUser})=> {
       </Paper>
       <Paper elevation={0} style={{padding: '5px', minHeight: '300px', marginTop: '10px', display:'flex', flexDirection: 'column'}}>
         <Typography variant="h5" color="textPrimary">
-          Create Supplier
+          Create Supplier Form
         </Typography>
         <Divider />
         <div style={{width:'100%', display:'flex', justifyContent: 'center'}}>
@@ -118,8 +119,9 @@ const CreateSupplierPage: FunctionComponent<Props> = ({authUser})=> {
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading || !payloadIsValid()}>
               {submitLoading ? <CircularProgress size={20} /> : null}
+              <CheckOutlined />
               <Typography variant="button">
-                Create Department
+                Submit
               </Typography>
             </Button>
           </form>

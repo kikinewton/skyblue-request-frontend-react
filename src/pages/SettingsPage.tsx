@@ -121,7 +121,7 @@ const SettingsPage: FunctionComponent = ()=> {
                 </Grid>
                 <Grid item sm={12} md={6} lg={6} xs={12}>
                   <TextField className={classes.userField} variant="outlined" size="small"
-                    label="Role" value={userContext.user.roles} disabled />
+                    label="Role" value={(userContext.user || {}).roles} disabled />
                 </Grid>
                 <Grid item sm={12} md={6} lg={6} xs={12}>
                   <TextField className={classes.userField} variant="outlined" size="small"

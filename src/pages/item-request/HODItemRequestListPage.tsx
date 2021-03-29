@@ -163,7 +163,7 @@ const HODItemRequestListPage: FunctionComponent = ()=> {
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
           <Typography variant="h6">
-            My Requests
+            HOD REQUESTS
           </Typography>
           <Button variant="contained" color="primary" 
             disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>

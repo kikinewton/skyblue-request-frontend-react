@@ -229,7 +229,7 @@ const EditUserPage: FunctionComponent = ()=> {
                 })}
               </Select>
             </FormControl>
-            <FormControlLabel
+            <FormControlLabel style={{width: '100%'}}
               control={<Checkbox checked={payload.enabled} onChange={handleCheckboxChange} name="enabled" />}
               label="Enabled"
             />
@@ -243,7 +243,6 @@ const EditUserPage: FunctionComponent = ()=> {
         </div>
       </Paper>
     </Fragment>
-    
   )
 }
 

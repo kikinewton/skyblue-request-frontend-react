@@ -1,5 +1,6 @@
 import { createContext, FC, useState } from "react";
 import { getUserDetailsFromStorage } from "../services/auth-service";
+import { EmployeeLevel } from "../types/EmployeeLevel";
 import { IDepartment, UserContextState } from "../types/types";
 import { AuthUser, User } from "../types/User";
 
@@ -19,7 +20,7 @@ const initUser = {
   employeeLevel: '',
   employeeId: '',
   phoneNumber: '',
-  roles: '',
+  roles: EmployeeLevel.REGULAR,
   department: defaultDepartment,
   createdAt: '',
   token: ''

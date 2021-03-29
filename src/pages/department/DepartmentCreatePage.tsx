@@ -104,7 +104,7 @@ const DepartmentCreatePage: FunctionComponent<Props> = ({authUser})=> {
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading}>
               {submitLoading ? <CircularProgress size={20} /> : null}
               <Typography variant="button">
-                Create Department
+                Submit
               </Typography>
             </Button>
           </form>

@@ -1,3 +1,4 @@
+import { EmployeeLevel } from "./EmployeeLevel";
 import { IDepartment } from "./types";
 
 export interface User {
@@ -8,7 +9,7 @@ export interface User {
   employeeLevel: string
   email: string
   employeeId?: string
-  roles: string
+  roles: EmployeeLevel
   department: IDepartment
   fullName: string
   createdAt: string
@@ -22,7 +23,7 @@ export interface AuthUser {
   employeeLevel: string
   email: string
   employeeId?: string
-  roles: string
+  roles: EmployeeLevel
   department: IDepartment
   fullName: string
   createdAt: string

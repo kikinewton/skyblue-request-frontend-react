@@ -55,7 +55,7 @@ const DepartmentListPage: FunctionComponent<Props> = ({authUser})=> {
   const MySwal = withReactContent(Swal)
 
   const handleNavigateToCreatePageClick = ()=> {
-    history.push(`${path}/create`)
+    history.push(`${path}/departments/create`)
   }
 
   const handleChangePage = (event: MouseEvent | null, newPage: number): void => {
@@ -69,7 +69,7 @@ const DepartmentListPage: FunctionComponent<Props> = ({authUser})=> {
   };
 
   const handleEdit = (id: number, event: any): void => {
-    history.push(`${path}/${id}/edit`)
+    history.push(`${path}/departments/${id}/edit`)
   }
 
   const handleDelete = (id: number, event: any): void => {

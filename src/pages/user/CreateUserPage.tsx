@@ -1,5 +1,5 @@
 import { Button, CircularProgress, Divider, FormControl, Grid, IconButton, InputLabel, makeStyles, Paper, Select, TextField, Typography } from '@material-ui/core';
-import React, { FormEvent, Fragment, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, Fragment, FunctionComponent, RefObject, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import BackIcon from '@material-ui/icons/ChevronLeft'
 import { useHistory } from 'react-router-dom';
 import * as userService from '../../services/user-service'
@@ -35,17 +35,17 @@ interface StateType {
   email: string
   phoneNo: string
   roles: EmployeeLevel
-  employeeId: string
   departmentId: number | string
 }
 
 const CreateUserPage: FunctionComponent = ()=> {
   const [payload, setPayload] = useState<StateType>(
     {firstName: '', lastName: '', phoneNo: '', email: '', 
-    roles: EmployeeLevel.REGULAR, employeeId: '', departmentId: ''
+    roles: EmployeeLevel.REGULAR, departmentId: ''
   })
   const [loading, setLoading] = useState<boolean>(false)
   const [departments, setDepartments] = useState<IDepartment[]>([])
+  const firstNameRef: RefObject<HTMLInputElement> = React.createRef()
 
   //lets authorize access
   useAuthentication({ roles: APP_PAGES_AND_ROLES.createUserRoles })
@@ -98,7 +98,6 @@ const CreateUserPage: FunctionComponent = ()=> {
       lastName: payload.lastName,
       employeeLevel: payload.roles,
       department: department,
-      employeeId: payload.employeeId,
       password: 'password'
     }
     setLoading(true)
@@ -112,7 +111,7 @@ const CreateUserPage: FunctionComponent = ()=> {
             text: message ? message : 'User Created Successfully',
             allowOutsideClick: false,
             willClose: ()=> {
-              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: departments[0].id, employeeId: '', roles: EmployeeLevel.REGULAR})
+              setPayload({email: '', phoneNo: '', firstName: '', lastName: '', departmentId: departments[0].id, roles: EmployeeLevel.REGULAR})
             }
           })
         } else {
@@ -134,6 +133,8 @@ const CreateUserPage: FunctionComponent = ()=> {
   useEffect(() => {
     appContext.updateCurrentPage('USERS / CREATE')
     fetchAllDepartments()
+    //lets move focus to firstname input field
+    firstNameRef.current?.focus()
     return () => {
       
     }
@@ -153,15 +154,13 @@ const CreateUserPage: FunctionComponent = ()=> {
         <Divider />
         <div style={{width:'100%', display:'flex', justifyContent: 'center'}}>
           <form className={classes.form} autoComplete="off" onSubmit={handleSubmitEvent}>
-            <TextField id="firstName" label="First Name" name="firstName" value={payload.firstName}
+            <TextField id="firstName" label="First Name" name="firstName" value={payload.firstName} inputRef={firstNameRef}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="lastName" label="Last Name" name="lastName" value={payload.lastName}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="phoneNo" label="Phone" name="phoneNo" value={payload.phoneNo}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <TextField id="email" label="Email" name="email" value={payload.email}
-              variant="outlined" className={classes.textField} onChange={handleInputChange}/>
-            <TextField id="email" label="Employee ID" name="employeeId" value={payload.employeeId}
               variant="outlined" className={classes.textField} onChange={handleInputChange}/>
             <FormControl variant="outlined" className={classes.textField}>
               <InputLabel htmlFor="outlined-age-native-simple">Department</InputLabel>
@@ -196,9 +195,9 @@ const CreateUserPage: FunctionComponent = ()=> {
               </Select>
             </FormControl>
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit">
-              {loading ? <CircularProgress /> : null }
+              {loading ? <CircularProgress size={10} /> : null }
               <Typography variant="button">
-                Create User
+                Submit
               </Typography>
             </Button>
           </form>

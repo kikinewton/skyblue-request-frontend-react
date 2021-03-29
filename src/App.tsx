@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import 'fontsource-roboto';
-import './App.css';
 import AppLayout from './components/layouts/AppLayout';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import LoginPage from './pages/LoginPage';

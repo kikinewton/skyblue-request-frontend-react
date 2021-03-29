@@ -76,6 +76,7 @@ const EditSupplierPage: FunctionComponent<Props> = ({authUser})=> {
   }
 
   const initDepartment = () => {
+    console.log('supplier id', supplierId)
     setLoading(true)
     supplierService.getSupplier(parseInt(supplierId))
       .then(response=> {
@@ -180,7 +181,7 @@ const EditSupplierPage: FunctionComponent<Props> = ({authUser})=> {
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading || !payloadIsValid()}>
               {submitLoading ? <CircularProgress size={15} /> : null}
               <Typography variant="button">
-                 Edit Supplier
+                 Update
               </Typography>
             </Button>
           </form>

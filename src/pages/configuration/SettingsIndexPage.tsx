@@ -8,11 +8,7 @@ import { APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { UserContext } from '../../context/UserProvider';
 import { AppContext } from '../../context/AppProvider';
-import CreateItemRequestPage from './CreateItemRequestPage';
-import MyRequestListPage from './MyRequestListPage';
-import HODItemRequestListPage from './HODItemRequestListPage';
-import GeneralManagerItemRequestListPage from './GeneralManagerItemRequestListPage';
-import ProcurmentOfficerRequestListPage from './ProcurementOfficerRequestListPage';
+import SettingsPage from '../SettingsPage';
 
 const tableColumns: ITableColumn[] = [
   {id: 'name', label: 'Name', minWidth: 170, align: 'left'},
@@ -35,12 +31,11 @@ const useStyles = makeStyles(theme=> ({
   }
 }))
 
-const ItemRequestIndexPage: FunctionComponent = ()=> {
+const SettingsIndexPage: FunctionComponent = ()=> {
   //lets authorize user
   useAuthentication({roles: APP_PAGES_AND_ROLES.listDepartmentsRoles})
 
   //router helpers
-  const history = useHistory()
   const { path } = useRouteMatch()
   const location = useLocation()
 
@@ -63,11 +58,7 @@ const ItemRequestIndexPage: FunctionComponent = ()=> {
           classNames="slide"
         >
           <Switch location={location}>
-            <Route path={`${path}/my-requests/create`} component={CreateItemRequestPage}/>
-            <Route path={`${path}/my-requests`} component={MyRequestListPage}/>
-            <Route path={`${path}/hod-item-requests`} component={HODItemRequestListPage}/>
-            <Route path={`${path}/general-manager-item-requests`} component={GeneralManagerItemRequestListPage}/>
-            <Route path={`${path}/procurement-officer-item-requests`} component={ProcurmentOfficerRequestListPage}/>
+            <Route path={`${path}`} component={SettingsPage}/>
           </Switch>
         </CSSTransition>
       </TransitionGroup>
@@ -75,4 +66,4 @@ const ItemRequestIndexPage: FunctionComponent = ()=> {
   );
 }
 
-export default ItemRequestIndexPage;
+export default SettingsIndexPage;

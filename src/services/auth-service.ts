@@ -46,12 +46,11 @@ export function logout(): void {
 }
 
 
-export function userHasAnyOfRoles(userRole: any, roles: EmployeeLevel[]): boolean {
+export function userHasAnyOfRoles(userRole: EmployeeLevel | undefined, roles: EmployeeLevel[]): boolean {
   if(!userRole) {
-    console.log('No Role....')
     return false
   }
-
+  console.log('has role', roles.indexOf(userRole) >= 0)
   return roles.indexOf(userRole) >= 0;
 }
 

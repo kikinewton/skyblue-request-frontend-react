@@ -1,6 +1,6 @@
 import { RequestApproval } from "./RequestApproval";
 import { RequestStatus } from "./RequestStatus";
-import { IDepartment, ISupplier, IUser } from "./types";
+import { IDepartment, ISupplier} from "./types";
 
 export interface SupplierPayload {
   id?: any
@@ -31,7 +31,6 @@ export interface IUserPayload {
   phoneNo: string
   employeeLevel: string
   email: string
-  employeeId: string
   departmentId?: number | string
   department?: IDepartment
   password?: string

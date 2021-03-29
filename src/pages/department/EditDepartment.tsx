@@ -114,9 +114,6 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
             title: 'Success',
             text: message ? message : 'Department Created Successfully',
             allowOutsideClick: false,
-            willClose: ()=> {
-              setPayload({name: '', description: ''})
-            }
           })
         } else {
           MySwal.fire({
@@ -163,14 +160,13 @@ const EditDepartmentPage: FunctionComponent<Props> = ({authUser})=> {
             <Button variant="contained" color="secondary" style={{float: 'right'}} type="submit" disabled={submitLoading}>
               {submitLoading ? <CircularProgress size={15} /> : null}
               <Typography variant="button">
-                Edit Department
+                Update
               </Typography>
             </Button>
           </form>
         </div>
       </Paper>
-    </Fragment>
-    
+    </Fragment>  
   )
 }
 

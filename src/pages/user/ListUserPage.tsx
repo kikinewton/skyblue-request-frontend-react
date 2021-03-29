@@ -43,10 +43,13 @@ const ListUserPage: FunctionComponent = ()=> {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
+  //lets authenticate and authorize roles
+  useAuthentication({roles: APP_PAGES_AND_ROLES.listUserRoles})
+
+  //states
   const appContext = useContext(AppContext)
   const userContext = useContext(UserContext)
   //let authorize use
-  useAuthentication({roles: APP_PAGES_AND_ROLES.listUserRoles})
 
   //router helpers
   const history = useHistory()
@@ -58,7 +61,7 @@ const ListUserPage: FunctionComponent = ()=> {
   const handleNavigateToCreatePageClick = ()=> {
     history.push(`${path}/create`)
   }
-
+  
   const handleChangePage = (event: MouseEvent | null, newPage: number): void => {
     setPage(newPage);
   };
@@ -90,7 +93,7 @@ const ListUserPage: FunctionComponent = ()=> {
     userService.deleteUser(id)
       .then(response => {
         const {message, status} = response
-        if(status == 'OK') {
+        if(status === 'OK') {
           setUsers(users.filter(user => user.id !== id))
           MySwal.fire({
             icon: 'success',

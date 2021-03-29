@@ -102,7 +102,7 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
       </Link>
       : null}
       {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listDepartmentsRoles) ?
-      <Link to="/departments" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.department)}>
+      <Link to="/department-module" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.department)}>
         <ListItem button selected={activeLink('/department')}>
           <ListItemIcon>
             <DepartmentIcon />
@@ -153,15 +153,15 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
           </Link> : null}
         </List>
       </Collapse>
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listSupplierRoles) ? <Link to="/supplier-management/suppliers" className={classes.link}>
-        <ListItem button selected={activeLink('/suppliers')}>
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listSupplierRoles) ? <Link to="/supplier-module/suppliers" className={classes.link}>
+        <ListItem button selected={activeLink('/supplier-module')}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faTruckMoving} style={{width: iconSize, height: iconSize}} />
           </ListItemIcon>
           <ListItemText primary="Suppliers" />
         </ListItem>
       </Link> : null}
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listUserRoles) ? <Link to="/user-management/users" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.userManagementPage)}>
+      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listUserRoles) ? <Link to="/user-management-module/users" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.userManagementPage)}>
         <ListItem button selected={activeLink('/user-management')}>
           <ListItemIcon>
             <AdminUserIcon />

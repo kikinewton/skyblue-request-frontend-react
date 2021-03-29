@@ -1,6 +1,7 @@
 import { Avatar, CircularProgress, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography, Button, Box, Paper, Checkbox } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
-import React, { ChangeEvent, FormEvent, FunctionComponent, SyntheticEvent, useContext, useState } from 'react'
+import { pick } from 'lodash';
+import React, { FormEvent, FunctionComponent, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -10,6 +11,7 @@ import backgroungImg from '../assets/images/shopping2.jpg'
 import CopyRight from '../components/core/CopyRight';
 import { UserContext } from '../context/UserProvider';
 import * as authservice from '../services/auth-service'
+import { LoginPayload } from '../types/payloads';
 import { AuthUser, User } from '../types/User';
 import { showErrorAlert } from '../utils/common-helper';
 import { APP_PAGES_AND_ROLES } from '../utils/constants';
@@ -63,14 +65,12 @@ interface ILoginFormInput {
 }
 
 const LoginPage: FunctionComponent = ()=> {
-  const [payload, setPayload] = useState<StateType>({email: '', password: '', rememberMe: false})
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setValue, errors, handleSubmit, register } = useForm()
 
   const classes = useStyles();
   const history = useHistory()
-  const { path } = useRouteMatch()
   const MySwal = withReactContent(Swal)
 
   const userContext = useContext(UserContext)
@@ -84,8 +84,7 @@ const LoginPage: FunctionComponent = ()=> {
   }
 
   const onSubmit = (data: ILoginFormInput) => {
-    console.log('data', data)
-    setLoading(true)
+    const payload: LoginPayload = data as Pick<LoginPayload, "email" | "password">
     authservice.login(payload)
       .then(response => {
         console.log('res', response)
