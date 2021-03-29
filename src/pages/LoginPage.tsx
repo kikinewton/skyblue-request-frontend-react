@@ -12,7 +12,7 @@ import CopyRight from '../components/core/CopyRight';
 import { UserContext } from '../context/UserProvider';
 import * as authservice from '../services/auth-service'
 import { LoginPayload } from '../types/payloads';
-import { AuthUser, User } from '../types/User';
+import { AuthUser, User } from '../types/types';
 import { showErrorAlert } from '../utils/common-helper';
 import { APP_PAGES_AND_ROLES } from '../utils/constants';
 

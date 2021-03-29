@@ -6,7 +6,7 @@ import * as requestService from '../../services/item-request-service'
 import * as authService from '../../services/auth-service'
 import { AppContext } from '../../context/AppProvider';
 import { formatRequestStatusColor, prettifyDateTime, showErrorAlert, showSuccessAlert } from '../../utils/common-helper';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { EndorsementStatus } from '../../types/enums';
 import { CancelOutlined, Check, CheckCircleTwoTone } from '@material-ui/icons';
 import withReactContent from 'sweetalert2-react-content';

@@ -4,8 +4,6 @@ import service from './helpers/web-api'
 
 const servicePath = 'employees'
 
-
-
 export function saveUser(payload: UserPayload): Promise<any> {
   return new Promise((resolve, reject) => {
     service({

@@ -17,7 +17,7 @@ import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../../context/AppProvider';
 import { appPages, APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { userHasAnyOfRoles } from '../../services/auth-service';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 // import clsx from 'clsx';
 
 const iconSize = '25px'

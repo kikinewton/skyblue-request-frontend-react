@@ -2,7 +2,6 @@ import { Component } from "react"
 import { EmployeeLevel } from "./EmployeeLevel"
 import { EndorsementStatus, RequestApproval, RequestStatus } from "./enums"
 import { RequestReason } from "./RequestReason"
-import { AuthUser, User } from "./User"
 
 export type AppContextState = {
   currentPage: string
@@ -106,4 +105,46 @@ export interface IRequestPerDepartment {
   id: number
   department: string
   num_of_Request: number
+}
+
+export interface User {
+  id: number | string
+  firstName: string
+  lastName: string
+  phoneNo: string
+  employeeLevel: string
+  email: string
+  employeeId?: string
+  roles: EmployeeLevel
+  department: IDepartment
+  fullName: string
+  createdAt: string
+}
+
+export interface AuthUser {
+  id: number | string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  employeeLevel: string
+  email: string
+  employeeId?: string
+  roles: EmployeeLevel
+  department: IDepartment
+  fullName: string
+  createdAt: string
+  token: string
+}
+
+export interface RequestItem {
+  id: number
+  name: string
+  reason: string
+  purpose: string
+  quantity: number
+  unitPrice: number
+  amount: number
+  supplierId: string
+  status: string
+  approval: string
 }

@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 import { AppContext } from '../../context/AppProvider';
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { userHasAnyOfRoles } from '../../services/auth-service';
 
 

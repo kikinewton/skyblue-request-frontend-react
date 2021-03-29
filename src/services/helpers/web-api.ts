@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { apiConfig } from './api.config'
 import { ResponseData } from '../../types/types';
 import { getUserDetailsFromStorage } from '../auth-service';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 const HTTP_SUCCESS_CODE = 200;
 
 

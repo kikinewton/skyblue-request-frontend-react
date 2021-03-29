@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { EmployeeLevel } from "../types/EmployeeLevel";
 import { LoginPayload } from "../types/payloads";
-import { AuthUser} from "../types/User";
+import { AuthUser} from "../types/types";
 import service from './helpers/web-api'
 
 export function login(loginPayload: LoginPayload): Promise<any> {

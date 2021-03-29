@@ -61,7 +61,7 @@ const ListUserPage: FunctionComponent = ()=> {
   const handleNavigateToCreatePageClick = ()=> {
     history.push(`${path}/create`)
   }
-  
+
   const handleChangePage = (event: MouseEvent | null, newPage: number): void => {
     setPage(newPage);
   };

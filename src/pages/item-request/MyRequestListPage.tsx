@@ -6,7 +6,7 @@ import * as requestService from '../../services/item-request-service'
 import * as authService from '../../services/auth-service'
 import { AppContext } from '../../context/AppProvider';
 import { formatRequestStatusColor, prettifyDateTime, showErrorAlert } from '../../utils/common-helper';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 
 
 const tableColumns: ITableColumn[] = [

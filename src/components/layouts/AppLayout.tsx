@@ -2,7 +2,7 @@ import { AppBar, Button, Container, CssBaseline, Divider, Drawer, IconButton, Li
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import clsx from 'clsx';
-import React, { FunctionComponent, useState, useContext, useEffect, useRef, Ref, SyntheticEvent } from 'react'
+import React, { FunctionComponent, useState, useContext, useEffect, useRef, SyntheticEvent } from 'react'
 import MenuListItems from '../core/MenuListItems';
 import CopyRight from '../core/CopyRight';
 import { AppContext } from '../../context/AppProvider';
@@ -12,9 +12,8 @@ import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-rou
 import { APP_MODULES } from '../../utils/constants';
 import { Person } from '@material-ui/icons';
 import * as authService from '../../services/auth-service'
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import NotAuthorizedPage from '../../pages/NotAuthorizedPage';
-import ErrorBoundary from '../ErrorBoundary';
 
 const HomePage = React.lazy(()=> import('../../pages/HomePage'))
 const DepartmentIndexPage = React.lazy(() => import('../../pages/department/DapartmentIndexPage'))

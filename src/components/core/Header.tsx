@@ -1,6 +1,6 @@
 import { AppBar, Toolbar } from '@material-ui/core';
 import React, { FunctionComponent } from 'react'
-import { User } from '../../types/User';
+import { User } from '../../types/types';
 
 interface HeaderProps {
   user: User

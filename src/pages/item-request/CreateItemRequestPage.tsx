@@ -10,7 +10,7 @@ import { IItemRequest, ITableColumn } from '../../types/types';
 import { Add, Delete, Send } from '@material-ui/icons';
 import { RequestReason, RequestReasonList } from '../../types/RequestReason';
 import { getUserDetailsFromStorage } from '../../services/auth-service'
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { showErrorAlert, showSuccessAlert } from '../../utils/common-helper';
 
 const useStyles = makeStyles(theme=> ({

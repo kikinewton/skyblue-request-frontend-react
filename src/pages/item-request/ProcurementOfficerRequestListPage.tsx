@@ -1,5 +1,5 @@
-import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, IconButton, LinearProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, ListItem, List, ListItemText, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core';
-import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext, SyntheticEvent, FormEvent} from 'react'
+import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, LinearProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField, ListItem, List, ListItemText, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core';
+import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext, FormEvent} from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import {IRequestItem, ISupplier, ITableColumn  } from '../../types/types'
 import * as requestService from '../../services/item-request-service'
@@ -7,7 +7,7 @@ import * as authService from '../../services/auth-service'
 import * as supplierService from '../../services/supplier-service'
 import { AppContext } from '../../context/AppProvider';
 import { formatRequestStatusColor, prettifyDateTime, showErrorAlert, showSuccessAlert } from '../../utils/common-helper';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { EndorsementStatus } from '../../types/enums';
 import { CheckCircleTwoTone } from '@material-ui/icons';
 import withReactContent from 'sweetalert2-react-content';

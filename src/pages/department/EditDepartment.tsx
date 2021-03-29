@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { DepartmentPayload } from '../../types/payloads';
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { AppContext } from '../../context/AppProvider';
 
 const useStyles = makeStyles(theme=> ({

@@ -5,7 +5,7 @@ import {ITableColumn  } from '../../types/types'
 import * as _ from 'lodash'
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { UserContext } from '../../context/UserProvider';
 import CreateSupplierPage from './CreateSupplierPage';

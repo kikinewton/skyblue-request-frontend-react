@@ -12,7 +12,7 @@ import * as _ from 'lodash'
 import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { userHasAnyOfRoles } from '../../services/auth-service';
-import { AuthUser } from '../../types/User';
+import { AuthUser } from '../../types/types';
 
 const tableColumns: ITableColumn[] = [
   {id: 'name', label: 'Name', minWidth: 170, align: 'left'},
