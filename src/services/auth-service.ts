@@ -50,7 +50,6 @@ export function userHasAnyOfRoles(userRole: EmployeeLevel | undefined, roles: Em
   if(!userRole) {
     return false
   }
-  console.log('has role', roles.indexOf(userRole) >= 0)
   return roles.indexOf(userRole) >= 0;
 }
 

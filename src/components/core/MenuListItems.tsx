@@ -1,6 +1,6 @@
-import React, { Fragment, FunctionComponent, useContext, useState } from 'react'
+import React, { Fragment, FunctionComponent, Profiler, ProfilerOnRenderCallback, useContext, useState } from 'react'
 
-import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Collapse, Icon, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DashBoardIcon from '@material-ui/icons/Dashboard'
@@ -15,9 +15,9 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../../context/AppProvider';
-import { appPages, APP_PAGES_AND_ROLES } from '../../utils/constants';
+import { appPages, APP_PAGES_AND_ROLES, MENU_ROUTES } from '../../utils/constants';
 import { userHasAnyOfRoles } from '../../services/auth-service';
-import { AuthUser } from '../../types/types';
+import { AuthUser, IMenuItem } from '../../types/types';
 // import clsx from 'clsx';
 
 const iconSize = '25px'
@@ -54,9 +54,15 @@ interface Props {
   authUser: AuthUser | undefined
 }
 
+interface ExpandableMenuProps {
+  itemRequest: boolean
+  inventory: boolean
+}
+
 
 const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
   const classes = useStyles();
+  const [expandableMenus, setExpandableMenus] = useState<ExpandableMenuProps>({itemRequest: false, inventory: false})
   const [inventoryOpen, setInventoryExpand] = useState(false)
   const [reportExpand, setReportExpand] = useState(false)
   const [userAdminOpen, setUserAdminOpen] = useState(false)
@@ -68,6 +74,16 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
   const handleExpandInventory = ()=> {
     let val = !inventoryOpen
     setInventoryExpand(val);
+  }
+
+  const handleToggleExpandableMenu = (menuKey: keyof ExpandableMenuProps) => {
+    if(!menuKey) return
+    const value: boolean = expandableMenus[menuKey]
+    setExpandableMenus({...expandableMenus, [menuKey]: !value})
+  }
+
+  const handleCloseExpandavleMenu = (menu: string) => {
+    setExpandableMenus({...expandableMenus, [menu]: true})
   }
 
   const activeLink = (subString: string): boolean => {
@@ -89,96 +105,77 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
     appContext.updateCurrentPage(value)
   }
 
-  return (
-    <Fragment>
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.dashboardRoles) ? 
-      <Link to="/" className={classes.link} color="primary">
-        <ListItem button selected ={activeLink('/')}>
+  const handleProfilerOnRender: ProfilerOnRenderCallback = (id, phase, actualDuration, baseDuration, startTime, commitTime, interractions) => {
+    console.log('Profiler', id, actualDuration)
+  }
+
+  const displayMainMenu = (menuItem: IMenuItem, index: number) => {
+    if(!menuItem.roles) {
+      return (
+        <Link to={menuItem.path} className={classes.link} color="primary" key={index}>
+        <ListItem button selected ={activeLink(menuItem.path)}>
           <ListItemIcon>
-            <DashBoardIcon />
+            <Icon>{menuItem.icon}</Icon>
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary={menuItem.label} />
         </ListItem>
-      </Link>
-      : null}
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listDepartmentsRoles) ?
-      <Link to="/department-module" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.department)}>
-        <ListItem button selected={activeLink('/department')}>
+        </Link>
+      )
+    } else {
+      return userHasAnyOfRoles(authUser?.roles, menuItem.roles) ? (
+        <Link to={menuItem.path} className={classes.link} color="primary" key={index}>
+        <ListItem button selected ={activeLink(menuItem.path)}>
           <ListItemIcon>
-            <DepartmentIcon />
+            <Icon>{menuItem.icon}</Icon>
           </ListItemIcon>
-          <ListItemText primary="Department" />
+          <ListItemText primary={menuItem.label} />
         </ListItem>
-      </Link> : null}
-      <ListItem button onClick={handleExpandInventory} selected={activeLink('/request-management')}>
-        <ListItemIcon>
-          <InventoryIcon />
-        </ListItemIcon>
-        <ListItemText primary="Item Requests"/>
-        {inventoryOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={inventoryOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <Link to="/request-management/my-requests" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="My Requests" />
-            </ListItem>
-          </Link>
-          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.hodEndorseRoles) ? <Link to="/request-management/hod-item-requests" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="HOD Item Requests" />
-            </ListItem>
-          </Link> : null}
-          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.generalManagerApproveRoles) ?<Link to="/request-management/general-manager-item-requests" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="GM Requests" />
-            </ListItem>
-          </Link> : null}
-          {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.procurementOfficerApproveRoles) ? <Link to="/request-management/procurement-officer-item-requests" className={classes.link}>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <SubMenuItemIcon />
-              </ListItemIcon>
-              <ListItemText primary="Endorsed Requests" />
-            </ListItem>
-          </Link> : null}
-        </List>
-      </Collapse>
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listSupplierRoles) ? <Link to="/supplier-module/suppliers" className={classes.link}>
-        <ListItem button selected={activeLink('/supplier-module')}>
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faTruckMoving} style={{width: iconSize, height: iconSize}} />
-          </ListItemIcon>
-          <ListItemText primary="Suppliers" />
-        </ListItem>
-      </Link> : null}
-      {userHasAnyOfRoles(authUser?.roles, APP_PAGES_AND_ROLES.listUserRoles) ? <Link to="/user-management-module/users" className={classes.link} onClick={()=> handleSetCurrentPageName(appPages.userManagementPage)}>
-        <ListItem button selected={activeLink('/user-management')}>
-          <ListItemIcon>
-            <AdminUserIcon />
-          </ListItemIcon>
-          <ListItemText primary="User Management" />
-        </ListItem>
-      </Link> : null}
-      <Link to="/settings" className={classes.link}>
-        <ListItem button selected={activeLink('settings')}>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </ListItem>
-      </Link>
-    </Fragment>
+        </Link>
+      ) : null;
+    }
+  }
+
+  const displaySubMenu = (menuItem: IMenuItem, index: number) => {
+    if((menuItem.roles && userHasAnyOfRoles(authUser?.roles, menuItem.roles)) || !menuItem.roles) {
+      return (
+        <Fragment key={index}>
+          <ListItem button onClick={() => handleToggleExpandableMenu(menuItem.id as keyof ExpandableMenuProps)} selected={activeLink(menuItem.path)}>
+            <ListItemIcon>
+              <Icon>{menuItem.icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={menuItem.label} />
+            {inventoryOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={expandableMenus[menuItem.id as keyof ExpandableMenuProps]} timeout="auto" unmountOnExit key={index}>
+            <List component="div" disablePadding>
+              {menuItem.children && menuItem.children.map((it, index) => {
+                return (
+                  <Link to={it.path} className={classes.link} key={index}>
+                    <ListItem button className={classes.nested} selected={activeLink(it.path)}>
+                      <ListItemIcon>
+                        <Icon>{it.icon}</Icon>
+                      </ListItemIcon>
+                      <ListItemText primary={it.label} />
+                    </ListItem>
+                  </Link>
+                )
+              })}
+            </List>
+          </Collapse>
+        </Fragment>
+      )
+    } else {
+      return null
+    }
     
+  }
+
+  return (
+    <Profiler id="MenuList" onRender={handleProfilerOnRender}>
+      {MENU_ROUTES.map((menuItem, index) => {
+        return !menuItem.children ? displayMainMenu(menuItem, index) : displaySubMenu(menuItem, index)
+      })}
+    </Profiler>
   )
 }
 

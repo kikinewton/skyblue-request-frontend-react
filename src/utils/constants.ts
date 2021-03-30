@@ -53,15 +53,20 @@ export const APP_PAGES_AND_ROLES = {
 
 
 export const MENU_ROUTES: IMenuItem[] = [
-  {path: '/', label:'Dashboard', icon: 'dashboard', hasSubMenu: false},
-  {path: '/departments', label:'Department', icon: 'home', hasSubMenu: false},
-  {path: '/item-requests', label:'Item Request', icon: 'home', hasSubMenu: true, 
+  {path: '/', label:'Dashboard', icon: 'dashboard', roles: APP_PAGES_AND_ROLES.dashboardRoles, id: 'dashboard'},
+  {path: '/department-module/departments', label:'Department', icon: 'apartments', roles: APP_PAGES_AND_ROLES.listDepartmentsRoles, id:'department'},
+  {path: '/request-management', label:'Item Request', icon: 'home', id: 'itemRequest',
     children: [
-      {path: '/request-management/my-myrequest', label:'My Request', icon: 'home', hasSubMenu: false},
-      {path: '/request-management/new-request', label:'New Request', icon: 'star', hasSubMenu: false},
-      {path: '/request-management/hod-item-requests', label:'HOD Requests', icon: 'home', hasSubMenu: false},
+      {path: '/request-management/my-requests', label:'My Request', icon: 'adjust', id: 'myRequest'},
+      {path: '/request-management/my-requests/create', label:'New Request', icon: 'adjust', id: 'myRequestCreate'},
+      {path: '/request-management/hod-item-requests', label:'HOD Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.hodEndorseRoles, id: 'hodRequest'},
+      {path: '/request-management/general-manager-item-requests', label:'GM Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.generalManagerApproveRoles, id: 'gmRequest'},
+      {path: '/request-management/procurement-officer-item-requests', label:'Endorsed Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.procurementOfficerApproveRoles, id: 'endrsedRequest'},
     ]
   },
+  {path: '/supplier-module/suppliers', label:'Suppliers', icon: 'apartments', roles: APP_PAGES_AND_ROLES.listSupplierRoles, id: 'supplier'},
+  {path: '/user-management-module/users', label:'User Management', icon: 'group', roles: APP_PAGES_AND_ROLES.listUserRoles, id: 'user'},
+  {path: '/settings', label:'Settings', icon: 'settings', id: 'settings'},
 ]
 
 export const CURRENCY_CODE = "GHS"

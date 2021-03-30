@@ -93,12 +93,12 @@ export interface IRequestItem {
 }
 
 export interface IMenuItem {
+  id: string
   path: string
   roles?: EmployeeLevel[]
   label: string
   icon: string
-  hasSubMenu: boolean
-  children?: IMenuItem[]
+  children?: IMenuItem[],
 }
 
 export interface IRequestPerDepartment {
