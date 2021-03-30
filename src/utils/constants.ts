@@ -55,7 +55,7 @@ export const APP_PAGES_AND_ROLES = {
 export const MENU_ROUTES: IMenuItem[] = [
   {path: '/', label:'Dashboard', icon: 'dashboard', roles: APP_PAGES_AND_ROLES.dashboardRoles, id: 'dashboard'},
   {path: '/department-module/departments', label:'Department', icon: 'apartments', roles: APP_PAGES_AND_ROLES.listDepartmentsRoles, id:'department'},
-  {path: '/request-management', label:'Item Request', icon: 'home', id: 'itemRequest',
+  {path: '/request-management', label:'Item Request', icon: 'phonelink', id: 'itemRequest',
     children: [
       {path: '/request-management/my-requests', label:'My Request', icon: 'adjust', id: 'myRequest'},
       {path: '/request-management/my-requests/create', label:'New Request', icon: 'adjust', id: 'myRequestCreate'},
@@ -64,7 +64,7 @@ export const MENU_ROUTES: IMenuItem[] = [
       {path: '/request-management/procurement-officer-item-requests', label:'Endorsed Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.procurementOfficerApproveRoles, id: 'endrsedRequest'},
     ]
   },
-  {path: '/supplier-module/suppliers', label:'Suppliers', icon: 'apartments', roles: APP_PAGES_AND_ROLES.listSupplierRoles, id: 'supplier'},
+  {path: '/supplier-module/suppliers', label:'Suppliers', icon: 'credit_score', roles: APP_PAGES_AND_ROLES.listSupplierRoles, id: 'supplier'},
   {path: '/user-management-module/users', label:'User Management', icon: 'group', roles: APP_PAGES_AND_ROLES.listUserRoles, id: 'user'},
   {path: '/settings', label:'Settings', icon: 'settings', id: 'settings'},
 ]

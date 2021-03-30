@@ -3,8 +3,6 @@ import React, { Fragment, FunctionComponent, Profiler, ProfilerOnRenderCallback,
 import { Collapse, Icon, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import DashBoardIcon from '@material-ui/icons/Dashboard'
-import AdminUserIcon from '@material-ui/icons/Group'
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';
 import { ExpandedMenu } from '../../types/ExpandedMenu';
