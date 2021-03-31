@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { IUserPayload, UserPayload } from "../types/payloads";
+import { ChangePasswordPayload, IUserPayload, UserPayload } from "../types/payloads";
 import service from './helpers/web-api'
 
 const servicePath = 'employees'
@@ -75,11 +75,12 @@ export function deleteUser(id: number): Promise<any> {
 }
 
 
-export function changePassword(adminId: number): Promise<any> {
+export function selfChangePassword(employeeId: number, payload: ChangePasswordPayload): Promise<any> {
   return new Promise((resolve, reject) => {
     service({
-      url: `/admin/${adminId}/changePassword`,
-      method: 'PUT'
+      url: `/employees/${employeeId}/changePassword`,
+      method: 'PUT',
+      data: payload
     })
     .then((response: AxiosResponse) => resolve(response))
     .catch(error=> reject(error))

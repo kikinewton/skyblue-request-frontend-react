@@ -1,5 +1,5 @@
 import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, 
-  TableRow, Typography, IconButton, LinearProgress } from '@material-ui/core';
+  TableRow, Typography, IconButton, LinearProgress, Fab } from '@material-ui/core';
 import React, { Fragment, FunctionComponent, useState, useEffect, ChangeEvent, MouseEvent, useContext} from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import {ITableColumn, IUser  } from '../../types/types'
@@ -13,6 +13,7 @@ import useAuthentication from '../../components/hooks/use-authentication';
 import { APP_PAGES_AND_ROLES } from '../../utils/constants';
 import { userHasAnyOfRoles } from '../../services/auth-service';
 import { UserContext } from '../../context/UserProvider';
+import { Add } from '@material-ui/icons';
 
 
 const tableColumns: ITableColumn[] = [
@@ -143,16 +144,14 @@ const ListUserPage: FunctionComponent = ()=> {
     <Fragment>
       <Paper elevation={0} style={{padding: '5px', minHeight: '50px'}} aria-label="department bar">
         <div className={classes.headerBar}>
-          {userHasAnyOfRoles(userContext.user.roles, APP_PAGES_AND_ROLES.createUserRoles) ? <Button variant="contained" color="primary" 
-          disableElevation aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
-            <Typography variant="button">
-              New User
-            </Typography>
-          </Button> : null}
+          {userHasAnyOfRoles(userContext.user.roles, APP_PAGES_AND_ROLES.createUserRoles) ? <Fab size="small" color="primary" 
+          aria-label="Create Department Button" onClick={handleNavigateToCreatePageClick}>
+            <Add />
+          </Fab> : null}
         </div>
       </Paper>
       
-      <Paper elevation={0} style={{padding: '5px', minHeight: '300px', marginTop:'10px'}}>
+      <Paper elevation={0} style={{padding: '5px', minHeight: '300px', marginTop:'10px', position: 'relative'}}>
         <TableContainer className={classes.tableContainer}>
           {loading ? <LinearProgress color="secondary" style={{width: '100%'}}/> : null}
           <Table stickyHeader aria-label="list of departments table">

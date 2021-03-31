@@ -57,15 +57,16 @@ export const MENU_ROUTES: IMenuItem[] = [
   {path: '/department-module/departments', label:'Department', icon: 'apartments', roles: APP_PAGES_AND_ROLES.listDepartmentsRoles, id:'department'},
   {path: '/request-management', label:'Item Request', icon: 'phonelink', id: 'itemRequest',
     children: [
-      {path: '/request-management/my-requests', label:'My Request', icon: 'adjust', id: 'myRequest'},
-      {path: '/request-management/my-requests/create', label:'New Request', icon: 'adjust', id: 'myRequestCreate'},
+      {path: '/request-management/my-requests', label:'My Request', icon: 'arrow_circle_up', id: 'myRequest'},
+      {path: '/request-management/my-requests/create', label:'New Request', icon: 'add_task', id: 'myRequestCreate'},
       {path: '/request-management/hod-item-requests', label:'HOD Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.hodEndorseRoles, id: 'hodRequest'},
       {path: '/request-management/general-manager-item-requests', label:'GM Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.generalManagerApproveRoles, id: 'gmRequest'},
       {path: '/request-management/procurement-officer-item-requests', label:'Endorsed Requests', icon: 'adjust', roles: APP_PAGES_AND_ROLES.procurementOfficerApproveRoles, id: 'endrsedRequest'},
     ]
   },
   {path: '/supplier-module/suppliers', label:'Suppliers', icon: 'credit_score', roles: APP_PAGES_AND_ROLES.listSupplierRoles, id: 'supplier'},
-  {path: '/user-management-module/users', label:'User Management', icon: 'group', roles: APP_PAGES_AND_ROLES.listUserRoles, id: 'user'},
+  {path: '/user-management-module/users', label:'User Management', icon: 'manage_accounts', roles: APP_PAGES_AND_ROLES.listUserRoles, id: 'user'},
+  {path: '/payment-management/payments', label:'Payments', icon: 'account_balance_wallet', id: 'payment'},
   {path: '/settings', label:'Settings', icon: 'settings', id: 'settings'},
 ]
 

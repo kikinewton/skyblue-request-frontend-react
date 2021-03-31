@@ -1,21 +1,15 @@
 import React, { Fragment, FunctionComponent, Profiler, ProfilerOnRenderCallback, useContext, useState } from 'react'
 
-import { Collapse, Icon, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Collapse, Divider, Icon, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link, useLocation } from 'react-router-dom';
-import { ExpandedMenu } from '../../types/ExpandedMenu';
-import DepartmentIcon from '@material-ui/icons/Apartment'
-import InventoryIcon from '@material-ui/icons/DesktopMac'
-import SubMenuItemIcon from '@material-ui/icons/Adjust'
-import SettingsIcon from '@material-ui/icons/Settings'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/AppProvider';
-import { appPages, APP_PAGES_AND_ROLES, MENU_ROUTES } from '../../utils/constants';
+import { MENU_ROUTES } from '../../utils/constants';
 import { userHasAnyOfRoles } from '../../services/auth-service';
 import { AuthUser, IMenuItem } from '../../types/types';
+import * as authService from '../../services/auth-service'
 // import clsx from 'clsx';
 
 const iconSize = '25px'
@@ -62,26 +56,20 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
   const classes = useStyles();
   const [expandableMenus, setExpandableMenus] = useState<ExpandableMenuProps>({itemRequest: false, inventory: false})
   const [inventoryOpen, setInventoryExpand] = useState(false)
-  const [reportExpand, setReportExpand] = useState(false)
-  const [userAdminOpen, setUserAdminOpen] = useState(false)
-
-  const [expandedMenu, setExpandedMenu] = useState("");
   const location = useLocation();
-  const appContext = useContext(AppContext)
 
-  const handleExpandInventory = ()=> {
-    let val = !inventoryOpen
-    setInventoryExpand(val);
+  const history = useHistory()
+
+  const handleLogoutClick = ()=> {
+    console.log('lets logout.......')
+    authService.logout()
+    history.push('/login')
   }
 
   const handleToggleExpandableMenu = (menuKey: keyof ExpandableMenuProps) => {
     if(!menuKey) return
     const value: boolean = expandableMenus[menuKey]
     setExpandableMenus({...expandableMenus, [menuKey]: !value})
-  }
-
-  const handleCloseExpandavleMenu = (menu: string) => {
-    setExpandableMenus({...expandableMenus, [menu]: true})
   }
 
   const activeLink = (subString: string): boolean => {
@@ -95,28 +83,20 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
     }
   }
 
-  const handleSetExpandedMenu = (value: ExpandedMenu.inventory | ExpandedMenu.userAdmin)=> {
-    setExpandedMenu(value);
-  }
-
-  const handleSetCurrentPageName = (value: string) => {
-    appContext.updateCurrentPage(value)
-  }
-
   const handleProfilerOnRender: ProfilerOnRenderCallback = (id, phase, actualDuration, baseDuration, startTime, commitTime, interractions) => {
-    console.log('Profiler', id, actualDuration)
+    //console.log('Profiler', id, actualDuration)
   }
 
   const displayMainMenu = (menuItem: IMenuItem, index: number) => {
     if(!menuItem.roles) {
       return (
         <Link to={menuItem.path} className={classes.link} color="primary" key={index}>
-        <ListItem button selected ={activeLink(menuItem.path)}>
-          <ListItemIcon>
-            <Icon>{menuItem.icon}</Icon>
-          </ListItemIcon>
-          <ListItemText primary={menuItem.label} />
-        </ListItem>
+          <ListItem button selected ={activeLink(menuItem.path)}>
+            <ListItemIcon>
+              <Icon>{menuItem.icon}</Icon>
+              </ListItemIcon>
+            <ListItemText primary={menuItem.label} />
+          </ListItem>
         </Link>
       )
     } else {
@@ -173,6 +153,13 @@ const MenuListItems: FunctionComponent<Props> = ({authUser}) => {
       {MENU_ROUTES.map((menuItem, index) => {
         return !menuItem.children ? displayMainMenu(menuItem, index) : displaySubMenu(menuItem, index)
       })}
+      <Divider style={{marginTop: '20px'}} />
+      <ListItem button onClick={handleLogoutClick}>
+        <ListItemIcon>
+          <Icon>power_settings_new</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
     </Profiler>
   )
 }

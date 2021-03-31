@@ -76,3 +76,9 @@ export interface ProcurementActOnRequestPayload {
   unitPrice: number
   supplier: ISupplier
 }
+
+export interface ChangePasswordPayload {
+  employeeId: number
+  oldPassword: string
+  newPassword: string
+}

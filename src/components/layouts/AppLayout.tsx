@@ -1,4 +1,4 @@
-import { AppBar, Button, Container, CssBaseline, Divider, Drawer, IconButton, List, makeStyles, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Container, CssBaseline, Divider, Drawer, Icon, IconButton, List, makeStyles, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import clsx from 'clsx';
@@ -10,10 +10,11 @@ import { UserContext } from '../../context/UserProvider';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { APP_MODULES } from '../../utils/constants';
-import { Person } from '@material-ui/icons';
+import { Group, Person } from '@material-ui/icons';
 import * as authService from '../../services/auth-service'
 import { AuthUser } from '../../types/types';
 import NotAuthorizedPage from '../../pages/NotAuthorizedPage';
+import PaymentIndexPage from '../../pages/payments/PaymentIndexPage';
 
 const HomePage = React.lazy(()=> import('../../pages/HomePage'))
 const DepartmentIndexPage = React.lazy(() => import('../../pages/department/DapartmentIndexPage'))
@@ -114,28 +115,17 @@ const useStyles = makeStyles(theme=> ({
 }));
 
 
-
-// const user:User = {
-//   id: 562,
-//   firstName: 'etornam',
-//   lastName: 'anyidoho',
-//   username: 'etoretornam',
-//   email: 'etornamanyidoho@gmail.com',
-//   phoneNumber: '0548556086',
-//   employeeLevel: 'junior'
-// }
-
 const AppLayout:FunctionComponent = ()=> {
+
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(true);
-  const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<any>(null)
   const userContext = useContext(UserContext)
   const appContext = useContext(AppContext)
 
   const menuAchorRef = useRef(null)
 
-  //get location
+  //router props
   const location = useLocation();
   const { path } = useRouteMatch()
   const history = useHistory()
@@ -156,12 +146,6 @@ const AppLayout:FunctionComponent = ()=> {
     setOpen(false);
   }
 
-  // const initUserState = ()=> {
-  //   if(authService.getUserDetailsFromStorage()) {
-  //     userContext.saveUser(authService.getUserDetailsFromStorage() as AuthUser)
-  //   }
-  // }
-
   const handleLogout = ()=> {
     handleProfileMenuClose()
     authService.logout()
@@ -176,10 +160,9 @@ const AppLayout:FunctionComponent = ()=> {
   useEffect(() => {
     const authUser = authService.getUserDetailsFromStorage() as AuthUser
     if(!authUser) {
-      console.log('path', path)
       return history.push(`/login`)
     }
-  })
+  }, [])
  
 
   //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -202,7 +185,7 @@ const AppLayout:FunctionComponent = ()=> {
             <img width="40" height="50" src="https://www.blueskies.com/wp-content/uploads/2017/10/logo-01.png" alt="" loading="eager" />
           </div>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {appContext.currentPage}
+            BLUESKIES APP
           </Typography>
           <div style={{marginLeft: '10px'}}>
             <Button style={{color: '#ffffff'}} aria-haspopup="true" onClick={handleProfileMenuButtonClick}>
@@ -217,7 +200,12 @@ const AppLayout:FunctionComponent = ()=> {
               onClose={handleProfileMenuClose}
             >
               <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <div style={{display: 'flex', width: '100%', justifyContent: 'space-around'}}>
+                  <Icon>logout</Icon>
+                  Logout
+                </div>
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -258,6 +246,7 @@ const AppLayout:FunctionComponent = ()=> {
                     <Route path={`${path}supplier-module`} component={SupplierIndexPage} />
                     <Route path={`${path}user-management-module/users`} component={UserIndexPage} />
                     <Route path={`${path}${APP_MODULES.REQUEST_ITEM_MODULE.path}`} component={ItemRequestIndexPage} />
+                    <Route path={`${path}payment-management/payments`} component={PaymentIndexPage} />
                     <Route path="/not-authorized" component={NotAuthorizedPage} />
                     <Route exact path={`${path}`} component={HomePage}/>
                   </Switch>

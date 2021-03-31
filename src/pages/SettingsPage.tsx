@@ -1,11 +1,13 @@
 import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Icon, List, ListItem, ListItemSecondaryAction, ListItemText, ListSubheader, makeStyles, Paper, Switch, TextField, ThemeProvider, Typography, useTheme } from '@material-ui/core';
 import { deepPurple } from '@material-ui/core/colors';
-import { Settings } from '@material-ui/icons';
-import React, { FormEvent, FunctionComponent, SyntheticEvent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, FunctionComponent, useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppProvider';
 import { UserContext } from '../context/UserProvider';
-import { storeThemeInLocalStorage } from '../utils/common-helper';
+import { ChangePasswordPayload } from '../types/payloads';
+import { showSuccessAlert, storeThemeInLocalStorage } from '../utils/common-helper';
 import { DARK_THEME_MODE, LIGHT_THEME_MODE } from '../utils/constants';
+import * as employeeService from '../services/user-service'
+import { CancelOutlined, CancelSharp, DoneAllOutlined } from '@material-ui/icons';
 
 // interface Props {
 
@@ -40,22 +42,45 @@ const useStyles = makeStyles(theme=> ({
 interface UserPayloadState {
   oldPassword: string
   newPassword: string
+  confirmPassword: string
+}
+
+interface ChangePasswordState {
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
 }
 
 const SettingsPage: FunctionComponent = ()=> {
   const [page, setPage] = useState<string>('My Settings');
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState<boolean>(false)
-  const [userPayload, setUserPayload] = useState<UserPayloadState>({oldPassword: '', newPassword: ''})
+  const [changePasswordState, setChangePasswordState] = useState<ChangePasswordState>({oldPassword: '', newPassword: '', confirmPassword: ''})
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+  const [changePasswordLoading, setChangePasswordLoading] = useState<boolean>(false)
   const appContext = useContext(AppContext)
   const userContext = useContext(UserContext)
   const themeContext = useTheme()
   const classes = useStyles()
-  const handleThemeToggle = (event: SyntheticEvent)=> {
-    console.log(event)
-  }
+  
   const handleSubmitChangePassword = ()=> {
-    console.log('payload', userPayload)
+    const data: ChangePasswordPayload = {
+      employeeId: userContext.user.id as number,
+      oldPassword: changePasswordState.oldPassword,
+      newPassword: changePasswordState.newPassword
+    }
+    setChangePasswordLoading(true)
+    employeeService.selfChangePassword(userContext.user.id as number, data)
+      .then(response => {
+        const {status, message} = response
+        if(status === 'OK') {
+          handleCloseChangePasswordDialog()
+          showSuccessAlert('Password Change', message)
+        }
+      })
+      .catch(error => {
+
+      })
+      .finally(()=> {setChangePasswordLoading(false)})
   }
 
   const handleDarkModeSwitch = (event: any)=> {
@@ -66,7 +91,7 @@ const SettingsPage: FunctionComponent = ()=> {
   }
 
   const handleOpenChangePasswordDialog = ()=> {
-    setUserPayload({oldPassword: '', newPassword: ''})
+    setChangePasswordState({oldPassword: '', newPassword: '', confirmPassword: ''})
     setChangePasswordDialogOpen(true)
   }
 
@@ -74,11 +99,23 @@ const SettingsPage: FunctionComponent = ()=> {
     setChangePasswordDialogOpen(false)
   }
 
-  const handleInputChange = (event: FormEvent<EventTarget>)=> {
+  const validatePasswordChangeForm = () => {
+    return changePasswordState.oldPassword && changePasswordState.newPassword && changePasswordState.confirmPassword 
+      && (changePasswordState.newPassword === changePasswordState.confirmPassword);
+  }
+
+  // const handleInputChange = (event: FormEvent<EventTarget>)=> {
+  //   const target = event.target as HTMLInputElement
+  //   const eventName: string = target.name;
+  //   const value: string = target.value;
+  //   setUserPayload({...userPayload, [eventName]: value})
+  // }
+
+  const handleCHangePasswordInputChange = (event: FormEvent<EventTarget>)=> {
     const target = event.target as HTMLInputElement
     const eventName: string = target.name;
     const value: string = target.value;
-    setUserPayload({...userPayload, [eventName]: value})
+    setChangePasswordState({...changePasswordState, [eventName]: value})
   }
 
   useEffect(()=> {
@@ -171,35 +208,46 @@ const SettingsPage: FunctionComponent = ()=> {
               <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
                 <TextField
                 type="password"
-                label="Old Password"
+                label="Old Password*"
                 variant="outlined"
                 name="oldPassword"
-                value={userPayload.oldPassword}
-                onChange={handleInputChange}
+                value={changePasswordState.oldPassword}
+                onChange={handleCHangePasswordInputChange}
                 className={classes.textField}
                 />
                 <TextField
-                type="password"
-                label="New Password"
-                variant="outlined"
-                name="newPassword"
-                value={userPayload.newPassword}
-                onChange={handleInputChange}
-                className={classes.textField}
+                  type="password"
+                  label="New Password*"
+                  variant="outlined"
+                  name="newPassword"
+                  value={changePasswordState.newPassword}
+                  onChange={handleCHangePasswordInputChange}
+                  className={classes.textField}
+                />
+                <TextField
+                  type="password"
+                  label="Confirm Password*"
+                  variant="outlined"
+                  name="confirmPassword"
+                  value={changePasswordState.confirmPassword}
+                  onChange={handleCHangePasswordInputChange}
+                  className={classes.textField}
                 />
               </div>
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseChangePasswordDialog} color="primary" disabled={submitLoading}>
+          <Button onClick={handleCloseChangePasswordDialog} color="primary" disabled={changePasswordLoading}>
+            <CancelSharp />
             <Typography variant="button">
               Cancel
             </Typography>
           </Button>
-          <Button onClick={handleSubmitChangePassword} color="primary" disabled={submitLoading}>
-            {submitLoading ? <CircularProgress /> : null}
+          <Button onClick={handleSubmitChangePassword} color="primary" disabled={changePasswordLoading || !validatePasswordChangeForm()}>
+            {changePasswordLoading ? <CircularProgress size={15} /> : null}
+            <DoneAllOutlined />
             <Typography variant="button">
-              Submit
+              Change Password
             </Typography>
           </Button>
         </DialogActions>

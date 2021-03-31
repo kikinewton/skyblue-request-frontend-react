@@ -7,7 +7,6 @@ const servicePath = 'requests'
 
 
 export function saveItemRequest(payload: MultiRequestItemPayload): Promise<any> {
-  console.log('payload', payload)
   return new Promise((resolve, reject) => {
     service({
       url: `/multipleRequestItems`,
