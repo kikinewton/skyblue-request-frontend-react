@@ -1,0 +1,17 @@
+import { createTypes } from "reduxsauce";
+
+export default createTypes(
+  `
+  FETCH_QUOTATIONS
+  FETCH_QUOTATIONS_SUCCESS
+  FETCH_QUOTATIONS_FAILURE
+
+  UPDATE_QUOTATION
+  UPDATE_QUOTATION_SUCCESS
+  UPDATE_QUOTATION_FAILURE
+
+  RESET_QUOTATION
+
+`,
+  {}
+);

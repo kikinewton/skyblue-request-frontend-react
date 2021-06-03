@@ -1,2 +1,2 @@
-# skyblue-request-frontend-react
-A react frontend app for bluskies
+# blueskies-procurement-app-frontend
+Blueskies procurement app in react and antd
