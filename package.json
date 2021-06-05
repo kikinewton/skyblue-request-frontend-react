@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/etornamtechnologies.github.io/skyblue-request-frontend-react",
+  "homepage": "https://etornamtechnologies.github.io/skyblue-request-frontend-react",
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@craco/craco": "^5.6.4",
