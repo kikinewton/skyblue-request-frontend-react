@@ -53,6 +53,7 @@ export function* createEmployee(action) {
       console.log('data', responseData)
       openNotification('success', 'CREATE Employee', response.message)
       yield put(Creators.createEmployeeSuccess(responseData))
+      yield put(Creators.fetchEmployees())
     } else {
       openNotification('error', 'Create Employee', response.message)
       yield put(Creators.createEmployeeFailure(response.message))

@@ -2,7 +2,7 @@ import { Button, Col, Row, Table, Upload } from 'antd'
 import React from 'react'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { saveDocument as saveDocumentApi } from '../../../services/api/document'
-import { CheckCircleOutlined, CheckOutlined, CloudUploadOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons'
 import Modal from 'antd/lib/modal/Modal'
 import { QUOTATIONS_WITHOUT_DOCUMENT } from '../../../util/quotation-types'
 
@@ -25,7 +25,7 @@ const columns = (props) => [
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: (text) => prettifyDateTime(text)
-  }, 
+  },
   {
     title: 'Document Attached',
     dataIndex: 'requestDocument',
@@ -92,6 +92,7 @@ const AddDocument = (props) => {
   React.useEffect(()=> {
     fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT })
   }, [])
+
   return (
     <React.Fragment>
       <Row>

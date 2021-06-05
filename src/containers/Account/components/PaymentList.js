@@ -1,8 +1,11 @@
-import { Card, Col, Input, Row, Table } from 'antd'
+import { Card, Col, Input, Row, Select, Table } from 'antd'
 import React from 'react'
 import * as paymentDraftService from '../../../services/api/payment-draft'
 import * as supplierService from '../../../services/api/supplier'
 import openNotification from '../../../util/notification'
+
+
+const { Option } = Select
 
 const columns = (props) => [
   {
@@ -24,13 +27,11 @@ const columns = (props) => [
 
 const PaymentList = (props) => {
   const [ payments, setPayments ] = React.useState([])
-  const [supplies, setSuppliers] = React.useState([])
+  const { suppliers, fetchSuppliers, suppliersLoading } = props
+  
 
-  const fetchSuppliers = async () => {
-    const response = await supplierService.getSuppliers({})
-    if(response.status === 'OK') {
-      setSuppliers(response.data)
-    }
+  const fetchPaymentsBySupplierId = (props) => {
+
   }
 
   const fetchPaymentDrafts = async (query)=> {
@@ -45,11 +46,11 @@ const PaymentList = (props) => {
   }
 
   React.useEffect(()=> {
-
+    fetchSuppliers({})
   }, [])
   return (
     <React.Fragment>
-      <Row>
+      <Row style={{marginBottom: 20}}>
         <Col md={8}>
           <span className="bs-page-title">Payments</span>
         </Col>
@@ -65,7 +66,13 @@ const PaymentList = (props) => {
               <Input type="search" placeholder="Search goods receive note" />
             </Col>
             <Col md={8}>
-              <Input type="search" placeholder="Search supplier" />
+              <Select style={{width: '100%'}}>
+                {suppliers.map(item=> (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
             </Col>
           </Row>
         </Col>
