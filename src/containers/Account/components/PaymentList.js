@@ -43,6 +43,7 @@ const PaymentList = (props) => {
     // } catch (error) {
     //   openNotification('error', 'Fetch Payments', error.message || 'Failed!')
     // }
+    //
   }
 
   React.useEffect(()=> {
