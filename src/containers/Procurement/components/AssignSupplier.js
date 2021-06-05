@@ -56,7 +56,7 @@ const AssignSupplier = (props) => {
     }
     const sups = selectedSuppliers.map(item=> {
       return suppliers.find(sup=> sup.id === item)
-    })
+    }) //
     console.log('supp', sups)
     MySwal.fire({
       title: "Assign Suppliers",
