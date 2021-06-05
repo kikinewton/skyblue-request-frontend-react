@@ -1,5 +1,5 @@
 import "antd/dist/antd.less";
-import { Router, Switch, Route, Redirect } from 'react-router'
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import {history} from './util/browser-history'
 import React from "react";
 import Spinner from "./presentation/Spinner";
