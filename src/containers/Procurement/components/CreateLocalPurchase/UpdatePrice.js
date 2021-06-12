@@ -39,7 +39,7 @@ const columns = (props)=> [
     key: 'unitPrice',
     render: (text, row) => {
       return (
-        <InputNumber min={1} max={1000} defaultValue={row['unitPrice'] || 0} onChange={(value)=> props.onPriceChange(row, value)} />
+        <InputNumber min={1} defaultValue={row['unitPrice'] || 0} onChange={(value)=> props.onPriceChange(row, value)} />
       )
     }
   },

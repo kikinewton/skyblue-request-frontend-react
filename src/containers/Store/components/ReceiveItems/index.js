@@ -74,8 +74,8 @@ const ReceiveItems = (props) => {
             invoiceDocument: doc,
             invoiceNumber: formData.invoiceNumber,
             numberOfDaysToPayment: formData.numberOfDaysToPayment,
-            invoiceAmountPayable: formData.invoiceAmountPayable,
           },
+          invoiceAmountPayable: formData.invoiceAmountPayable,
           localPurchaseOrder: lpo,
           comment: formData.comment,
           requestItems: selectedItems

@@ -20,9 +20,10 @@ const Dashboard = React.lazy(() => import('./containers/Dashboard'))
 const Store = React.lazy(() => import('./containers/Store'))
 const Settings = React.lazy(()=> import('./containers/Settings'))
 const Account = React.lazy(() => import('./containers/Account'))
+const Report = React.lazy(()=> import('./containers/Report'))
+const Audit = React.lazy(() => import('./containers/Audit'))
 
 function App(props) {
-  const { authUser } = props
   return (
     <>
       <Router history={history}>
@@ -39,6 +40,8 @@ function App(props) {
             <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
             <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />
             <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
+            <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
+            <Route path="/app/audit" component={Audit} {...props} />
             <Route path={LOGIN_ROUTE} component={Login} />
             <Route path="/not-authorized" component={NotAuthorized} />
             <AuthenticatedRoute path="/"><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>

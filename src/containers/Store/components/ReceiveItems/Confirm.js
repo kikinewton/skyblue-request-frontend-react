@@ -36,7 +36,7 @@ const Confirm = (props) => {
             <List>
               <List.Item.Meta title="Invoice Number" description={formData.invoiceNumber} />
               <List.Item.Meta title="Invoice Amount Payable" description={formData.invoiceAmountPayable} />
-              <List.Item.Meta title="Number Of Days Payment Due" description={formData.numberOfDaysPaymentDue} />
+              <List.Item.Meta title="Number Of Days Payment Due" description={formData.numberOfDaysToPayment} />
             </List>
           </Card>
         </Col>

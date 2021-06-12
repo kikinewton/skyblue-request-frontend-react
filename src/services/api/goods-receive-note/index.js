@@ -1,9 +1,11 @@
+import { serializeQueryParams } from '../../../util/common-helper'
 import service from '../apiRequest'
 const path = "/goodsReceivedNote"
 
-export function getAllGoodsReceiveNotes() {
+export function getAllGoodsReceiveNotes(query) {
+  const qs = serializeQueryParams(query)
   return service({
-    url: `${path}`,
+    url: `${path}/${qs}`,
     method: 'GET'
   })
 }

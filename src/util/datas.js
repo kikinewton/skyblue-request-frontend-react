@@ -41,3 +41,14 @@ export const PAYMENT_METHODS = [
   {id: "VISA", label: "VISA"},
   {id: "BANK-TRANSFER", label: "BANK TRANSFER"},
 ]
+
+export const PAYMENT_STATUS = [
+  {id: "COMPLETED", label: "COMPLETE PAYMENT"},
+  {id: "PARTIAL", label: "PART PAYMENT"},
+]
+
+export const PAYMENT_APPROVE_STATUS = [
+  {id: "APPROVED", label: "APPROVED"},
+  {id: "PENDING", label: "PENDING"},
+  {id: "REJECTED", label: "REJECTED"},
+]

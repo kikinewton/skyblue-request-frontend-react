@@ -1,4 +1,4 @@
-import { Col, Row, Table } from 'antd'
+import { Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
 import { useHistory } from 'react-router'
 import * as grnService from '../../../services/api/goods-receive-note'
@@ -6,9 +6,10 @@ import openNotification from '../../../util/notification'
 
 const columns = (props) => [
   {
-    title: "#ID",
-    dataIndex: "id",
-    key: "id"
+    title: "Supplier",
+    dataIndex: "invoice",
+    key: "invoiceSupplier",
+    render: (text, row) => row.invoice?.supplier?.name
   },
   {
     title: "Invoice Number",
@@ -17,25 +18,40 @@ const columns = (props) => [
     render: (text, row) => row.invoice.invoiceNumber
   },
   {
-    title: "",
-    dataIndex: "",
-    key: ""
+    title: "Actions",
+    dataIndex: "operation",
+    key: "operation",
+    align: 'right',
+    render: (text, row) => (
+      <Row>
+        <Col span={24}>
+          <Button onClick={()=> props.onNewPaymentClick(row)}>Make Payment</Button>
+        </Col>
+      </Row>
+    )
   },
 ]
 
 const GrnList = (props) => {
   const [ grns, setGrns ] = React.useState([])
-  const history = useHistory()
+  const [ loading, setLoading ] = React.useState(false)
 
-  const fetchGrnsPendingPayment = () => {
+  const fetchGrnsPendingPayment = async () => {
+    setLoading(true)
     try {
-      const response = grnService.getAllGoodsReceiveNotes()
+      const response = await grnService.getAllGoodsReceiveNotes({status: "Not-paid"})
       if(response.status === 'OK') {
+        console.log('yes grns success')
         setGrns(response.data)
       }
     } catch (error) {
       openNotification('error', 'Fetch Grns', error.message || 'Failed')
     }
+    setLoading(false)
+  }
+
+  const handleGoToNewPayment = (row) => {
+    window.location.href = `/#app/account/goods-receive-notes/${row.id}/add-new-payment`
   }
 
   React.useEffect(()=> {
@@ -46,15 +62,21 @@ const GrnList = (props) => {
     <React.Fragment>
       <Row>
         <Col md={24}>
-          <span className="bs-page-title">Goods Receive Notes</span>
+          <span className="bs-page-title">Goods Receive Notes With Pending Payments</span>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
-          <Table 
-            columns={columns({...props, onNewPaymentClick: (row)=> { history.push(`/app/account/goods-receive-notes/${row.id}/new-payment`) }})}
-            dataSource={grns}
-          />
+          {loading ? <Spin /> : 
+            (
+              <Table 
+                columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
+                dataSource={grns}
+                size="small"
+                rowKey="id"
+              />
+            )
+          }
         </Col>
       </Row>
     </React.Fragment>

@@ -15,20 +15,19 @@ export function* login(action) {
   console.log('action', action)
   try {
     const { email, password } = action.payload
-
     const response = yield call(signIn, { email, password })
     if(response.status === 'SUCCESS') {
       const responseData = response.data
       storeLocalState(AUTH_TOKEN_KEY, responseData.token)
       storeLocalState(AUTH_USER_KEY, { ...responseData.employee, role: responseData.employee.role[0] })
       yield put(Creators.loginSuccess(responseData))
-      history.push(HOME_ROUTE)
+      window.location.href = "/#app"
     } else {
       openNotification('error', 'Login', response.message)
       yield put(Creators.loginFailue(response.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Invalid credentials'
+    const message = (error && error.response?.data && error.response?.data?.error) || 'Invalid credentials'
     openNotification('error', 'Login', message)
     yield put(Creators.loginFailure(message))
   }
@@ -38,7 +37,7 @@ export function* logout(action) {
   yield put(Creators.logout(null))
   clearLocalState(AUTH_USER_KEY)
   clearLocalState(AUTH_TOKEN_KEY)
-  history.push(LOGIN_ROUTE)
+  window.location.href = "/#auth/login"
 }
 
 export function* watchLogin() {

@@ -9,10 +9,9 @@ import { history } from "../../util/browser-history";
 const apiConfig = {
   timeout: 30000,
   baseURL: BASE_URL,
-   
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // },
   // paramsSerializer: (params) => qs.stringify(params, { indices: false }),
 }
 
@@ -30,7 +29,6 @@ request.interceptors.request.use((config) => {
 })
 
 request.interceptors.response.use((response) => {
-  
   const { status, statusText } = response
   console.log('status', status)
   if(status === 200) {
@@ -43,7 +41,7 @@ request.interceptors.response.use((response) => {
   return Promise.reject(statusText)
 }, (error) => {
   console.log('ERROR RESPONSE: ', error.response)
-  const { status } = error?.response?.data
+  const { status } = error?.response?.data || {}
   if(status === 401) {
     history.push("/not-authorized")
   } else if(status === 403) {

@@ -118,14 +118,14 @@ const CollapsibleLayout = (props) => {
                   Add Document
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key={`${PROCUREMENT_ROUTE}/local-purchase-orders`}>
-                <NavLink to={`${PROCUREMENT_ROUTE}/local-purchase-orders`}>
-                  Local Purchase Orders
-                </NavLink>
-              </Menu.Item>
               <Menu.Item key={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
                   Create LPO
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key={`${PROCUREMENT_ROUTE}/local-purchase-orders`}>
+                <NavLink to={`${PROCUREMENT_ROUTE}/local-purchase-orders`}>
+                  Local Purchase Orders
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={`${PROCUREMENT_ROUTE}/request-categories`}>
@@ -150,10 +150,10 @@ const CollapsibleLayout = (props) => {
             </Menu.SubMenu>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER]) && 
-            <Menu.SubMenu key="/app/account" title="Payments" icon={<AccountBookOutlined />}>
+            <Menu.SubMenu key="/app/account" title="Accounts" icon={<AccountBookOutlined />}>
               <Menu.Item key="/app/account/goods-receive-notes">
                 <NavLink to="/app/account/goods-receive-notes">
-                  Goods Receive Notes
+                  Make Payment
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="/app/account/payments">
@@ -161,13 +161,20 @@ const CollapsibleLayout = (props) => {
                   Payments
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="/app/account/add-payment">
-                <NavLink to="/app/account/add-payment">
-                  Make Payment
-                </NavLink>
-              </Menu.Item>
             </Menu.SubMenu>
           }
+          <Menu.SubMenu key="/app/audit" title="Audit" icon={<AccountBookOutlined />}>
+            <Menu.Item key="/app/audit/approve-payment">
+              <NavLink to="/app/audit/approve-payment">
+                Approve Payments
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/app/audit/payments">
+              <NavLink to="/app/audit/payments">
+                Payments
+              </NavLink>
+            </Menu.Item>
+          </Menu.SubMenu>
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listDepartmentsRoles) && 
             <Menu.Item key="/app/departments">
               <NavLink to="/app/departments">

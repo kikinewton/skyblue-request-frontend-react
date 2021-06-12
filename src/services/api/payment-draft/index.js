@@ -1,5 +1,6 @@
 import service from '../apiRequest'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
+import { serializeQueryParams } from '../../../util/common-helper'
 
 
 const path = "/paymentDraft"
@@ -28,10 +29,26 @@ export function updatePaymentDraft(payload) {
   })
 }
 
-export function approvePaymentDraft(payload) {
+export function approvePaymentDraft(paymentDraftId, payload) {
+  const queryStr = serializeQueryParams(payload)
   return service({
-    url: `${path}/${payload.paymentDraftId}/auditorApproval`,
-    method: 'PUT',
-    data: payload
+    url: `${path}/${paymentDraftId}/auditorApproval/${queryStr.length > 1 ? queryStr : ""}`,
+    method: 'PUT'
+  })
+}
+
+export function getAllPaymentDrafts(query) {
+  const queryString = serializeQueryParams(query)
+  return service({
+    url: `/paymentDraft/all/${queryString.length > 1 ? queryString : ""}`,
+    method: 'GET'
+  })
+}
+
+export function getAllPayments(query) {
+  const queryString = serializeQueryParams(query)
+  return service({
+    url: `/payments/all/${queryString.length > 1 ? queryString : ""}`,
+    method: 'GET'
   })
 }

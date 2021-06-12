@@ -3,16 +3,16 @@ import React from 'react'
 import { useHistory } from 'react-router'
 
 
-const PaymentSuccess = (props) => {
+const ApproveSuccess = (props) => {
   const history = useHistory()
   return (
     <React.Fragment>
       <Result 
         status="success"
-        title="Payment Successful!"
+        title="Payment Approved Successful!"
         extra={[
           <Button type="primary" key="lpos" onClick={()=> window.location.href = "/#app/account/goods-receive-notes"}>
-            Back to Goods reeive notes
+            Back to Approve Payments
           </Button>,
           <Button type="primary" key="home" onClick={()=>window.location.href="/#app"}>
             Back to Home
@@ -23,4 +23,4 @@ const PaymentSuccess = (props) => {
   )
 }
 
-export default PaymentSuccess
+export default ApproveSuccess

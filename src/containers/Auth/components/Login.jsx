@@ -6,7 +6,6 @@ const Login = (props) => {
   const { loginUser, loading } = props
   const onFinish = (values) => {
     const payload = { email: values['email'], password: values['password'] }
-    console.log('values', payload)
     loginUser(payload)
   }
 

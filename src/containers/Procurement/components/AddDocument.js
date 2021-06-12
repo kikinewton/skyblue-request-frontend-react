@@ -2,7 +2,7 @@ import { Button, Col, Row, Table, Upload } from 'antd'
 import React from 'react'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { saveDocument as saveDocumentApi } from '../../../services/api/document'
-import { CheckOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloudUploadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import Modal from 'antd/lib/modal/Modal'
 import { QUOTATIONS_WITHOUT_DOCUMENT } from '../../../util/quotation-types'
 
@@ -95,6 +95,15 @@ const AddDocument = (props) => {
 
   return (
     <React.Fragment>
+      <Row style={{marginBottom: 20}}>
+        <Col md={6}>
+          <span className="bs-page-title">Attach Quotation Document</span>
+        </Col>
+        <Col md={18} style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <Button onClick={()=> window.location.href="/#app/procurement/add-local-purchase-order"} type="link"><PlusOutlined /> Create Local Purchase Order</Button>
+          <Button onClick={()=> window.location.href="/#app/procurement/local-purchase-orders"} type="link">All Quotations</Button>
+        </Col>
+      </Row>
       <Row>
         <Col md={24}>
           <Table 

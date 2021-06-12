@@ -26,7 +26,7 @@ const Home = (props) => {
         </Row>
         <Row>
           <Col md={24} style={{display:'flex', justifyContent: 'flex-end', alignItems: 'center', padding: 5}}>
-            <a href="/app/my-requests">View All</a>
+            <a href="/#app/my-requests">View All</a>
           </Col>
         </Row>
 

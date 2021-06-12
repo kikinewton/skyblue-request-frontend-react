@@ -20,20 +20,13 @@ const Auth = (props)=> {
 }
 
 const mapStateToProps = (store) => ({
-  loading: store.auth.loading,
-  user: store.auth.user,
-  token: store.auth.token
+  loading: store.auth.loading
 })
 
-const mapActionsToProps = (dispatch) => {
-  return {
-    loginUser: (payload) => {
-      dispatch(AuthCreators.login(payload))
-    },
-    logoutUser: () => {
-      dispatch(AuthCreators.logout())
-    }
+const mapActionsToProps = (dispatch) => ({
+  loginUser: (payload) => {
+    dispatch(AuthCreators.login(payload))
   }
-}
+})
 
 export default connect(mapStateToProps, mapActionsToProps)(Auth)

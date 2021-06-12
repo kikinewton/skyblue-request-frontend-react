@@ -16,8 +16,8 @@ export function signIn(payload){
 export function signOut() {
   clearLocalState(AUTH_TOKEN_KEY)
   clearLocalState(AUTH_USER_KEY)
-  history.push(LOGIN_ROUTE)
-  //window.location.reload(true)
+  //history.push(LOGIN_ROUTE)
+  window.location.href="/#auth/login"
 }
 
 export function userHasAnyRole(role, roles) {
