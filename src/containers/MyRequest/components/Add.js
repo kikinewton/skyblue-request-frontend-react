@@ -79,7 +79,7 @@ const AddNewRequest = (props) => {
       console.log('DATA', fd)
       setRequests(fd)
     }
-    fetchDepartments({})
+    fetchDepartments({}) // eslint-disable-next-line
   }, [])
   return (
     <>

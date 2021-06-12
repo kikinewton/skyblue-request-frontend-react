@@ -42,7 +42,7 @@ const RequestCategory = (props) => {
   }
 
   React.useEffect(()=> {
-    fetchRequestCategories({})
+    fetchRequestCategories({}) // eslint-disable-next-line
   }, [])
 
   return (

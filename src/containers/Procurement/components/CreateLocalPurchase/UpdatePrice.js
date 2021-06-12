@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react'
 import { Col, InputNumber, Row, Select, Table } from 'antd'
 import React from 'react'
 

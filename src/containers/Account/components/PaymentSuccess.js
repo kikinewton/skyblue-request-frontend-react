@@ -1,10 +1,8 @@
 import { Result, Button } from 'antd'
 import React from 'react'
-import { useHistory } from 'react-router'
 
 
 const PaymentSuccess = (props) => {
-  const history = useHistory()
   return (
     <React.Fragment>
       <Result 

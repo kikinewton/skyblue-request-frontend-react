@@ -1,4 +1,4 @@
-import { Card, Col, List, Row, Steps } from 'antd'
+import { Card, Col, Row, Steps } from 'antd'
 import React from 'react'
 import { useHistory, useParams } from 'react-router'
 import ItemList from './ItemList'
@@ -82,7 +82,7 @@ const ReceiveItems = (props) => {
         }
         console.log('data', payload)
         const response = await grnService.createGoodsReceiveNote(payload)
-        if(response.status == 'OK') {
+        if(response.status === 'OK') {
           setSelectedItems([])
           setFormData(initForm)
           setFile([])
@@ -114,7 +114,7 @@ const ReceiveItems = (props) => {
   }
 
   React.useEffect(()=> {
-    fetchLpo()
+    fetchLpo() // eslint-disable-next-line
   }, [lpoId])
 
   return (

@@ -1,6 +1,4 @@
 import React from 'react'
-import { Switch } from 'react-router-dom'
-import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import AppLayout from '../AppLayout'
 import List from './components/List'
 import { connect } from 'react-redux'

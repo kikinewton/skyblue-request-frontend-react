@@ -6,7 +6,7 @@ export const LineChart = (props) => {
   const { data, label, labels, maintainAspectRation=false } = props
   return (
     <Line 
-      options={{maintainAspectRatio: maintainAspectRation}}
+      options={{maintainAspectRatio: maintainAspectRation, responsive: true, offset: true}}
       type="line"
       data={{
         label: label,
@@ -26,8 +26,9 @@ export const LineChart = (props) => {
 export const BarChart = (props) => {
   const { data, label, labels, maintainAspectRatio=false} = props
   return (
-    <Bar 
-      options={{ maintainAspectRatio: maintainAspectRatio }}
+    <Bar
+      height="250px"
+      options={{ maintainAspectRatio: maintainAspectRatio, responsive: true }}
       type="Line"
       data={{
         label: label,
@@ -39,6 +40,8 @@ export const BarChart = (props) => {
           fill: false,
           borderColor: 'rgb(75, 192, 192)',
           tension: 0.1,
+          barThickness: 25,
+          barPercentage: 0.5
         }]
       }}
     />
@@ -51,6 +54,7 @@ export const PieChart = (props) => {
     <>
       {type === 'Pie'
       ? <Pie 
+          height="250px"
           options={{ aspectRatio: 1, maintainAspectRatio: false }}
           data={{
             labels: labels,
@@ -66,6 +70,7 @@ export const PieChart = (props) => {
           type="Pie"
         />
       : <Doughnut
+          height="250px"
           options={{ aspectRatio: 1, maintainAspectRatio: false }}
           data={{
             label: label,

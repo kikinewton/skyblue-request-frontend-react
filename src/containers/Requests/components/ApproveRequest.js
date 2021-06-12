@@ -1,5 +1,5 @@
-import { CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Card, Col, Table, Row, Button } from 'antd'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { Card, Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
 import openNotification from '../../../util/notification'
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
@@ -71,7 +71,7 @@ const Approve = (props)=> {
     }
   }
   React.useEffect(()=> {
-    initPage()
+    initPage() // eslint-disable-next-line
   }, [])
 
   return (
@@ -94,16 +94,18 @@ const Approve = (props)=> {
       <Row>
         <Col md={24}>
           <Card>
-            <Table 
-              columns={columns}
-              dataSource={requests}
-              rowKey="id"
-              rowSelection={{
-                onChange: (selectedRowKeys, selectedRows) => {
-                  setSelectedRequests(selectedRows)
-                }
-              }}
-            />
+            {requestLoading ? (<Spin />) : 
+              <Table 
+                columns={columns}
+                dataSource={requests}
+                rowKey="id"
+                rowSelection={{
+                  onChange: (selectedRowKeys, selectedRows) => {
+                    setSelectedRequests(selectedRows)
+                  }
+                }}
+              />
+            }
           </Card>
         </Col>
       </Row>

@@ -2,7 +2,6 @@ import axios from "axios";
 import { BASE_URL } from "./urls";
 import { getLocalState } from "../app-storage";
 import { AUTH_TOKEN_KEY } from "../app-storage/key-values";
-import openNotification from '../../util/notification'
 import * as authenticationService from './auth'
 import { history } from "../../util/browser-history";
 

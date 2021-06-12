@@ -1,8 +1,6 @@
 import { clearLocalState } from "../../app-storage";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../app-storage/key-values";
 import apiRequest from "../apiRequest";
-import { history } from '../../../util/browser-history'
-import { LOGIN_ROUTE } from "../../../util/routes";
 
 
 export function signIn(payload){

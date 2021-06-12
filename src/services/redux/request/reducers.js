@@ -55,7 +55,6 @@ export const updateRequest = (state = INITIAL_STATE, action) => {
 };
 
 export const updateRequestSuccess = (state = INITIAL_STATE, action) => {
-  const { depratmentId, responseData } = action
   return { 
     ...state,
     submitting: false,

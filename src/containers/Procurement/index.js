@@ -6,13 +6,12 @@ import {  Creators as RequestCategoryCreator } from '../../services/redux/reques
 import { connect } from 'react-redux'
 import { Switch, useRouteMatch } from 'react-router-dom'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
-import { Tabs, Row, Col, Card } from 'antd'
 import AppLayout from '../AppLayout'
 import AddDocument from './components/AddDocument'
 import CreateLocalPurchaseOrder from './components/CreateLocalPurchase'
 import RequestCategory from './components/RequestCategory'
 import AssignSupplier from './components/AssignSupplier'
-import LocalPurchaseOrders from '../Store/components/LocalPurchaseOrders'
+import LocalPurchaseOrders from './components/LocalPurchaseOrders'
 import Suppliers from './components/Suppliers'
 
 const Procurement = (props) => {

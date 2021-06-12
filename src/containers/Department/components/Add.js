@@ -14,6 +14,7 @@ const CreateDepartmentForm = (props)=> {
     if(!submitting) {
       form.resetFields()
     }
+    // eslint-disable-next-line
   }, [submitting])
   return (
     <>

@@ -2,9 +2,7 @@ import { Button, Col, Row, Table, Form, Input } from 'antd'
 import React from 'react'
 import { DEPARTMENT_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import ConfirmModal from '../../../presentation/ConfirmModal'
 import Spinner from '../../../presentation/Spinner'
-import { history } from '../../../util/browser-history'
 import Modal from 'antd/lib/modal/Modal'
 import MySwal from '../../../util/sweet-alert'
 
@@ -29,7 +27,6 @@ const columns = (props)=> DEPARTMENT_COLUMNS.concat({
 
 const List = (props)=> {
   console.log('props', props)
-  const [openModal, setOpenModal] = React.useState(false)
   const [openEdit, setOpenEdit] = React.useState(false)
   const [openAdd, setOpenAdd] = React.useState(false)
   const [editData, setEditData] = React.useState({})
@@ -60,18 +57,10 @@ const List = (props)=> {
     setOpenEdit(true)
   }
 
-  const handleAddCancel = ()=> {
-
-  }
-
   const handleAddSubmit = (values) => {
     const { name, description } = values
     const payload = {name, description}
     createDepartment(payload)
-  }
-
-  const handleEditCancel = () => {
-
   }
 
   const handleEditSubmit = (values) => {
@@ -85,6 +74,7 @@ const List = (props)=> {
   React.useEffect(()=> {
     console.log('loading', loading)
    fetchDepartments({})
+   // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
@@ -93,7 +83,7 @@ const List = (props)=> {
       addForm.resetFields()
       setOpenAdd(false)
       setOpenEdit(false)
-    }
+    } // eslint-disable-next-line
   }, [submitSuccess])
 
   return (

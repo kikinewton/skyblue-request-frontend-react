@@ -6,8 +6,7 @@ const columns = REQUEST_COLUMNS
 
 const List = (props)=> {
   console.log('props..............', props)
-  const { suppliers, fetchSuppliers, fetchQuotations, 
-    quotations, requests, fetchRequests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier } = props
+  const { suppliers, requests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier } = props
 
   const handleSupplierSelect = (value) => {
     onSelectSupplier(value)

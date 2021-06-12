@@ -1,4 +1,4 @@
-import { Card, Col, Row, Upload, Button, Input, Form, Table } from 'antd'
+import { Card, Col, Row, Upload, Button, Input, Table } from 'antd'
 import { LeftOutlined, RightOutlined, UploadOutlined } from '@ant-design/icons'
 import React from 'react'
 import TextArea from 'antd/lib/input/TextArea'
@@ -29,16 +29,11 @@ const columns = (props) => [
   },
 ]
 const CreateGrn = (props) => {
-  const [items, setItems] = React.useState([])
-  const { selectedItems, onUpdateSelectedItem, onFormDataChange, formData, file, onFileUpload, onFileRemove } = props
+  const { selectedItems, onFormDataChange, formData, file, onFileUpload, onFileRemove } = props
 
   const handleFormInputChange = (event) => {
     onFormDataChange(event)
   }
-
-  // const handleReplacementChange = (row) => {
-  //   setItems selectedItems.map(item=> {})
-  // }
 
   const handleFileRemove = ()=> {
     onFileRemove()

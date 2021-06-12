@@ -8,20 +8,18 @@ import {
   HomeOutlined,
   DashboardOutlined,
   AppstoreOutlined,
-  LaptopOutlined,
   UsergroupAddOutlined,
   SettingOutlined,
   PieChartOutlined,
   LogoutOutlined,
- DesktopOutlined,
- ReconciliationFilled,
- ShopOutlined,
- ReconciliationOutlined,
- UserOutlined,
- AccountBookOutlined
+  DesktopOutlined,
+  ShopOutlined,
+  ReconciliationOutlined,
+  UserOutlined,
+  AccountBookOutlined
 } from '@ant-design/icons';
 import { NavLink, useLocation } from 'react-router-dom';
-import { PROCUREMENT_ROUTE, QUOTATION_ROUTE } from '../../../util/routes';
+import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';

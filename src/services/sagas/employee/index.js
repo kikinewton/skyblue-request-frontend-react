@@ -88,7 +88,6 @@ export function* deleteEmployee(action) {
   try {
     const response = yield call(deleteEmployeeApi, action.employeeId)
     if(response.status === 'OK') {
-      const responseData = response.data
       openNotification('success', 'delete employee', response.message)
       yield put(Creators.deleteEmployeeSuccess({employeeId: action.employeeId}))
     } else {

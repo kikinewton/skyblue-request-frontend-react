@@ -56,7 +56,7 @@ const CreateLocalPurchase = (props) => {
   React.useEffect(()=> {
     resetRequests()
     fetchSuppliers({requestType: "GET-REQUESTS-BY-SUPPLIER"})
-    fetchRequestCategories({})
+    fetchRequestCategories({}) // eslint-disable-next-line
   }, [])
 
   const next = () => {

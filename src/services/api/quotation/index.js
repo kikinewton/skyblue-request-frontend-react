@@ -1,5 +1,4 @@
 import service from '../apiRequest'
-import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 import { ALL_QUOTATIONS, QUOTATIONS_WITHOUT_DOCUMENT } from '../../../util/quotation-types'
 
 

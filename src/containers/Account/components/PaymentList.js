@@ -1,10 +1,8 @@
-import { Badge, Button, Card, Col, DatePicker, Input, message, Row, Select, Spin, Table, Tag } from 'antd'
+import { Badge, Button, Card, Col, DatePicker, message, Row, Select, Spin, Table } from 'antd'
 import React from 'react'
 import * as paymentDraftService from '../../../services/api/payment-draft'
-import * as supplierService from '../../../services/api/supplier'
 import { prettifyDateTime, serializeQueryParams } from '../../../util/common-helper'
 import { PAYMENT_APPROVE_STATUS } from '../../../util/datas'
-import openNotification from '../../../util/notification'
 
 
 const { Option } = Select
@@ -63,23 +61,6 @@ const PaymentList = (props) => {
   const { suppliers, fetchSuppliers, suppliersLoading } = props
   const [ loading, setLoading ] = React.useState(false)
   const [ filter, setFilter ] = React.useState({ fromDate: "", toDate: "", supplierId: undefined, status: undefined })
-  
-
-  const fetchPaymentsBySupplierId = (props) => {
-
-  }
-
-  const fetchPaymentDrafts = async (query)=> {
-    // try {
-    //   const response = await paymentDraftService.fetchPaymentDrafts(query)
-    //   if(response.status === 'OK') {
-    //     setPayments(response.data)
-    //   }
-    // } catch (error) {
-    //   openNotification('error', 'Fetch Payments', error.message || 'Failed!')
-    // }
-    //
-  }
 
   const fetchPayments = async () => {
     setLoading(true)
@@ -99,7 +80,7 @@ const PaymentList = (props) => {
 
   React.useEffect(()=> {
     fetchSuppliers({})
-    fetchPayments()
+    fetchPayments() // eslint-disable-next-line
   }, [])
 
   return (
@@ -147,6 +128,7 @@ const PaymentList = (props) => {
             </Col>
             <Col md={5}>
               <Select 
+                loading={suppliersLoading}
                 name="spplierId" 
                 style={{width: '100%'}} 
                 placeholder="select supplier" 

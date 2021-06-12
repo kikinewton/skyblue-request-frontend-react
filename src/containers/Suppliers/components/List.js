@@ -1,9 +1,8 @@
-import { Button, Col, Row, Table, Form, Input, Select } from 'antd'
+import { Button, Col, Row, Table, Form, Input } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import Spinner from '../../../presentation/Spinner'
-import { history } from '../../../util/browser-history'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
@@ -62,13 +61,6 @@ const List = (props)=> {
     setOpenEdit(true)
   }
 
-  const handleAdd = (row) => {
-    setOpenAdd(true)
-  }
-
-  const deleteUser = (userId)=> {
-
-  }
 
   const handleAddSubmit = async (values) => {
     console.log('values', values)
@@ -102,7 +94,7 @@ const List = (props)=> {
   }
 
   React.useEffect(()=> {
-    fetchSuppliers()
+    fetchSuppliers() // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
@@ -112,7 +104,7 @@ const List = (props)=> {
       editForm.resetFields()
       setOpenAdd(false)
       setOpenEdit(false)
-    }
+    } // eslint-disable-next-line
   }, [submitSuccess])
 
   return (

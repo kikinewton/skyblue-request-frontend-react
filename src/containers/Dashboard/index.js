@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd'
 import React from 'react'
 import Spinner from '../../presentation/Spinner'
 import { getDashboardData as getDashboardDataApi} from '../../services/api/dashboard'

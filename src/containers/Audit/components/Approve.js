@@ -1,6 +1,5 @@
 import { Button, Card, Col, Input, List, message, Modal, Row, Spin, Table } from 'antd'
 import React from 'react'
-import MySwal from '../../../util/sweet-alert'
 import * as paymentApi from '../../../services/api/payment-draft'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import openNotification from '../../../util/notification'

@@ -1,7 +1,6 @@
-import { Button, Col, Row, Select, Table, Tag } from 'antd'
+import { Button, Col, Row, Select, Spin, Table, Tag } from 'antd'
 import React from 'react'
 import { prettifyDateTime } from '../../../util/common-helper'
-import { REQUEST_COLUMNS } from '../../../util/constants'
 import openNotification from '../../../util/notification'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 import MySwal from '../../../util/sweet-alert'
@@ -36,7 +35,7 @@ const COLUMNS = (props) => [
 
 const AssignSupplier = (props) => {
   const { currentUser, updateRequest, requests, 
-    fetchRequests, requestLoading, requestSubmitting, requestSubmitSuccess, suppliers, fetchSuppliers } = props
+    fetchRequests, requestLoading, requestSubmitting, suppliers, fetchSuppliers } = props
   const [ selectedRequests, setSelectedRequests ] = React.useState([])
   const [ selectedSuppliers, setSelectedSuppliers ] = React.useState([])
 
@@ -82,7 +81,7 @@ const AssignSupplier = (props) => {
 
   React.useEffect(()=> {
     console.log('init assign supplier...........')
-    initPage()
+    initPage() // eslint-disable-next-line
   }, [])
 
   return (
@@ -110,20 +109,22 @@ const AssignSupplier = (props) => {
       </Row>
       <Row>
         <Col md={24}>
-          <Table 
-            columns={COLUMNS(props)}
-            dataSource={requests}
-            pagination={{
-              pageSize: 20,
-            }}
-            rowKey="id"
-            size="small"
-            rowSelection={{
-              onChange: ((selectedRowKeys, selectedRows) => {
-                setSelectedRequests(selectedRows)
-              })
-            }}
-          />
+          {requestLoading ? <Spin /> : 
+            <Table 
+              columns={COLUMNS(props)}
+              dataSource={requests}
+              pagination={{
+                pageSize: 20,
+              }}
+              rowKey="id"
+              size="small"
+              rowSelection={{
+                onChange: ((selectedRowKeys, selectedRows) => {
+                  setSelectedRequests(selectedRows)
+                })
+              }}
+            />
+          }
         </Col>
       </Row>
     </React.Fragment>

@@ -56,7 +56,7 @@ export const updateEmployee = (state = INITIAL_STATE, action) => {
 };
 
 export const updateEmployeeSuccess = (state = INITIAL_STATE, action) => {
-  const { departmentId, responseData } = action
+  const { responseData } = action
   return { 
     ...state, 
     employees: state.employees.map(item=> {

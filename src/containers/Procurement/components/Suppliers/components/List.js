@@ -3,7 +3,6 @@ import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import Spinner from '../../../../../presentation/Spinner'
-import { history } from '../../../../../util/browser-history'
 import MySwal from '../../../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
@@ -93,7 +92,7 @@ const List = (props)=> {
   }
 
   React.useEffect(()=> {
-    fetchSuppliers()
+    fetchSuppliers() // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
@@ -103,7 +102,7 @@ const List = (props)=> {
       editForm.resetFields()
       setOpenAdd(false)
       setOpenEdit(false)
-    }
+    } // eslint-disable-next-line
   }, [supplierSubmitSuccess])
 
   return (

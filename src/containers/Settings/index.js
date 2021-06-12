@@ -13,13 +13,6 @@ const Settings = (props) => {
   const [ changePasswordModal, setChangePasswordModal ] = React.useState(false)
   const [changePasswordForm] = Form.useForm()
 
-  const userDataList = () => {
-    return Object.keys(currentUser).map(item => {
-      let data = { [item]: currentUser[item] }
-      return data; 
-    })
-  }
-
   const handleCancel = () => {
     setChangePasswordModal(false)
     changePasswordForm.resetFields()
@@ -68,15 +61,6 @@ const Settings = (props) => {
       desription: currentUser?.role
     },
   ]
-
-  const settingsList = [
-    {
-      title: 'Change password',
-      desription: 'yes'
-    },
-  ]
-
-  console.log('entries', userDataList())
 
   return (
     <React.Fragment>

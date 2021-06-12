@@ -3,11 +3,9 @@ import React from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import Spinner from '../../../presentation/Spinner'
-import { useHistory } from 'react-router'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 import { USER_ROLES } from '../../../util/datas'
-//import { history } from '../../../util/browser-history'
 
 const initUser = {
   id: undefined,
@@ -81,10 +79,6 @@ const List = (props)=> {
     setOpenAdd(true)
   }
 
-  const deleteUser = (userId)=> {
-
-  }
-
   const handleAddSubmit = async (values) => {
     console.log('values', values)
     const { firstName, lastName, email, phoneNo, departmentId, role } = values
@@ -123,6 +117,7 @@ const List = (props)=> {
     console.log('loading', loading)
    fetchEmployees({})
    fetchDepartments({})
+   // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
@@ -133,6 +128,7 @@ const List = (props)=> {
       setOpenAdd(false)
       setOpenEdit(false)
     }
+    // eslint-disable-next-line
   }, [submitSuccess])
 
   return (

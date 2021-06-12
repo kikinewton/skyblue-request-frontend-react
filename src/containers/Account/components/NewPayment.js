@@ -1,6 +1,6 @@
 import { Card, Col, Row, Form, Input, Select, Button, message, Spin } from 'antd'
 import React from 'react'
-import { useHistory, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
 import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
@@ -13,9 +13,7 @@ const NewPayment = (props) => {
   const [submitting, setSubmitting] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
   const [grn, setGrn] = React.useState({})
-  const {  } = props
   const { grnId } = useParams()
-  const history = useHistory()
 
   const fetchGoodsReceiveNote = async (goodsReceivedNoteId) => {
     setLoading(true)
@@ -32,6 +30,7 @@ const NewPayment = (props) => {
 
   const handleSubmit = async (values) => {
     console.log('values', values)
+    setSubmitting(true)
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus } = values
     const payload = {
       goodsReceivedNote: grn,
@@ -53,6 +52,7 @@ const NewPayment = (props) => {
     } catch (error) {
       openNotification('error', 'Add Payment', error.message || 'Error')
     }
+    setSubmitting(false)
   }
 
   React.useEffect(()=> {

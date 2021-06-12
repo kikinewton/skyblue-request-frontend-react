@@ -52,7 +52,6 @@ export function* updateSupplier(action) {
   try {
     const response = yield call(updateSupplierApi, action.supplierId, action.payload)
     if(response.status === 'SUCCESS') {
-      const responseData = response.data
       openNotification('success', 'update supplier', response.message)
       yield put(Creators.updateSupplierSuccess({id: action.supplierId, ...action.payload}))
     } else {
@@ -72,7 +71,6 @@ export function* deleteSupplier(action) {
   try {
     const response = yield call(deleteSupplierApi, supplierId)
     if(response.status === 'OK') {
-      const responseData = response.data
       console.log('about to call supplier delete success')
       yield put(Creators.deleteSupplierSuccess(supplierId))
       openNotification('success', 'Delete Supplier', response.message)

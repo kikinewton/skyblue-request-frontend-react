@@ -1,7 +1,6 @@
-import { CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Card, Col, Table, Row, Button } from 'antd'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { Card, Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
-import { REQUEST_COLUMNS } from '../../../util/constants'
 import openNotification from '../../../util/notification'
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
 import MySwal from '../../../util/sweet-alert'
@@ -36,7 +35,7 @@ const columns =  [
 
 
 const Endorse = (props)=> {
-  const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests, submitSuccess } = props
+  const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests } = props
   const [selectedRequests, setSelectedRequests] = React.useState([])
 
   const handleSubmit = (type)=> {
@@ -46,7 +45,6 @@ const Endorse = (props)=> {
     }
 
     const updateType = type === 'endorse' ? 'ENDORSE' : 'CANCEL'
-    console.log('----------------->USER ID', currentUser.id)
     let data = {userId: currentUser.id, updateType: updateType}
     if(type === 'endorse') {
       data['payload'] = {endorsedList: selectedRequests}
@@ -72,7 +70,7 @@ const Endorse = (props)=> {
     }
   }
   React.useEffect(()=> {
-    initPage()
+    initPage() // eslint-disable-next-line
   }, [])
 
   return (
@@ -95,16 +93,18 @@ const Endorse = (props)=> {
       <Row>
         <Col md={24}>
           <Card>
-            <Table 
-              columns={columns}
-              dataSource={requests}
-              rowKey="id"
-              rowSelection={{
-                onChange: (selectedRowKeys, selectedRows) => {
-                  setSelectedRequests(selectedRows)
-                }
-              }}
-            />
+            {requestLoading ? (<Spin />) : 
+              <Table 
+                columns={columns}
+                dataSource={requests}
+                rowKey="id"
+                rowSelection={{
+                  onChange: (selectedRowKeys, selectedRows) => {
+                    setSelectedRequests(selectedRows)
+                  }
+                }}
+             />
+            }
           </Card>
         </Col>
       </Row>

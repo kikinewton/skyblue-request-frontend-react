@@ -1,6 +1,5 @@
 import { Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
-import { useHistory } from 'react-router'
 import * as grnService from '../../../services/api/goods-receive-note'
 import openNotification from '../../../util/notification'
 

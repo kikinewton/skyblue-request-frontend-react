@@ -90,7 +90,6 @@ export function* deleteDepartment(action) {
   try {
     const response = yield call(deleteDepartmentApi, departmentId)
     if(response.status === 'SUCCESS') {
-      const responseData = response.data
       openNotification('success', 'Delete Department', response.message)
       yield put(Creators.deleteDepartmentSuccess(departmentId))
     } else {

@@ -16,6 +16,7 @@ const Edit = (props) => {
 
   React.useEffect(()=> {
     getDepartment(departmentId)
+    // eslint-disable-next-line
   }, [])
   return (
     <>

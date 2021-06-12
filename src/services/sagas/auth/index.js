@@ -5,10 +5,8 @@ import {
   signIn
 } from '../../api/auth'
 import { clearLocalState, storeLocalState } from '../../app-storage'
-import { history } from '../../../util/browser-history'
 import openNotification from '../../../util/notification'
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from '../../app-storage/key-values'
-import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes'
 
 
 export function* login(action) {
