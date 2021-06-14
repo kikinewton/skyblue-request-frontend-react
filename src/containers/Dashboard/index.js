@@ -1,5 +1,5 @@
+import { Spin } from 'antd'
 import React from 'react'
-import Spinner from '../../presentation/Spinner'
 import { getDashboardData as getDashboardDataApi} from '../../services/api/dashboard'
 import openNotification from '../../util/notification'
 import AppLayout from '../AppLayout'
@@ -32,7 +32,7 @@ const Dashboard = (props) => {
   return (
     <React.Fragment>
       <AppLayout>
-        {loading ? <Spinner /> :
+        {loading ? <Spin /> :
           <DashboardComponent 
             data={data}
           />

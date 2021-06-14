@@ -1,6 +1,7 @@
 import React from 'react'
 import { Line, Doughnut, Pie, Bar } from 'react-chartjs-2'
 import { generateHexColorString } from '../../util/common-helper'
+import { COLORS } from '../../util/datas'
 
 export const LineChart = (props) => {
   const { data, label, labels, maintainAspectRation=false } = props
@@ -34,7 +35,7 @@ export const BarChart = (props) => {
         label: label,
         labels,
         datasets: [{
-          backgroundColor: labels.map(it=> generateHexColorString()),
+          backgroundColor: labels.map((it, idx) => COLORS[idx] || generateHexColorString()),
           label,
           data,
           fill: false,
@@ -61,7 +62,7 @@ export const PieChart = (props) => {
             datasets: [
               {
                 label: label,
-                backgroundColor: labels?.map(it=> generateHexColorString()),
+                backgroundColor: labels.map((it, idx) => COLORS[idx] || generateHexColorString()),
                 data: data
               }
             ]
@@ -78,7 +79,7 @@ export const PieChart = (props) => {
             datasets: [
               {
                 label: label,
-                backgroundColor: labels.map(it=> generateHexColorString()),
+                backgroundColor: labels.map((it, idx) => COLORS[labels.length - idx] || generateHexColorString()),
                 data: data,
               }
             ]

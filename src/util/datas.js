@@ -52,3 +52,18 @@ export const PAYMENT_APPROVE_STATUS = [
   {id: "PENDING", label: "PENDING"},
   {id: "REJECTED", label: "REJECTED"},
 ]
+
+export const COLORS = [
+  "#b84c7d",
+  "#50b47b",
+  "#8650a6",
+  "#86a542",
+  "#6881d8",
+  "#c18739",
+  "#b84c3e",
+  "#fcba03",
+  "#03cafc",
+  "#03fce7",
+  "#03fc07",
+  "#fc0394",
+]

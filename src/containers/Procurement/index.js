@@ -42,6 +42,7 @@ const mapStateToProps = (store) => ({
   quotations: store.quotation.quotations,
   quotationLoading: store.quotation.loading,
   quotationSubmitSuccess: store.quotation.submitSuccess,
+  quotationSubmitting: store.quotation.submitting,
   suppliers: store.supplier.suppliers,
   supplierLoading: store.supplier.loading,
   supplierSubmitSuccess: store.supplier.submitSuccess,
@@ -88,6 +89,9 @@ const mapActionsToState = (dispatch) => {
   },
   createRequestCategory: (payload) => {
     dispatch(RequestCategoryCreator.createRequestCategory(payload))
+  },
+  createQuotation: (payload) => {
+    dispatch(QuotationCreators.createQuotation(payload))
   }
 }}
 

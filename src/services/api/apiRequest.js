@@ -17,11 +17,17 @@ const apiConfig = {
 const request = axios.create(apiConfig)
 
 request.interceptors.request.use((config) => {
-  console.log('API CONFIG: ', config)
   const accessToken = getLocalState(AUTH_TOKEN_KEY)
   if(accessToken) {
     config.headers['Authorization'] = `Bearer ${accessToken}`
   }
+  
+  if(config.url.indexOf("download") !== -1) {
+    console.log('down load link')
+    config.headers['Content-Type'] = 'application/octet-stream'
+    //config.headers['Content-Type'] = 'application/octet-stream' //post({ 'Content-Type': 'application/octet-stream' })
+  }
+  console.log('API CONFIG: ', config)
   return config
 }, error => {
   return Promise.reject(error)

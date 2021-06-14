@@ -9,6 +9,10 @@ const List = (props)=> {
   const { suppliers, requests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier } = props
 
   const handleSupplierSelect = (value) => {
+    if(!value) {
+      onSelectSupplier(undefined)
+      onSelectRequests([])
+    }
     onSelectSupplier(value)
   }
 
@@ -35,9 +39,7 @@ const List = (props)=> {
           <Table 
             columns={columns}
             dataSource={requests}
-            pagination={{
-              pageSize: 30
-            }}
+            pagination={false}
             size="small"
             rowSelection={{
               onChange: (keys, rows) => handleRowSelection(keys, rows),

@@ -10,6 +10,10 @@ export const { Types, Creators } = createActions(
     updateQuotationSuccess: ["quotationId", "responseData"],
     updateQuotationFailure: ["error"],
 
+    createQuotation: ["payload"],
+    createQuotationSuccess: ["responseData"],
+    createQuotationFailure: ["error"],
+
     resetQuotation: null
   }
 )

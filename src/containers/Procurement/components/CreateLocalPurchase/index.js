@@ -14,6 +14,7 @@ const CreateLocalPurchase = (props) => {
   const { fetchSuppliers, fetchRequests, resetRequests, requestSubmitting, updateRequest, fetchRequestCategories, requestSubmitSuccess } = props
 
   const handleSelectSupplier = (value) => {
+    if(!value) return
     setSelectedRequests([])
     fetchRequests({ requestType: FETCH_REQUEST_TYPES.DOCUMENTED_REQUESTS_BY_SUPPLIER, supplierId: value })
     setSelectedSupplier(value)
@@ -151,7 +152,7 @@ const CreateLocalPurchase = (props) => {
                   </Button>
                 )}
                 {currentStep < 2 && (
-                  <Button type="primary" onClick={()=> next()} style={{marginRight: 10}}>
+                  <Button type="primary" onClick={()=> next()} style={{marginRight: 10}} disabled={!selectedSupplier}>
                     Next
                     <RightOutlined />
                   </Button>

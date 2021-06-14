@@ -3,9 +3,11 @@ import { Creators, Types } from '../../redux/quotation/actions'
 
 import {
   getAllQuotations as getAllQuotationsApi,
-  updateQuotation as updateQuotationApi
+  updateQuotation as updateQuotationApi,
+  createQuotation as createQuotationApi,
 } from '../../api/quotation'
 import openNotification from '../../../util/notification'
+import { message } from 'antd'
 
 
 export function* fetchQuotations(action) {
@@ -49,6 +51,21 @@ export function* updateQuotation(action) {
   }
 }
 
+export function* createQuotation(action) {
+  const { payload } = action
+  try {
+    const response = yield call(createQuotationApi, payload)
+    if(response.status === "OK") {
+      yield put(Creators.createQuotationSuccess(response.data))
+      message.success("Quotation Document Addedd Successfully")
+    } else {
+      message.error("Upload failed!")
+    }
+  } catch (error) {
+    console.log('err: ', error)
+    message.error("Failed!")
+  }
+}
 
 
 export function* watchFetchQuotations(action) {
@@ -57,4 +74,8 @@ export function* watchFetchQuotations(action) {
 
 export function* watchUpdateQuotation(action) {
   yield takeLatest(Types.UPDATE_QUOTATION, updateQuotation)
+}
+
+export function* watchCreateQuotation(action) {
+  yield takeLatest(Types.CREATE_QUOTATION, createQuotation)
 }

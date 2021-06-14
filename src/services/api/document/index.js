@@ -18,6 +18,17 @@ export function getAllDocument(query) {
   })
 }
 
+// export function saveDocument(payload) {
+//   const fd = new FormData()
+//   console.log('file send', payload.file)
+//   fd.append("files", payload.file)
+//   return service({
+//     url: `${path}/uploadMultipleFiles?employeeId=${payload.employeeId}`,
+//     method: 'POST',
+//     data: fd,
+//   })
+// }
+
 export function saveDocument(payload) {
   const fd = new FormData()
   console.log('file send', payload.file)
@@ -28,3 +39,16 @@ export function saveDocument(payload) {
     data: fd,
   })
 }
+
+// export function saveDocument(payload) {
+//   const fd = new FormData()
+//   console.log('file send', payload.file)
+//   fd.append("files", payload.file)
+//   return service({
+//     url: `${path}/uploadMultipleFiles?employeeId=${payload.employeeId}`,
+//     method: 'POST',
+//     data: fd,
+//   })
+// }
+
+

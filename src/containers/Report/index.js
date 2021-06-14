@@ -6,7 +6,6 @@ import AppLayout from '../AppLayout'
 import * as reportApi from '../../services/api/report'
 import { downloadFile } from '../../util/common-helper'
 
-
 const Report = (props) => {
   const [ fromDate, setFromDate ] = React.useState(undefined)
   const [ toDate, setToDate ] = React.useState(undefined)
@@ -37,7 +36,8 @@ const Report = (props) => {
       let fileType = "text/xlsx"
       downloadFile(data, fileName, fileType)
     } catch (error) {
-      message.error(error.response.message)
+      console.log('error: ', error)
+      message.error('failed')
     }
   }
 

@@ -7,7 +7,7 @@ const DashboardCard = (props) => {
     <Card title={title} bordered={false}>
       <div style={{width: '100%', height: '100%', display:'flex', flexDirection: 'row', alignItems:'flex-end', justifyContent: 'flex-end'}}>
         <div style={{}}>
-          <span style={{fontWeight: 'bold', fontSize: '30px', color: '#7e8082'}}>{value}</span>
+          <span style={{fontSize: '30px', color: '#7e8082'}}>{value ? value : 0}</span>
         </div>
       </div>
     </Card>

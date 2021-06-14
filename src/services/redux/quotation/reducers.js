@@ -6,7 +6,7 @@ export const INITIAL_STATE = {
   quotations: [],
   loading: false,
   submitting: false,
-  submitSuccess: false
+  submitSuccess: false,
 };
 
 //fetch
@@ -47,6 +47,17 @@ export const updateQuotationFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submitSuccess: false};
 };
 
+export const createQuotation = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, submitSuccess: false };
+};
+
+export const createQuotationSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submitSuccess: true };
+};
+
+export const createQuotationFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submitSuccess: false };
+};
 
 export const resetQuotation = (state = INITIAL_STATE, action) => {
   return {
@@ -66,6 +77,10 @@ export const HANDLERS = {
   [Types.UPDATE_QUOTATION]: updateQuotation,
   [Types.UPDATE_QUOTATION_SUCCESS]: updateQuotationSuccess,
   [Types.UPDATE_QUOTATION_FAILURE]: updateQuotationFailure,
+
+  [Types.CREATE_QUOTATION]: createQuotation,
+  [Types.CREATE_QUOTATION_SUCCESS]: createQuotationSuccess,
+  [Types.CREATE_QUOTATION_FAILURE]: createQuotationFailure,
   
   [Types.RESET_QUOTATION]: resetQuotation
 };
