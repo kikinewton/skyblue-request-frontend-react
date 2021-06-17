@@ -1,4 +1,5 @@
-import { Col, InputNumber, Row, Select, Table } from 'antd'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { Col, InputNumber, Row, Select, Table, Button } from 'antd'
 import React from 'react'
 
 const columns = (props)=> [
@@ -56,18 +57,28 @@ const UpdatePrice = (props) => {
     <React.Fragment>
       <Row style={{padding: 5}}>
         <Col md={24}>
-          <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier).name}</span>
+          <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
           <Table 
             columns={columns({...props, onPriceChange: (row, value)=> handleUnitPriceOnChange(row, value)})}
-            dataSource={selectedRequests}
+            dataSource={selectedRequests || []}
             size="small"
             rowKey="id"
             pagination={false}
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={24} className="bs-stepper-nav">
+          <Button type="primary" onClick={()=> props.onStep(0)}>
+            <LeftOutlined /> Prev
+          </Button>
+          <Button type="primary" onClick={()=> props.onStep(2)}>
+            Next <RightOutlined />
+          </Button>
         </Col>
       </Row>
     </React.Fragment>

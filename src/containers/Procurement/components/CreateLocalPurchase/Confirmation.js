@@ -1,4 +1,5 @@
-import { Col, Row, Table } from 'antd'
+import { CheckOutlined, LeftOutlined } from '@ant-design/icons'
+import { Col, Row, Table, Button } from 'antd'
 import React from 'react'
 
 
@@ -38,7 +39,7 @@ const Confirmation = (props) => {
     <React.Fragment>
       <Row style={{padding: 5}}>
           <Col md={24}>
-            <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier).name}</span>
+            <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
           </Col>
       </Row>
       <Row>
@@ -50,6 +51,16 @@ const Confirmation = (props) => {
             size="small"
             rowKey="id"
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={24} className="bs-stepper-nav">
+          <Button type="primary" onClick={()=> props.onStep(1)}>
+            <LeftOutlined /> Prev
+          </Button>
+          <Button type="primary" onClick={()=> props.onDone()} loading={props.requestSubmitting}>
+            <CheckOutlined /> Submit
+          </Button>
         </Col>
       </Row>
     </React.Fragment>

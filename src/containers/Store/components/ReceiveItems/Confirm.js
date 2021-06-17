@@ -47,7 +47,7 @@ const Confirm = (props) => {
             <List>
               <List.Item.Meta title="Comment" description={formData.comment} />
               <List.Item.Meta title="Invoice Amount Payable" 
-                description={<Table columns={columns} dataSource={selectedItems} pagination={false} size="small" bordered />} />
+                description={<Table columns={columns} rowKey="id" dataSource={selectedItems} pagination={false} size="small" bordered />} />
             </List>
           </Card>
         </Col>

@@ -1,6 +1,6 @@
 import { Card, Col, Row, Steps } from 'antd'
 import React from 'react'
-import { useHistory, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import ItemList from './ItemList'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import * as documentService from '../../../../services/api/document'
@@ -26,7 +26,7 @@ const ReceiveItems = (props) => {
   const [file, setFile] = React.useState([])
   const { currentUser } = props
   const [submitting, setSubmitting] = React.useState(false)
-  const history = useHistory()
+  const [ loading, setLoading ] = React.useState(false)
 
   const handleSelectedItemUpdate = (event, row) => {
     const name = event.target.name
@@ -63,19 +63,30 @@ const ReceiveItems = (props) => {
 
   const handleSubmit = async () => {
     setSubmitting(true)
+    // const suppliers = (lpo.requestItems || [])[0].suppliers
+    // console.log('supliers', suppliers)
+    // const supplierId = lpo.supplierId
+    // const supplier = suppliers.find(item => item.id === supplierId)
+    // console.log('supplier', supplier)
     try {
+      const suppliers = (lpo.requestItems || [])[0].suppliers
+      console.log('supliers', suppliers)
+      const supplierId = lpo.supplierId
+      const supplier = suppliers.find(item => item.id === supplierId)
+      console.log('supplier', supplier)
       const uploadFileResponse = await documentService.saveDocument({file: file, employeeId: currentUser.id})
       console.log('upldoa response', uploadFileResponse)
       if(uploadFileResponse.status === 'SUCCESS') {
         const doc = uploadFileResponse?.data[0]
-        console.log('doc', doc)
+        console.log('lpo', lpo)
         const payload = {
           invoice: {
             invoiceDocument: doc,
             invoiceNumber: formData.invoiceNumber,
-            numberOfDaysToPayment: formData.numberOfDaysToPayment,
+            numberOfDaysToPayment: parseInt(formData.numberOfDaysToPayment) || 0,
+            supplier: supplier
           },
-          invoiceAmountPayable: formData.invoiceAmountPayable,
+          invoiceAmountPayable: parseInt(formData.invoiceAmountPayable),
           localPurchaseOrder: lpo,
           comment: formData.comment,
           requestItems: selectedItems
@@ -86,13 +97,14 @@ const ReceiveItems = (props) => {
           setSelectedItems([])
           setFormData(initForm)
           setFile([])
-          history.pushState("/app/stores/grn-success")
+          window.location.href = "/#app/stores/grn-success"
         } else {
           return openNotification('error', 'Create Goods Receive Note', response.mesage)
         }
       } else {
         openNotification('error', 'Upload Invoice', 'Upload failed, Please ensure correct file format is selected!')
       }
+      setSubmitting(false)
     } catch (error) {
       openNotification('error', 'Create Goods Receive Note', error.message || 'failed!')
     }
@@ -100,6 +112,7 @@ const ReceiveItems = (props) => {
   }
 
   const fetchLpo = async ()=> {
+    setLoading(true)
     try {
       const lposResponse = await grnService.getGoodsReceiveNoteWithoutGRN({})
       console.log('lpos', lposResponse)
@@ -111,6 +124,7 @@ const ReceiveItems = (props) => {
     } catch (error) {
       openNotification('error', 'fetch LPO', 'failed!')
     }
+    setLoading(false)
   }
 
   React.useEffect(()=> {
@@ -138,7 +152,7 @@ const ReceiveItems = (props) => {
             </Row>
             <Row style={{marginTop: 20}}>
               <Col md={24}>
-                {current === 0 && (<ItemList {...props} items={items} selectedItems={selectedItems} onItemSelect={handleItemSelect} onStep={(value)=>handleOnStep(value)} />)}
+                {current === 0 && (<ItemList loading={loading} {...props} items={items} selectedItems={selectedItems} onItemSelect={handleItemSelect} onStep={(value)=>handleOnStep(value)} />)}
                 {current === 1 && (<CreateGrn {...props} items={items} selectedItems={selectedItems} formData={formData} onFormDataChange={handleFormDataChange} 
                   onItemSelect={handleItemSelect} onStep={(value)=>handleOnStep(value)} onUpdateSelectedItem={handleSelectedItemUpdate} 
                   file={file} onFileUpload={(fl)=> setFile(fl)} onFileRemove={()=> setFile(undefined)}

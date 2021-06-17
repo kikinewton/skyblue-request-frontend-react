@@ -1,17 +1,16 @@
 import React from 'react'
-import { Button, Card, Col, Row, Steps } from 'antd'
+import { Card, Col, Row, Steps } from 'antd'
 import List from './List'
 import UpdatePrice from './UpdatePrice'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../../util/request-types'
 import Confirmation from './Confirmation'
-import { CheckOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
 const { Step } = Steps
 
 const CreateLocalPurchase = (props) => {
   const  [ currentStep, setCurrentStep ] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined)
   const [selectedRequests, setSelectedRequests] = React.useState([])
-  const { fetchSuppliers, fetchRequests, resetRequests, requestSubmitting, updateRequest, fetchRequestCategories, requestSubmitSuccess } = props
+  const { fetchSuppliers, fetchRequests, resetRequests, updateRequest, requestSubmitting, fetchRequestCategories, requestSubmitSuccess } = props
 
   const handleSelectSupplier = (value) => {
     if(!value) return
@@ -60,14 +59,6 @@ const CreateLocalPurchase = (props) => {
     fetchRequestCategories({}) // eslint-disable-next-line
   }, [])
 
-  const next = () => {
-    setCurrentStep(currentStep + 1)
-  }
-
-  const prev = () => {
-    setCurrentStep(currentStep - 1)
-  }
-
   const done = async ()=> {
     const requestList = selectedRequests.map(item=> {
       let data = item
@@ -88,11 +79,16 @@ const CreateLocalPurchase = (props) => {
     setCurrentStep(0)
   }
 
+  const onStep = (value) => {
+    setCurrentStep(value)
+  }
+
   const displayPage = ()=> {
     console.log('current', currentStep)
     switch(currentStep) {
       case 0:
         return (<List {...props}
+            onStep={onStep}
             onSelectRequests={(list)=> handleSelectRequests(list)}
             selectedRequests={selectedRequests}
             selectedSupplier={selectedSupplier}
@@ -101,6 +97,8 @@ const CreateLocalPurchase = (props) => {
           )
       case 1:
         return (<UpdatePrice {...props} 
+            onStep={onStep}
+            onDone={done}
             selectedRequests={selectedRequests} 
             onUnitPriceUpdate={handleUpdateRequestUnitPrice}
             selectedSupplier={selectedSupplier}
@@ -109,6 +107,10 @@ const CreateLocalPurchase = (props) => {
           )
       case 2:
         return (<Confirmation {...props} 
+            onStep={onStep}
+            onDone={done}
+            submitting={requestSubmitting}
+            requestSubmitSuccess={requestSubmitSuccess}
             selectedRequests={selectedRequests}
             selectedSupplier={selectedSupplier}
           />
@@ -141,28 +143,6 @@ const CreateLocalPurchase = (props) => {
             <Row>
               <Col md={24} style={{marginTop: 20}}>
                 {displayPage()}
-              </Col>
-            </Row>
-            <Row style={{marginTop: 10}}>
-              <Col md={12} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-                {currentStep > 0 && (
-                  <Button type="primary" onClick={()=> prev()} style={{marginRight: 10}}>
-                    <LeftOutlined />
-                    Previous
-                  </Button>
-                )}
-                {currentStep < 2 && (
-                  <Button type="primary" onClick={()=> next()} style={{marginRight: 10}} disabled={!selectedSupplier}>
-                    Next
-                    <RightOutlined />
-                  </Button>
-                )}
-                {currentStep === 2 && (
-                  <Button type="primary" onClick={()=> done()} style={{marginRight: 10}} loading={requestSubmitting} disabled={requestSubmitting}>
-                    <CheckOutlined />
-                    Done
-                  </Button>
-                )}
               </Col>
             </Row>
           </Card>

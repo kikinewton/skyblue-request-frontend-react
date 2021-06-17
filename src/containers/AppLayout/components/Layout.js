@@ -50,7 +50,7 @@ const CollapsibleLayout = (props) => {
     <Layout className="bs-layout">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         {/* <div className="bs-logo" /> */}
-        <div style={{color: '#fff', padding: '10px 0px 10px 20px', marginBottom: 10, borderBottom: '1px #fff solid'}}>
+        <div style={{color: '#fff', padding: '10px 0px 10px 20px', marginBottom: 10}}>
           <img width="30" height="40" src="https://www.blueskies.com/wp-content/uploads/2017/10/logo-01.png" alt="" loading="eager" />
           <span>Blueskies</span>
         </div>

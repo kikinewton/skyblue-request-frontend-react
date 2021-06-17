@@ -1,6 +1,6 @@
 import React from 'react'
 import { RightOutlined } from '@ant-design/icons'
-import { Button, Col, Row, Table } from 'antd'
+import { Button, Col, Row, Table, Spin } from 'antd'
 
 const columns = [
   {
@@ -21,21 +21,23 @@ const columns = [
 ]
 
 const ItemList = (props) => {
-  const { items, onItemSelect, selectedItems, onStep } = props
+  const { items, onItemSelect, selectedItems, onStep, loading } = props
   return (
     <React.Fragment>
       <Row>
         <Col md={24}>
-          <Table 
-            columns={columns}
-            dataSource={items || []}
-            pagination={false}
-            rowKey="id"
-            rowSelection={{
-              onChange: (selectedkeys, selectedRows) => onItemSelect(selectedkeys, selectedRows),
-              selectedRowKeys: selectedItems.map(item=> item.id)
-            }}
-          />
+          {loading ? <Spin /> :
+            <Table 
+              columns={columns}
+              dataSource={items || []}
+              pagination={false}
+              rowKey="id"
+              rowSelection={{
+                onChange: (selectedkeys, selectedRows) => onItemSelect(selectedkeys, selectedRows),
+                selectedRowKeys: selectedItems.map(item=> item.id)
+              }}
+            />
+          }
         </Col>
       </Row>
       <Row style={{marginTop: 20}}>

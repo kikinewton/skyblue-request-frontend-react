@@ -1,8 +1,7 @@
-import { Button, Col, Row, Table, Form, Input } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Spin } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import Spinner from '../../../../../presentation/Spinner'
 import MySwal from '../../../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
@@ -117,7 +116,7 @@ const List = (props)=> {
       </Row>
       <Row>
         <Col md={24}>
-          {supplierLoading ? <Spinner /> : 
+          {supplierLoading ? <Spin /> : 
             <Table 
               columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
               dataSource={suppliers}
