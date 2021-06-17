@@ -11,8 +11,9 @@ import openNotification from '../../../util/notification'
 
 
 export function* fetchSuppliers(action) {
+  const { query } = action
   try {
-    const response = yield call(getSuppliers, {})
+    const response = yield call(getSuppliers, query)
     if(response.status === 'SUCCESS') {
       const responseData = response.data
       yield put(Creators.fetchSuppliersSuccess(responseData))

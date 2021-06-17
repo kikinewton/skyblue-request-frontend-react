@@ -20,7 +20,7 @@ export const fetchRequestsSuccess = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchRequestsFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error};
+  return { ...state, loading: false, error: action.error, requests: []};
 };
 
 //get

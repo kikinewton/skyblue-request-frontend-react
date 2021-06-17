@@ -34,7 +34,7 @@ const columns = [
   }
 ]
 const Confirmation = (props) => {
-  const { selectedRequests, suppliers, selectedSupplier } = props
+  const { selectedRequests, suppliers, selectedSupplier, requestSubmitting } = props
   return (
     <React.Fragment>
       <Row style={{padding: 5}}>
@@ -58,7 +58,7 @@ const Confirmation = (props) => {
           <Button type="primary" onClick={()=> props.onStep(1)}>
             <LeftOutlined /> Prev
           </Button>
-          <Button type="primary" onClick={()=> props.onDone()} loading={props.requestSubmitting}>
+          <Button type="primary" onClick={()=> props.onDone()} loading={requestSubmitting}>
             <CheckOutlined /> Submit
           </Button>
         </Col>

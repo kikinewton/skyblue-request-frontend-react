@@ -14,19 +14,18 @@ export function* fetchRequests(action) {
   console.log('=================>FETCH REQUEST', action)
   try {
     const response = yield call(fetchRequestsApi, action.query)
-    const responseData = response.data
-    yield put(Creators.fetchRequestsSuccess(responseData))
-    // if(response.status === 'FOUND') {
-    //   const responseData = response.data
-    //   yield put(Creators.fetchRequestsSuccess(responseData))
-    // } else {
-    //   openNotification('error', 'Login', response.message)
-    //   yield put(Creators.fetchRequestsFailure(response.message))
-    // }
+    console.log("Request Response", response)
+    if(response.status === "OK" || response.status === "FOUND") {
+      const responseData = response?.data || []
+      yield put(Creators.fetchRequestsSuccess(responseData))
+    } else {
+      openNotification('error', 'Fetch Request', response.message || "Failed to fetch Requests")
+      yield put(Creators.fetchRequestsFailure(response.message || "Failed to fetch requests!"))
+    }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Login', message)
-    yield put(Creators.fetchRequestsFailure(message))
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch departments'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchRequestsFailure(errorText))
   }
 }
 
@@ -45,9 +44,9 @@ export function* createRequest(action) {
       yield put(Creators.createRequestFailure(response.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Login', message)
-    yield put(Creators.createRequestFailure(message))
+    const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
+    openNotification('error', 'Login', errorTxt)
+    yield put(Creators.createRequestFailure(errorTxt))
   }
 }
 

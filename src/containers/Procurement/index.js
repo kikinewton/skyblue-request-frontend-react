@@ -57,6 +57,9 @@ const mapActionsToState = (dispatch) => {
   fetchSuppliers: (query) => {
     dispatch(SupplierCreators.fetchSuppliers(query))
   },
+  resetSupplier: () => {
+    dispatch(SupplierCreators.resetSupplier())
+  },
   createSupplier: (payload) => {
     dispatch(SupplierCreators.createSupplier(payload))
   },
@@ -81,7 +84,7 @@ const mapActionsToState = (dispatch) => {
   updateQuotation: (quotationId, payload) => {
     dispatch(QuotationCreators.updateQuotation(quotationId, payload))
   },
-  resetRequests: () => {
+  resetRequest: () => {
     dispatch(RequestCreators.resetRequest())
   },
   fetchRequestCategories: (query) => {

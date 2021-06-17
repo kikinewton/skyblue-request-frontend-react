@@ -7,7 +7,7 @@ export function downloadPaymentsReport(query) {
   return service({
     url: `/accounts/paymentReport/download/${queryStr}`,
     method: 'GET',
-    responseType: "blob"
+    responseType: "arraybuffer"
   })
 }
 
@@ -16,7 +16,7 @@ export function downloadProcuredItemsReport(query) {
   return service({
     url: `/procurement/procuredItemsReport/download/${queryStr}`,
     method: 'GET',
-    responseType: 'blob'
+    responseType: 'arraybuffer'
   })
 }
 

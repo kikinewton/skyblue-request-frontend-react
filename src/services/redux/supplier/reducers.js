@@ -21,7 +21,7 @@ export const fetchSuppliersSuccess = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchSuppliersFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error};
+  return { ...state, loading: false, error: action.error, suppliers: []};
 };
 
 //get

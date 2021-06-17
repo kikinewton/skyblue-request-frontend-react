@@ -10,10 +10,14 @@ const CreateLocalPurchase = (props) => {
   const  [ currentStep, setCurrentStep ] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined)
   const [selectedRequests, setSelectedRequests] = React.useState([])
-  const { fetchSuppliers, fetchRequests, resetRequests, updateRequest, requestSubmitting, fetchRequestCategories, requestSubmitSuccess } = props
+  const { fetchSuppliers, fetchRequests, resetRequest, updateRequest, requestSubmitting, fetchRequestCategories, requestSubmitSuccess } = props
 
   const handleSelectSupplier = (value) => {
-    if(!value) return
+    if(!value) {
+      setSelectedRequests([])
+      resetRequest()
+      return
+    }
     setSelectedRequests([])
     fetchRequests({ requestType: FETCH_REQUEST_TYPES.DOCUMENTED_REQUESTS_BY_SUPPLIER, supplierId: value })
     setSelectedSupplier(value)
@@ -54,29 +58,22 @@ const CreateLocalPurchase = (props) => {
   
 
   React.useEffect(()=> {
-    resetRequests()
-    fetchSuppliers({requestType: "GET-REQUESTS-BY-SUPPLIER"})
+    resetRequest()
+    fetchSuppliers({suppliersWithRQ: true})
     fetchRequestCategories({}) // eslint-disable-next-line
   }, [])
 
-  const done = async ()=> {
+  const done = ()=> {
     const requestList = selectedRequests.map(item=> {
       let data = item
       data['requestCategory'] = {id: item.requestCategory}
       return data
     })
-    console.log('selected requets', requestList)
     const payload = {
       updateType: UPDATE_REQUEST_TYPES.UPDATE_UNIT_PRICE,
       payload: {items: requestList}
     }
-    await updateRequest(payload)
-    setCurrentStep(0)
-    console.log('requst submit', requestSubmitSuccess)
-    setSelectedSupplier(undefined)
-    setSelectedRequests([])
-    resetRequests()
-    setCurrentStep(0)
+    updateRequest(payload)
   }
 
   const onStep = (value) => {
@@ -120,6 +117,17 @@ const CreateLocalPurchase = (props) => {
 
     }
   }
+
+  React.useEffect(()=> {
+    if(!requestSubmitting) {
+      fetchSuppliers({ suppliersWithRQ: true })
+      setCurrentStep(0)
+      setSelectedSupplier(undefined)
+      setSelectedRequests([])
+      resetRequest()
+      setCurrentStep(0)
+    }
+  }, [requestSubmitSuccess])
 
   return (
     <React.Fragment>

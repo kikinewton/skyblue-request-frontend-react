@@ -1,5 +1,5 @@
 import { RightOutlined } from '@ant-design/icons'
-import { Col, Row, Select, Table, Button } from 'antd'
+import { Col, Row, Select, Table, Button, Spin } from 'antd'
 import React from 'react'
 import { REQUEST_COLUMNS } from '../../../../util/constants'
 
@@ -7,10 +7,11 @@ const columns = REQUEST_COLUMNS
 
 const List = (props)=> {
   console.log('props..............', props)
-  const { suppliers, requests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier, supplierLoading } = props
+  const { suppliers, requests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier, supplierLoading, requestLoading } = props
 
   const handleSupplierSelect = (value) => {
     if(!value) {
+      console.log('Nothi selected')
       onSelectSupplier(undefined)
       onSelectRequests([])
     }
@@ -37,23 +38,25 @@ const List = (props)=> {
       </Row>
       <Row style={{marginTop: 20}}>
         <Col md={24}>
-          <Table 
-            columns={columns}
-            dataSource={requests}
-            pagination={false}
-            size="small"
-            rowSelection={{
-              onChange: (keys, rows) => handleRowSelection(keys, rows),
-              selectedRowKeys: selectedRequests.map(item=> item.id),
-              rowKey: "id"
-            }}
-            rowKey="id"
-          />
+          {requestLoading ? (<Spin />) : 
+            <Table 
+              columns={columns}
+              dataSource={requests}
+              pagination={false}
+              size="small"
+              rowSelection={{
+                onChange: (keys, rows) => handleRowSelection(keys, rows),
+                selectedRowKeys: selectedRequests.map(item=> item.id),
+                rowKey: "id"
+              }}
+              rowKey="id"
+            />
+          }
         </Col>
       </Row>
       <Row>
         <Col md={24} className="bs-stepper-nav">
-          <Button type="primary" disabled={selectedSupplier} onClick={()=> props.onStep(1)}>
+          <Button type="primary" disabled={requests.length < 1 || selectedRequests.length < 1} onClick={()=> props.onStep(1)}>
             Next <RightOutlined />
           </Button>
         </Col>

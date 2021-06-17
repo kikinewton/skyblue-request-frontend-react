@@ -1,11 +1,13 @@
+import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
 import { SUPPLIERS_ENDPOINT } from "../urls";
 
-export function getSuppliers() {
+export function getSuppliers(query) {
   console.log('fetch supplie API')
+  const queryStr = serializeQueryParams(query)
   return apiRequest({
     method: "GET",
-    url: `${SUPPLIERS_ENDPOINT}`
+    url: `${SUPPLIERS_ENDPOINT}${queryStr}`
   })
 }
 

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import * as reportApi from '../../services/api/report'
 import { downloadFile } from '../../util/common-helper'
+import fileDownload from 'js-file-download'
 
 const Report = (props) => {
   const [ fromDate, setFromDate ] = React.useState(undefined)
@@ -20,21 +21,23 @@ const Report = (props) => {
   }
 
   const handleDownloadPayments = async () => {
-    console.log('from', fromDate, 'to', toDate)
-
-    const dateMil = Date.parse(fromDate)
-    console.log('data milli', dateMil)
     const query = {
       periodStart: Date.parse(fromDate),
       periodEnd: Date.parse(toDate)
     }
     try {
       const response = await reportApi.downloadPaymentsReport(query)
-      console.log('download response', response)
-      const data = response.data
-      const fileName = "payments.xlsx"
-      let fileType = "text/xlsx"
-      downloadFile(data, fileName, fileType)
+      console.log('response', response)
+      let disposition = response.headers["Content-Disposition"]
+      console.log('disposition', disposition)
+      let filename = decodeURI(disposition.match(/filename="(.*)"/)[1]) || "payment-report.xlsx"
+      console.log('file name', filename)
+      fileDownload(response.data, filename)
+      // console.log('download response', response)
+      // const data = response.data
+      // const fileName = "payments.xlsx"
+      // let fileType = "text/xlsx"
+      // downloadFile(data, fileName, fileType)
     } catch (error) {
       console.log('error: ', error)
       message.error('failed')
