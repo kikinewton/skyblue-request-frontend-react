@@ -57,6 +57,7 @@ const CollapsibleLayout = (props) => {
         
         <Menu 
           theme="dark" 
+          style={{height: "100vh"}}
           mode="inline"
           defaultSelectedKeys={["/app"]}
           selectedKeys={[location.pathname]}
