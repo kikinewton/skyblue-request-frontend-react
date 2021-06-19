@@ -2,7 +2,6 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Card, Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
 import openNotification from '../../../util/notification'
-import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
 import MySwal from '../../../util/sweet-alert'
 
 const columns =  [
@@ -32,6 +31,12 @@ const columns =  [
     key: 'quantity'
   }
 ]
+
+const rowSelection = props => ({
+  onchange: (selectedRows, selectedKeys) => {
+    props.setSelectedRequests(selectedRows)
+  }
+})
 
 
 const Approve = (props)=> {
@@ -67,12 +72,13 @@ const Approve = (props)=> {
   const initPage = async ()=> {
     resetRequests()
     if(currentUser.id) {
-      fetchRequests({ requestType: FETCH_REQUEST_TYPES.ENDORSED_REQUESTS, userId: currentUser.id })
+      fetchRequests({ toBeApproved: true })
     }
   }
-  React.useEffect(()=> {
-    initPage() // eslint-disable-next-line
-  }, [])
+
+  // React.useEffect(()=> {
+  //   initPage() // eslint-disable-next-line
+  // }, [])
 
   return (
     <React.Fragment>
@@ -94,10 +100,10 @@ const Approve = (props)=> {
       <Row>
         <Col md={24}>
           <Card>
-            {requestLoading ? (<Spin />) : 
+            {requestLoading ? <Spin /> : 
               <Table 
                 columns={columns}
-                dataSource={requests}
+                dataSource={requests || []}
                 rowKey="id"
                 rowSelection={{
                   onChange: (selectedRowKeys, selectedRows) => {

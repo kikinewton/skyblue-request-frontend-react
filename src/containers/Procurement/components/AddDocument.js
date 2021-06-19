@@ -114,9 +114,7 @@ const AddDocument = (props) => {
                 rowKey="supplierId"
                 size="small"
                 onCancel={()=> console.log('row clicked')}
-                pagination={{
-                  pageSize: 20
-                }}
+                pagination={false}
               />
             </Card>
           </Col>

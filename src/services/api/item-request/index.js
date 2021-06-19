@@ -1,5 +1,6 @@
 import service from '../apiRequest'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
+import { serializeQueryParams } from '../../../util/common-helper'
 
 
 export function saveRequest(payload){
@@ -18,9 +19,10 @@ export function getUserItemRequests(userId) {
     })
 }
 
-export function getAllItemRequests() {
+export function getAllItemRequests(query) {
+  const queryStr = serializeQueryParams(query)
   return service({
-      url: `/requestItems`,
+      url: `/requestItems/${queryStr}`,
       method: 'get'
     })
 }
@@ -141,6 +143,7 @@ export function getEndorsedItemsWithSupplier(supplierId) {
   })
 }
 
+
 export function getAllEndorsedRequestsByDepartment() {
   return service({
       url: `/procurement/endorsedItemsWithMultipleSuppliers`,
@@ -181,6 +184,7 @@ export function updateRequest(data) {
 
 export function fetchRequests(query) {
   const { requestType, userId } = query
+  console.log('In fetch All requests')
   switch (requestType) {
     case FETCH_REQUEST_TYPES.MY_REQUESTS:
       return getUserItemRequests(query.userId)
@@ -192,8 +196,11 @@ export function fetchRequests(query) {
       return getEndorsedItemsWithSupplier(query.supplierId)
     case FETCH_REQUEST_TYPES.ENDORSED_REQUESTS:
       return getEndorsedRequestItems(query.userId)
-    default:
-      return getAllItemRequests();
+    default: {
+      console.log('In default api call')
+      return getAllItemRequests(query);
+    }
+      
   }
 }
 

@@ -34,13 +34,14 @@ const COLUMNS = (props) => [
 ]
 
 const AssignSupplier = (props) => {
-  const { currentUser, updateRequest, requests, 
+  const { currentUser, updateRequest, requests, requestSubmitSuccess,
     fetchRequests, requestLoading, requestSubmitting, suppliers, fetchSuppliers } = props
   const [ selectedRequests, setSelectedRequests ] = React.useState([])
   const [ selectedSuppliers, setSelectedSuppliers ] = React.useState([])
 
   const initPage = async () => {
-    fetchSuppliers()
+    console.log('init get requests')
+    fetchSuppliers({})
     await fetchRequests({ requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS, userId: currentUser.id })
   }
 
@@ -78,11 +79,21 @@ const AssignSupplier = (props) => {
     })
   }
 
+  
+
 
   React.useEffect(()=> {
     console.log('init assign supplier...........')
     initPage() // eslint-disable-next-line
   }, [])
+
+  React.useEffect(()=> {
+    if(!requestSubmitting) {
+      setSelectedSuppliers([])
+      setSelectedRequests([])
+      fetchRequests({ requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS, userId: currentUser.id })
+    }
+  }, [requestSubmitSuccess])
 
   return (
     <React.Fragment>
@@ -97,6 +108,7 @@ const AssignSupplier = (props) => {
             style={{width: '100%'}}
             placeholder="Please select a supplier"
             onChange={handleSupplierSelectChange}
+            value={selectedSuppliers}
           >
             {suppliers.map(supplier=> (
               <Select.Option value={supplier.id} key={`supplier-option-${supplier.id}`}>{supplier.name}</Select.Option>

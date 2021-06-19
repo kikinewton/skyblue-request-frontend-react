@@ -35,7 +35,7 @@ const columns =  [
 
 
 const Endorse = (props)=> {
-  const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests } = props
+  const { requests, updateRequest, requestSubmitting, requestSubmitSuccess, requestLoading, fetchRequests, currentUser, resetRequests } = props
   const [selectedRequests, setSelectedRequests] = React.useState([])
 
   const handleSubmit = (type)=> {
@@ -69,8 +69,17 @@ const Endorse = (props)=> {
       fetchRequests({ requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REQUEST, userId: currentUser.id, departmentId: currentUser.department.id })
     }
   }
+
   React.useEffect(()=> {
-    initPage() // eslint-disable-next-line
+    if(!requestSubmitting) {
+      fetchRequests({ requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REQUEST, userId: currentUser.id, departmentId: currentUser.department.id })
+    }
+    // eslint-disable-next-line
+  }, [requestSubmitSuccess])
+
+  React.useEffect(()=> {
+    initPage()
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -80,7 +89,12 @@ const Endorse = (props)=> {
           <span className="bs-page-title">Endorse Requests</span>
         </Col>
         <Col md={12} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-          <Button type="primary" style={{marginRight: 10}} loading={requestSubmitting} onClick={()=> handleSubmit('endorse')}>
+          <Button type="primary" 
+            style={{marginRight: 10}} 
+            loading={requestSubmitting} 
+            onClick={()=> handleSubmit('endorse')}
+            loading={requestSubmitting}
+          >
             <CheckOutlined />
             Endorse
           </Button>

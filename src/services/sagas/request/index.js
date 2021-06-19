@@ -15,7 +15,7 @@ export function* fetchRequests(action) {
   try {
     const response = yield call(fetchRequestsApi, action.query)
     console.log("Request Response", response)
-    if(response.status === "OK" || response.status === "FOUND") {
+    if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       const responseData = response?.data || []
       yield put(Creators.fetchRequestsSuccess(responseData))
     } else {
@@ -54,18 +54,18 @@ export function* updateRequest(action) {
   console.log('action', action)
   try {
     const response = yield call(updateRequestApi, action.payload)
-    if(response.status === 'OK') {
+    if(["OK", "SUCCESS"].includes(response.status)) {
       const responseData = response?.data
       console.log('API RESPONSE DAYA', responseData)
       openNotification('success', 'Update Request', response.message)
       yield put(Creators.updateRequestSuccess(responseData || {}))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'Update Request', response.message)
       yield put(Creators.updateRequestFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Login', message)
+    openNotification('error', 'Update Request', message)
     yield put(Creators.updateRequestFailure(message))
   }
 }

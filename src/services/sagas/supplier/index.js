@@ -14,8 +14,9 @@ export function* fetchSuppliers(action) {
   const { query } = action
   try {
     const response = yield call(getSuppliers, query)
+    console.log('supplier data', response)
     if(response.status === 'SUCCESS') {
-      const responseData = response.data
+      const responseData = response?.data || []
       yield put(Creators.fetchSuppliersSuccess(responseData))
     } else {
       openNotification('error', 'Login', response.message)

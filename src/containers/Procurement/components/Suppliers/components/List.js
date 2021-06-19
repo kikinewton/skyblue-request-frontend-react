@@ -91,7 +91,7 @@ const List = (props)=> {
   }
 
   React.useEffect(()=> {
-    fetchSuppliers() // eslint-disable-next-line
+    fetchSuppliers({}) // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
