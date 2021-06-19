@@ -1,8 +1,7 @@
 import "antd/dist/antd.less";
-import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import {history} from './util/browser-history'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import React from "react";
-import Spinner from "./presentation/Spinner";
+import { Spin } from "antd";
 import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SUPPLIERS_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, REQUEST_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
 import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
@@ -26,28 +25,26 @@ const Audit = React.lazy(() => import('./containers/Audit'))
 function App(props) {
   return (
     <>
-      <Router history={history} basename={process.env.PUBLIC_URL}>
-        <React.Suspense fallback={<Spinner />}>
-          <Switch>
-            <Route path="/app/account" component={Account} {...props} />
-            <Route path="/app/stores" component={Store} {...props} />
-            <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
-            <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
-            <Route path={REQUEST_ROUTE} component={Request} {...props} />
-            <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />
-            <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} /> \
-            <AuthenticatedRoute path={SUPPLIERS_ROUTE} component={Supplier} />
-            <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
-            <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />
-            <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
-            <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
-            <Route path="/app/audit" component={Audit} {...props} />
-            <Route path={LOGIN_ROUTE} component={Login} />
-            <Route path="/not-authorized" component={NotAuthorized} />
-            <AuthenticatedRoute path="/" ><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>
-          </Switch>
-        </React.Suspense>
-      </Router>
+      <React.Suspense fallback={<Spin />}>
+        <Switch>
+          <Route path="/app/account" component={Account} {...props} />
+          <Route path="/app/stores" component={Store} {...props} />
+          <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
+          <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
+          <Route path={REQUEST_ROUTE} component={Request} {...props} />
+          <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />
+          <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} /> \
+          <AuthenticatedRoute path={SUPPLIERS_ROUTE} component={Supplier} />
+          <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
+          <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />
+          <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
+          <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
+          <Route path="/app/audit" component={Audit} {...props} />
+          <Route path={LOGIN_ROUTE} component={Login} />
+          <Route path="/not-authorized" component={NotAuthorized} />
+          <AuthenticatedRoute path="/" ><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>
+        </Switch>
+      </React.Suspense>
     </>
   );
 }
