@@ -38,7 +38,7 @@ export function* logout(action) {
   clearLocalState(AUTH_USER_KEY)
   clearLocalState(AUTH_TOKEN_KEY)
   //window.location.href = "/#auth/login"
-  history.push("/auth/login")
+  history.push("/auth/login") //ada
 }
 
 export function* watchLogin() {
