@@ -37,7 +37,8 @@ export function* logout(action) {
   yield put(Creators.logout(null))
   clearLocalState(AUTH_USER_KEY)
   clearLocalState(AUTH_TOKEN_KEY)
-  window.location.href = "/#auth/login"
+  //window.location.href = "/#auth/login"
+  history.push("/auth/login")
 }
 
 export function* watchLogin() {
