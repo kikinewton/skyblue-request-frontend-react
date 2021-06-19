@@ -93,6 +93,7 @@ const AssignSupplier = (props) => {
       setSelectedRequests([])
       fetchRequests({ requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS, userId: currentUser.id })
     }
+    // eslint-disable-next-line
   }, [requestSubmitSuccess])
 
   return (

@@ -1,6 +1,7 @@
 import { clearLocalState } from "../../app-storage";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../app-storage/key-values";
 import apiRequest from "../apiRequest";
+import { history } from "../../../util/browser-history";
 
 
 export function signIn(payload){
@@ -15,7 +16,8 @@ export function signOut() {
   clearLocalState(AUTH_TOKEN_KEY)
   clearLocalState(AUTH_USER_KEY)
   //history.push(LOGIN_ROUTE)
-  window.location.href="/#auth/login"
+  history.push("/auth/login")
+
 }
 
 export function userHasAnyRole(role, roles) {

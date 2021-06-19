@@ -1,5 +1,6 @@
 import { Result, Button } from 'antd'
 import React from 'react'
+import { history } from '../../../util/browser-history'
 
 
 const PaymentSuccess = (props) => {
@@ -9,10 +10,10 @@ const PaymentSuccess = (props) => {
         status="success"
         title="Payment Successful!"
         extra={[
-          <Button type="primary" key="lpos" onClick={()=> window.location.href = "/#app/account/goods-receive-notes"}>
+          <Button type="primary" key="lpos" onClick={()=> history.push("/#app/account/goods-receive-notes")}>
             Back to Goods reeive notes
           </Button>,
-          <Button type="primary" key="home" onClick={()=>window.location.href="/#app"}>
+          <Button type="primary" key="home" onClick={()=> history.push("/#app")}>
             Back to Home
           </Button>
         ]}

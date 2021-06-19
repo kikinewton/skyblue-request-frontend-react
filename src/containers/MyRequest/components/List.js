@@ -2,6 +2,7 @@ import { Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
 import { REQUEST_COLUMNS } from '../../../util/constants'
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
+import { history } from '../../../util/browser-history'
 
 
 
@@ -17,7 +18,7 @@ const List = (props) => {
       <Row style={{marginBottom: 10}}>
         <Col md={12}><span className="bs-page-title">My Requests</span></Col>
         <Col md={12} style={{ justifyContent: 'flex-end', display: 'flex' }}>
-          <Button type="primary" onClick={()=> window.location.href = "/#app/my-requests/add-new"}>
+          <Button type="primary" onClick={()=> history.push("/#app/my-requests/add-new")}>
             Add New
           </Button>
         </Col>

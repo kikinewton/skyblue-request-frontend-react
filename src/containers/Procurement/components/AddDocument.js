@@ -1,6 +1,5 @@
 import { Button, Card, Col, Row, Spin, Table, Upload } from 'antd'
 import React from 'react'
-import { saveDocument as saveDocumentApi } from '../../../services/api/document'
 import { RightOutlined, UploadOutlined } from '@ant-design/icons'
 import Modal from 'antd/lib/modal/Modal'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
@@ -46,9 +45,9 @@ const columns = (props) => [
 ]
 
 const AddDocument = (props) => {
-  const { currentUser, quotations, fetchQuotations, updateQuotation, quotationSubmitSuccess, quotationLoading, createQuotation, quotationSubmitting } = props
-  const [files, setFiles] = React.useState([])
-  const [ quotation, setQuotation ] = React.useState({})
+  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, quotationLoading, createQuotation, quotationSubmitting } = props
+  const [files, setFiles] = React.useState([]) // eslint-disable-next-line
+  const [ quotation, setQuotation ] = React.useState({}) 
   const [modalOpen, setModalOpen] = React.useState(false)
   const [selectedRow, setSelectedRow] = React.useState({supplierId: null, requests: []})
   const [ items, setItems ] = React.useState([])
@@ -163,7 +162,6 @@ const AddDocument = (props) => {
           action={false}
           listType="picture-card"
           maxCount={1}
-          defaultFileList={files}
           defaultFileList={files}
           onChange={(values)=> {
             setFiles([values.file])

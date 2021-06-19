@@ -90,8 +90,7 @@ const Endorse = (props)=> {
         </Col>
         <Col md={12} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
           <Button type="primary" 
-            style={{marginRight: 10}} 
-            loading={requestSubmitting} 
+            style={{marginRight: 10}}
             onClick={()=> handleSubmit('endorse')}
             loading={requestSubmitting}
           >

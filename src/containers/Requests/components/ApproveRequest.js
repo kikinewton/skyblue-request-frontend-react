@@ -32,12 +32,6 @@ const columns =  [
   }
 ]
 
-const rowSelection = props => ({
-  onchange: (selectedRows, selectedKeys) => {
-    props.setSelectedRequests(selectedRows)
-  }
-})
-
 
 const Approve = (props)=> {
   const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests } = props
@@ -76,9 +70,9 @@ const Approve = (props)=> {
     }
   }
 
-  // React.useEffect(()=> {
-  //   initPage() // eslint-disable-next-line
-  // }, [])
+  React.useEffect(()=> {
+    initPage() // eslint-disable-next-line
+  }, [])
 
   return (
     <React.Fragment>

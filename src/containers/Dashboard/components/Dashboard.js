@@ -7,7 +7,7 @@ import { BarChart, PieChart } from '../../../presentation/Chart'
 const Dashboard = (props) => {
   const { data } = props
   const { countOfRequestPerCurrentMonth, countOfGRNForToday, costPerDepartmentForCurrentMonth, countOfPaymentDueWithinOneWeek,
-      approvedNumberRequestItemsAndUserDepartmentToday, countPaymentsMadeToday, requestPerCategoryForToday, supplierSpendAnalysis } = data
+      approvedNumberRequestItemsAndUserDepartmentToday, countPaymentsMadeToday, supplierSpendAnalysis } = data
   return (
     <React.Fragment>
       <Row>

@@ -2,6 +2,7 @@ import { Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
 import * as grnService from '../../../services/api/goods-receive-note'
 import openNotification from '../../../util/notification'
+import { history } from '../../../util/browser-history'
 
 const columns = (props) => [
   {
@@ -50,7 +51,7 @@ const GrnList = (props) => {
   }
 
   const handleGoToNewPayment = (row) => {
-    window.location.href = `/#app/account/goods-receive-notes/${row.id}/add-new-payment`
+    history.push(`/app/account/goods-receive-notes/${row.id}/add-new-payment`)
   }
 
   React.useEffect(()=> {

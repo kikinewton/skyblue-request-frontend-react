@@ -5,6 +5,7 @@ import { PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
 import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
 import * as grnService from '../../../services/api/goods-receive-note'
+import { history } from '../../../util/browser-history'
 const { Option } = Select
 
 
@@ -45,7 +46,7 @@ const NewPayment = (props) => {
     try {
       const response = await paymentDraftService.savePaymentDraft(payload)
       if(response.status === 'OK') {
-        window.location.href = "/#app/account/payment-success"
+        history.push("/#app/account/payment-success")
       } else {
         openNotification('error', 'Add Payment', response.message || 'Error')
       }

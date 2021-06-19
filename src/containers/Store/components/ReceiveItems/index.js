@@ -7,6 +7,7 @@ import * as documentService from '../../../../services/api/document'
 import openNotification from '../../../../util/notification'
 import CreateGrn from './CreateGrn'
 import Confirm from './Confirm'
+import { history } from '../../../../util/browser-history'
 const { Step } = Steps
 
 const initForm = { 
@@ -97,7 +98,7 @@ const ReceiveItems = (props) => {
           setSelectedItems([])
           setFormData(initForm)
           setFile([])
-          window.location.href = "/#app/stores/grn-success"
+          history.push("/#app/stores/grn-success")
         } else {
           return openNotification('error', 'Create Goods Receive Note', response.mesage)
         }

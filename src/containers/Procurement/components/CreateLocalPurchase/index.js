@@ -127,6 +127,7 @@ const CreateLocalPurchase = (props) => {
       resetRequest()
       setCurrentStep(0)
     }
+    // eslint-disable-next-line
   }, [requestSubmitSuccess])
 
   return (

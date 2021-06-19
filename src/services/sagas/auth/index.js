@@ -20,7 +20,6 @@ export function* login(action) {
       storeLocalState(AUTH_TOKEN_KEY, responseData.token)
       storeLocalState(AUTH_USER_KEY, { ...responseData.employee, role: responseData.employee.role[0] })
       yield put(Creators.loginSuccess(responseData))
-      //window.location.href = "/app"
       history.push("/app")
     } else {
       openNotification('error', 'Login', response.message)
@@ -37,7 +36,6 @@ export function* logout(action) {
   yield put(Creators.logout(null))
   clearLocalState(AUTH_USER_KEY)
   clearLocalState(AUTH_TOKEN_KEY)
-  //window.location.href = "/#auth/login"
   history.push("/auth/login") //ada
 }
 
