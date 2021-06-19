@@ -44,7 +44,7 @@ const Dashboard = (props) => {
           </Row>
           <Row gutter={12} style={{marginTop: 20}}>
             <Col md={12}>
-              <Card style={{height: 300}}>
+              <Card style={{height: 350}} title="Supplier Spend Analysis">
                 {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                   <PieChart
                     type="doughnut"
@@ -57,7 +57,7 @@ const Dashboard = (props) => {
               </Card>
             </Col>
             <Col md={12}>
-              <Card style={{height: 300}}>
+              <Card style={{height: 350}} title="Approved number of requests per department">
                 {(approvedNumberRequestItemsAndUserDepartmentToday || []).length < 1 ? "N/A" : 
                   <PieChart
                     type="doughnut"
@@ -72,7 +72,7 @@ const Dashboard = (props) => {
           </Row>
           <Row style={{marginTop: 20}}>
             <Col md={24}>
-              <Card style={{height: 300}}>
+              <Card style={{height: 350}} title="Cost per department for this month">
                 {(costPerDepartmentForCurrentMonth || []).length < 1 ? "N/A" : 
                   <BarChart
                     maintainAspectRatio={false}

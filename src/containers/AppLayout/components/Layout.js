@@ -240,7 +240,7 @@ const CollapsibleLayout = (props) => {
           {props.children}
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Blueskies Procurment Application ©2018 Created by Tech-Bridge
+          Blueskies Procurement Application ©2021 Created by Tech-Bridge
         </Footer>
       </Layout>
     </Layout>

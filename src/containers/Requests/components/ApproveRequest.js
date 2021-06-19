@@ -66,7 +66,7 @@ const Approve = (props)=> {
   const initPage = async ()=> {
     resetRequests()
     if(currentUser.id) {
-      fetchRequests({ toBeApproved: true })
+      fetchRequests({ toBeApproved: "toBeApproved" })
     }
   }
 
