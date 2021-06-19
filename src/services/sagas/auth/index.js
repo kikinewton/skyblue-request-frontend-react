@@ -1,5 +1,6 @@
 import { call, put, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/auth/actions'
+import { history } from '../../../util/browser-history'
 
 import {
   signIn
@@ -19,7 +20,8 @@ export function* login(action) {
       storeLocalState(AUTH_TOKEN_KEY, responseData.token)
       storeLocalState(AUTH_USER_KEY, { ...responseData.employee, role: responseData.employee.role[0] })
       yield put(Creators.loginSuccess(responseData))
-      window.location.href = "/#app"
+      //window.location.href = "/app"
+      history.push("/app")
     } else {
       openNotification('error', 'Login', response.message)
       yield put(Creators.loginFailue(response.message))

@@ -5,7 +5,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons'
 const Login = (props) => {
   const { loginUser, loading } = props
   const onFinish = (values) => {
-    const payload = { email: values['email'], password: values['password'] }
+    const payload = { email: values['email']?.trim(), password: values['password'] }
     loginUser(payload)
   }
 
