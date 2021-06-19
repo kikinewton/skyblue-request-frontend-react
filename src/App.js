@@ -26,7 +26,7 @@ const Audit = React.lazy(() => import('./containers/Audit'))
 function App(props) {
   return (
     <>
-      <Router history={history}>
+      <Router history={history} basename={process.env.PUBLIC_URL}>
         <React.Suspense fallback={<Spinner />}>
           <Switch>
             <Route path="/app/account" component={Account} {...props} />
@@ -44,7 +44,7 @@ function App(props) {
             <Route path="/app/audit" component={Audit} {...props} />
             <Route path={LOGIN_ROUTE} component={Login} />
             <Route path="/not-authorized" component={NotAuthorized} />
-            <AuthenticatedRoute path="/"><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>
+            <AuthenticatedRoute path="/" ><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>
           </Switch>
         </React.Suspense>
       </Router>
