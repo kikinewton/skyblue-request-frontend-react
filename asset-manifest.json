@@ -11,8 +11,8 @@
     "static/js/4.6dbc5b3c.chunk.js": "/skyblue-request-frontend-react/static/js/4.6dbc5b3c.chunk.js",
     "static/js/4.6dbc5b3c.chunk.js.map": "/skyblue-request-frontend-react/static/js/4.6dbc5b3c.chunk.js.map",
     "main.css": "/skyblue-request-frontend-react/static/css/main.9472ecee.chunk.css",
-    "main.js": "/skyblue-request-frontend-react/static/js/main.75829e17.chunk.js",
-    "main.js.map": "/skyblue-request-frontend-react/static/js/main.75829e17.chunk.js.map",
+    "main.js": "/skyblue-request-frontend-react/static/js/main.35902aa3.chunk.js",
+    "main.js.map": "/skyblue-request-frontend-react/static/js/main.35902aa3.chunk.js.map",
     "runtime-main.js": "/skyblue-request-frontend-react/static/js/runtime-main.4c524b7b.js",
     "runtime-main.js.map": "/skyblue-request-frontend-react/static/js/runtime-main.4c524b7b.js.map",
     "static/css/7.efa69225.chunk.css": "/skyblue-request-frontend-react/static/css/7.efa69225.chunk.css",
@@ -101,6 +101,6 @@
     "static/css/7.efa69225.chunk.css",
     "static/js/7.5302bdac.chunk.js",
     "static/css/main.9472ecee.chunk.css",
-    "static/js/main.75829e17.chunk.js"
+    "static/js/main.35902aa3.chunk.js"
   ]
 }
