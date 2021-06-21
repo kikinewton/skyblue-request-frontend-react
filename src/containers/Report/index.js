@@ -26,13 +26,14 @@ const Report = (props) => {
       periodEnd: Date.parse(toDate)
     }
     try {
-      const response = await reportApi.downloadPaymentsReport(query)
-      console.log('response', response)
-      let disposition = response.headers["Content-Disposition"]
-      console.log('disposition', disposition)
-      let filename = decodeURI(disposition.match(/filename="(.*)"/)[1]) || "payment-report.xlsx"
-      console.log('file name', filename)
-      fileDownload(response.data, filename)
+      await reportApi.downloadPaymentReportLink(query)
+      // const response = await reportApi.downloadPaymentsReport(query)
+      // console.log('response', response)
+      // let disposition = response.headers["Content-Disposition"]
+      // console.log('disposition', disposition)
+      // let filename = decodeURI(disposition.match(/filename="(.*)"/)[1]) || "payment-report.xlsx"
+      // console.log('file name', filename)
+      // fileDownload(response.data, filename)
       // console.log('download response', response)
       // const data = response.data
       // const fileName = "payments.xlsx"
@@ -44,43 +45,45 @@ const Report = (props) => {
     }
   }
 
-  const handleDownloadProcuredItems = () => {
+  const handleDownloadProcuredItems = async () => {
     console.log('from', fromDate, 'to', toDate)
     const query = {
-      periodStart: fromDate,
-      periodEnd: toDate
+      periodStart: Date.parse(fromDate),
+      periodEnd: Date.parse(toDate)
     }
     try {
-      const response = reportApi.downloadProcuredItemsReport(query)
-      if(response.status === 'OK') {
-        const data = response.data
-        const fileName = "payments"
-        let fileType = "text/xlsx"
-        downloadFile(data, fileName, fileType)
-      } else {
-        message.error(response.message || 'Download not complete')
-      }
+      await reportApi.downloadProcuredItemsLink(query)
+      // const response = reportApi.downloadProcuredItemsReport(query)
+      // if(response.status === 'OK') {
+      //   const data = response.data
+      //   const fileName = "payments"
+      //   let fileType = "text/xlsx"
+      //   downloadFile(data, fileName, fileType)
+      // } else {
+      //   message.error(response.message || 'Download not complete')
+      // }
     } catch (error) {
       message.error('Download not complete')
     }
   }
 
-  const handleDownloadGrn = () => {
+  const handleDownloadGrn = async () => {
     console.log('from', fromDate, 'to', toDate)
     const query = {
-      periodStart: fromDate,
-      periodEnd: toDate
+      periodStart: Date.parse(fromDate),
+      periodEnd: Date.parse(toDate)
     }
     try {
-      const response = reportApi.downloadGrnReport(query)
-      if(response.status === 'OK') {
-        const data = response.data
-        const fileName = "payments"
-        let fileType = "text/xlsx"
-        downloadFile(data, fileName, fileType)
-      } else {
-        message.error(response.message || 'Download not complete')
-      }
+      await reportApi.downloadGrnLink(query)
+      // const response = reportApi.downloadGrnReport(query)
+      // if(response.status === 'OK') {
+      //   const data = response.data
+      //   const fileName = "payments"
+      //   let fileType = "text/xlsx"
+      //   downloadFile(data, fileName, fileType)
+      // } else {
+      //   message.error(response.message || 'Download not complete')
+      // }
     } catch (error) {
       message.error('Download not complete')
     }

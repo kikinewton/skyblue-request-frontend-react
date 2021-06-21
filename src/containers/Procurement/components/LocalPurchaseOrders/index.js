@@ -2,14 +2,10 @@ import { FileOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Table, Spin } from 'antd'
 import React from 'react'
 import * as grnService from '../../../../services/api/goods-receive-note'
+import { BASE_URL } from '../../../../services/api/urls'
 import { prettifyDateTime } from '../../../../util/common-helper'
 
 const columns = (props) => [
-  {
-    title: '#ID',
-    dataIndex: 'id',
-    key: 'id'
-  },
   {
     title: 'Supplier',
     dataIndex: 'supplierId',
@@ -51,9 +47,13 @@ const LocalPurchaseOrders = (props) => {
   }
 
   const handleDownloadPdf = async (row)=> {
-    console.log('lets download pdf', row)
-    const response = await grnService.getLpoDocument(row.id)
-    console.log('response', response)
+    //console.log('lets download pdf', row)
+    //const response = await grnService.getLpoDocument(row.id)
+    try {
+      await grnService.downloadLPODocument(row.id)
+    } catch (error) {
+      
+    }
   }
 
   const fetchLpos = async () => {

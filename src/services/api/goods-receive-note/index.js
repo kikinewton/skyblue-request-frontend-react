@@ -1,5 +1,6 @@
 import { serializeQueryParams } from '../../../util/common-helper'
 import service from '../apiRequest'
+import { BASE_URL } from '../urls'
 const path = "/goodsReceivedNote"
 
 export function getAllGoodsReceiveNotes(query) {
@@ -70,4 +71,14 @@ export function getLpoDocument(lpoId) {
     url: `/document/lpo/${lpoId}`,
     method: 'GET'
   })
+}
+
+export function downloadLPODocument(lpoId) {
+  const url = `${BASE_URL}/document/lpo/${lpoId}`
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute("target", "_blank")
+  document.body.appendChild(link)
+  link.click()
+  link.parentNode.removeChild(link)
 }

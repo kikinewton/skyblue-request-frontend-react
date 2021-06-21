@@ -1,7 +1,6 @@
 import React from 'react'
-import { Card, Table, Row, Col } from 'antd'
+import { Card, Table, Row, Col, Spin } from 'antd'
 import { REQUEST_COLUMNS } from '../../../util/constants';
-import Spinner from '../../../presentation/Spinner';
 
 
 const Home = (props) => {
@@ -13,7 +12,7 @@ const Home = (props) => {
         <Row>
           <Col md={24}>
             {loading 
-              ? <Spinner /> 
+              ? <Spin /> 
               : <Table 
                   columns={REQUEST_COLUMNS}
                   dataSource={myRequests && myRequests.slice(0, 5)}
