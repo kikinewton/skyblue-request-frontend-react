@@ -16,7 +16,8 @@ import {
   ShopOutlined,
   ReconciliationOutlined,
   UserOutlined,
-  AccountBookOutlined
+  AccountBookOutlined,
+  SendOutlined
 } from '@ant-design/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
@@ -78,7 +79,7 @@ const CollapsibleLayout = (props) => {
           }
           <Menu.Item key="/app/my-requests">
             <NavLink to="/app/my-requests">
-              <DashboardOutlined />
+              <SendOutlined />
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>

@@ -18,7 +18,7 @@ const List = (props) => {
       <Row style={{marginBottom: 10}}>
         <Col md={12}><span className="bs-page-title">My Requests</span></Col>
         <Col md={12} style={{ justifyContent: 'flex-end', display: 'flex' }}>
-          <Button type="primary" onClick={()=> history.push("/#app/my-requests/add-new")}>
+          <Button type="primary" onClick={()=> history.push("/app/my-requests/add-new")}>
             Add New
           </Button>
         </Col>
