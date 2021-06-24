@@ -71,6 +71,7 @@ export function* updateEmployee(action) {
     const response = yield call(updateEmployeeApi, action.employeeId, action.payload)
     if(response.status === 'CREATED') {
       const responseData = response.data
+      console.log('employee data', responseData)
       yield put(Creators.updateEmployeeSuccess(responseData))
     } else {
       openNotification('error', 'Login', response.message)

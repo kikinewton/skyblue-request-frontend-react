@@ -161,7 +161,7 @@ export const EMPLOYEE_COLUMNS = [
     title: 'Role',
     dataIndex: 'role',
     key: 'role',
-    render: (text)=> text[0]
+    render: (text)=> (text || [])[0] || "N/A"
   }
 ]
 

@@ -62,7 +62,6 @@ const List = (props)=> {
   }
 
   const handleEdit = (row) => {
-    console.log('row', row)
     editForm.setFieldsValue({
       firstName: row.firstName,
       lastName: row.lastName,

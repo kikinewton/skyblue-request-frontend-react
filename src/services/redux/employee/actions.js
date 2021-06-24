@@ -15,7 +15,7 @@ export const { Types, Creators } = createActions(
     createEmployeeFailure: ["error"],
 
     updateEmployee: ["employeeId", "payload"],
-    updateEmployeeSuccess: ["employeeId", "responseData"],
+    updateEmployeeSuccess: ["responseData"],
     updateEmployeeFailure: ["error"],
 
     deleteEmployee: ["employeeId"],
