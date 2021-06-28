@@ -7,27 +7,27 @@ import MySwal from '../../../util/sweet-alert'
 
 const columns =  [
   {
-    title: 'ID',
+    title: 'Id',
     dataIndex: 'id',
     key: 'id'
   },
   {
-    title: 'NAME',
+    title: 'Name',
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'REASON',
+    title: 'Reason',
     dataIndex: 'reason',
     key: 'reason'
   },
   {
-    title: 'PURPOSE',
+    title: 'Purpose',
     dataIndex: 'purpose',
     key: 'purpose'
   },
   {
-    title: 'QUANTITY',
+    title: 'Quantity',
     dataIndex: 'quantity',
     key: 'quantity'
   }
@@ -71,7 +71,7 @@ const Endorse = (props)=> {
   }
 
   React.useEffect(()=> {
-    if(!requestSubmitting) {
+    if(requestSubmitSuccess) {
       fetchRequests({ requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REQUEST, userId: currentUser.id, departmentId: currentUser.department.id })
     }
     // eslint-disable-next-line

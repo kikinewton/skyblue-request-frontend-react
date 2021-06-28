@@ -32,7 +32,7 @@ const mapStateToProps = (store) => ({
   requests: store.request.requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
-  reuquestSubmitSuccess: store.request.submitSuccess,
+  requestSubmitSuccess: store.request.submitSuccess,
   suppliers: store.supplier.suppliers
 })
 

@@ -34,7 +34,7 @@ const columns =  [
 
 
 const Approve = (props)=> {
-  const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests } = props
+  const { requests, updateRequest, requestSubmitting, requestLoading, fetchRequests, currentUser, resetRequests, requestSubmitSuccess } = props
   const [selectedRequests, setSelectedRequests] = React.useState([])
 
   const handleSubmit = async (type)=> {
@@ -73,6 +73,13 @@ const Approve = (props)=> {
   React.useEffect(()=> {
     initPage() // eslint-disable-next-line
   }, [])
+
+  React.useEffect(()=> {
+    if(requestSubmitSuccess) {
+      fetchRequests({ toBeApproved: "toBeApproved" })
+    }
+    // eslint-disable-next-line
+  }, [requestSubmitSuccess])
 
   return (
     <React.Fragment>
