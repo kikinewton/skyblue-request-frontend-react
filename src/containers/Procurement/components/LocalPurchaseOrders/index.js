@@ -1,4 +1,4 @@
-import { FileOutlined } from '@ant-design/icons'
+import { FileOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Table, Spin } from 'antd'
 import React from 'react'
 import * as grnService from '../../../../services/api/goods-receive-note'
@@ -13,10 +13,10 @@ const columns = (props) => [
     render: (text, row)=> row?.requestItems[0]?.suppliers.find(item=> item.id === row.supplierId)?.name || 'N/A'
   },
   {
-    title: 'Comment',
-    dataIndex: 'comment',
-    key: 'comment',
-    render: (text)=> text || 'N/A'
+    title: 'Date',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    render: (text) => prettifyDateTime(text) || 'N/A'
   },
   {
     title: 'Action',
@@ -91,6 +91,7 @@ const LocalPurchaseOrders = (props) => {
       <Row style={{marginBottom: 20}}>
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
+          <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> fetchLpos()} /></span>
         </Col>
       </Row>
       <Row>

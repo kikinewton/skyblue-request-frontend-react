@@ -7,7 +7,8 @@ import { BarChart, PieChart } from '../../../presentation/Chart'
 const Dashboard = (props) => {
   const { data } = props
   const { countOfRequestPerCurrentMonth, countOfGRNForToday, costPerDepartmentForCurrentMonth, countOfPaymentDueWithinOneWeek,
-      approvedNumberRequestItemsAndUserDepartmentToday, countPaymentsMadeToday, supplierSpendAnalysis } = data
+      approvedNumberRequestItemsAndUserDepartmentToday, countPaymentsMadeToday, supplierSpendAnalysis, 
+      requestsPerCurrentMonthPerDepartment, requestPerCategoryForToday } = data
   return (
     <React.Fragment>
       <Row>
@@ -43,7 +44,7 @@ const Dashboard = (props) => {
             </Col>
           </Row>
           <Row gutter={12} style={{marginTop: 20}}>
-            <Col md={12}>
+            <Col md={8}>
               <Card style={{height: 350}} title="Supplier Spend Analysis">
                 {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                   <PieChart
@@ -56,22 +57,35 @@ const Dashboard = (props) => {
                 }
               </Card>
             </Col>
-            <Col md={12}>
+            <Col md={8}>
               <Card style={{height: 350}} title="Approved number of requests per department">
                 {(approvedNumberRequestItemsAndUserDepartmentToday || []).length < 1 ? "N/A" : 
                   <PieChart
                     type="doughnut"
                     maintainAspectRatio={false}
-                    label="Cost per department for this month"
+                    label="Approved number of requests per department"
                     labels={(approvedNumberRequestItemsAndUserDepartmentToday || []).map(item=> item.userDepartment)}
-                    data={(approvedNumberRequestItemsAndUserDepartmentToday || []).map(item=> item.totalPrice)}
+                    data={(approvedNumberRequestItemsAndUserDepartmentToday || []).map(item=> item.numOfRequest)}
+                  />
+                }
+              </Card>
+            </Col>
+            <Col md={8}>
+              <Card style={{height: 350}} title="Request per department for this month">
+                {(requestsPerCurrentMonthPerDepartment || []).length < 1 ? "N/A" : 
+                  <PieChart
+                    type="Pie"
+                    maintainAspectRatio={false}
+                    label="Request per department for this month"
+                    labels={(requestsPerCurrentMonthPerDepartment || []).map(item=> item.department)}
+                    data={(requestsPerCurrentMonthPerDepartment || []).map(item=> item.num_of_Request)}
                   />
                 }
               </Card>
             </Col>
           </Row>
-          <Row style={{marginTop: 20}}>
-            <Col md={24}>
+          <Row style={{marginTop: 20}} gutter={12}>
+            <Col md={12}>
               <Card style={{height: 350}} title="Cost per department for this month">
                 {(costPerDepartmentForCurrentMonth || []).length < 1 ? "N/A" : 
                   <BarChart
@@ -79,6 +93,18 @@ const Dashboard = (props) => {
                     label="Cost per department for this month"
                     labels={(costPerDepartmentForCurrentMonth || []).map(item=> item.userDepartment)}
                     data={(costPerDepartmentForCurrentMonth || []).map(item=> item.totalPrice)}
+                  />
+                }
+              </Card>
+            </Col>
+            <Col md={12}>
+              <Card style={{height: 350}} title="Request per category for today">
+                {(requestPerCategoryForToday || []).length < 1 ? "N/A" : 
+                  <BarChart
+                    maintainAspectRatio={false}
+                    label="Request per category for today"
+                    labels={(requestPerCategoryForToday || []).map(item=> item.requestCategory)}
+                    data={(requestPerCategoryForToday || []).map(item=> item.numOfRequest)}
                   />
                 }
               </Card>

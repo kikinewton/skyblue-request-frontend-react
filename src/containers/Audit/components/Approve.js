@@ -1,7 +1,7 @@
 import { Button, Card, Col, Input, List, message, Modal, Row, Spin, Table } from 'antd'
 import React from 'react'
 import * as paymentApi from '../../../services/api/payment-draft'
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, SyncOutlined } from '@ant-design/icons'
 import openNotification from '../../../util/notification'
 
 const columns = (props) => [
@@ -116,7 +116,8 @@ const Approve = (props) => {
     <React.Fragment>
       <Row>
         <Col md={24}>
-          <span className="bs-page-title">Approve Payments</span>
+          <span className="bs-page-title">Approve Payments</span> 
+          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchAllPaymentDrafts({})} /></span>
         </Col>
       </Row>
       <Row>

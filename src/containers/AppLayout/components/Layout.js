@@ -149,21 +149,32 @@ const CollapsibleLayout = (props) => {
               </Menu.Item>
             </Menu.SubMenu>
           }
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER]) && 
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
             <Menu.SubMenu key="/app/account" title="Accounts" icon={<AccountBookOutlined />}>
+              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && 
               <Menu.Item key="/app/account/goods-receive-notes">
                 <NavLink to="/app/account/goods-receive-notes">
                   Make Payment
                 </NavLink>
               </Menu.Item>
+              }
+              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) &&
               <Menu.Item key="/app/account/payments">
                 <NavLink to="/app/account/payments">
                   Payments
                 </NavLink>
               </Menu.Item>
+              }
+              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_AUDITOR]) &&
+                <Menu.Item key="/app/audit/approve-payment">
+                  <NavLink to="/app/audit/approve-payment">
+                    Aprove Payments
+                  </NavLink>
+                </Menu.Item>
+              }
             </Menu.SubMenu>
           }
-          <Menu.SubMenu key="/app/audit" title="Audit" icon={<AccountBookOutlined />}>
+          {/* <Menu.SubMenu key="/app/audit" title="Audit" icon={<AccountBookOutlined />}>
             <Menu.Item key="/app/audit/approve-payment">
               <NavLink to="/app/audit/approve-payment">
                 Approve Payments
@@ -174,7 +185,7 @@ const CollapsibleLayout = (props) => {
                 Payments
               </NavLink>
             </Menu.Item>
-          </Menu.SubMenu>
+          </Menu.SubMenu> */}
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listDepartmentsRoles) && 
             <Menu.Item key="/app/departments">
               <NavLink to="/app/departments">
