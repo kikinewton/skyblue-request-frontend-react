@@ -1,8 +1,7 @@
-import { Button, Col, Row, Table, Form, Input, Select } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Select, Spin } from 'antd'
 import React from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import Spinner from '../../../presentation/Spinner'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 import { USER_ROLES } from '../../../util/datas'
@@ -22,15 +21,15 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
   render: (text, row) => {
     return (
       <Row>
-        <Col md={12} sm={12}>
+        <Col md={24} sm={24} style={{textAlign: "center"}}>
           <EditOutlined style={{cursor: 'pointer'}} onClick={()=> props.editRow(row)} />
         </Col>
-        <Col md={12} sm={12}>
+        {/* <Col md={12} sm={12}>
           <DeleteOutlined 
             style={{cursor: 'pointer'}} 
             onClick={() => props.deleteRow(row)} 
           />
-        </Col>
+        </Col> */}
       </Row>
     )
   }
@@ -142,7 +141,7 @@ const List = (props)=> {
       </Row>
       <Row>
         <Col md={24}>
-          {loading ? <Spinner /> : 
+          {loading ? <Spin /> : 
             <Table 
               columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
               dataSource={employees}

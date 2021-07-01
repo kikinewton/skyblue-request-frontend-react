@@ -17,9 +17,10 @@ import {
   ReconciliationOutlined,
   UserOutlined,
   AccountBookOutlined,
-  SendOutlined
+  SendOutlined,
+  SnippetsOutlined
 } from '@ant-design/icons';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
@@ -30,6 +31,7 @@ const CollapsibleLayout = (props) => {
   const { Header, Sider, Content, Footer } = Layout
   const location = useLocation()
   const { currentUser } = props
+  const { path } = useRouteMatch()
 
   const toggle = () => {
     setCollapsed(!collapsed)
@@ -62,6 +64,7 @@ const CollapsibleLayout = (props) => {
           mode="inline"
           defaultSelectedKeys={["/app"]}
           selectedKeys={[location.pathname]}
+          forceSubMenuRender={true}
         >
           <Menu.Item key="/app">
             <NavLink to="/app">
@@ -101,6 +104,14 @@ const CollapsibleLayout = (props) => {
               }
             </Menu.SubMenu>
           }
+          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) &&   
+            <Menu.Item key="/app/quoatations">
+              <NavLink to="/app/quotations">
+                <SnippetsOutlined />
+                <span>Quotations</span>
+              </NavLink>
+            </Menu.Item>
+          } */}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]) && 
             <Menu.SubMenu key={PROCUREMENT_ROUTE} icon={<ReconciliationOutlined />} title="Procurement">
               <Menu.Item key={`${PROCUREMENT_ROUTE}/suppliers`}>
@@ -136,21 +147,24 @@ const CollapsibleLayout = (props) => {
             </Menu.SubMenu>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && 
-            <Menu.SubMenu key="/app/stores" title="Store" icon={<ShopOutlined />}>
-              <Menu.Item key="/app/stores/local-purchase-orders">
-                <NavLink to="/app/stores/local-purchase-orders">
-                  Local Purchase Orders
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key="/app/stores/receive-items">
-                <NavLink to="/app/stores/receive-items">
-                  Receive Goods
-                </NavLink>
-              </Menu.Item>
-            </Menu.SubMenu>
+            <Menu.Item key="/app/store/lpos" icon={<ShopOutlined />}>
+              <NavLink to="/app/store/lpos">
+                Store
+              </NavLink>
+            </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
-            <Menu.SubMenu key="/app/account" title="Accounts" icon={<AccountBookOutlined />}>
+            <Menu.SubMenu  
+              key={()=> {
+                if(path.indexOf("/app/account")) {
+                  return path
+                } else {
+                  return "/app/accounts"
+                }
+              }} 
+              title="Accounts" 
+              icon={<AccountBookOutlined />}
+            >
               {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && 
               <Menu.Item key="/app/account/goods-receive-notes">
                 <NavLink to="/app/account/goods-receive-notes">

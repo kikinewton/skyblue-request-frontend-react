@@ -44,7 +44,7 @@ const columns = (props) => [
     render: (text, row) => (
       <Row gutter={6}>
         <Col md={12}>
-          <Button size="small" onClick={()=> props.onRowClick({...row, actionType: 'approve'})}>
+          <Button size="small" onClick={()=> props.onRowClick({...row, actionType: 'approve', comment: ''})}>
             <CheckOutlined /> Approve
           </Button>
         </Col>

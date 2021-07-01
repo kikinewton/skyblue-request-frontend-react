@@ -10,6 +10,7 @@ const CreateLocalPurchase = (props) => {
   const  [ currentStep, setCurrentStep ] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined)
   const [selectedRequests, setSelectedRequests] = React.useState([])
+  const [deliveryDate, setDeliveryDate] = React.useState("")
   const { fetchSuppliers, fetchRequests, resetRequest, updateRequest, requestSubmitting, fetchRequestCategories, requestSubmitSuccess } = props
 
   const handleSelectSupplier = (value) => {
@@ -71,7 +72,7 @@ const CreateLocalPurchase = (props) => {
     })
     const payload = {
       updateType: UPDATE_REQUEST_TYPES.UPDATE_UNIT_PRICE,
-      payload: {items: requestList}
+      payload: {items: requestList, deliveryDate: deliveryDate.format("YYYY-MM-DD")}
     }
     updateRequest(payload)
   }
@@ -100,6 +101,8 @@ const CreateLocalPurchase = (props) => {
             onUnitPriceUpdate={handleUpdateRequestUnitPrice}
             selectedSupplier={selectedSupplier}
             onRequestCategoryUpdate={handleUpdateRequestCategory}
+            onDateSelect={(value)=> setDeliveryDate(value)}
+            deliveryDate={deliveryDate}
           />
           )
       case 2:
@@ -110,6 +113,7 @@ const CreateLocalPurchase = (props) => {
             requestSubmitSuccess={requestSubmitSuccess}
             selectedRequests={selectedRequests}
             selectedSupplier={selectedSupplier}
+            deliveryDate={deliveryDate}
           />
         )
       default:

@@ -34,12 +34,17 @@ const columns = [
   }
 ]
 const Confirmation = (props) => {
-  const { selectedRequests, suppliers, selectedSupplier, requestSubmitting } = props
+  const { selectedRequests, suppliers, selectedSupplier, requestSubmitting, deliveryDate } = props
   return (
     <React.Fragment>
       <Row style={{padding: 5}}>
           <Col md={24}>
             <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
+          </Col>
+      </Row>
+      <Row style={{padding: 5}}>
+          <Col md={24}>
+            <span style={{fontWeight: 'bold'}}>Delivery Date: {deliveryDate.format("YYYY-MM-DD")}</span>
           </Col>
       </Row>
       <Row>

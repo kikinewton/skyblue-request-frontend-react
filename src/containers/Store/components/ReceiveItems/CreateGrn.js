@@ -62,32 +62,47 @@ const CreateGrn = (props) => {
                 </Upload>
               </div>
               
+              <Row>
+                <Col md={4}>Invoice Number</Col>
+                <Col md={20}>
+                  <Input 
+                    placeholder="Invoice Number" 
+                    value={formData.invoiceNumber}
+                    onChange={handleFormInputChange} 
+                    style={{marginBottom: 20}}
+                    name="invoiceNumber"
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col md={4}>Invoice Amount Payable: </Col>
+                <Col md={20}>
+                  <Input 
+                    placeholder="Invoice Amount payable" 
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    name="invoiceAmountPayable"
+                    value={formData.invoiceAmountPayable}
+                    onChange={handleFormInputChange} 
+                    style={{marginBottom: 20}}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col md={4}>Number of Days to payment: </Col>
+                <Col md={20}>
+                  <Input 
+                    placeholder="Number of Days to payment" 
+                    type="number"
+                    value={formData.numberOfDaysToPayment} 
+                    name="numberOfDaysToPayment" 
+                    onChange={handleFormInputChange} 
+                    style={{marginBottom: 20}}
+                  />
+                </Col>
+              </Row>
               
-              <Input 
-                placeholder="Invoice Number" 
-                value={formData.invoiceNumber}
-                onChange={handleFormInputChange} 
-                style={{marginBottom: 20}}
-                name="invoiceNumber"
-              />
-              <Input 
-                placeholder="Invoice Amount payable" 
-                type="number"
-                step="0.1"
-                min="0"
-                name="invoiceAmountPayable"
-                value={formData.invoiceAmountPayable}
-                onChange={handleFormInputChange} 
-                style={{marginBottom: 20}}
-              />
-              <Input 
-                placeholder="Number of Days to payment" 
-                type="number"
-                value={formData.numberOfDaysToPayment} 
-                name="numberOfDaysToPayment" 
-                onChange={handleFormInputChange} 
-                style={{marginBottom: 20}}
-              />
             </div>
           </Card>
         </Col>
@@ -116,7 +131,16 @@ const CreateGrn = (props) => {
           </Button>
         </Col>
         <Col md={12}>
-          <Button style={{float: 'right'}} type="primary" onClick={()=> props.onStep(2)}>
+          <Button 
+            style={{float: 'right'}} 
+            type="primary" 
+            onClick={()=> props.onStep(2)}
+            disabled={!formData.invoiceNumber || 
+                !formData.invoiceAmountPayable || 
+                !formData.numberOfDaysToPayment ||
+                !file
+              }
+          >
             Next <RightOutlined />
           </Button>
         </Col>

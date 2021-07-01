@@ -10,7 +10,7 @@ const GoodsReceiveSuccessPage = (props)=> {
         status="success"
         title="Successfully Created Goods Receive Note and invoice"
         extra={[
-          <Button type="primary" key="lpos" onClick={()=>history.push("/app/stores/local-purchase-orders")}>
+          <Button type="primary" key="lpos" onClick={()=>history.push("/app/store/lpos")}>
             Back to Local Purchase Orders
           </Button>,
           <Button type="primary" key="home" onClick={()=>history.push("/app")}>

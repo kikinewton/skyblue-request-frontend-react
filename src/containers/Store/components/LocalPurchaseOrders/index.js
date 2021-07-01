@@ -1,15 +1,10 @@
-import { FileOutlined, ShoppingOutlined } from '@ant-design/icons'
+import { FileOutlined, ShoppingOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import { prettifyDateTime } from '../../../../util/common-helper'
 
 const columns = (props) => [
-  {
-    title: '#ID',
-    dataIndex: 'id',
-    key: 'id'
-  },
   {
     title: 'Supplier',
     dataIndex: 'supplierId',
@@ -28,19 +23,9 @@ const columns = (props) => [
     key: 'operation',
     align: 'right',
     render: (text, row) => (
-      <Row>
-        <Col md={12}>
-          <Button onClick={() => props.onDownloadPdfClick(row)} size="small">
-            <FileOutlined /> Download
-          </Button>
-        </Col>
-        <Col md={12}>
-          <Button onClick={() => props.onCreateGrnClick(row)} size="small">
-            <ShoppingOutlined /> Create Goods Receive Note
-          </Button>
-        </Col>
-      </Row>
-
+      <Button onClick={() => props.onCreateGrnClick(row)} size="small">
+        <ShoppingOutlined /> Create Goods Receive Note
+      </Button>
     )
   },
 ]
@@ -52,13 +37,11 @@ const LocalPurchaseOrders = (props) => {
 
   const handleCreateGrn = (row) => {
     console.log('lpoId', row)
-    history.push(`/app/stores/lpos/${row.id}/create-goods-receive-note`)
+    history.push(`/app/store/lpos/${row.id}/create-goods-receive-note`)
   }
 
   const handleDownloadPdf = async (row) => {
-    console.log('lets download pdf', row)
     const response = await grnService.getLpoDocument(row.id)
-    console.log('response', response)
   }
 
   const fetchLpos = async () => {
@@ -82,7 +65,7 @@ const LocalPurchaseOrders = (props) => {
     const expandedColumns = [
       { title: 'Description', dataIndex: 'name', key: 'name' },
       { title: 'Reason', dataIndex: 'reason', key: 'reason' },
-      { title: 'Qauntity', dataIndex: 'quantity', key: 'quantity' },
+      { title: 'Quantity', dataIndex: 'quantity', key: 'quantity' },
       { title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text) => prettifyDateTime(text) },
       {
         title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
@@ -98,6 +81,7 @@ const LocalPurchaseOrders = (props) => {
       <Row>
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
+          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLpos()} /></span>
         </Col>
       </Row>
       <Row>

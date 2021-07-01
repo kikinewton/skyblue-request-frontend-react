@@ -1,5 +1,5 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Col, InputNumber, Row, Select, Table, Button } from 'antd'
+import { Col, InputNumber, Row, Select, Table, Button, DatePicker, Card } from 'antd'
 import React from 'react'
 
 const columns = (props)=> [
@@ -46,8 +46,7 @@ const columns = (props)=> [
 ]
 
 const UpdatePrice = (props) => {
-  console.log('update price props: ', props)
-  const { selectedRequests, onUnitPriceUpdate, suppliers, selectedSupplier } = props
+  const { selectedRequests, onUnitPriceUpdate, suppliers, selectedSupplier, onDateSelect, deliveryDate } = props
   const handleUnitPriceOnChange = (row, value)=> {
     onUnitPriceUpdate(row, value)
     //console.log('row', row)
@@ -55,9 +54,29 @@ const UpdatePrice = (props) => {
 
   return (
     <React.Fragment>
-      <Row style={{padding: 5}}>
+      <Row style={{paddingTop: 20, paddingBottom: 20}}>
         <Col md={24}>
-          <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
+          <Card>
+          <Row style={{marginBottom: 20, borderBottom: "1px #bdbdbd solid"}}>
+            <Col md={24}>
+              <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
+            </Col>
+          </Row>
+            <Row>
+              <Col md={6}>Delivery Date:</Col>
+              <Col md={18}>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  style={{width: "100%"}} 
+                  value={deliveryDate}
+                  onChange={(date, dateStr)=> {
+                    console.log('date', date)
+                    onDateSelect(date)
+                  }} 
+                />
+              </Col>
+            </Row>
+          </Card>
         </Col>
       </Row>
       <Row>

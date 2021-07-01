@@ -6,7 +6,6 @@ import { REQUEST_COLUMNS } from '../../../../util/constants'
 const columns = REQUEST_COLUMNS
 
 const List = (props)=> {
-  console.log('props..............', props)
   const { suppliers, requests, onSelectSupplier, selectedRequests, onSelectRequests, selectedSupplier, supplierLoading, requestLoading } = props
 
   const handleSupplierSelect = (value) => {
@@ -41,15 +40,14 @@ const List = (props)=> {
           {requestLoading ? (<Spin />) : 
             <Table 
               columns={columns}
-              dataSource={requests}
+              dataSource={requests || []}
               pagination={false}
               size="small"
+              rowKey="id"
               rowSelection={{
                 onChange: (keys, rows) => handleRowSelection(keys, rows),
-                selectedRowKeys: selectedRequests.map(item=> item.id),
-                rowKey: "id"
+                selectedRowKeys: selectedRequests && selectedRequests.length > 0 && selectedRequests.map(item=> item.id)
               }}
-              rowKey="id"
             />
           }
         </Col>

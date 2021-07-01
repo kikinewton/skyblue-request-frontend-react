@@ -71,15 +71,11 @@ const ReceiveItems = (props) => {
     // console.log('supplier', supplier)
     try {
       const suppliers = (lpo.requestItems || [])[0].suppliers
-      console.log('supliers', suppliers)
       const supplierId = lpo.supplierId
       const supplier = suppliers.find(item => item.id === supplierId)
-      console.log('supplier', supplier)
       const uploadFileResponse = await documentService.saveDocument({file: file, employeeId: currentUser.id})
-      console.log('upldoa response', uploadFileResponse)
       if(uploadFileResponse.status === 'SUCCESS') {
         const doc = uploadFileResponse?.data[0]
-        console.log('lpo', lpo)
         const payload = {
           invoice: {
             invoiceDocument: doc,
@@ -92,13 +88,12 @@ const ReceiveItems = (props) => {
           comment: formData.comment,
           requestItems: selectedItems
         }
-        console.log('data', payload)
         const response = await grnService.createGoodsReceiveNote(payload)
         if(response.status === 'OK') {
           setSelectedItems([])
           setFormData(initForm)
           setFile([])
-          history.push("/#app/stores/grn-success")
+          history.push("/app/store/grn-success")
         } else {
           return openNotification('error', 'Create Goods Receive Note', response.mesage)
         }
@@ -116,7 +111,6 @@ const ReceiveItems = (props) => {
     setLoading(true)
     try {
       const lposResponse = await grnService.getGoodsReceiveNoteWithoutGRN({})
-      console.log('lpos', lposResponse)
       if(lposResponse.status === 'OK') {
         const lpoData = lposResponse.data?.filter(item => item.id === parseInt(lpoId))[0]
         setLpo(lpoData)

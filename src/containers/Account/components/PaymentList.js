@@ -1,3 +1,4 @@
+import { SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Card, Col, DatePicker, message, Row, Select, Spin, Table } from 'antd'
 import React from 'react'
 import * as paymentDraftService from '../../../services/api/payment-draft'
@@ -88,6 +89,7 @@ const PaymentList = (props) => {
       <Row style={{marginBottom: 20}}>
         <Col md={6}>
           <span className="bs-page-title">Payments</span>
+          <span style={{marginLeft: 5}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchPayments()}/></span>
         </Col>
         <Col md={18}>
           <Row gutter={12} style={{display: 'flex', alignItems: 'center'}}>

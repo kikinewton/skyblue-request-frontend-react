@@ -42,7 +42,7 @@ const ItemList = (props) => {
       </Row>
       <Row style={{marginTop: 20}}>
         <Col md={24}>
-          <Button style={{float: 'right'}} type="primary" onClick={()=> onStep(1)}>
+          <Button style={{float: 'right'}} type="primary" disabled={selectedItems.length < 1} onClick={()=> onStep(1)}>
             Next <RightOutlined />
           </Button>
         </Col>
