@@ -2,7 +2,6 @@ import { Button, Col, Row, Table, Form, Input } from 'antd'
 import React from 'react'
 import { DEPARTMENT_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import Spinner from '../../../presentation/Spinner'
 import Modal from 'antd/lib/modal/Modal'
 import MySwal from '../../../util/sweet-alert'
 
@@ -93,20 +92,19 @@ const List = (props)=> {
           <span className="bs-page-title">Departments</span>
         </Col>
         <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
+          <Button type="primary" onClick={()=> setOpenAdd(true)}>Create department</Button>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
-          {loading ? <Spinner /> : 
-            <Table 
-              columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
-              dataSource={departments}
-              rowKey="id"
-              bordered
-              size="small"
-            />
-          }
+          <Table 
+            loading={loading}
+            columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
+            dataSource={departments}
+            rowKey="id"
+            bordered
+            size="small"
+          />
         </Col>
       </Row>
       <Modal

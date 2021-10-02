@@ -8,8 +8,6 @@ import store from './store'
 import { HashRouter as Router } from "react-router-dom"
 import { history } from "./util/browser-history"
 
-console.log("STATE: ", store)
-
 ReactDOM.render(
     <Provider store={store}>
       <Router history={history} basename={process.env.PUBLIC_URL}>

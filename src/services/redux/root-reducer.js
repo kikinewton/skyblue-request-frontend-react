@@ -6,6 +6,8 @@ import requestReducer from './request/reducers'
 import employeeReducer from './employee/reducers'
 import QuotationReducer from './quotation/reducers'
 import requestCategoryReducer from './request-category/reducers'
+import FloatReducer from "./float/reducers"
+import pettyCashReducer from "./petty-cash/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -14,5 +16,7 @@ export default combineReducers({
   request: requestReducer,
   employee: employeeReducer,
   quotation: QuotationReducer,
-  requestCategory: requestCategoryReducer
+  requestCategory: requestCategoryReducer,
+  petty_cash: pettyCashReducer,
+  float: FloatReducer,
 })

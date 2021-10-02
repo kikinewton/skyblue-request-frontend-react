@@ -6,7 +6,7 @@ import { history } from "../../../util/browser-history";
 
 export function signIn(payload){
   return apiRequest({
-    url: `/auth/login/`,
+    url: `/login/`,
     method: 'POST',
     data: payload,
   })
@@ -16,7 +16,7 @@ export function signOut() {
   clearLocalState(AUTH_TOKEN_KEY)
   clearLocalState(AUTH_USER_KEY)
   //history.push(LOGIN_ROUTE)
-  history.push("/auth/login")
+  history.push("/login")
 
 }
 

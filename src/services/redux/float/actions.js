@@ -1,0 +1,31 @@
+import { createActions } from 'reduxsauce'
+
+export const { Types, Creators } = createActions(
+  {
+    fetchFloatRequests: ["query"],
+    fetchFloatRequestsSuccess: ["responseData"],
+    fetchFloatRequestsFailure: ["error"],
+
+    fetchMyFloatRequests: ["query"],
+    fetchMyFloatRequestsSuccess: ["responseData"],
+    fetchMyFloatRequestsFailure: ["error"],
+
+    getFloatRequest: ["requestId"],
+    getFloatRequestSuccess: ["responseData"],
+    getFloatRequestFailure: ["error"],
+
+    createFloatRequest: ["payload"],
+    createFloatRequestSuccess: ["responseData"],
+    createFloatRequestFailure: ["error"],
+
+    updateFloatRequest: ["payload"],
+    updateFloatRequestSuccess: ["id", "responseData"],
+    updateFloatRequestFailure: ["error"],
+
+    deleteFloatRequest: ["requestId", "payload"],
+    deleteFloatRequestSuccess: ["responseData"],
+    deleteFloatRequestFailure: ["error"],
+
+    resetFloatRequest: null
+  }
+)

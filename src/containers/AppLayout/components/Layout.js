@@ -18,7 +18,6 @@ import {
   UserOutlined,
   AccountBookOutlined,
   SendOutlined,
-  SnippetsOutlined
 } from '@ant-design/icons';
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
@@ -29,6 +28,7 @@ import { EMPLOYEE_ROLE } from '../../../util/datas';
 const CollapsibleLayout = (props) => {
   const [collapsed, setCollapsed] = React.useState(false)
   const { Header, Sider, Content, Footer } = Layout
+  const [key, setKey] = React.useState("home")
   const location = useLocation()
   const { currentUser } = props
   const { path } = useRouteMatch()
@@ -49,6 +49,24 @@ const CollapsibleLayout = (props) => {
     </Menu>
   )
 
+  React.useEffect(()=> {
+    console.log("pathname", location.pathname)
+    const { pathname } = location
+    if(pathname.includes("/app/my-requests")) {
+      setKey("my-requests")
+    } else if(pathname.includes("/app/dashboard")) {
+      setKey("dashboard")
+    } else if(pathname.includes("/app/departments")) {
+      setKey("department")
+    } else if(pathname.includes("/app/employees")) {
+      setKey("employee")
+    } else if(pathname.includes("/app/settings")) {
+      setKey("setting")
+    } else {
+      setKey("home")
+    }
+  }, [key])
+
   return (
     <Layout className="bs-layout">
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -63,24 +81,24 @@ const CollapsibleLayout = (props) => {
           style={{height: "100vh"}}
           mode="inline"
           defaultSelectedKeys={["/app"]}
-          selectedKeys={[location.pathname]}
+          selectedKeys={[key]}
           forceSubMenuRender={true}
         >
-          <Menu.Item key="/app">
+          <Menu.Item key="home">
             <NavLink to="/app">
               <HomeOutlined />
               <span>Home</span>
             </NavLink>
           </Menu.Item>
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.dashboardRoles) &&   
-            <Menu.Item key="/app/dashboard">
+            <Menu.Item key="dashboard">
               <NavLink to="/app/dashboard">
                 <DashboardOutlined />
                 <span>Dashboard</span>
               </NavLink>
             </Menu.Item>
           }
-          <Menu.Item key="/app/my-requests">
+          <Menu.Item key="my-requests">
             <NavLink to="/app/my-requests">
               <SendOutlined />
               <span>My Requests</span>
@@ -201,7 +219,7 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           </Menu.SubMenu> */}
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listDepartmentsRoles) && 
-            <Menu.Item key="/app/departments">
+            <Menu.Item key="department">
               <NavLink to="/app/departments">
                 <AppstoreOutlined />
                 <span>Departments</span>
@@ -209,14 +227,14 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listUserRoles) && 
-            <Menu.Item key="/app/employees">
+            <Menu.Item key="employee">
               <NavLink to="/app/employees">
                 <UsergroupAddOutlined />
                 <span>User Management</span>
               </NavLink>
             </Menu.Item>
           }
-          <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
+          <Menu.Item key="setting" icon={<SettingOutlined />}>
             <NavLink to="/app/settings">
               <span>Settings</span>
             </NavLink>

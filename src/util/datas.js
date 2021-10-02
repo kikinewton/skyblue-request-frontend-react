@@ -67,3 +67,14 @@ export const COLORS = [
   "#03fc07",
   "#fc0394",
 ]
+
+export const PRIORITY_LEVELS = [
+  {
+    key: "NORMAL",
+    name: "NORMAL"
+  },
+  {
+    key: "URGENT",
+    name: "URGENT"
+  }
+]

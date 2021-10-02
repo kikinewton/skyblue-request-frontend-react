@@ -14,7 +14,7 @@ export function saveRequest(payload){
 
 export function getUserItemRequests(userId) {
   return service({
-      url: `/requestItems/employees/${userId}`,
+      url: `/requestItemsForEmployee`,
       method: 'get'
     })
 }

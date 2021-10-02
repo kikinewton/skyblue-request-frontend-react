@@ -1,21 +1,140 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Switch, useRouteMatch } from 'react-router-dom'
-import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
+import { Switch, useRouteMatch, useHistory, Route } from 'react-router-dom'
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
-import Add from './components/Add'
+import { Creators as FloatCreators } from "../../services/redux/float/actions"
+import { Creators as PettyCashCreators } from "../../services/redux/petty-cash/actions"
 import AppLayout from '../AppLayout'
-import List from './components/List'
+import MyRequestsIndex from './components'
+import { Row, Col, Menu } from 'antd'
+import { PlusCircleOutlined } from '@ant-design/icons'
+import ListLpos from "./components/Lpo/List"
+import AddLpo from "./components/Lpo/Add"
+import ListPettyCash from "./components/PettyCash/List"
+import AddPettyCash from "./components/PettyCash/Add"
+import ListFloat from "./components/Float/List"
+import AddFloat from "./components/Float/Add"
 
 const MyRequest = (props)=> {
+  const [current, setCurrent] = React.useState("my-lpos")
   const { path } = useRouteMatch()
+  const history = useHistory()
+
+  React.useEffect(() => {
+    const url = window.location.href
+    let key = "my-lpos"
+    if(url.indexOf("/lpos/add-new") !== -1) {
+      key= "create-request"
+    } else if(url.indexOf("/petty-cash-requests/add-new") !== -1) {
+      key= "create-petty-cash"
+    } else if(url.indexOf("/float-requests/add-new") !== -1) {
+      key= "create-float"
+    } else if(url.indexOf("/my-requests/lpos") !== -1) {
+      key = "my-lpos"
+    } else if(url.indexOf("/my-requests/petty-cash-requests") !== -1) {
+      key = "my-petty-cash-requests"
+    } else if(url.indexOf("/my-requests/float-requests") !== -1) {
+      key = "my-float-requests"
+    } else {
+      key = "create-request"
+    }
+    setCurrent(key)
+  }, [current])
+
   return (
     <React.Fragment>
       <AppLayout>
+        <Row style={{marginBottom: 20}}>
+          <Col span={24}>
+          <Menu
+            mode="horizontal"
+            selectedKeys={[current]}
+          >
+              <Menu.Item 
+                key="my-lpos"
+                onClick={()=> {
+                  setCurrent("my-lpos")
+                  history.push("/app/my-requests/lpos")
+                }}
+              >
+                LPO Requests
+              </Menu.Item>
+              <Menu.Item 
+                key="my-petty-cash-requests"
+                onClick={() => {
+                  setCurrent("my-petty-cash-requests")
+                  history.push("/app/my-requests/petty-cash-requests")
+                }}
+              >
+                Petty Cash Requests
+              </Menu.Item>
+              <Menu.Item 
+                key="my-float-requests"
+                onClick={() => {
+                  setCurrent("my-float-requests")
+                  history.push("/app/my-requests/float-requests")
+                }}
+              >
+                Float Requests
+              </Menu.Item>
+              <Menu.SubMenu key="create-request" title="Create Request">
+                <Menu.Item
+                  key="create-request"
+                  onClick={() => {
+                    setCurrent("create-request")
+                    history.push("/app/my-requests/lpos/add-new")
+                  }}
+                >
+                  <PlusCircleOutlined />
+                  New LPO Request
+                </Menu.Item>
+                <Menu.Item
+                  key="create-petty-cash"
+                  onClick={() => {
+                    setCurrent("create-petty-cash")
+                    history.push("/app/my-requests/petty-cash-requests/add-new")
+                  }}
+                >
+                  <PlusCircleOutlined />
+                  New Petty Cash Request
+                </Menu.Item>
+                <Menu.Item
+                  key="create-float"
+                  onClick={() => {
+                    setCurrent("create-float")
+                    history.push("/app/my-requests/float-requests/add-new")
+                  }}
+                >
+                  <PlusCircleOutlined />
+                  New Float Request
+                </Menu.Item>
+              </Menu.SubMenu>
+            </Menu>
+          </Col>
+        </Row>
         <Switch>
-          <AuthenticatedRoute exact path={`${path}`} component={List} {...props} />
-          <AuthenticatedRoute path={`${path}/add-new`} component={Add} {...props} />
+          <Route exact path={`${path}`}>
+            <MyRequestsIndex {...props} />
+          </Route>
+          <Route path={`${path}/lpos/add-new`}>
+            <AddLpo {...props} />
+          </Route>
+          <Route exact path={`${path}/lpos`}>
+            <ListLpos {...props} />
+          </Route>
+          <Route path={`${path}/petty-cash-requests/add-new`}>
+            <AddPettyCash {...props} />
+          </Route>
+          <Route path={`${path}/petty-cash-requests`}>
+            <ListPettyCash {...props} />
+          </Route>
+          <Route path={`${path}/float-requests/add-new`}>
+            <AddFloat {...props} />
+          </Route>
+          <Route exact path={`${path}/float-requests`}>
+            <ListFloat {...props} />
+          </Route>
         </Switch>
       </AppLayout>
     </React.Fragment>
@@ -29,7 +148,15 @@ const mapStateToProps = (store) => ({
   requests: store.request.requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
-  submitSuccess: store.request.submitSuccess
+  submitSuccess: store.request.submitSuccess,
+  my_petty_cash_requests: store.petty_cash.my_petty_cash_requests,
+  fetching_petty_cash_requests: store.petty_cash.loading,
+  submitting_petty_cash_request: store.petty_cash.submitting,
+  submit_petty_cash_request_success: store.petty_cash.submitSuccess,
+  my_float_requests: store.float.my_float_requests,
+  fetching_float_requests: store.float.loading,
+  submitting_float_request: store.float.submitting,
+  submit_float_request_success: store.float.submitSuccess
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -45,7 +172,19 @@ const mapActionsToProps = (dispatch) => {
     },
     updateRequest: (options) => {
       dispatch(RequestCreators.updateRequest(options))
-    }
+    },
+    fetchMyFloatRequests: (query) => {
+      dispatch(FloatCreators.fetchMyFloatRequests(query))
+    },
+    createFloatRequest: (payload) => {
+      dispatch(FloatCreators.createFloatRequest(payload))
+    },
+    fetchMyPettyCashRequests: (query) => {
+      dispatch(PettyCashCreators.fetchMyPettyCashRequests(query))
+    },
+    createPettyCashRequest: (payload) => {
+      dispatch(PettyCashCreators.createPettyCashRequest(payload))
+    },
   }
 }
 export default connect(mapStateToProps, mapActionsToProps)(MyRequest)

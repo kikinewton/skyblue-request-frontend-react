@@ -1,7 +1,7 @@
 import { Button, Col, Row, Table, Form, Input, Select, Spin } from 'antd'
 import React from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 import { USER_ROLES } from '../../../util/datas'
@@ -136,7 +136,7 @@ const List = (props)=> {
           <span className="bs-page-title">Employees</span>
         </Col>
         <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={handleAdd}>Add New</Button>
+          <Button type="primary" onClick={handleAdd}>Register new employee</Button>
         </Col>
       </Row>
       <Row>

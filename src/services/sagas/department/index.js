@@ -14,7 +14,7 @@ import openNotification from '../../../util/notification'
 export function* fetchDepartments(action) {
   try {
     const response = yield call(getDepartments, {})
-    if(response.status === 'OK') {
+    if(response.status === 'SUCCESS') {
       const responseData = response.data
       yield put(Creators.fetchDepartmentsSuccess(responseData))
     } else {

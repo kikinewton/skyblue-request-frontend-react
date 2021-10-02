@@ -45,6 +45,17 @@ import {
 	watchResetRequestCategory
 } from './request-category'
 
+import {
+	watchCreateFloatRequest,
+	watchFetchMyFloatRequests,
+	watchFetchFloatRequests,
+} from "./float"
+
+import {
+	watchCreatePettyCashRequest,
+	watchFetchMyPettyCashRequests
+} from "./petty-cash"
+
 export default function* rootSaga() {
 	yield all([
 		watchLogin(),
@@ -76,7 +87,14 @@ export default function* rootSaga() {
 
 		watchFetchRequestCategories(),
 		watchCreateRequestCategory(),
-		watchResetRequestCategory()
+		watchResetRequestCategory(),
+
+		watchFetchMyFloatRequests(),
+		watchFetchFloatRequests(),
+		watchCreateFloatRequest(),
+
+		watchCreatePettyCashRequest(),
+		watchFetchMyPettyCashRequests(),
 
 	]);
 }

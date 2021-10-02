@@ -1,4 +1,5 @@
 import "antd/dist/antd.less";
+//import "./App.less"
 import { Switch, Route, Redirect } from 'react-router-dom'
 import React from "react";
 import { Spin } from "antd";
