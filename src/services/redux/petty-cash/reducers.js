@@ -21,7 +21,7 @@ export const fetchMyPettyCashRequestsSuccess = (state = INITIAL_STATE, action) =
 };
 
 export const fetchMyPettyCashRequestsFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error, requests: []};
+  return { ...state, loading: false, error: action.error };
 };
 
 //fetch

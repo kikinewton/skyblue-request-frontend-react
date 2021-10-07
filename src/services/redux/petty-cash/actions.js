@@ -7,8 +7,8 @@ export const { Types, Creators } = createActions(
     fetchPettyCashRequestsFailure: ["error"],
 
     fetchMyPettyCashRequests: ["query"],
-    fetchMyFloatRequestsSuccess: ["responseData"],
-    fetchMyFloatRequestsFailure: ["error"],
+    fetchMyPettyCashRequestsSuccess: ["responseData"],
+    fetchMyPettyCashRequestsFailure: ["error"],
 
     getPettyCashRequest: ["requestId"],
     getPettyCashRequestSuccess: ["responseData"],

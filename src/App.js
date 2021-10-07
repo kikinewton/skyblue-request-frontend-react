@@ -23,6 +23,7 @@ const Account = React.lazy(() => import('./containers/Account'))
 const Report = React.lazy(()=> import('./containers/Report'))
 const Audit = React.lazy(() => import('./containers/Audit'))
 const QuotationView = React.lazy(() => import('./containers/QuotationView'))
+const RequestManagement = React.lazy(() => import("./containers/RequestManagement"))
 
 function App(props) {
   return (
@@ -42,6 +43,7 @@ function App(props) {
           <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
           <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
           <AuthenticatedRoute path="/app/quotations" component={QuotationView} {...props} />
+          <AuthenticatedRoute path="/app/request-management" component={RequestManagement} {...props} />
           <Route path="/app/audit" component={Audit} {...props} />
           <Route path={LOGIN_ROUTE} component={Login} />
           <Route path="/not-authorized" component={NotAuthorized} />

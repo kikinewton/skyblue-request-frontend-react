@@ -12,6 +12,7 @@ const Settings = (props) => {
   const { currentUser, history } = props
   const [ changePasswordModal, setChangePasswordModal ] = React.useState(false)
   const [changePasswordForm] = Form.useForm()
+  const [changingPassword, setChangingPassword] = React.useState(false)
 
   const handleCancel = () => {
     setChangePasswordModal(false)
@@ -19,10 +20,11 @@ const Settings = (props) => {
   }
 
   const handleChangePasswordSubmit = async (values) => {
-    console.log('values', values)
     const { oldPassword, newPassword } = values
+    setChangingPassword(true)
     try {
       const response = await employeeService.selfChangePassword(currentUser.id, {oldPassword, newPassword })
+      setChangingPassword(false)
       if(response.status === 'OK') {
         openNotification('success', 'password change', response.message || 'SUCCESS')
         history.push('/auth/login')
@@ -30,6 +32,7 @@ const Settings = (props) => {
         openNotification('error', 'Change password', response.message)
       }
     } catch (error) {
+      setChangingPassword(false)
       openNotification('error', 'Change password', error?.response?.message || 'Failed!')
     }
     
@@ -131,17 +134,45 @@ const Settings = (props) => {
           newPassword: '',
           confirmPassword: ''
         }}>
-          <Form.Item label="Old Password" name="oldPassword" rules={[{required: true, message: 'Old password required'}]}>
+          <Form.Item 
+            label="Old Password" 
+            name="oldPassword" 
+            rules={[{required: true, message: 'Old password required'}]}
+          >
             <Input type="password" />
           </Form.Item>
-          <Form.Item label="New Password" name="newPassword" rules={[{required: true, message: 'New password required'}]}>
+          <Form.Item 
+            label="New Password" 
+            name="newPassword" 
+            rules={[{required: true, message: 'New password required'}]}
+          >
             <Input type="password" />
           </Form.Item>
-          <Form.Item label="Confirm Password" name="confirmPassword" rules={[{required: true, message: 'Password required'}]}>
+          <Form.Item 
+            label="Confirm Password" 
+            name="confirmPassword" 
+            dependencies={['newPassword']}
+            hasFeedback
+            rules={[
+              {required: true, message: 'Password required'},
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if(!value || getFieldValue('newPassword') === value) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject('The two passwords that you entered do not match')
+                }
+              })
+            ]}
+          >
             <Input type="password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="bs-form-button">
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="bs-form-button"
+            >
               Submit
             </Button>
           </Form.Item>

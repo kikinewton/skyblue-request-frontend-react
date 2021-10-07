@@ -18,6 +18,7 @@ import {
   UserOutlined,
   AccountBookOutlined,
   SendOutlined,
+  MailOutlined,
 } from '@ant-design/icons';
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
@@ -62,6 +63,12 @@ const CollapsibleLayout = (props) => {
       setKey("employee")
     } else if(pathname.includes("/app/settings")) {
       setKey("setting")
+    } else if(pathname.includes("/app/request-management/requests")) {
+      setKey("request")
+    } else if(pathname.includes("/app/request-management/petty-cash")) {
+      setKey("petty-cash")
+    } else if(pathname.includes("/app/request-management/float")) {
+      setKey("float")
     } else {
       setKey("home")
     }
@@ -104,7 +111,24 @@ const CollapsibleLayout = (props) => {
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>
-          {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.requestMenu) && 
+          <Menu.SubMenu title="Requests" icon={<DesktopOutlined />}>
+            <Menu.Item key="request">
+              <NavLink to="/app/request-management/requests">
+                Item requests
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="float">
+              <NavLink to="/app/request-management/float">
+                Float requests
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="petty-cash">
+              <NavLink to="/app/request-management/petty-cash">
+                Petty cash requests
+              </NavLink>
+            </Menu.Item>
+          </Menu.SubMenu>
+          {/* {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.requestMenu) && 
             <Menu.SubMenu key="/app/requests" icon={<DesktopOutlined/>} title="Request Mgmt">
               {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && 
                 <Menu.Item key="/app/requests/endorse">
@@ -121,7 +145,7 @@ const CollapsibleLayout = (props) => {
                 </Menu.Item>
               }
             </Menu.SubMenu>
-          }
+          } */}
           {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) &&   
             <Menu.Item key="/app/quoatations">
               <NavLink to="/app/quotations">

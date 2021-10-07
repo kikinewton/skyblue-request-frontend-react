@@ -14,7 +14,6 @@ import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 export function* fetchPettyCashRequests(action) {
   try {
     const response = yield call(fetchAllPettyCashRequestsApi, action.query)
-    console.log("Request Response", response)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       const responseData = response?.data || []
       yield put(Creators.fetchPettyCashRequestsSuccess(responseData))
@@ -77,7 +76,7 @@ export function* watchFetchPettyCashRequests(action) {
 }
 
 export function* watchFetchMyPettyCashRequests(action) {
-  yield takeLatest(Types.FETCH_MY_PETTY_CASH_REQUESTS, fetchPettyCashRequests)
+  yield takeLatest(Types.FETCH_MY_PETTY_CASH_REQUESTS, fetchMyPettyCashRequests)
 }
 
 export function* watchCreatePettyCashRequest(action) {
