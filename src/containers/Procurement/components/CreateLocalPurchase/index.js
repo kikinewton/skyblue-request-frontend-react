@@ -2,8 +2,8 @@ import React from 'react'
 import { Card, Col, Row, Steps } from 'antd'
 import List from './List'
 import UpdatePrice from './UpdatePrice'
-import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../../util/request-types'
 import Confirmation from './Confirmation'
+import { FETCH_REQUEST_TYPES } from '../../../../util/constants'
 const { Step } = Steps
 
 const CreateLocalPurchase = (props) => {

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from 'antd'
-import { CheckOutlined } from '@ant-design/icons'
+import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
 import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 
-const columns = [
+const columns = props => [
   {
     title: 'Request Type',
     dataIndex: 'requestType',
@@ -38,8 +38,14 @@ const columns = [
   },
   {
     title: "Priority",
-    dataIndex: "priority",
-    key: "priority"
+    dataIndex: "priorityLevel",
+    key: "priorityLevel"
+  },
+  {
+    title: "Actions",
+    dataIndex: "operation",
+    key: "operation",
+    render: (text, row) => (<Button type="default" onClick={() => props.removeEntry(row)}><MinusOutlined color="red" /></Button>)
   }
 ]
 
@@ -50,10 +56,10 @@ const AddNewRequest = (props) => {
   const departmentFieldRef = React.createRef()
 
   const addToEntires = (values) => {
-    const { name, reason, purpose, requestType, departmentId, quantity } = values
+    const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel } = values
     const department = departments.filter(item => item.id === departmentId)[0]
     const id = requests.length + 2;
-    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity}
+    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel}
     const list = requests.concat([data])
     storeLocalState("NEW-REQUEST", list)
     setRequests(list)
@@ -64,11 +70,20 @@ const AddNewRequest = (props) => {
 
   const handleSubmit = async ()=> {
     const payload = {
-      employee_id: currentUser.id,
-      multipleRequestItem: requests
+      multipleRequestItem: requests.map(it=> {
+        let dt = it
+        dt['quantity'] = it.quantity
+        return dt
+      })
     }
     await createRequest(payload)
    
+  }
+
+  const handleRemove = (row) => {
+    const entries = requests.filter(it => it.id !== row.id)
+    storeLocalState("NEW-REQUEST", entries)
+    setRequests(entries)
   }
 
   React.useEffect(() => {
@@ -108,7 +123,7 @@ const AddNewRequest = (props) => {
                   layout="vertical"
                   form={form}
                   name="request-entry"
-                  initialValues={{ name: "", reason: "", purpose: "", quantity: "", requestType: undefined, departmentId: undefined, priority: "NORMAL" }}
+                  initialValues={{ name: "", reason: "", purpose: "", quantity: "", requestType: undefined, departmentId: undefined, priorityLevel: "NORMAL" }}
                   onFinish={addToEntires}
                 >
                   <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
@@ -125,7 +140,7 @@ const AddNewRequest = (props) => {
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="PRIORITY" name="priority" rules={[{ required: true, message: 'Priority required' }]}>
+                  <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
                     <Select >
                       {PRIORITY_LEVELS.map(it=> (
                         <Select.Option key={`priority-${it.key}`} value={it.id}>{it.name}</Select.Option>
@@ -162,7 +177,11 @@ const AddNewRequest = (props) => {
               <Row>
                 <Col md={24}>
                   <Table 
-                    columns={columns}
+                    columns={columns({
+                      removeEntry: (row) => {
+                        handleRemove(row)
+                      }
+                    })}
                     dataSource={requests}
                     pagination={false}
                     size="small"

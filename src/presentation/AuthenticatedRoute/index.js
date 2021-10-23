@@ -9,7 +9,7 @@ import { LOGIN_ROUTE, UNAUTHORIZED_ROUTE } from '../../util/routes'
 
 const AuthenticatedRoute = ({ component: Component, roles, authUser, accessToken, ...rest  })=> {
   return(
-    <Route 
+    <Route
       {...rest}
       render = {props => {
         const accessToken = getLocalState(AUTH_TOKEN_KEY)
@@ -20,7 +20,7 @@ const AuthenticatedRoute = ({ component: Component, roles, authUser, accessToken
         if(roles && roles.indexOf(authUser.role) === -1) {
           return <Redirect to={UNAUTHORIZED_ROUTE} />
         }
-        return <Component {...props} {...rest} />
+        return <Component {...rest} />
       }}
     />
   )

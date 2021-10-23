@@ -9,6 +9,7 @@ import {
   getUser as getEmployeeApi
 } from '../../api/employee'
 import openNotification from '../../../util/notification'
+import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchEmployees(action) {
@@ -48,7 +49,7 @@ export function* getEmployee(action) {
 export function* createEmployee(action) {
   try {
     const response = yield call(saveEmployeeApi, action.payload)
-    if(response.status === 'CREATED') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       console.log('data', responseData)
       openNotification('success', 'CREATE Employee', response.message)
@@ -69,7 +70,7 @@ export function* updateEmployee(action) {
   console.log('action', action)
   try {
     const response = yield call(updateEmployeeApi, action.employeeId, action.payload)
-    if(response.status === 'CREATED') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       console.log('employee data', responseData)
       yield put(Creators.updateEmployeeSuccess(responseData))

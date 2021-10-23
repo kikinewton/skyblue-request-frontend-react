@@ -50,8 +50,7 @@ const List = (props) => {
 
   React.useEffect(() => {
     fetchMyPettyCashRequests({
-      pageNo: 2,
-      pageSize: 5
+      
     })
   }, [])
 

@@ -6,6 +6,7 @@ import List from './components/List'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import { Creators } from '../../services/redux/employee/actions'
 import { Creators as DepartmentCreators } from '../../services/redux/department/actions'
+import { Creators as RoleCreators } from "../../services/redux/role/actions"
 
 const Employee = (props) => {
   const { path } = useRouteMatch()
@@ -14,7 +15,12 @@ const Employee = (props) => {
     <>
       <AppLayout>
         <Switch>
-          <AuthenticatedRoute exact path={`${path}`} {...props} component={List} />
+          <AuthenticatedRoute
+            exact 
+            path={`${path}`}
+            {...props} 
+            component={List}
+          />
         </Switch>
       </AppLayout>
     </>
@@ -29,7 +35,9 @@ const mapStateToProps = (store) => ({
   loading: store.employee.loading,
   employee: store.employee.employee,
   departments: store.department.departments,
-  departmentLoading: store.department.loading
+  departmentLoading: store.department.loading,
+  user_roles: store.role.roles,
+  fetching_roles: store.role.loading,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -51,6 +59,9 @@ const mapActionsToProps = (dispatch) => {
     },
     fetchDepartments: (query) => {
       dispatch(DepartmentCreators.fetchDepartments(query))
+    },
+    fetchRoles: (query) => {
+      dispatch(RoleCreators.fetchRoles(query))
     }
   }
 }

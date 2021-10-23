@@ -18,7 +18,7 @@ export function getUser(userId) {
 export function saveUser(data) {
   return apiRequest({
     method: "POST",
-    url: `/auth/admin/signup`,
+    url: `/admin/signup`,
     data
   })
 }

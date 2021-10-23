@@ -6,6 +6,10 @@ export const { Types, Creators } = createActions(
     fetchRequestsSuccess: ["responseData"],
     fetchRequestsFailure: ["error"],
 
+    fetchMyRequests: ["query"],
+    fetchMyRequestsSuccess: ["responseData"],
+    fetchMyRequestsFailure: ["error"],
+
     getRequest: ["requestId"],
     getRequestSuccess: ["responseData"],
     getRequestFailure: ["error"],
@@ -21,6 +25,10 @@ export const { Types, Creators } = createActions(
     deleteRequest: ["requestId", "payload"],
     deleteRequestSuccess: ["responseData"],
     deleteRequestFailure: ["error"],
+
+    setRequest: ["request"],
+
+    setSelectedRequests: ["requests"],
 
     resetRequest: null
   }

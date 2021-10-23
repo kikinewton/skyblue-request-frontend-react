@@ -18,7 +18,7 @@ export function* login(action) {
     if(response.status === 'SUCCESS') {
       const responseData = response.data
       storeLocalState(AUTH_TOKEN_KEY, responseData.token)
-      storeLocalState(AUTH_USER_KEY, { ...responseData.employee, role: responseData.employee.role[0] })
+      storeLocalState(AUTH_USER_KEY, { ...responseData.employee, role: responseData.roles[0]})
       yield put(Creators.loginSuccess(responseData))
       history.push("/app")
     } else {

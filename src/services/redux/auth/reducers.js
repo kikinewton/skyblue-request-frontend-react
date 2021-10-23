@@ -41,12 +41,12 @@ export const login = (state = INITIAL_STATE, action) => {
 };
 
 export const loginSuccess = (state = INITIAL_STATE, action) => {
-  const { employee, token } = action.responseData
+  const { employee, token, roles } = action.responseData
   console.log('user', employee)
   return {
     ...state,
     loading: false,
-    user: { ...employee, role: employee.role[0] },
+    user: { ...employee, role: roles[0] },
     token: token
   };
 };

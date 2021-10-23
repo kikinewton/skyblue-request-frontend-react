@@ -56,6 +56,10 @@ import {
 	watchFetchMyPettyCashRequests
 } from "./petty-cash"
 
+import {
+	watchFetchRoles
+} from "./role"
+
 export default function* rootSaga() {
 	yield all([
 		watchLogin(),
@@ -95,6 +99,8 @@ export default function* rootSaga() {
 
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),
+
+		watchFetchRoles()
 
 	]);
 }

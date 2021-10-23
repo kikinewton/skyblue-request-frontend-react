@@ -26,7 +26,7 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
         </Col>
         {/* <Col md={12} sm={12}>
           <DeleteOutlined 
-            style={{cursor: 'pointer'}} 
+            style={{cursor: 'pointer'}}
             onClick={() => props.deleteRow(row)} 
           />
         </Col> */}
@@ -36,14 +36,17 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
 })
 
 const List = (props)=> {
+  console.log('----------------->my props', props)
   const { employees, createEmployee,loading, fetchEmployees, deleteEmployee, 
-    departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee } = props
+    departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee, fetchRoles, 
+    user_roles, fetching_roles
+  } = props
+
   const [ openAdd, setOpenAdd ] = React.useState(false)
   const [ openEdit, setOpenEdit ] = React.useState(false)
   const [editData, setEditData] = React.useState(initUser)
   const [ addForm ] = Form.useForm()
   const [ editForm ] = Form.useForm()
-
 
   const handleDelete = (row) => {
     MySwal.fire({
@@ -67,7 +70,7 @@ const List = (props)=> {
       email: row.email,
       phoneNo: row.phoneNo,
       departmentId: row.department?.id,
-      role: (row?.role || [])[0]
+      role: (row?.roles || [])[0]?.id
     })
     setEditData(row)
     setOpenEdit(true)
@@ -81,7 +84,7 @@ const List = (props)=> {
     console.log('values', values)
     const { firstName, lastName, email, phoneNo, departmentId, role } = values
     const dpt = {id: departmentId, name: ""}
-    const empRole = [role]
+    const empRole = [{id: role}]
     const payload = {
       firstName,
       lastName,
@@ -91,14 +94,13 @@ const List = (props)=> {
       employeeRole: empRole
     }
     await createEmployee(payload)
-    console.log('submit success', submitSuccess)
   }
 
   const handleEditSubmit = async (values) => {
     console.log('values', values)
     const { firstName, lastName, email, phoneNo, departmentId, role } = values
     const dpt = {id: departmentId, name: ""}
-    const empRole = [role]
+    const empRole = [{id: role}]
     const payload = {
       firstName,
       lastName,
@@ -107,15 +109,14 @@ const List = (props)=> {
       department: dpt,
       employeeRole: empRole
     }
-    console.log('payload', payload, 'userId', editData.id)
     await updateEmployee(editData.id, payload)
   }
 
   React.useEffect(()=> {
-    console.log('loading', loading)
-   fetchEmployees({})
-   fetchDepartments({})
-   // eslint-disable-next-line
+    fetchRoles({})
+    fetchEmployees({})
+    fetchDepartments({})
+    // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
@@ -141,15 +142,14 @@ const List = (props)=> {
       </Row>
       <Row>
         <Col md={24}>
-          {loading ? <Spin /> : 
-            <Table 
-              columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
-              dataSource={employees}
-              rowKey="id"
-              bordered
-              size="small"
-            />
-          }
+          <Table 
+            loading={loading}
+            columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
+            dataSource={employees}
+            rowKey="id"
+            bordered
+            size="small"
+          />
         </Col>
       </Row>
       <Modal
@@ -184,9 +184,9 @@ const List = (props)=> {
             </Select>
           </Form.Item>
           <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Role required' }]}>
-            <Select>
-              {USER_ROLES.map(role=> (
-                <Select.Option key={`role-${role.id}`} value={role.id}>{role.label}</Select.Option>
+            <Select loading={fetching_roles}>
+              {user_roles?.map(role=> (
+                <Select.Option key={`role-${role?.id}`} value={role?.id}>{role?.name?.replaceAll("_", " ")}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -240,9 +240,11 @@ const List = (props)=> {
             </Select>
           </Form.Item>
           <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Role required' }]}>
-            <Select>
-              {USER_ROLES.map(role=> (
-                <Select.Option key={`role-${role.id}`} value={role.id}>{role.label}</Select.Option>
+            <Select loading={fetching_roles}>
+              {user_roles?.map(role=> (
+                <Select.Option key={`role-${role.id}`} value={role.id}>
+                  {role?.name?.replaceAll('_', ' ')}
+                </Select.Option>
               ))}
             </Select>
           </Form.Item>

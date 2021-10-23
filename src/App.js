@@ -7,6 +7,7 @@ import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SUPPLIERS_ROUTE, EMPLOYEE_R
 import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
 import { connect } from 'react-redux'
+import PrivateRoute from "./presentation/PrivateRoute";
 const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))
 const Department = React.lazy(()=> import('./containers/Department'))
@@ -24,6 +25,9 @@ const Report = React.lazy(()=> import('./containers/Report'))
 const Audit = React.lazy(() => import('./containers/Audit'))
 const QuotationView = React.lazy(() => import('./containers/QuotationView'))
 const RequestManagement = React.lazy(() => import("./containers/RequestManagement"))
+const RequestItemIndex = React.lazy(() => import("./containers/RequestItem"))
+const PettyCashIndex = React.lazy(() => import("./containers/PettyCash"))
+const FloatIndex = React.lazy(() => import("./containers/Float"))
 
 function App(props) {
   return (
@@ -43,7 +47,11 @@ function App(props) {
           <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
           <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
           <AuthenticatedRoute path="/app/quotations" component={QuotationView} {...props} />
-          <AuthenticatedRoute path="/app/request-management" component={RequestManagement} {...props} />
+
+          <Route path="/app/request-items" component={RequestItemIndex} {...props} />
+          
+          <AuthenticatedRoute path="/app/petty-cash-requests" component={PettyCashIndex} {...props} />
+          <AuthenticatedRoute path="/app/float-requests" component={FloatIndex} {...props} />
           <Route path="/app/audit" component={Audit} {...props} />
           <Route path={LOGIN_ROUTE} component={Login} />
           <Route path="/not-authorized" component={NotAuthorized} />

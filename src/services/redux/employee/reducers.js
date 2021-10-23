@@ -43,7 +43,11 @@ export const createEmployee = (state = INITIAL_STATE, action) => {
 
 export const createEmployeeSuccess = (state = INITIAL_STATE, action) => {
   console.log('resposeData', action.responseData)
-  return { ...state, employees: state.employees.concat(action.responseData), submitting: false, submitSuccess: true};
+  return { 
+    ...state,
+    submitting: false, 
+    submitSuccess: true
+  };
 };
 
 export const createEmployeeFailure = (state = INITIAL_STATE, action) => {

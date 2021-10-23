@@ -1,7 +1,14 @@
 import service from '../apiRequest'
-import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 import { serializeQueryParams } from '../../../util/common-helper'
+import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 
+export function fetchMyRequests(query) {
+  const queryStr = serializeQueryParams(query)
+  return service({
+    url: `/requestItemsForEmployee${queryStr}`,
+    method: 'get'
+  })
+}
 
 export function saveRequest(payload){
   return service({
@@ -27,9 +34,10 @@ export function getAllItemRequests(query) {
     })
 }
 
-export function getAllDepartmentItemRequests(departmentId, employeeId) {
+export function getAllDepartmentItemRequests() {
+  console.log("lets fetch department request")
   return service({
-      url: `/requestItems/departments/${departmentId}/employees/${employeeId}`,
+      url: `/requestItemsByDepartment`,
       method: 'get'
     })
 }
@@ -42,13 +50,34 @@ export function endorseItemRequest(requestId, employeeId){
     })
 }
 
-export function endorseBulkItemRequest(authUserId, data) {
+
+//HOD UPDATE
+export function hodEndorseBulkItemRequest(data) {
   return service({
-      url: `/requestItems/bulkEndorse/employees/${authUserId}`,
+    url: `/requestItems/bulkEndorse`,
+    method: 'put',
+    data
+  })
+}
+export function hodCancelBulkRequest(payload) {
+  return service({
+    url: `/requestItems/bulkCancel`,
+    method: 'put',
+    data: payload
+  })
+}
+
+export function hodRejectBulkRequest(payload) {
+  return service({
+      url: `/requestItems/bulkCancel`,
       method: 'put',
-      data
+      data: payload
     })
 }
+
+
+
+
 
 export function approveBulkRequests(data) {
   return service({
@@ -58,13 +87,7 @@ export function approveBulkRequests(data) {
     })
 }
 
-export function cancelBulkRequest(payload) {
-  return service({
-      url: `/requestItems/bulkCancel`,
-      method: 'put',
-      data: payload
-    })
-}
+
 
 export function getEndorsedRequestItems(employeeId) {
   return service({
@@ -165,12 +188,15 @@ export function getRequestsBySupplier() {
 }
 
 export function updateRequest(data) {
+  console.log("API PAYLOAD", data)
   const { updateType, userId, payload } = data
   switch (updateType) {
-    case UPDATE_REQUEST_TYPES.ENDORSE:
-      return endorseBulkItemRequest(userId, payload)
-    case UPDATE_REQUEST_TYPES.CANCEL:
-      return cancelBulkRequest(payload)
+    case UPDATE_REQUEST_TYPES.HOD_ENDORSE:
+      return hodEndorseBulkItemRequest(userId, payload)
+    case UPDATE_REQUEST_TYPES.HOD_CANCEL:
+      return hodCancelBulkRequest(payload)
+    case UPDATE_REQUEST_TYPES.HOD_REJECT:
+      return hodRejectBulkRequest(payload)
     case UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
       return addSuppliersToRequest(payload)
     case UPDATE_REQUEST_TYPES.UPDATE_UNIT_PRICE:
@@ -183,19 +209,26 @@ export function updateRequest(data) {
 }
 
 export function fetchRequests(query) {
-  const { requestType, userId } = query
-  console.log('In fetch All requests')
+  const { requestType } = query
+  
+  console.log('In fetch All requests for requests', requestType, 'value', FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS)
+  // if(requestType === FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS) {
+  //   console.log('in fetch department pending')
+  //   return getAllDepartmentItemRequests(query)
+  // } else if(requestType===FETCH_REQUEST_TYPES.MY_REQUESTS) {
+  //   return getUserItemRequests(query)
+  // }
   switch (requestType) {
     case FETCH_REQUEST_TYPES.MY_REQUESTS:
-      return getUserItemRequests(query.userId)
-    case FETCH_REQUEST_TYPES.HOD_PENDING_REQUEST:
-      return getAllDepartmentItemRequests(query.departmentId, query.userId)
+      return getUserItemRequests(query)
+    case FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
+      return getAllDepartmentItemRequests(query)
     case FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
-      return getEndorsedRequestItems(userId)
+      return getEndorsedRequestItems(query)
     case FETCH_REQUEST_TYPES.DOCUMENTED_REQUESTS_BY_SUPPLIER:
-      return getEndorsedItemsWithSupplier(query.supplierId)
+      return getEndorsedItemsWithSupplier(query)
     case FETCH_REQUEST_TYPES.ENDORSED_REQUESTS:
-      return getEndorsedRequestItems(query.userId)
+      return getEndorsedRequestItems()
     default: {
       console.log('In default api call')
       return getAllItemRequests(query);

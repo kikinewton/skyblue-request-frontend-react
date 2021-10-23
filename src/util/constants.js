@@ -1,3 +1,4 @@
+import { Badge, Tag } from "antd"
 import { EMPLOYEE_ROLE } from "./datas"
 
 export const USER_ROLES = {
@@ -20,7 +21,8 @@ export const REQUEST_COLUMNS = [
   {
     title: 'NAME',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
   },
   {
     title: 'REASON',
@@ -75,7 +77,7 @@ export const QUOTATION_COLUMNS = [
     title: 'STATUS',
     dataIndex: 'status',
     key: 'status'
-  }, 
+  },
 ]
 
 export const DEPARTMENT_COLUMNS = [
@@ -155,18 +157,23 @@ export const EMPLOYEE_COLUMNS = [
     title: 'Department',
     dataIndex: 'department',
     key: 'department',
-    render: (text) => text.name
+    render: (text) => text?.name
   },
   {
     title: 'Role',
-    dataIndex: 'role',
-    key: 'role',
-    render: (text)=> (text || [])[0] || "N/A"
+    dataIndex: 'roles',
+    key: 'roles',
+    render: (text)=> {
+      let role = (text || [])[0]?.name
+      return role?.replaceAll('_', ' ')
+      //return roleName.replcae('_', ' ')
+    }
   }
 ]
 
 export const FETCH_REQUEST_TYPES = {
   MY_REQUEST: "MY-REQUEST",
+  HOD_PENDING_ENDORSEMENT_REQUESTS: "HOD-PENDING-ENDORSEMENT-REQUESTS",
   HOD_PENDING_REQUEST: "HOD-PENDING-REQUEST",
   GM_PENDING_REQUEST: "GM_PENDING_REQUEST",
   PROCUREMENT_PENDING_SUPPLIER_REQUEST: "PROCUREMENT-PENDING_SUPPLIER_REQUEST",
@@ -179,7 +186,6 @@ export const UPDATE_REQUEST_TYPE = {
   CANCEL: "CANCEL",
   ADD_SUPPLIERS: "ADD-SUPPLIER"
 }
-
 
 
 export const FUNCTIONAL_ROLES = {

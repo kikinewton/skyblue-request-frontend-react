@@ -19,7 +19,7 @@ const apiConfig = {
 const request = axios.create(apiConfig)
 
 request.interceptors.request.use((config) => {
-  if(config.url.indexOf("signUp") !== -1 || config.url.indexOf("login") !== -1) {
+  if(config.url.indexOf("signUp") !== -1 || config.url.indexOf("signup") !== -1 || config.url.indexOf("login") !== -1 ) {
     config.baseURL = AUTH_BASE_URL
   }
   const accessToken = getLocalState(AUTH_TOKEN_KEY)

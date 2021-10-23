@@ -8,6 +8,7 @@ import QuotationReducer from './quotation/reducers'
 import requestCategoryReducer from './request-category/reducers'
 import FloatReducer from "./float/reducers"
 import pettyCashReducer from "./petty-cash/reducers"
+import roleReducer from "./role/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   requestCategory: requestCategoryReducer,
   petty_cash: pettyCashReducer,
   float: FloatReducer,
+  role: roleReducer
 })

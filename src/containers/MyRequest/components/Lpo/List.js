@@ -1,8 +1,8 @@
 import { Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
 import { REQUEST_COLUMNS } from '../../../../util/constants'
-import { FETCH_REQUEST_TYPES } from '../../../../util/request-types'
 import { history } from '../../../../util/browser-history'
+import { FETCH_REQUEST_TYPES } from '../../../../util/request-types'
 
 
 

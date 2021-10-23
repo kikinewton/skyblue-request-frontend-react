@@ -111,9 +111,9 @@ const CollapsibleLayout = (props) => {
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>
-          <Menu.SubMenu title="Requests" icon={<DesktopOutlined />}>
+          <Menu.SubMenu key="request-menu" title="Requests" icon={<DesktopOutlined />}>
             <Menu.Item key="request">
-              <NavLink to="/app/request-management/requests">
+              <NavLink to="/app/request-items">
                 Item requests
               </NavLink>
             </Menu.Item>

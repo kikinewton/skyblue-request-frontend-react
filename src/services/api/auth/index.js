@@ -6,16 +6,23 @@ import { history } from "../../../util/browser-history";
 
 export function signIn(payload){
   return apiRequest({
-    url: `/login/`,
+    url: `/login`,
     method: 'POST',
     data: payload,
+  })
+}
+
+
+export function fetchRoles(query) {
+  return apiRequest({
+    url: '/roles',
+    method: 'GET'
   })
 }
 
 export function signOut() {
   clearLocalState(AUTH_TOKEN_KEY)
   clearLocalState(AUTH_USER_KEY)
-  //history.push(LOGIN_ROUTE)
   history.push("/login")
 
 }

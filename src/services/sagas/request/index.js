@@ -11,7 +11,7 @@ import { clearLocalState } from '../../app-storage'
 
 
 export function* fetchRequests(action) {
-  console.log('=================>FETCH REQUEST', action)
+  console.log('=================>FETCH ALL REQUEST SAGA', action)
   try {
     const response = yield call(fetchRequestsApi, action.query)
     console.log("Request Response", response)
@@ -26,6 +26,25 @@ export function* fetchRequests(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch departments'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchRequestsFailure(errorText))
+  }
+}
+
+export function* fetchMyRequests(action) {
+  console.log('=================>FETCH MY REQUEST', action)
+  try {
+    const response = yield call(fetchRequestsApi, action.query)
+    console.log("Request Response", response)
+    if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
+      const responseData = response?.data || []
+      yield put(Creators.fetchMyRequestsSuccess(responseData))
+    } else {
+      openNotification('error', 'Fetch Request', response.message || "Failed to fetch Requests")
+      yield put(Creators.fetchMyRequestsFailure(response.message || "Failed to fetch requests!"))
+    }
+  } catch (error) {
+    const errorText = (error?.response?.data && error?.response?.data?.error) || 'Failed to fetch departments'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchMyRequestsFailure(errorText))
   }
 }
 
@@ -44,9 +63,10 @@ export function* createRequest(action) {
       yield put(Creators.createRequestFailure(response.message))
     }
   } catch (error) {
-    const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Login', errorTxt)
-    yield put(Creators.createRequestFailure(errorTxt))
+    const errorTxt = (error && error.response.data && error.response.data.error) || 'Create Request Failed'
+    const errors = error?.response?.data?.errors[0]
+    openNotification('error', 'Create Requests', errors)
+    yield put(Creators.createRequestFailure(errors))
   }
 }
 
