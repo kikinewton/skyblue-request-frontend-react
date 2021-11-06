@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { ALL_QUOTATIONS, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
+import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
 
 
 const path = "/quotations"
@@ -40,6 +40,12 @@ export function getQuotations(query) {
   })
 }
 
+export function getQuotationBySupplier(query) {
+  return service({
+    url: `${path}/suppliers/${query.supplierId}`
+  })
+}
+
 
 export function getAllQuotations(query) {
   console.log('query api', query)
@@ -51,6 +57,8 @@ export function getAllQuotations(query) {
       return getAllQuotationsWithoutDocuments()
     case QUOTATIONS_WITHOUT_DOCUMENT_TEST:
       return getAllQuotationsWithoutDocumentsTest()
+    case QUOTATIONS_BY_SUPPLIER:
+      return getQuotationBySupplier(query)
     default:
       return getQuotations()
   }
@@ -67,7 +75,7 @@ export function updateQuotation(quotationId, payload) {
 
 export function createQuotation({ file, userId, supplierId }) {
   let fd = new FormData()
-  fd.append("file", file)
+  fd.append("files", file)
   return service({
     url: `/quotations/suppliers/${supplierId}?employeeId=${userId}`,
     method: 'POST',

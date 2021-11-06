@@ -8,13 +8,14 @@ import {
 } from '../../api/quotation'
 import openNotification from '../../../util/notification'
 import { message } from 'antd'
+import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchQuotations(action) {
   console.log('fetch quotations saga', action)
   try {
     const response = yield call(getAllQuotationsApi, action.query)
-    if(response.status === 'OK') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       console.log('response data', responseData)
       yield put(Creators.fetchQuotationsSuccess(responseData))
@@ -55,7 +56,7 @@ export function* createQuotation(action) {
   const { payload } = action
   try {
     const response = yield call(createQuotationApi, payload)
-    if(response.status === "OK") {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       yield put(Creators.createQuotationSuccess(response.data))
       message.success("Quotation Document Addedd Successfully")
     } else {

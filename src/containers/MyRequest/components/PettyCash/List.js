@@ -1,6 +1,7 @@
 import React from 'react';
-import { Table, Row, Col, PageHeader, Badge, Tag, Pagination, Button } from "antd"
+import { Table, Row, Col, PageHeader, Badge, Tag, Pagination, Button, Card } from "antd"
 import { useHistory } from 'react-router';
+import { CURRENCY_CODE } from '../../../../util/constants';
 
 const columns = [
   {
@@ -19,7 +20,7 @@ const columns = [
     key: "quantity",
   },
   {
-    title: "Unit Price",
+    title: `Unit Price (${CURRENCY_CODE})`,
     dataIndex: "amount",
     key: "amount",
   },
@@ -56,36 +57,30 @@ const List = (props) => {
 
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <PageHeader
-            style={{padding: 0}}
-            title="My Petty Cash Requests"
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Table
-            columns={columns}
-            dataSource={my_petty_cash_requests}
-            rowKey="id"
-            loading={fetching_petty_cash_requests}
-            size="small"
-            pagination={false}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Pagination
-            size="small"
-            defaultCurrent={0}
-            defaultPageSize={20}
-            current
-          />
-        </Col>
-      </Row>
+      <Card
+        hoverable
+        title="My Petty Cash Requests"
+        extra={[
+          <Button type="primary"
+            onClick={()=> history.push("/app/my-requests/petty-cash-requests/add-new")}
+          >
+            Create New Petty Cash Request
+          </Button>
+        ]}
+      >
+        <Row>
+          <Col span={24}>
+            <Table
+              columns={columns}
+              dataSource={my_petty_cash_requests}
+              rowKey="id"
+              loading={fetching_petty_cash_requests}
+              size="small"
+              bordered
+            />
+          </Col>
+        </Row>
+      </Card>
     </>
   )
 } 

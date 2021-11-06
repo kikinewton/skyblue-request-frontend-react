@@ -2,46 +2,27 @@ import React from 'react'
 import { connect } from "react-redux"
 import Home from "./components/Home"
 import AppLayout from '../AppLayout'
-import * as requestApi from '../../services/api/item-request'
-import openNotification from '../../util/notification'
+import { Creators as RequestCreators } from "../../services/redux/request/actions"
+
 
 const HomePage = (props)=> {
-  const [myRequests, setMyRequests] = React.useState([])
-  const [loading, setLoading] = React.useState(false)
-
-  const fetchMyRequests = async (query)=> {
-    setLoading(true)
-    try {
-      const response = await requestApi.getUserItemRequests(props.authUser.id)
-      const {status, data} = response
-      if(status === 'FOUND') {
-        setMyRequests(data)
-      }
-    } catch (error) {
-      openNotification('error', 'GET MY REQUEST', "GET REQUESTS FAILED!")
-    }
-    setLoading(false)
-  }
-
-  React.useEffect(()=> {
-    fetchMyRequests({})
-    // eslint-disable-next-line
-  }, [])
   
   return (
     <AppLayout>
-      <Home {...props} loading={loading} myRequests={myRequests} />
+      <Home {...props} />
     </AppLayout>
   )
 }
 
 const mapStateToProps = (store) => ({
-  authUser: store.auth.user
+  authUser: store.auth.user,
+  my_requests: store.request.my_requests,
+  fetching_my_requests: store.request.loading
 })
 
-const mapActionsToProps = () => ({
-  fetchMyRequests: () => {
-    console.log('Hey')
+const mapActionsToProps = (dispatch) => ({
+  fetchMyRequests: (query) => {
+    dispatch(RequestCreators.fetchMyRequests(query))
   }
 })
 

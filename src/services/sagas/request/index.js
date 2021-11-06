@@ -5,9 +5,12 @@ import {
   fetchRequests as fetchRequestsApi,
   updateRequest as updateRequestApi,
   saveRequest as createRequestApi,
+  fetchMyRequests as fetchMyRequestsApi,
+  getRequestById as fetchRequestByIdApi,
 } from '../../api/item-request'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
+import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchRequests(action) {
@@ -29,10 +32,25 @@ export function* fetchRequests(action) {
   }
 }
 
-export function* fetchMyRequests(action) {
-  console.log('=================>FETCH MY REQUEST', action)
+export function* getRequest(action) {
   try {
-    const response = yield call(fetchRequestsApi, action.query)
+    const response = yield call(fetchRequestByIdApi, action.id)
+      if(response.status === RESPONSE_SUCCESS_CODE) {
+        console.log('yes fetched', response?.data)
+        yield put(Creators.getRequestSuccess(response?.data))
+      }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch request'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.getRequestFailure(errorText))
+  }
+}
+
+export function* fetchMyRequests(action) {
+  console.log('HEY LETS FETCH MY REQUESTS SAGA')
+  console.log('=================>FETCH MY REQUEST')
+  try {
+    const response = yield call(fetchMyRequestsApi, action.query)
     console.log("Request Response", response)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       const responseData = response?.data || []
@@ -53,7 +71,7 @@ export function* createRequest(action) {
   console.log('action data', action)
   try {
     const response = yield call(createRequestApi, action.payload)
-    if(response.status === 'OK') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       yield put(Creators.createRequestSuccess(responseData))
       clearLocalState("NEW-REQUEST")
@@ -84,8 +102,9 @@ export function* updateRequest(action) {
       yield put(Creators.updateRequestFailure(response.message))
     }
   } catch (error) {
+    const errors = error?.response?.data?.errors
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Update Request', message)
+    openNotification('error', 'Update Request', errors[0])
     yield put(Creators.updateRequestFailure(message))
   }
 }
@@ -95,8 +114,16 @@ export function* resetRequest(action) {
   yield put(Creators.resetRequest())
 }
 
+export function* watchGetRequest(action) {
+  yield takeLatest(Types.GET_REQUEST, getRequest)
+}
+
 export function* watchFetchRequests(action) {
   yield takeLatest(Types.FETCH_REQUESTS, fetchRequests)
+}
+
+export function* watchFetchMyRequests(action) {
+  yield takeLatest(Types.FETCH_MY_REQUESTS, fetchMyRequests)
 }
 
 export function* watchCreateRequest(action) {

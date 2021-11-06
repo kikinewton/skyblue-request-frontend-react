@@ -112,14 +112,11 @@ const AddNewRequest = (props) => {
 
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <PageHeader 
-            style={{padding: 0}}
-            title="Create New Petty Cash"
-          />
-        </Col>
-      </Row>
+      
+      <Card
+        size="small"
+        title="Create New Petty Cash Form"
+      >
       <Row style={{marginBottom: 30, marginTop: 30}}>
         <Col span={16} offset={4}>
           <Steps
@@ -135,7 +132,7 @@ const AddNewRequest = (props) => {
         <Col span={24}>
           {current === 1 && (
             <>
-              <Card style={{minHeight: 300}} title="Upload Petty Cash Receipt">
+              <Card style={{minHeight: 300}} title="Upload Petty Cash Document">
               <Row>
                 <Col span={24}>
                   <Upload
@@ -252,6 +249,7 @@ const AddNewRequest = (props) => {
           }
         </Col>
       </Row>
+      </Card>
     </>
   )
 }

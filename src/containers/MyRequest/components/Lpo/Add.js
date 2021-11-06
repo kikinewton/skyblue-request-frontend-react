@@ -3,6 +3,7 @@ import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from '
 import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
 import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
+import { useHistory } from 'react-router'
 
 const columns = props => [
   {
@@ -54,6 +55,7 @@ const AddNewRequest = (props) => {
   const { departments, fetchDepartments, createRequest, departmentLoading, currentUser, requestSubmitting, submitSuccess } = props
   const [ form ] = Form.useForm()
   const departmentFieldRef = React.createRef()
+  const history = useHistory()
 
   const addToEntires = (values) => {
     const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel } = values
@@ -63,7 +65,7 @@ const AddNewRequest = (props) => {
     const list = requests.concat([data])
     storeLocalState("NEW-REQUEST", list)
     setRequests(list)
-    form.resetFields()
+    form.resetFields(["name", "reason", "purpose", "quantity", "requestType"])
     departmentFieldRef.current.focus()
   }
 
@@ -109,10 +111,15 @@ const AddNewRequest = (props) => {
         <Col span={24}>
           <PageHeader 
             style={{padding: 0}}
-            title="Create New LPO request"
           />
         </Col>
       </Row>
+      <Card 
+        title="Create New Request Form"
+        extra={[
+          <Button type="link" onClick={() => history.push("/app/my-requests/petty-cash-requests/add-new")}>Create Petty Cash</Button>
+        ]}  
+      >
         <Row gutter={24}>
           <Col md={6}>
             <Card>
@@ -123,7 +130,8 @@ const AddNewRequest = (props) => {
                   layout="vertical"
                   form={form}
                   name="request-entry"
-                  initialValues={{ name: "", reason: "", purpose: "", quantity: "", requestType: undefined, departmentId: undefined, priorityLevel: "NORMAL" }}
+                  initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
+                    requestType: undefined, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
                   onFinish={addToEntires}
                 >
                   <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
@@ -143,7 +151,7 @@ const AddNewRequest = (props) => {
                   <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
                     <Select >
                       {PRIORITY_LEVELS.map(it=> (
-                        <Select.Option key={`priority-${it.key}`} value={it.id}>{it.name}</Select.Option>
+                        <Select.Option key={`priority-${it.key}`} value={it.key}>{it.name}</Select.Option>
                       ))}
                     </Select>
                   </Form.Item>
@@ -199,6 +207,7 @@ const AddNewRequest = (props) => {
               </Row>
           </Col>
         </Row>
+      </Card>
     </>
   )
 }

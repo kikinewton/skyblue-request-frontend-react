@@ -107,7 +107,7 @@ const List = (props)=> {
       email,
       phoneNo,
       department: dpt,
-      employeeRole: empRole
+      role: empRole
     }
     await updateEmployee(editData.id, payload)
   }

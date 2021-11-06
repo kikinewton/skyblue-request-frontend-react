@@ -4,7 +4,8 @@ import { Creators, Types } from '../../redux/float/actions'
 import {
   fetchAllFloatRequests as fetchAllFloatRequestsApi,
   fetchMyFloatRequests as fetchMyFloatRequestsApi,
-  saveFloatRequest as saveFloatRequestApi
+  saveFloatRequest as saveFloatRequestApi,
+  fetchFloatRequests as fetchFloatRequestsApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -15,17 +16,17 @@ export function* fetchAllFloatRequests(action) {
   console.log('=================>FETCH REQUEST', action)
   const { query } = action
   try {
-    const response = yield call(fetchAllFloatRequestsApi, query)
-    if(response.status === "SUCCESS") {
-      yield put(Creators.fetchAllFloatRequestsSuccess(response?.data))
+    const response = yield call(fetchFloatRequestsApi, query)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchFloatRequestsSuccess(response?.data))
     } else {
       openNotification('error', 'Fetch Request', response?.message)
-      yield put(Creators.fetchAllFloatRequestsFailure(response?.message))
+      yield put(Creators.fetchAFloatRequestsFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
     openNotification('error', 'Fetch Request', errorText)
-    yield put(Creators.fetchAllFloatRequestsFailure(errorText))
+    yield put(Creators.fetchFloatRequestsFailure(errorText))
   }
 }
 

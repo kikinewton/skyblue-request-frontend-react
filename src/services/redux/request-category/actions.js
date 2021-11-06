@@ -10,6 +10,16 @@ export const { Types, Creators } = createActions(
     createRequestCategorySuccess: ["responsedata"],
     createRequestCategoryFailure: ["error"],
 
+    updateRequestCategory: ["id", "payload"],
+    updateRequestCategorySuccess: ["responsedata"],
+    updateRequestCategoryFailure: ["error"],
+
+    deleteRequestCategory: ["id"],
+    deleteRequestCategorySuccess: ["id"],
+    deleteRequestCategoryFailure: ["error"],
+
+    setRequestCategory: ["requestCategory"],
+
     resetRequestCategory: null
   }
 )

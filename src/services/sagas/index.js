@@ -30,7 +30,9 @@ import {
 import {
 	watchCreateRequest,
 	watchFetchRequests,
-	watchUpdateRequest
+	watchUpdateRequest,
+	watchFetchMyRequests,
+	watchGetRequest,
 } from './request'
 
 import {
@@ -42,7 +44,8 @@ import {
 import {
 	watchFetchRequestCategories,
 	watchCreateRequestCategory,
-	watchResetRequestCategory
+	watchResetRequestCategory,
+	watchUpdateRequestCategory,
 } from './request-category'
 
 import {
@@ -59,6 +62,11 @@ import {
 import {
 	watchFetchRoles
 } from "./role"
+
+import {
+	watchFetchLocalPurchaseOrders,
+	watchCreateLocalPurchaseOrder
+} from "./local-purchase-order"
 
 export default function* rootSaga() {
 	yield all([
@@ -84,6 +92,8 @@ export default function* rootSaga() {
 		watchFetchRequests(),
 		watchCreateRequest(),
 		watchUpdateRequest(),
+		watchFetchMyRequests(),
+		watchGetRequest(),
 
 		watchFetchQuotations(),
 		watchUpdateQuotation(),
@@ -92,7 +102,8 @@ export default function* rootSaga() {
 		watchFetchRequestCategories(),
 		watchCreateRequestCategory(),
 		watchResetRequestCategory(),
-
+		watchUpdateRequestCategory(),
+		
 		watchFetchMyFloatRequests(),
 		watchFetchFloatRequests(),
 		watchCreateFloatRequest(),
@@ -100,7 +111,10 @@ export default function* rootSaga() {
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),
 
-		watchFetchRoles()
+		watchFetchRoles(),
+
+		watchFetchLocalPurchaseOrders(),
+		watchCreateLocalPurchaseOrder(),
 
 	]);
 }

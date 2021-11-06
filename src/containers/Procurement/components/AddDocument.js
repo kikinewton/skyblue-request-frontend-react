@@ -53,12 +53,10 @@ const AddDocument = (props) => {
   const [ items, setItems ] = React.useState([])
 
   const handleSubmit = async ()=> {
-    console.log('files', files)
-    const file = files[0].originFileObj
+    const files =  files.map(it => it.originFileObj)
     const payload = {
-      file,
-      userId: currentUser.id,
-      supplierId: selectedRow.supplierId
+      files,
+      supplierId: selectedRow?.supplierId
     }
     createQuotation(payload)
     // console.log('SUBMIT', currentUser.id)
@@ -102,7 +100,7 @@ const AddDocument = (props) => {
       {quotationLoading ? (<Spin />) : 
         <Row gutter={12}>
           <Col md={10}>
-            <Card title="Quotations">
+            <Card title="Suppliers with assigned requests">
               <Table 
                 columns={columns({ onSelectRow: (row)=> {
                   setSelectedRow(row)
@@ -118,22 +116,18 @@ const AddDocument = (props) => {
             </Card>
           </Col>
           <Col md={14}>
-            <Card title={(
-                <Row>
-                  <Col md={12}>
-                    Items
-                  </Col>
-                  <Col md={12}>
-                    <Button
+            <Card 
+              title="Items"
+              extra={[
+                <Button
                       disabled={!selectedRow.supplierId} 
                       style={{float: "right"}} 
                       onClick={()=> setModalOpen(true)}
                     >
                       <UploadOutlined /> Attach Document
                     </Button>
-                  </Col>
-                </Row>
-              )}>
+              ]}
+            >
               <Row>
                 <Col md={24}>
                   <Table
@@ -150,7 +144,8 @@ const AddDocument = (props) => {
           </Col>
         </Row>
       }
-      <Modal title="Attach document" visible={modalOpen} onOk={handleSubmit} 
+      <Modal title="Attach document" visible={modalOpen} 
+      onOk={handleSubmit} 
         forceRender={true}
         onCancel={()=> {
           setFiles([])

@@ -30,7 +30,7 @@ export const fetchRequestsFailure = (state = INITIAL_STATE, action) => {
 
 //fetch
 export const fetchMyRequests = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: true, errors: null, submitting: false };
+  return { ...state, loading: true, errors: null, submitting: false, my_requests: [] };
 };
 
 export const fetchMyRequestsSuccess = (state = INITIAL_STATE, action) => {
@@ -43,7 +43,7 @@ export const fetchMyRequestsFailure = (state = INITIAL_STATE, action) => {
 
 //get
 export const getRequest = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: true, errors: null, submitting: false };
+  return { ...state, loading: true, errors: null };
 };
 
 export const getRequestSuccess = (state = INITIAL_STATE, action) => {
@@ -128,6 +128,10 @@ export const HANDLERS = {
   [Types.FETCH_REQUESTS]: fetchRequests,
   [Types.FETCH_REQUESTS_SUCCESS]: fetchRequestsSuccess,
   [Types.FETCH_REQUESTS_FAILURE]: fetchRequestsFailure,
+
+  [Types.GET_REQUEST]: getRequest,
+  [Types.GET_REQUEST_SUCCESS]: getRequestSuccess,
+  [Types.GET_REQUEST_FAILURE]: getRequestFailure,
 
   [Types.FETCH_MY_REQUESTS]: fetchMyRequests,
   [Types.FETCH_MY_REQUESTS_SUCCESS]: fetchMyRequestsSuccess,

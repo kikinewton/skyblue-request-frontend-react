@@ -13,20 +13,20 @@ import RequestCategory from './components/RequestCategory'
 import AssignSupplier from './components/AssignSupplier'
 import LocalPurchaseOrders from './components/LocalPurchaseOrders'
 import Suppliers from './components/Suppliers'
+import AssignSuppliersToRequests from './components/AssignSuppliersToRequests'
 
 const Procurement = (props) => {
   const { path } = useRouteMatch()
 
   return (
     <React.Fragment>
-      <AppLayout>
+      <AppLayout title="Procurement">
         <Switch>
-          <AuthenticatedRoute path={`${path}/suppliers`}  component={Suppliers} {...props}/>
           <AuthenticatedRoute path={`${path}/request-categories`} component={RequestCategory} {...props} />
           <AuthenticatedRoute path={`${path}/add-local-purchase-order`} component={CreateLocalPurchaseOrder} {...props} />
           <AuthenticatedRoute path={`${path}/local-purchase-orders`} component={LocalPurchaseOrders}  {...props} />
           <AuthenticatedRoute path={`${path}/attach-document`} component={AddDocument} {...props} />
-          <AuthenticatedRoute path={`${path}/assign-suppliers`} component={AssignSupplier} {...props} />
+          <AuthenticatedRoute path={`${path}/assign-suppliers`} component={AssignSuppliersToRequests} {...props} />
         </Switch>
       </AppLayout>
     </React.Fragment>
@@ -39,17 +39,24 @@ const mapStateToProps = (store) => ({
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
   requestSubmitSuccess: store.request.submitSuccess,
+  selected_requests: store.request.selected_requests,
+  updating_request: store.request.updating,
+  request_update_success: store.request.update_success,
+
   quotations: store.quotation.quotations,
   quotationLoading: store.quotation.loading,
   quotationSubmitSuccess: store.quotation.submitSuccess,
   quotationSubmitting: store.quotation.submitting,
+
   suppliers: store.supplier.suppliers,
-  supplierLoading: store.supplier.loading,
-  supplierSubmitSuccess: store.supplier.submitSuccess,
-  requestCategories: store.requestCategory.requestCategories,
-  requestCategoryLoading: store.requestCategory.loading,
-  requestCategorySubmitSuccess: store.requestCategory.submitSuccess,
-  requestCategorySubmitting: store.requestCategory.submitting
+  fetching_suppliers: store.supplier.loading,
+  supplier_submit_success: store.supplier.submit_success,
+  submitting_supplier: store.supplier.submitting,
+
+  request_categories: store.requestCategory.request_categories,
+  request_category_loading: store.requestCategory.loading,
+  request_category_submit_success: store.requestCategory.submit_success,
+  request_category_submitting: store.requestCategory.submitting
 })
 
 const mapActionsToState = (dispatch) => {
@@ -58,7 +65,7 @@ const mapActionsToState = (dispatch) => {
     dispatch(SupplierCreators.fetchSuppliers(query))
   },
   resetSupplier: () => {
-    dispatch(SupplierCreators.resetSupplier())
+    dispatch(SupplierCreators.resetSuppliers())
   },
   createSupplier: (payload) => {
     dispatch(SupplierCreators.createSupplier(payload))
@@ -87,11 +94,26 @@ const mapActionsToState = (dispatch) => {
   resetRequest: () => {
     dispatch(RequestCreators.resetRequest())
   },
+  setSelectedRequests: (requests) => {
+    dispatch(RequestCreators.setSelectedRequests(requests))
+  },
   fetchRequestCategories: (query) => {
     dispatch(RequestCategoryCreator.fetchRequestCategories(query))
   },
   createRequestCategory: (payload) => {
     dispatch(RequestCategoryCreator.createRequestCategory(payload))
+  },
+  deleteRequestCategory: (id) => {
+    dispatch(RequestCategoryCreator.deleteRequestCategory(id))
+  },
+  updateRequestCategory: (id, payload) => {
+    dispatch(RequestCategoryCreator.updateRequestCategory(id, payload))
+  },
+  resetRequestCategory: () => {
+    dispatch(RequestCategoryCreator.resetRequestCategory())
+  },
+  setRequestCategory: (requestCategory) => {
+    dispatch(RequestCategoryCreator.setRequestCategory(requestCategory))
   },
   createQuotation: (payload) => {
     dispatch(QuotationCreators.createQuotation(payload))

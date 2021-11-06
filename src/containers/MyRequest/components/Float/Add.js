@@ -79,14 +79,10 @@ const AddNewRequest = (props) => {
   }, [])
   return (
     <>
-        <Row>
-          <Col span={24}>
-            <PageHeader 
-              style={{padding: 0}}
-              title="Create New Float"
-            />
-          </Col>
-        </Row>
+      <Card
+        title="Create New Float Request Form"
+        size="small"
+      >
         <Row gutter={24}>
           <Col md={6}>
             <Card>
@@ -153,6 +149,7 @@ const AddNewRequest = (props) => {
             </Card>
           </Col>
         </Row>
+      </Card>
     </>
   )
 }

@@ -134,8 +134,9 @@ const HodEndorsePendingList = (props) => {
   const submit = () => {
     console.log("action", actionType)
     updateRequest({
-      updatetype: actionType,
-      
+      updateType: actionType,
+      role: "hod",
+      payload: {requestItems: selected_requests}
     })
   }
 
@@ -146,20 +147,33 @@ const HodEndorsePendingList = (props) => {
     })
   }, [])
 
+  React.useEffect(() => {
+    if(!updating_request && update_request_success) {
+      setSelectedRequests([])
+      setConfirmDrawer(false);
+      props.fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+  }, [updating_request, update_request_success])
+
   return (
     <>
-      <Card>
-        <Row style={{marginBottom: 10}}>
+      <Card
+        size="small"
+        title="Requests pending Endorsement" extra={[
+        (
+          <Row style={{marginBottom: 10}}>
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
             <Button 
               disabled={selected_requests.length < 1} 
               style={{backgroundColor: "yellow", marginRight: 5}}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_REJECT)
+                setActionType(UPDATE_REQUEST_TYPES.HOD_COMMENT)
                 setConfirmDrawer(true)
               }}
             >
-              <WarningOutlined /> Reject With Comment
+              <WarningOutlined /> Comment
             </Button>
             <Button
               style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 
@@ -176,6 +190,7 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_requests.length < 1} 
               type="primary" style={{marginRight: 5}} 
               onClick={() => {
+                console.log('action type on click', UPDATE_REQUEST_TYPES.HOD_ENDORSE)
                 setActionType(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
                 setConfirmDrawer(true)
               }}
@@ -185,6 +200,8 @@ const HodEndorsePendingList = (props) => {
             </Button>
           </Col>
         </Row>
+        )
+      ]}>
         <Row>
           <Col span={24}>
             <Table
@@ -199,7 +216,6 @@ const HodEndorsePendingList = (props) => {
               }}
               rowSelection={{
                 onChange: (selectedRowKeys, selectedRows) => {
-                  console.log("selected row", selectedRows)
                   setSelectedRequests(selectedRows)
                 },
                 selectedRowKeys: selected_requests?.map(it=> it.id),
@@ -226,6 +242,8 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
+              loading={updating_request}
+              disabled={selected_requests.length < 1 || updating_request}
             >
               <CheckOutlined /> SUBMIT
             </Button>
@@ -235,7 +253,7 @@ const HodEndorsePendingList = (props) => {
         <Row>
           <Col span={24}>
             <Table 
-              columns={actionType !== "REJECT" ? selectedRequestsColumns({
+              columns={actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE  ? selectedRequestsColumns({
                 actionType,
               }) 
               : selectedRequestsColumnsForReject({

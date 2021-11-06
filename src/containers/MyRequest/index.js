@@ -15,6 +15,7 @@ import ListPettyCash from "./components/PettyCash/List"
 import AddPettyCash from "./components/PettyCash/Add"
 import ListFloat from "./components/Float/List"
 import AddFloat from "./components/Float/Add"
+import RequestTracker from './components/Lpo/RequestTracker'
 
 const MyRequest = (props)=> {
   const [current, setCurrent] = React.useState("my-lpos")
@@ -44,7 +45,7 @@ const MyRequest = (props)=> {
 
   return (
     <React.Fragment>
-      <AppLayout>
+      <AppLayout title="My Requests">
         <Row style={{marginBottom: 20}}>
           <Col span={24}>
           <Menu
@@ -120,6 +121,9 @@ const MyRequest = (props)=> {
           <Route path={`${path}/lpos/add-new`}>
             <AddLpo {...props} />
           </Route>
+          <Route path={`${path}/lpos/:request_id/details`}>
+            <RequestTracker {...props} />
+          </Route>
           <Route exact path={`${path}/lpos`}>
             <ListLpos {...props} />
           </Route>
@@ -148,15 +152,19 @@ const mapStateToProps = (store) => ({
   requests: store.request.requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
+  my_requests: store.request.my_requests,
   submitSuccess: store.request.submitSuccess,
-  my_petty_cash_requests: store.petty_cash.my_petty_cash_requests,
+  request: store.request.request,
+
+  my_petty_cash_requests: store.petty_cash.my_requests,
   fetching_petty_cash_requests: store.petty_cash.loading,
   submitting_petty_cash_request: store.petty_cash.submitting,
-  submit_petty_cash_request_success: store.petty_cash.submitSuccess,
-  my_float_requests: store.float.my_float_requests,
+  submit_petty_cash_request_success: store.petty_cash.submit_success,
+
+  my_float_requests: store.float.my_requests,
   fetching_float_requests: store.float.loading,
   submitting_float_request: store.float.submitting,
-  submit_float_request_success: store.float.submitSuccess
+  submit_float_request_success: store.float.submit_success
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -170,15 +178,26 @@ const mapActionsToProps = (dispatch) => {
     fetchRequests: (query) => {
       dispatch(RequestCreators.fetchRequests(query))
     },
+    getRequest: (id) => {
+      dispatch(RequestCreators.getRequest(id))
+    },
+    setRequest: (request) => {
+      dispatch(RequestCreators.setRequest(request))
+    },
     updateRequest: (options) => {
       dispatch(RequestCreators.updateRequest(options))
     },
+    fetchMyRequests: (query) => {
+      dispatch(RequestCreators.fetchMyRequests(query))
+    },
+
     fetchMyFloatRequests: (query) => {
       dispatch(FloatCreators.fetchMyFloatRequests(query))
     },
     createFloatRequest: (payload) => {
       dispatch(FloatCreators.createFloatRequest(payload))
     },
+
     fetchMyPettyCashRequests: (query) => {
       dispatch(PettyCashCreators.fetchMyPettyCashRequests(query))
     },

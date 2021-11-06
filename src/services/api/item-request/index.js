@@ -10,6 +10,21 @@ export function fetchMyRequests(query) {
   })
 }
 
+export function fetchHODPendingReviewRequests(query) {
+  const queryStr = serializeQueryParams(query)
+  return service({
+    url: `/requestItemsByDepartment?toBeReviewed=${true}`,
+    method: 'get'
+  })
+}
+
+export function getRequestById(id) {
+  return service({
+    url: `/requestItems/${id}`,
+    method: 'get'
+  })
+}
+
 export function saveRequest(payload){
   return service({
     url: `/multipleRequestItems`,
@@ -53,8 +68,9 @@ export function endorseItemRequest(requestId, employeeId){
 
 //HOD UPDATE
 export function hodEndorseBulkItemRequest(data) {
+  console.log('hey am heere')
   return service({
-    url: `/requestItems/bulkEndorse`,
+    url: `/requestItems/HOD_ENDORSE`,
     method: 'put',
     data
   })
@@ -91,7 +107,7 @@ export function approveBulkRequests(data) {
 
 export function getEndorsedRequestItems(employeeId) {
   return service({
-      url: `/requestItems/endorsedItems`,
+      url: `/requestItemsByDepartment/endorsed`,
       method: 'get',
     })
 }
@@ -159,9 +175,9 @@ export function procurementUpdateMultiReuqestSupplier(data) {
 
 
 
-export function getEndorsedItemsWithSupplier(supplierId) {
+export function getEndorsedItemsWithSupplier(query) {
   return service({
-    url: `/procurement/endorsedItemsWithSupplierId/${supplierId}`,
+    url: `/procurement/endorsedItemsWithSupplierId/${query?.supplierId}`,
     method: 'GET'
   })
 }
@@ -189,12 +205,15 @@ export function getRequestsBySupplier() {
 
 export function updateRequest(data) {
   console.log("API PAYLOAD", data)
-  const { updateType, userId, payload } = data
+  const { updateType, payload } = data
+  console.log('----------->update request payload', data)
   switch (updateType) {
     case UPDATE_REQUEST_TYPES.HOD_ENDORSE:
-      return hodEndorseBulkItemRequest(userId, payload)
+      return service({url: '/requestItems/updateStatus/ENDORSE', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_CANCEL:
-      return hodCancelBulkRequest(payload)
+      return service({url: '/requestItems/updateStatus/CANCEL', method: "PUT", data: payload})
+    case UPDATE_REQUEST_TYPES.HOD_COMMENT:
+      return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:
       return hodRejectBulkRequest(payload)
     case UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
@@ -223,8 +242,10 @@ export function fetchRequests(query) {
       return getUserItemRequests(query)
     case FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return getAllDepartmentItemRequests(query)
+    case FETCH_REQUEST_TYPES.HOD_PENDING_REVIEW:
+      return fetchHODPendingReviewRequests(query)
     case FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
-      return getEndorsedRequestItems(query)
+      return service({url: "/requestItems/endorsed", method: "GET"})
     case FETCH_REQUEST_TYPES.DOCUMENTED_REQUESTS_BY_SUPPLIER:
       return getEndorsedItemsWithSupplier(query)
     case FETCH_REQUEST_TYPES.ENDORSED_REQUESTS:

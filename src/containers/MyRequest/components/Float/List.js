@@ -1,16 +1,18 @@
 import React from 'react';
-import { Table, Row, Col, PageHeader } from "antd"
+import { Table, Row, Col, PageHeader, Card, Button, Tag } from "antd"
+import { useHistory } from 'react-router';
+import { CURRENCY_CODE } from '../../../../util/constants';
 
 const columns = [
   {
-    title: "Department",
-    dataIndex: "department",
-    key: "department",
+    title: "Reference",
+    dataIndex: "floatRef",
+    key: "floatRef"
   },
   {
     title: "Descrption",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "itemDescription",
+    key: "itemDescription",
   },
   {
     title: "Purpose",
@@ -23,39 +25,63 @@ const columns = [
     key: "quantity",
   },
   {
-    title: "Unit Price",
-    dataIndex: "unit_price",
-    key: "unit_price",
+    title: `Unit Price (${CURRENCY_CODE})`,
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+  },
+  {
+    title: "Endorsement",
+    dataIndex: "endorsement",
+    key: "endorsement",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (text) => {
+      let color = "default"
+      if(text === "PENDING") {
+        color = "processing"
+      } else if(text = "APPROVED") {
+        color = "success"
+      }
+      return (<Tag color={color}>{text}</Tag>)
+    }
   },
 ]
 
 const List = (props) => {
   const { my_float_requests, fetchMyFloatRequests, fetching_float_requests } = props
+  const history = useHistory()
 
   React.useEffect(() => {
-    console.log('lets fetch my floats')
     fetchMyFloatRequests({})
   }, [])
 
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <PageHeader
-            style={{padding: 0}}
-            title="My Float Requests"
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Table
-            columns={columns}
-            dataSource={my_float_requests}
-            rowKey="id"
-          />
-        </Col>
-      </Row>
+      <Card
+        size="small"
+        title="My Float Requests"
+        extra={[
+          <Button size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
+            Create New Float Request
+          </Button>
+        ]}
+      >
+        <Row>
+          <Col span={24}>
+            <Table
+              loading={fetching_float_requests}
+              columns={columns}
+              dataSource={my_float_requests}
+              rowKey="id"
+              bordered
+              size="small"
+            />
+          </Col>
+        </Row>
+      </Card>
     </>
   )
 } 

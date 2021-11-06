@@ -1,41 +1,57 @@
-import { Col, Table, Row, Button, Spin } from 'antd'
+import { Col, Table, Row, Button, Spin, Card, Pagination } from 'antd'
 import React from 'react'
 import { REQUEST_COLUMNS } from '../../../../util/constants'
-import { history } from '../../../../util/browser-history'
-import { FETCH_REQUEST_TYPES } from '../../../../util/request-types'
+import { InfoOutlined } from '@ant-design/icons'
+import { useHistory, useRouteMatch } from 'react-router'
 
-
+const columns = props => REQUEST_COLUMNS.concat([
+  {
+    title: "Actions",
+    dataIndex: "operations",
+    key: "operations",
+    align: "right",
+    render: (text, row) => (<Button onClick={() => props.setRequest(row)} size="small" type="default" shape="circle"><InfoOutlined /></Button>)
+  }
+])
 
 const List = (props) => {
-  const { fetchRequests, requests, currentUser, requestLoading } = props
-
+  const { fetchMyRequests, requestLoading, my_requests } = props
+  const [page, setPage] = React.useState(0)
+  const history = useHistory()
+  const { path } = useRouteMatch()
   React.useEffect(()=> {
-    fetchRequests({requestType: FETCH_REQUEST_TYPES.MY_REQUESTS, userId: currentUser?.id})
+
+    fetchMyRequests({
+
+    })
     // eslint-disable-next-line
   }, [])
   return (
     <React.Fragment>
-      <Row style={{marginBottom: 10}}>
-        <Col md={12}><span className="bs-page-title">My LPO Requests</span></Col>
-        <Col md={12} style={{ justifyContent: 'flex-end', display: 'flex' }}>
+      <Card title="My request items"
+        extra={[
           <Button type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
             Add New
           </Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={24}>
-          { requestLoading ? (<Spin />) : 
+        ]}
+      >
+        <Row>
+          <Col md={24}>
             <Table
-              columns={REQUEST_COLUMNS}
-              dataSource={requests}
+              loading={requestLoading}
+              columns={columns({
+                setRequest: (row) => {
+                  history.push(`${path}/${row.id}/details`)
+                }
+              })}
+              dataSource={my_requests}
               size="small"
-              pagination={{ pageSize: 10 }}
               rowKey="id"
+              bordered
             />
-          }
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </Card>
     </React.Fragment>
   )
 }

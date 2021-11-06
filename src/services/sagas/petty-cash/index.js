@@ -66,6 +66,25 @@ export function* createPettyCashRequest(action) {
   }
 }
 
+export function* updatePettyCashRequest(action) {
+  try {
+    const response = yield call(savePettyCashRequestApi, action.payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      yield put(Creators.updatePettyCashRequestSuccess(responseData))
+      clearLocalState("NEW-REQUEST")
+      openNotification('success', 'UPDATE PETTY CASH', response.message)
+    } else {
+      openNotification('error', 'UPDATE PETTY CASH', response.message)
+      yield put(Creators.updatePettyCashRequestFailure(response.message))
+    }
+  } catch (error) {
+    const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to update petty cash'
+    openNotification('error', 'Login', errorTxt)
+    yield put(Creators.updatePettyCashRequestFailure(errorTxt))
+  }
+}
+
 
 export function* resetRequest(action) {
   yield put(Creators.resetRequest())

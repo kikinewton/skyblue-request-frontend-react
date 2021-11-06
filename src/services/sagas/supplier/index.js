@@ -8,14 +8,14 @@ import {
   saveSupplier
 } from '../../api/supplier'
 import openNotification from '../../../util/notification'
+import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchSuppliers(action) {
   const { query } = action
   try {
     const response = yield call(getSuppliers, query)
-    console.log('supplier data', response)
-    if(response.status === 'SUCCESS') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response?.data || []
       yield put(Creators.fetchSuppliersSuccess(responseData))
     } else {
@@ -30,21 +30,20 @@ export function* fetchSuppliers(action) {
 }
 
 export function* createSupplier(action) {
-  console.log('payload', action)
   try {
     const response = yield call(saveSupplier, action.payload)
-    if(response.status === 'CREATED') {
+    if(response.status === 'SUCCESS') {
       const responseData = response.data
       openNotification('success', 'CREATE SUPPLIER', response.message)
-      yield put(Creators.fetchSuppliers({}))
       yield put(Creators.createSupplierSuccess(responseData))
+      yield put(Creators.fetchSuppliers({}))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'CREATE SUPPLIER', response.message)
       yield put(Creators.createSupplierFailure(response.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Suppliers'
-    openNotification('error', 'Login', message)
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to create Suppliers'
+    openNotification('error', 'CREATE SUPPLIER', message)
     yield put(Creators.createSupplierFailure(message))
   }
 }
@@ -72,8 +71,7 @@ export function* deleteSupplier(action) {
   console.log('---------->saga supplier id', supplierId)
   try {
     const response = yield call(deleteSupplierApi, supplierId)
-    if(response.status === 'OK') {
-      console.log('about to call supplier delete success')
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       yield put(Creators.deleteSupplierSuccess(supplierId))
       openNotification('success', 'Delete Supplier', response.message)
     } else {
@@ -81,9 +79,10 @@ export function* deleteSupplier(action) {
       yield put(Creators.deleteSupplierFailure(response.message))
     }
   } catch (error) {
+    const errors = error?.response?.data?.errors
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Suppliers'
-    openNotification('error', 'Login', message)
-    yield put(Creators.updateSupplierFailure(message))
+    openNotification('error', 'Login', errors[0])
+    yield put(Creators.updateSupplierFailure(errors[0]))
   }
 }
 

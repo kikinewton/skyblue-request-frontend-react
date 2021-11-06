@@ -4,23 +4,25 @@ import { REQUEST_COLUMNS } from '../../../util/constants';
 
 
 const Home = (props) => {
-  const {myRequests, loading} = props
+  const {fetchMyRequests, my_requests, fetching_my_requests} = props
+
+  React.useEffect(() => {
+    fetchMyRequests({})
+  }, [])
   return (
     <>
       <h1>Home</h1>
       <Card title="My Recent Requests">
         <Row>
           <Col md={24}>
-            {loading 
-              ? <Spin /> 
-              : <Table 
-                  columns={REQUEST_COLUMNS}
-                  dataSource={myRequests && myRequests.slice(0, 5)}
-                  rowKey="id"
-                  pagination={false}
-                  size="small"
-                />
-            }
+            <Table 
+              loading={fetching_my_requests}
+              columns={REQUEST_COLUMNS}
+              dataSource={my_requests?.slice(0, 5)}
+              rowKey="id"
+              pagination={false}
+              size="small"
+            />
           </Col>
         </Row>
         <Row>

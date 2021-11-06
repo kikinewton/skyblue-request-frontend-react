@@ -6,10 +6,12 @@ import { Creators as RequestCreators } from '../../services/redux/request/action
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
-import HodApprovePendingList from './components/HodApprovePendingList';
+import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
-import { Menu } from "antd"
+import ApprovePendingList from './components/ApprovePendingList';
+import { Menu, Row, Col } from "antd"
 import PrivateRoute from '../../presentation/PrivateRoute';
+import { FUNCTIONAL_ROLES } from '../../util/constants';
 
 
 export const REQUEST_ITEMS = [
@@ -31,39 +33,55 @@ const RequestItemIndex = (props) => {
 
   const handleNavClick = (value) => {
     console.log('menus', value)
+    setKey(value)
   }
 
   React.useEffect(() => {
     console.log('init')
   }, [])
 
+  React.useEffect(() => {
+    const url = window.location.href
+    console.log("url", url)
+    if(url.indexOf("/hod-pending-endorse") !== -1) {
+      setKey("hod-pending-endorse")
+    } else if(url.indexOf("/hod-pending-approve") !== -1) {
+      setKey("hod-pending-approve")
+    } else if(url.indexOf("gm-pending-approve") !== -1) {
+      setKey("gm-pending-approve")
+    }
+  }, [key])
+
   return (
     <>
-      <AppLayout>
-        <Menu
-          selectedKeys={[key]}
-          mode="horizontal"
-          onClick={handleNavClick}
-          forceSubMenuRender
-          mode="horizontal"
-        >
-          <Menu.Item key="hod-pending-endorse">
-            <NavLink to="/app/request-items/hod-pending-endorse">
-              <span>Pending Endorsement</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="hod-pending-approve">
-            <NavLink to="/app/request-items/hod-pending-approve">
-              <span>Pending Approval</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="gm-pending-approve">
-            <NavLink to="/app/request-items/gm-approve-list">
-              <span>GM Awaiting Approval Requests</span>
-            </NavLink>
-          </Menu.Item>
-        </Menu>
-        
+      <AppLayout
+        title="LPO Requests Management"
+        subNav={(
+          <Menu
+            selectedKeys={[key]}
+            mode="horizontal"
+            onClick={handleNavClick}
+            forceSubMenuRender
+            mode="horizontal"
+          >
+            <Menu.Item key="hod-pending-endorse">
+              <NavLink to="/app/request-items/hod-pending-endorse">
+                <span>Pending Endorsement</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="hod-pending-approve">
+              <NavLink to="/app/request-items/hod-pending-approve">
+                <span>Pending Review</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="gm-pending-approve">
+              <NavLink to="/app/request-items/gm-pending-approve">
+                <span>Pending Approval</span>
+              </NavLink>
+            </Menu.Item>
+          </Menu>
+        )}
+      >
         <Switch>
           <AuthenticatedRoute
             exact
@@ -73,14 +91,21 @@ const RequestItemIndex = (props) => {
             <Redirect to="/app/request-items/hod-pending-endorse" />
           </AuthenticatedRoute>
           <AuthenticatedRoute
-            path={`${path}/hod-pending-approve`}
+            path={`/app/request-items/hod-pending-endorse`}
             component={HodEndorsePendingList}
             {...props}
           />
           <AuthenticatedRoute
             exact
-            path={`${path}/hod-approve-endorse`}
-            component={HodApprovePendingList} 
+            path={`/app/request-items/hod-pending-approve`}
+            component={HodReviewPendingList}
+            {...props}
+          />
+          <AuthenticatedRoute 
+            roles={FUNCTIONAL_ROLES.generalManagerApproveRoles}
+            exact
+            path={`/app/request-items/gm-pending-approve`}
+            component={ApprovePendingList}
             {...props}
           />
         </Switch>

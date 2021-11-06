@@ -3,12 +3,13 @@ import Types from "./actionTypes";
 
 export const INITIAL_STATE = {
   errors: null,
-  float_requests: [],
-  my_float_requests: null,
-  float_request: null,
+  requests: [],
+  my_requests: [],
+  request: null,
+  selected_requests: [],
   loading: false,
   submitting: false,
-  submitSuccess: false,
+  submit_success: false,
 };
 
 //fetch
@@ -17,7 +18,7 @@ export const fetchMyFloatRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyFloatRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_float_requests: action.responseData, loading: false};
+  return { ...state, my_requests: action.responseData, loading: false};
 };
 
 export const fetchMyFloatRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -30,7 +31,7 @@ export const fetchFloatRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchFloatRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, float_requests: action.responseData, loading: false};
+  return { ...state, requests: action.responseData, loading: false};
 };
 
 export const fetchFloatRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -52,11 +53,11 @@ export const getFloatRequestFailure = (state = INITIAL_STATE, action) => {
 
 //create
 export const createFloatRequest = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
 };
 
 export const createFloatRequestSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, submitSuccess: true};
+  return { ...state, submitting: false, submit_success: true};
 };
 
 export const createFloatRequestFailure = (state = INITIAL_STATE, action) => {
@@ -65,19 +66,19 @@ export const createFloatRequestFailure = (state = INITIAL_STATE, action) => {
 
 //edit
 export const updateFloatRequest = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
 };
 
 export const updateFloatRequestSuccess = (state = INITIAL_STATE, action) => {
   return { 
     ...state,
     submitting: false,
-    submitSuccess: true
+    submit_success: true
   };
 };
 
 export const updateFloatRequestFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 
@@ -100,11 +101,15 @@ export const deleteRequestFailure = (state = INITIAL_STATE, action) => {
 };
 
 
+export const setSelectedFloatRequests = (state = INITIAL_STATE, action) => {
+  return { ...state, selected_requests: action?.requests};
+};
+
 export const resetFloatRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    float_requests: [],
-    my_float_requests: [],
+    requests: [],
+    my_requests: [],
     error: null,
     loading: false,
     submitting: false
@@ -131,6 +136,8 @@ export const HANDLERS = {
   [Types.DELETE_FLOAT_REQUEST]: deleteRequest,
   [Types.DELETE_FLOAT_REQUEST_SUCCESS]: deleteRequestSuccess,
   [Types.DELETE_FLOAT_REQUEST_FAILURE]: deleteRequestFailure,
+
+  [Types.SET_SELECTED_FLOAT_REQUESTS]: setSelectedFloatRequests,
   
   [Types.RESET_FLOAT_REQUEST]: resetFloatRequest
 };

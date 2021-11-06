@@ -15,3 +15,18 @@ export function saveRequestCategory(data) {
     data
   })
 }
+
+export function updateRequestCategory(id, data) {
+  return service({
+    url: `${path}/${id}`,
+    method: 'PUT',
+    data
+  })
+}
+
+export function deleteRequestCategory(id) {
+  return service({
+    url: `${path}/${id}`,
+    method: "DELETE"
+  })
+}

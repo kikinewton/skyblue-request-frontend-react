@@ -15,7 +15,7 @@ export const SUPPLIERS_ENDPOINT = "/suppliers/"
 export const MY_REQUESTS_ENDPOINT = "/my-requests/"
 
 //quotation endpoint
-export const QUOTATION_ENDPOINT = "/quotations/"
+export const QUOTATION_ENDPOINT = "/quotations"
 
 //users endpoint
 export const EMPLOYEE_ENDPOINT = "/employees/"

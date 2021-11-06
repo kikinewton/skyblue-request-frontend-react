@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table, Form, Input, Spin } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Spin, Card } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
@@ -25,7 +25,8 @@ const columns = (props)=> SUPPLIER_COLUMNS.concat({
 })
 
 const List = (props)=> {
-  const { suppliers, supplierLoading, fetchSuppliers, deleteSupplier, supplierSubmitSuccess, createSupplier, updateSupplier, submitting } = props
+  const { suppliers, fetching_suppliers, fetchSuppliers, deleteSupplier, supplier_submit_success, 
+    submitting_supplier, createSupplier, updateSupplier, resetSupplier } = props
   const [ openAdd, setOpenAdd ] = React.useState(false)
   const [ openEdit, setOpenEdit ] = React.useState(false)
   const [editData, setEditData] = React.useState({})
@@ -91,42 +92,42 @@ const List = (props)=> {
   }
 
   React.useEffect(()=> {
+    resetSupplier()
     fetchSuppliers({}) // eslint-disable-next-line
   }, [])
 
   React.useEffect(()=> {
     console.log('submit status change')
-    if(supplierSubmitSuccess) {
+    if(supplier_submit_success) {
       addForm.resetFields()
       editForm.resetFields()
       setOpenAdd(false)
       setOpenEdit(false)
     } // eslint-disable-next-line
-  }, [supplierSubmitSuccess])
+  }, [supplier_submit_success, submitting_supplier])
 
   return (
     <>
-      <Row>
-        <Col md={10} style={{paddingBottom: 5}}>
-          <span className="bs-page-title">Suppliers</span>
-        </Col>
-        <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={24}>
-          {supplierLoading ? <Spin /> : 
+      <Card
+        size="small" 
+        title="Suppliers" 
+        extra={[
+          <Button size="small" type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
+        ]}
+      >
+        <Row>
+          <Col md={24}>
             <Table 
+              loading={fetching_suppliers}
               columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
               dataSource={suppliers}
               rowKey="id"
               bordered
               size="small"
             />
-          }
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </Card>
       <Modal
         form={addForm}
         visible={openAdd}
@@ -161,7 +162,7 @@ const List = (props)=> {
             <Input  placeholder="Description" />
           </Form.Item>
           <Form.Item>
-          <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
+          <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting_supplier}>
             Submit
           </Button>
           </Form.Item>
@@ -202,7 +203,7 @@ const List = (props)=> {
             <Input  placeholder="Description" />
           </Form.Item>
           <Form.Item>
-          <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
+          <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting_supplier}>
             UPDATE
           </Button>
           </Form.Item>

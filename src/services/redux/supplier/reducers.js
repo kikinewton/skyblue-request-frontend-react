@@ -7,7 +7,9 @@ export const INITIAL_STATE = {
   supplier: {},
   loaidng: false,
   submitting: false,
-  submitSuccess: false
+  submit_success: false,
+  selected_suppliers: [],
+  filtered_suppliers: []
 };
 
 
@@ -17,11 +19,11 @@ export const fetchSuppliers = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchSuppliersSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, suppliers: action.responseData, loading: false};
+  return { ...state, suppliers: action.responseData, loading: false, filtered_suppliers: action.responseData};
 };
 
 export const fetchSuppliersFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error, suppliers: []};
+  return { ...state, loading: false, error: action.error, suppliers: [], filtered_suppliers: []};
 };
 
 //get
@@ -40,22 +42,22 @@ export const getSupplierFailure = (state = INITIAL_STATE, action) => {
 
 //create
 export const createSupplier = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, error: null, submitSuccess: false};
+  return { ...state, submitting: true, error: null, submit_success: false};
 };
 
 export const createSupplierSuccess = (state = INITIAL_STATE, action) => {
   console.log('ADD SUPPLIER REDUCER', action)
-  return { ...state, submitting: false, error: action.error, submitSuccess: true};
+  return { ...state, submitting: false, error: action.error, submit_success: true};
 };
 
 export const createSupplierFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 
 //edit
 export const updateSupplier = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, error: null, submitSuccess: false};
+  return { ...state, submitting: true, error: null, submit_success: false};
 };
 
 export const updateSupplierSuccess = (state = INITIAL_STATE, action) => {
@@ -63,8 +65,15 @@ export const updateSupplierSuccess = (state = INITIAL_STATE, action) => {
   const { responseData } = action
   return { 
     ...state, 
-    submitSuccess: true,
+    submit_success: true,
     suppliers: state.suppliers.map(supplier=> {
+      if(supplier.id === responseData.id) {
+        return responseData
+      } else {
+        return supplier;
+      }
+    }), 
+    filtered_suppliers: state.suppliers.map(supplier=> {
       if(supplier.id === responseData.id) {
         return responseData
       } else {
@@ -76,12 +85,12 @@ export const updateSupplierSuccess = (state = INITIAL_STATE, action) => {
 };
 
 export const updateSupplierFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 //delete
 export const deleteSupplier = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, error: null, submitSuccess: false};
+  return { ...state, submitting: true, error: null, submit_success: false};
 };
 
 export const deleteSupplierSuccess = (state = INITIAL_STATE, action) => {
@@ -90,22 +99,37 @@ export const deleteSupplierSuccess = (state = INITIAL_STATE, action) => {
     ...state, 
     suppliers: state.suppliers.filter(item => item.id !== action.supplierId),
     submitting: false,
-    submitSuccess: true
+    submit_success: true
   };
 };
 
 export const deleteSupplierFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
+
+export const setSelectedSuppliers = (state = INITIAL_STATE, action) => {
+  return { ...state, selected_suppliers: action.suppliers }
+}
+
+export const filterSuppliers = (state = INITIAL_STATE, action) => {
+  console.log('action serac', action)
+  return {
+    ...state,
+    filtered_suppliers: state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1)
+  }
+}
 
 export const resetSuppliers = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     suppliers: [],
     error: null,
-    loading: false
+    loading: false,
+    selected_suppliers: [],
+    filtered_suppliers: []
   };
 };
+
 
 export const HANDLERS = {
   [Types.FETCH_SUPPLIERS]: fetchSuppliers,
@@ -127,6 +151,10 @@ export const HANDLERS = {
   [Types.GET_SUPPLIER]: getSupplier,
   [Types.GET_SUPPLIER_SUCCESS]: getSupplierSuccess,
   [Types.GET_SUPPLIER_FAILURE]: getSupplierFailure,
+
+  [Types.SET_SELECTED_SUPPLIERS]: setSelectedSuppliers,
+
+  [Types.FILTER_SUPPLIERS]: filterSuppliers,
 
   [Types.RESET_SUPPLIERS]: resetSuppliers,
 };

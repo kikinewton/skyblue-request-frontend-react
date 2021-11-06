@@ -22,6 +22,9 @@ export const { Types, Creators } = createActions(
     getSupplierSuccess: ["supplierId"],
     getSupplierFailure: ["error"],
 
+    setSelectedSuppliers: ["suppliers"],
+    filterSuppliers: ["search"],
+
     resetSuppliers: null
   }
 )

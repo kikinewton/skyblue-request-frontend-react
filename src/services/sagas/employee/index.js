@@ -67,20 +67,20 @@ export function* createEmployee(action) {
 }
 
 export function* updateEmployee(action) {
-  console.log('action', action)
   try {
     const response = yield call(updateEmployeeApi, action.employeeId, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
-      console.log('employee data', responseData)
+      openNotification('success', 'Update User', 'SUCCESS')
       yield put(Creators.updateEmployeeSuccess(responseData))
+      yield put(Creators.fetchEmployees({}))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'Update User', response.message)
       yield put(Creators.updateEmployeeFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Employees'
-    openNotification('error', 'Login', message)
+    openNotification('error', 'Update User', message)
     yield put(Creators.updateEmployeeFailure(message))
   }
 }

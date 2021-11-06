@@ -19,12 +19,14 @@ export const { Types, Creators } = createActions(
     createPettyCashRequestFailure: ["error"],
 
     updatePettyCashRequest: ["payload"],
-    updatePettyCashRequestSuccess: ["id", "responseData"],
+    updatePettyCashRequestSuccess: ["responseData"],
     updatePettyCashRequestFailure: ["error"],
 
     deletePettyCashRequest: ["requestId", "payload"],
     deletePettyCashRequestSuccess: ["responseData"],
     deletePettyCashRequestFailure: ["error"],
+
+    setSelectedPettyCashRequests: ["requests"],
 
     resetPettyCashRequest: null
   }

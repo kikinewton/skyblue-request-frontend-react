@@ -51,6 +51,17 @@ export function saveSingleDocument(payload) {
   })
 }
 
+export function saveMultipleDocument(payload) {
+  console.log("file upload api", payload)
+  const fd = new FormData()
+  fd.append("files", payload.files)
+  return service({
+    url: `/requestDOcument/uploadMultipleFiles`,
+    method: 'POST',
+    data: fd,
+  })
+}
+
 // export function saveDocument(payload) {
 //   const fd = new FormData()
 //   console.log('file send', payload.file)

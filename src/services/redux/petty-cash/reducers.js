@@ -3,12 +3,13 @@ import Types from "./actionTypes";
 
 export const INITIAL_STATE = {
   errors: null,
-  petty_cash_requests: [],
-  petty_cash_request: null,
-  my_petty_cash_requests: [],
+  requests: [],
+  request: null,
+  my_requests: [],
   loading: false,
   submitting: false,
-  submitSuccess: false,
+  submit_success: false,
+  selected_requests: []
 };
 
 //fetch
@@ -17,7 +18,7 @@ export const fetchMyPettyCashRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyPettyCashRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_petty_cash_requests: action.responseData, loading: false};
+  return { ...state, my_requests: action.responseData, loading: false};
 };
 
 export const fetchMyPettyCashRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -30,7 +31,7 @@ export const fetchPettyCashRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchPettyCashRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_petty_cash_requests: action.responseData, loading: false};
+  return { ...state, my_requests: action.responseData, loading: false};
 };
 
 export const fetchPettyCashRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -43,7 +44,7 @@ export const getPettyCashRequest = (state = INITIAL_STATE, action) => {
 };
 
 export const getPettyCashRequestSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, petty_cash_request: action.responseData, loading: false};
+  return { ...state, request: action.responseData, loading: false};
 };
 
 export const getPettyCashRequestFailure = (state = INITIAL_STATE, action) => {
@@ -52,11 +53,11 @@ export const getPettyCashRequestFailure = (state = INITIAL_STATE, action) => {
 
 //create
 export const createPettyCashRequest = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
 };
 
 export const createPettyCashRequestSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, submitSuccess: true};
+  return { ...state, submitting: false, submit_success: true};
 };
 
 export const createPettyCashRequestFailure = (state = INITIAL_STATE, action) => {
@@ -65,19 +66,19 @@ export const createPettyCashRequestFailure = (state = INITIAL_STATE, action) => 
 
 //edit
 export const updatePettyCashRequest = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
 };
 
 export const updatePettyCashRequestSuccess = (state = INITIAL_STATE, action) => {
   return { 
     ...state,
     submitting: false,
-    submitSuccess: true
+    submit_success: true
   };
 };
 
 export const updatePettyCashRequestFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 
@@ -99,12 +100,17 @@ export const deletePettyCashRequestFailure = (state = INITIAL_STATE, action) => 
   return { ...state, submitting: false, error: action.error};
 };
 
+export const setSelectedPettyCashRequests = (state = INITIAL_STATE, action) => {
+  return {...state, selected_requests: action.requests}
+}
+
 
 export const resetPettyCashRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    PettyCash_requests: [],
-    my_petty_cash_requests: [],
+    requests: [],
+    selected_requests: [],
+    my_requests: [],
     error: null,
     loading: false,
     submitting: false
@@ -131,6 +137,8 @@ export const HANDLERS = {
   [Types.DELETE_PETTY_CASH_REQUEST]: deletePettyCashRequest,
   [Types.DELETE_PETTY_CASH_REQUEST_SUCCESS]: deletePettyCashRequestSuccess,
   [Types.DELETE_PETTY_CASH_REQUEST_FAILURE]: deletePettyCashRequestFailure,
+
+  [Types.SET_SELECTED_PETTY_CASH_REQUESTS]: setSelectedPettyCashRequests,
   
   [Types.RESET_PETTY_CASH_REQUEST]: resetPettyCashRequest
 };

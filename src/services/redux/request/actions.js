@@ -10,7 +10,7 @@ export const { Types, Creators } = createActions(
     fetchMyRequestsSuccess: ["responseData"],
     fetchMyRequestsFailure: ["error"],
 
-    getRequest: ["requestId"],
+    getRequest: ["id"],
     getRequestSuccess: ["responseData"],
     getRequestFailure: ["error"],
 

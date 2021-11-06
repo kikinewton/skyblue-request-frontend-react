@@ -8,6 +8,8 @@ import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
 import { connect } from 'react-redux'
 import PrivateRoute from "./presentation/PrivateRoute";
+import { FUNCTIONAL_ROLES } from "./util/constants";
+import { EMPLOYEE_ROLE } from "./util/datas";
 const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))
 const Department = React.lazy(()=> import('./containers/Department'))
@@ -28,6 +30,8 @@ const RequestManagement = React.lazy(() => import("./containers/RequestManagemen
 const RequestItemIndex = React.lazy(() => import("./containers/RequestItem"))
 const PettyCashIndex = React.lazy(() => import("./containers/PettyCash"))
 const FloatIndex = React.lazy(() => import("./containers/Float"))
+const SupplierModule = React.lazy(() => import("./containers/SupplierModule"))
+const LocalPurchaseOrderModule = React.lazy(() => import("./containers/LocalPurchaseOrderModule"))
 
 function App(props) {
   return (
@@ -41,17 +45,19 @@ function App(props) {
           <Route path={REQUEST_ROUTE} component={Request} {...props} />
           <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />
           <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} />
-          <AuthenticatedRoute path={SUPPLIERS_ROUTE} component={Supplier} />
           <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
           <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />
+          
+          <AuthenticatedRoute path="/app/local-purchase-orders" component={LocalPurchaseOrderModule} />
           <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
           <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
           <AuthenticatedRoute path="/app/quotations" component={QuotationView} {...props} />
+          <AuthenticatedRoute path="/app/suppliers" component={SupplierModule} {...props} roles={[EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]} />
 
           <Route path="/app/request-items" component={RequestItemIndex} {...props} />
-          
-          <AuthenticatedRoute path="/app/petty-cash-requests" component={PettyCashIndex} {...props} />
-          <AuthenticatedRoute path="/app/float-requests" component={FloatIndex} {...props} />
+          <Route path="/app/petty-cash" component={PettyCashIndex} {...props} />
+          <Route path="/app/float" component={FloatIndex} {...props} />
+
           <Route path="/app/audit" component={Audit} {...props} />
           <Route path={LOGIN_ROUTE} component={Login} />
           <Route path="/not-authorized" component={NotAuthorized} />
