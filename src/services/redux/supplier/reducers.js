@@ -115,7 +115,10 @@ export const filterSuppliers = (state = INITIAL_STATE, action) => {
   console.log('action serac', action)
   return {
     ...state,
-    filtered_suppliers: state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1)
+    filtered_suppliers: state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
+      it?.phone_no?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
+      it?.description?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1
+    )
   }
 }
 

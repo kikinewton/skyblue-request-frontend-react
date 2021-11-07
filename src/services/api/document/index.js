@@ -45,7 +45,7 @@ export function saveSingleDocument(payload) {
   const fd = new FormData()
   fd.append("file", payload.file)
   return service({
-    url: `${path}/upload`,
+    url: `${path}/upload?docType=${payload?.docType}`,
     method: 'POST',
     data: fd,
   })

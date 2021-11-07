@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table, Form, Input, Select, Spin } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Select, Spin, PageHeader } from 'antd'
 import React from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
 import { EditOutlined } from '@ant-design/icons'
@@ -39,7 +39,7 @@ const List = (props)=> {
   console.log('----------------->my props', props)
   const { employees, createEmployee,loading, fetchEmployees, deleteEmployee, 
     departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee, fetchRoles, 
-    user_roles, fetching_roles
+    user_roles, fetching_roles, filtered_employees
   } = props
 
   const [ openAdd, setOpenAdd ] = React.useState(false)
@@ -132,20 +132,29 @@ const List = (props)=> {
 
   return (
     <>
-      <Row>
+      {/* <Row>
         <Col md={10} style={{paddingBottom: 5}}>
           <span className="bs-page-title">Employees</span>
         </Col>
         <Col md={14} style={{textAlign: 'right'}}>
           <Button type="primary" onClick={handleAdd}>Register new employee</Button>
         </Col>
-      </Row>
+      </Row> */}
+      <PageHeader 
+        title="Employees"
+        style={{padding: 0}}
+        extra={[
+          <span>Filter</span>,
+          <Input type="search" onChange={(event) => props.filterEmployees(event.target.value)} style={{width: 200}} />,
+          <Button type="primary" onClick={handleAdd}>Register new employee</Button>
+        ]}
+      />
       <Row>
         <Col md={24}>
           <Table 
             loading={loading}
             columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
-            dataSource={employees}
+            dataSource={filtered_employees}
             rowKey="id"
             bordered
             size="small"

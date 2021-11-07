@@ -53,10 +53,10 @@ const AddDocument = (props) => {
   const [ items, setItems ] = React.useState([])
 
   const handleSubmit = async ()=> {
-    const files =  files.map(it => it.originFileObj)
+    const file = files[0].originFileObj
     const payload = {
-      files,
-      supplierId: selectedRow?.supplierId
+      file,
+      supplierId: selectedRow.supplierId
     }
     createQuotation(payload)
     // console.log('SUBMIT', currentUser.id)

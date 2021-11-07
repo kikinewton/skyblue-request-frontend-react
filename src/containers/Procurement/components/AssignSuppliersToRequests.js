@@ -158,7 +158,7 @@ const AssignSuppliersToRequests = (props) => {
                         filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       >
                         <Select.Option value={undefined} onClick={() => console.log('lets create anonim')}>Select a supplier</Select.Option>
-                        {suppliers.map(it => (<Select.Option key={it.id} value={it.id}>{`${it?.name} - ${it?.description}`}</Select.Option>))}
+                        {suppliers.map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
                       </Select>
                     </Col>
                     <Col span={8}>

@@ -22,6 +22,8 @@ export const { Types, Creators } = createActions(
     deleteEmployeeSuccess: ["responseData"],
     deleteEmployeeFailure: ["error"],
 
+    filterEmployees: ["filter"],
+
     resetEmployee: null
   }
 )

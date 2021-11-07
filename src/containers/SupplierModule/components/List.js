@@ -119,7 +119,7 @@ const List = (props)=> {
             onChange={(event) => filterSuppliers(event.target.value)}
             type="search" 
             style={{width: 300}} 
-            placeholder="Search supplier by name..." />,
+            placeholder="Search by name, phone, description..." />,
           <Button key="add-btn" type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
         ]}
       />

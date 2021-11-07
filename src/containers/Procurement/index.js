@@ -14,6 +14,7 @@ import AssignSupplier from './components/AssignSupplier'
 import LocalPurchaseOrders from './components/LocalPurchaseOrders'
 import Suppliers from './components/Suppliers'
 import AssignSuppliersToRequests from './components/AssignSuppliersToRequests'
+import CreateQuotation from './components/CreateQuotation'
 
 const Procurement = (props) => {
   const { path } = useRouteMatch()
@@ -25,7 +26,7 @@ const Procurement = (props) => {
           <AuthenticatedRoute path={`${path}/request-categories`} component={RequestCategory} {...props} />
           <AuthenticatedRoute path={`${path}/add-local-purchase-order`} component={CreateLocalPurchaseOrder} {...props} />
           <AuthenticatedRoute path={`${path}/local-purchase-orders`} component={LocalPurchaseOrders}  {...props} />
-          <AuthenticatedRoute path={`${path}/attach-document`} component={AddDocument} {...props} />
+          <AuthenticatedRoute path={`${path}/attach-document`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/assign-suppliers`} component={AssignSuppliersToRequests} {...props} />
         </Switch>
       </AppLayout>
@@ -90,6 +91,9 @@ const mapActionsToState = (dispatch) => {
   },
   updateQuotation: (quotationId, payload) => {
     dispatch(QuotationCreators.updateQuotation(quotationId, payload))
+  },
+  resetQuotation: (quotationId, payload) => {
+    dispatch(QuotationCreators.resetQuotation())
   },
   resetRequest: () => {
     dispatch(RequestCreators.resetRequest())

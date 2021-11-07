@@ -16,7 +16,7 @@ const Employee = (props) => {
       <AppLayout>
         <Switch>
           <AuthenticatedRoute
-            exact 
+            exact
             path={`${path}`}
             {...props} 
             component={List}
@@ -38,6 +38,7 @@ const mapStateToProps = (store) => ({
   departmentLoading: store.department.loading,
   user_roles: store.role.roles,
   fetching_roles: store.role.loading,
+  filtered_employees: store.employee.filtered_employees
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -62,6 +63,9 @@ const mapActionsToProps = (dispatch) => {
     },
     fetchRoles: (query) => {
       dispatch(RoleCreators.fetchRoles(query))
+    },
+    filterEmployees: (filter) => {
+      dispatch(Creators.filterEmployees(filter))
     }
   }
 }

@@ -7,7 +7,8 @@ export const INITIAL_STATE = {
   loading: false,
   submitting: false,
   employee: {},
-  submitSuccess: false
+  submitSuccess: false,
+  filtered_employees: []
 };
 
 //fetch
@@ -16,11 +17,11 @@ export const fetchEmployees = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchEmployeesSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, employees: action.responseData, loading: false};
+  return { ...state, employees: action.responseData, loading: false, filtered_employees: action.responseData};
 };
 
 export const fetchEmployeesFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error};
+  return { ...state, loading: false, error: action.error, employees: [], filtered_employees: []};
 };
 
 //get
@@ -101,6 +102,12 @@ export const deleteEmployeeFailure = (state = INITIAL_STATE, action) => {
 };
 
 
+export const filterEmployees = (state = INITIAL_STATE, action) => {
+  const { filter } = action
+  return { ...state, filtered_employees: state.employees.filter(it => 
+    it?.fullName?.toLowerCase().indexOf(filter?.toLowerCase()) !== -1)};
+};
+
 export const resetEmployee = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -128,6 +135,8 @@ export const HANDLERS = {
   [Types.DELETE_EMPLOYEE]: deleteEmployee,
   [Types.DELETE_EMPLOYEE_SUCCESS]: deleteEmployeeSuccess,
   [Types.DELETE_EMPLOYEE_FAILURE]: deleteEmployeeFailure,
+
+  [Types.FILTER_EMPLOYEES]: filterEmployees,
   
   [Types.RESET_EMPLOYEE]: resetEmployee
 };

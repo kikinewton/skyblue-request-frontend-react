@@ -72,7 +72,8 @@ const List = (props)=> {
 
   React.useEffect(()=> {
     console.log('loading', loading)
-   fetchDepartments({})
+    props.resetDepartment()
+    fetchDepartments({})
    // eslint-disable-next-line
   }, [])
 

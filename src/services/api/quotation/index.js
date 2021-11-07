@@ -73,12 +73,20 @@ export function updateQuotation(quotationId, payload) {
   })
 }
 
-export function createQuotation({ file, userId, supplierId }) {
-  let fd = new FormData()
-  fd.append("files", file)
+// export function createQuotation({ file, userId, supplierId }) {
+//   let fd = new FormData()
+//   fd.append("file", file)
+//   return service({
+//     url: `/quotations/suppliers/${supplierId}?employeeId=${userId}`,
+//     method: 'POST',
+//     data: fd
+//   })
+// }
+
+export function createQuotation(payload) {
   return service({
-    url: `/quotations/suppliers/${supplierId}?employeeId=${userId}`,
+    url: `/quotations`,
     method: 'POST',
-    data: fd
+    data: payload
   })
 }

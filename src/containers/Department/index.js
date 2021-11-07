@@ -51,6 +51,9 @@ const mapActionsToProps = (dispatch) => {
     },
     getDepartment: (departmentId) => {
       dispatch(Creators.getDepartment(departmentId))
+    },
+    resetDepartment: () => {
+      dispatch(Creators.resetDepartment())
     }
   }
 }
