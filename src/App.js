@@ -3,7 +3,7 @@ import "antd/dist/antd.less";
 import { Switch, Route, Redirect } from 'react-router-dom'
 import React from "react";
 import { Spin } from "antd";
-import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SUPPLIERS_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, REQUEST_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
+import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, REQUEST_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
 import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
 import { connect } from 'react-redux'
@@ -13,10 +13,8 @@ import { EMPLOYEE_ROLE } from "./util/datas";
 const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))
 const Department = React.lazy(()=> import('./containers/Department'))
-const Supplier = React.lazy(() => import('./containers/Suppliers'))
 const Employee = React.lazy(() => import('./containers/Employee'))
 const MyRequest = React.lazy(()=> import('./containers/MyRequest'))
-const Request = React.lazy(()=> import('./containers/Requests'))
 const NotAuthorized = React.lazy(()=> import('./containers/NotAuthorized'))
 const Procurement = React.lazy(() => import('./containers/Procurement'))
 const Dashboard = React.lazy(() => import('./containers/Dashboard'))
@@ -26,7 +24,6 @@ const Account = React.lazy(() => import('./containers/Account'))
 const Report = React.lazy(()=> import('./containers/Report'))
 const Audit = React.lazy(() => import('./containers/Audit'))
 const QuotationView = React.lazy(() => import('./containers/QuotationView'))
-const RequestManagement = React.lazy(() => import("./containers/RequestManagement"))
 const RequestItemIndex = React.lazy(() => import("./containers/RequestItem"))
 const PettyCashIndex = React.lazy(() => import("./containers/PettyCash"))
 const FloatIndex = React.lazy(() => import("./containers/Float"))
@@ -42,7 +39,6 @@ function App(props) {
           <Route path="/app/store" component={Store} {...props} />
           <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
           <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
-          <Route path={REQUEST_ROUTE} component={Request} {...props} />
           <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />
           <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} />
           <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />

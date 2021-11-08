@@ -2,6 +2,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Card, Col, Table, Row, Button, Spin } from 'antd'
 import React from 'react'
 import openNotification from '../../../util/notification'
+import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
 import MySwal from '../../../util/sweet-alert'
 
 const columns =  [
