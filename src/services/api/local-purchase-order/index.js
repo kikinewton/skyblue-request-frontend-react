@@ -1,13 +1,13 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { QUOTATION_ENDPOINT } from "../urls";
+import { BASE_URL, QUOTATION_ENDPOINT } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
   console.log('fetch supplie API')
   const queryStr = serializeQueryParams(query)
   return apiRequest({
     method: "GET",
-    url: `/lpo${queryStr}`
+    url: `/localPurchaseOrder${queryStr}`
   })
 }
 
@@ -19,4 +19,15 @@ export function createLocalPurchaseOrder(payload) {
     url: `/localPurchaseOrders`,
     data: payload
   })
+}
+
+
+export function downloadLPODocument({lpoId}) {
+  const url = `${BASE_URL}/localPurchaseOrder/${lpoId}/download`
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute("target", "_blank")
+  document.body.appendChild(link)
+  link.click()
+  link.parentNode.removeChild(link)
 }

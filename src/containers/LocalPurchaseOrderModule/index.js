@@ -87,6 +87,7 @@ const mapStateToProps = store => ({
 const mapActionsToState = dispatch => ({
   fetchLocalPurchaseOrders: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrders(query)),
   createLocalPurchaseOrder: (payload) => dispatch(LocalPurchaseOrderCreators.createLocalPurchaseOrder(payload)),
+  resetLocalPurchaseOrder: () => dispatch(LocalPurchaseOrderCreators.resetLocalPurchaseOrder()),
 
   fetchRequestCategories: (query) => dispatch(RequestCategoryCreators.fetchRequestCategories(query)),
   resetRequestCategory: () => dispatch(RequestCategoryCreators.resetRequestCategory()),

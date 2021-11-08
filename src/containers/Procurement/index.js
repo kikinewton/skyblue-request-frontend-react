@@ -15,6 +15,7 @@ import LocalPurchaseOrders from './components/LocalPurchaseOrders'
 import Suppliers from './components/Suppliers'
 import AssignSuppliersToRequests from './components/AssignSuppliersToRequests'
 import CreateQuotation from './components/CreateQuotation'
+import RfqList from './components/RfqList'
 
 const Procurement = (props) => {
   const { path } = useRouteMatch()
@@ -23,6 +24,7 @@ const Procurement = (props) => {
     <React.Fragment>
       <AppLayout title="Procurement">
         <Switch>
+          <AuthenticatedRoute path={`${path}/rfqs`} component={RfqList} {...props} />
           <AuthenticatedRoute path={`${path}/request-categories`} component={RequestCategory} {...props} />
           <AuthenticatedRoute path={`${path}/add-local-purchase-order`} component={CreateLocalPurchaseOrder} {...props} />
           <AuthenticatedRoute path={`${path}/local-purchase-orders`} component={LocalPurchaseOrders}  {...props} />

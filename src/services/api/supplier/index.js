@@ -1,6 +1,6 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { SUPPLIERS_ENDPOINT } from "../urls";
+import { BASE_URL, SUPPLIERS_ENDPOINT } from "../urls";
 
 export function getSuppliers(query) {
   console.log('fetch supplie API')
@@ -38,5 +38,22 @@ export function deleteSupplier(supplierId) {
   return apiRequest({
     method: "DELETE",
     url: `${SUPPLIERS_ENDPOINT}${supplierId}`
+  })
+}
+
+export function downloadRfqForSupplier({supplierId}) {
+  const url = `${BASE_URL}/procurement/generateRequestListForSupplier/suppliers/${supplierId}`
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute("target", "_blank")
+  document.body.appendChild(link)
+  link.click()
+  link.parentNode.removeChild(link)
+}
+
+export function generateRfqForSupplierAndShare({supplierId}) {
+  return apiRequest({
+    url: `/procurement/sendRequestListForSupplier/suppliers/${supplierId}`,
+    method: "GET"
   })
 }

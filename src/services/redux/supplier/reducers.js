@@ -5,7 +5,7 @@ export const INITIAL_STATE = {
   errors: null,
   suppliers: [],
   supplier: {},
-  loaidng: false,
+  loading: false,
   submitting: false,
   submit_success: false,
   selected_suppliers: [],
