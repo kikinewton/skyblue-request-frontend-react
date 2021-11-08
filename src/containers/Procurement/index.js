@@ -26,7 +26,7 @@ const Procurement = (props) => {
           <AuthenticatedRoute path={`${path}/request-categories`} component={RequestCategory} {...props} />
           <AuthenticatedRoute path={`${path}/add-local-purchase-order`} component={CreateLocalPurchaseOrder} {...props} />
           <AuthenticatedRoute path={`${path}/local-purchase-orders`} component={LocalPurchaseOrders}  {...props} />
-          <AuthenticatedRoute path={`${path}/attach-document`} component={CreateQuotation} {...props} />
+          <AuthenticatedRoute path={`${path}/create-quotation`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/assign-suppliers`} component={AssignSuppliersToRequests} {...props} />
         </Switch>
       </AppLayout>

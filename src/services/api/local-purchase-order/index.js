@@ -13,10 +13,10 @@ export function fetchLocalPurchaseOrders(query) {
 
 
 export function createLocalPurchaseOrder(payload) {
-  console.log('create local API')
+  console.log('create LPO API')
   return apiRequest({
-    method: "GET",
-    url: `/lpo`,
+    method: "POST",
+    url: `/localPurchaseOrders`,
     data: payload
   })
 }

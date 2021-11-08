@@ -9,6 +9,7 @@ import {
 import openNotification from '../../../util/notification'
 import { message } from 'antd'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
+import { createQuotationFailure } from '../../redux/quotation/reducers'
 
 
 export function* fetchQuotations(action) {
@@ -61,10 +62,13 @@ export function* createQuotation(action) {
       message.success("Quotation Document Addedd Successfully")
     } else {
       message.error("Upload failed!")
+      yield put(Creators.createQuotationFailure(response.message))
     }
   } catch (error) {
     console.log('err: ', error)
+    const errors = error?.response?.data?.errors
     message.error("Failed!")
+    yield put(Creators.createQuotationFailure(errors[0]))
   }
 }
 

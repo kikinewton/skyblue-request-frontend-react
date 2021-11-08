@@ -120,14 +120,14 @@ const CreateQuotation = (props) => {
   }
 
   React.useEffect(()=> {
-    if(quotationSubmitSuccess) {
-      setFiles(null)
+    if(!quotationSubmitting && quotationSubmitSuccess) {
+      setFiles([])
       fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
-      setSelectedRow({})
-      setItems([])
-      setModalOpen(false)
+      setSelectedRequestItems([])
+      setCurrent(0)
+      setSelectedSupplier(null)
     } // eslint-disable-next-line
-  }, [quotationSubmitSuccess])
+  }, [quotationSubmitSuccess, quotationSubmitting])
 
   React.useEffect(()=> {
     props.resetQuotation()
@@ -214,14 +214,14 @@ const CreateQuotation = (props) => {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row style={{padding: "10px 0px 10px 0px"}}>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <Button type="default" onClick={()=> setCurrent(0)}>
                   <LeftOutlined />
                   Select Supplier
                 </Button>
                 <Button type="primary" onClick={() => setCurrent(2)} disabled={selectedRequestItems?.length < 1}>
-                  Upload Quotatio Document
+                  Upload Quotation Document
                   <RightOutlined />
                 </Button>
               </Col>

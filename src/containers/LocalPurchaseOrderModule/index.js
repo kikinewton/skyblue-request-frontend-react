@@ -73,11 +73,15 @@ const mapStateToProps = store => ({
   suppliers: store.supplier.suppliers,
   fetching_suppliers: store.supplier.loading,
 
-  request_categories: store.requestCategory.request_categories,
-
   quotations: store.quotation.quotations,
   fetching_quoatations: store.quotation.loading,
+
+  request_categories: store.requestCategory.request_categories,
+  fetching_request_categories: store.requestCategory.loading,
   
+  local_purchase_orders: store.local_purchase_order.local_purchase_orders,
+  submitting_local_purchase_order: store.local_purchase_order.submitting,
+  submit_local_purchase_order_success: store.local_purchase_order.submit_success,
 })
 
 const mapActionsToState = dispatch => ({

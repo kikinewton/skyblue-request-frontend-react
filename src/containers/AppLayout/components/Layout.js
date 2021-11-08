@@ -74,6 +74,8 @@ const CollapsibleLayout = (props) => {
       setKey("float")
     } else if(pathname.includes("/app/local-purchase-orders")) {
       setKey("/app/local-purchase-orders")
+    } else if(pathname.includes("/app/procurement/create-quotation")) {
+      setKey("/app/procurement/create-quotation")
     } else if(pathname.includes("/app/procurement/suppliers")) {
       setKey("procurement/suppliers")
     }  else if(pathname.includes("/app/procurement/assign-suppliers")) {
@@ -180,9 +182,14 @@ const CollapsibleLayout = (props) => {
                   Assign Supplier
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key={`${PROCUREMENT_ROUTE}/attach-document`}>
-                <NavLink to={`${PROCUREMENT_ROUTE}/attach-document`}>
-                  Add Quotation
+              <Menu.Item key={`${PROCUREMENT_ROUTE}/rfqs`}>
+                <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
+                  RFQs
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="/app/procurement/create-quotation">
+                <NavLink to={`${PROCUREMENT_ROUTE}/create-quotation`}>
+                  Create Quotation
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
