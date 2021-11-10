@@ -103,7 +103,7 @@ const RequestItemIndex = (props) => {
             {...props}
           />
           <AuthenticatedRoute 
-            roles={FUNCTIONAL_ROLES.generalManagerApproveRoles}
+            // roles={FUNCTIONAL_ROLES.generalManagerApproveRoles}
             exact
             path={`/app/request-items/gm-pending-approve`}
             component={ApprovePendingList}

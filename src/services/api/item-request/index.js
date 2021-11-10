@@ -250,6 +250,8 @@ export function fetchRequests(query) {
       return getEndorsedItemsWithSupplier(query)
     case FETCH_REQUEST_TYPES.ENDORSED_REQUESTS:
       return getEndorsedRequestItems()
+    case FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS:
+      return service({ url: `/requestItems?toBeApproved=${true}`, method: "GET" })
     default: {
       console.log('In default api call')
       return getAllItemRequests(query);

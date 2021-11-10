@@ -134,8 +134,7 @@ const HodEndorsePendingList = (props) => {
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
 
   const submit = () => {
-    if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL || actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
-      
+    if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
       const comments = selected_requests.map(it => {
         let data = {
           procurementTypeId: it.id,
@@ -147,6 +146,25 @@ const HodEndorsePendingList = (props) => {
       console.log('payload', payload)
       createComment("LPO", payload)
 
+    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
+      let updatePayload = {}
+      
+
+      const comments = selected_requests.filter(it => it.comment)
+                            .map(it => {
+                              let data = {
+                                procurementTypeId: it.id,
+                                comment: { description: it?.comment || "", process: actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL ? "HOD_REQUEST_ENDORSEMENT" : "HOD_REQUEST_ENDORSEMENT"},
+                              }
+                              return data
+                            })
+      updateRequest({
+        updateType: actionType,
+        role: "hod",
+        payload: {requestItems: selected_requests}
+      })
+      const commentPayload = {comments: comments}
+      createComment("LPO", commentPayload)
     } else {
       updateRequest({
         updateType: actionType,

@@ -1,0 +1,17 @@
+import { createTypes } from "reduxsauce";
+
+export default createTypes(
+  `
+  FETCH_COMMENTS
+  FETCH_COMMENTS_SUCCESS
+  FETCH_COMMENTS_FAILURE
+
+  CREATE_COMMENT
+  CREATE_COMMENT_SUCCESS
+  CREATE_COMMENT_FAILURE
+
+  RESET_COMMENT
+
+`,
+  {}
+);

@@ -143,7 +143,7 @@ const ApprovePendingList = (props) => {
   React.useEffect(()=> {
     resetRequest()
     props.fetchRequests({
-      requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
     })
   }, [])
 
@@ -152,7 +152,7 @@ const ApprovePendingList = (props) => {
       setSelectedRequests([])
       setConfirmDrawer(false);
       props.fetchRequests({
-        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+        requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
       })
     }
   }, [updating_request, update_request_success])

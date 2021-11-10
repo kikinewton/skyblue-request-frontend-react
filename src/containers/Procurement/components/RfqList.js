@@ -43,7 +43,7 @@ const RfqList = (props) => {
   useEffect(() => {
     resetSupplier()
     fetchSuppliers({
-      suppliersWithRQ: true
+      suppliersForRequestProcurement: true
     })
   }, [])
   return (
