@@ -68,6 +68,10 @@ import {
 	watchCreateLocalPurchaseOrder
 } from "./local-purchase-order"
 
+import {
+	watchCreateComment
+} from "./comment"
+
 export default function* rootSaga() {
 	yield all([
 		watchLogin(),
@@ -115,6 +119,8 @@ export default function* rootSaga() {
 
 		watchFetchLocalPurchaseOrders(),
 		watchCreateLocalPurchaseOrder(),
+
+		watchCreateComment()
 
 	]);
 }

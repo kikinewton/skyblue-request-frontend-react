@@ -127,17 +127,33 @@ const HodEndorsePendingList = (props) => {
     updateRequest,
     updating_request,
     update_request_success,
+    createComment
   } = props
+
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
 
   const submit = () => {
-    console.log("action", actionType)
-    updateRequest({
-      updateType: actionType,
-      role: "hod",
-      payload: {requestItems: selected_requests}
-    })
+    if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL || actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
+      
+      const comments = selected_requests.map(it => {
+        let data = {
+          procurementTypeId: it.id,
+          comment: { description: it?.comment || "", process: actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL ? "HOD_REQUEST_ENDORSEMENT" : "HOD_REQUEST_ENDORSEMENT"},
+        }
+        return data
+      })
+      const payload = {comments: comments, procurementType: "LPO"}
+      console.log('payload', payload)
+      createComment("LPO", payload)
+
+    } else {
+      updateRequest({
+        updateType: actionType,
+        role: "hod",
+        payload: {requestItems: selected_requests}
+      })
+    }
   }
 
   React.useEffect(()=> {
@@ -156,6 +172,17 @@ const HodEndorsePendingList = (props) => {
       })
     }
   }, [updating_request, update_request_success])
+
+  React.useEffect(() => {
+    if(!props.submitting_comment && props.submit_comment_success) {
+      setSelectedRequests([])
+      setConfirmDrawer(false)
+      props.fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+
+  }, [props.submitting_comment, props.submit_comment_success])
 
   return (
     <>

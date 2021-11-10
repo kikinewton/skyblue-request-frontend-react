@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch, NavLink, Redirect } from 'react-router-do
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
+import { Creators as CommentCreators } from "../../services/redux/comment/actions"
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
@@ -128,7 +129,10 @@ const mapStateToProps = (store) => ({
   fetching_requests: store.request.loading,
   updating_request: store.request.updating,
   update_request_success: store.request.update_success, 
-  authUser: store.auth
+  authUser: store.auth,
+
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -156,6 +160,9 @@ const mapActionsToProps = (dispatch) => {
     },
     resetRequest: () => {
       dispatch(RequestCreators.resetRequest())
+    },
+    createComment: (procurementType, payload) => {
+      dispatch(CommentCreators.createComment(procurementType, payload))
     }
   }
 }

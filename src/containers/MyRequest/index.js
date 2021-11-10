@@ -79,7 +79,7 @@ const MyRequest = (props)=> {
               >
                 Float Requests
               </Menu.Item>
-              <Menu.SubMenu key="create-request" title="Create Request">
+              <Menu.SubMenu key="create-request-submenu" title="Create Request">
                 <Menu.Item
                   key="create-request"
                   onClick={() => {

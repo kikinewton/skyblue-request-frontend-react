@@ -3,11 +3,11 @@ import apiRequest from "../apiRequest";
 import { BASE_URL, QUOTATION_ENDPOINT } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
-  console.log('fetch supplie API')
+  console.log('fetch supplie API', query)
   const queryStr = serializeQueryParams(query)
   return apiRequest({
     method: "GET",
-    url: `/localPurchaseOrder${queryStr}`
+    url: `/localPurchaseOrders${queryStr}`
   })
 }
 
@@ -23,7 +23,7 @@ export function createLocalPurchaseOrder(payload) {
 
 
 export function downloadLPODocument({lpoId}) {
-  const url = `${BASE_URL}/localPurchaseOrder/${lpoId}/download`
+  const url = `${BASE_URL}/localPurchaseOrders/${lpoId}/download`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")
