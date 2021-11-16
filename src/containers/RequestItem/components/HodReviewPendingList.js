@@ -63,21 +63,6 @@ const HodReviewPendingList = (props) => {
       <Card
         size="small"
         title="Requests Pending review from department HOD"
-        extra={[
-          (
-            <Button 
-              size="small"
-              type="primary" 
-              style={{marginRight: 5}}
-              disabled={selected_requests.length < 1}
-              onClick={() => {
-                setDrawer(true)
-              }}
-            >
-              Approve
-            </Button>
-          )
-        ]}
       >
         <Row>
           <Col span={24}>
@@ -91,13 +76,6 @@ const HodReviewPendingList = (props) => {
               pagination={{
                 pageSize: 20
               }}
-              rowSelection={{
-                onChange: (selectedRowKeys, selectedRows) => {
-                  console.log("selected row", selectedRows)
-                  setSelectedRequests(selectedRows)
-                },
-                selectedRowKeys: (selected_requests || []).map(it => it.id)
-              }}
             />
           </Col>
         </Row>
@@ -105,7 +83,7 @@ const HodReviewPendingList = (props) => {
       <Drawer
         forceRender
         visible={drawer}
-        title="Confirm Approve Requests"
+        title="Review Request Item Price"
         placement="right"
         width={1000}
         maskClosable={false}

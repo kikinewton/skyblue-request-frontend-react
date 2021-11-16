@@ -48,7 +48,7 @@ export const updateRequestCategorySuccess = (state = INITIAL_STATE, action) => {
 };
 
 export const updateRequestCategoryFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error};
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 
@@ -66,6 +66,7 @@ export const deleteRequestCategoryFailure = (state = INITIAL_STATE, action) => {
 };
 
 export const setRequestCategory = (state = INITIAL_STATE, action) => {
+  console.log('lets set request categoy', action)
   return { ...state, request_category: action.requestCategory }
 }
 

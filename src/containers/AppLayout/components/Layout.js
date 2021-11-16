@@ -18,6 +18,7 @@ import {
   AccountBookOutlined,
   SendOutlined,
   ShoppingCartOutlined,
+  ProfileOutlined,
 } from '@ant-design/icons';
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
@@ -72,13 +73,17 @@ const CollapsibleLayout = (props) => {
       setKey("petty-cash")
     } else if(pathname.includes("/app/float")) {
       setKey("float")
+    } else if(pathname.includes("/app/suppliers")) {
+      setKey("/app/")
     } else if(pathname.includes("/app/local-purchase-orders")) {
       setKey("/app/local-purchase-orders")
     } else if(pathname.includes("/app/procurement/create-quotation")) {
       setKey("/app/procurement/create-quotation")
-    } else if(pathname.includes("/app/procurement/suppliers")) {
-      setKey("procurement/suppliers")
-    }  else if(pathname.includes("/app/procurement/assign-suppliers")) {
+    } else if(pathname.includes("/app/suppliers")) {
+      setKey("/app/suppliers")
+    }  else if(pathname.includes("/app/quotations")) {
+      setKey("/app/quotations")
+    } else if(pathname.includes("/app/procurement/assign-suppliers")) {
       setKey("assign-suppliers")
     }
     else {
@@ -126,24 +131,28 @@ const CollapsibleLayout = (props) => {
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="request">
-            <NavLink to="/app/request-items">
-              <ReconciliationOutlined />
-              <span>Item requests</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="float">
-            <NavLink to="/app/float">
-              <ReconciliationOutlined />
-              <span>Float requests</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="petty-cash">
-            <NavLink to="/app/petty-cash">
-              <ReconciliationOutlined />
-              <span>Petty cash requests</span>
-            </NavLink>
-          </Menu.Item>
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
+            <>
+              <Menu.Item key="request">
+                <NavLink to="/app/request-items">
+                  <ReconciliationOutlined />
+                  <span>Item requests</span>
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="float">
+                <NavLink to="/app/float">
+                  <ReconciliationOutlined />
+                  <span>Float requests</span>
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="petty-cash">
+                <NavLink to="/app/petty-cash">
+                  <ReconciliationOutlined />
+                  <span>Petty cash requests</span>
+                </NavLink>
+              </Menu.Item>
+            </>
+          )}
           {/* {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.requestMenu) && 
             <Menu.SubMenu key="/app/requests" icon={<DesktopOutlined/>} title="Request Mgmt">
               {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && 
@@ -171,7 +180,7 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           } */}
           {authService.userHasAnyRole(currentUser.role, 
-            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_HOD]) && 
+            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
             <Menu.SubMenu 
               key="procurement" 
               icon={<ReconciliationOutlined />} 
@@ -203,6 +212,14 @@ const CollapsibleLayout = (props) => {
                 </NavLink>
               </Menu.Item>
             </Menu.SubMenu>
+          }
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
+            <Menu.Item key={`/app/quotations`}>
+              <NavLink to={`/app/quotations`}>
+                <ProfileOutlined />
+                <span>Supplier Quotes</span>
+              </NavLink>
+            </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
             <Menu.Item key={`/app/local-purchase-orders`}>
@@ -275,7 +292,7 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
-            <Menu.Item key="supplier">
+            <Menu.Item key="/app/suppliers">
               <NavLink to="/app/suppliers">
                 <UsergroupAddOutlined />
                 <span>Supplier Management</span>
@@ -321,12 +338,12 @@ const CollapsibleLayout = (props) => {
             <Col span={2}>
               {collapsed ? <MenuUnfoldOutlined className="bs-trigger" onClick={toggle} /> : <MenuFoldOutlined onClick={toggle} className="bs-trigger" />}
             </Col>
-            <Col span={6}>
+            <Col span={14}>
               {props.title && (
                 <span style={{fontSize: 20, fontWeight: "lighter", color: "#6e7273"}}>{props.title?.toUpperCase()}</span>
               )}
             </Col>
-            <Col span={16}>
+            <Col span={8}>
               <div 
                 style={{float: 'right', marginRight: 10, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', 
                 alignItems: 'center', cursor: 'pointer', height: '100%'}}

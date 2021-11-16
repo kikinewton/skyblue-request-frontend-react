@@ -1,6 +1,7 @@
 import { FileOutlined, ShoppingOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
+import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import { prettifyDateTime } from '../../../../util/common-helper'
 
@@ -48,7 +49,7 @@ const LocalPurchaseOrders = (props) => {
     setLoading(true)
     try {
       const response = await grnService.getGoodsReceiveNoteWithoutGRN({})
-      if (response.status === 'OK') {
+      if (response.status === RESPONSE_SUCCESS_CODE) {
         setLpos(response.data)
       }
     } catch (error) {

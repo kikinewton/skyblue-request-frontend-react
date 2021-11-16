@@ -9,7 +9,7 @@ export const AUTH_ENDPOINT = "/auth/login"
 export const DEPARTMENTS_ENDPOINT = "/departments/"
 
 //suppliers endpoint
-export const SUPPLIERS_ENDPOINT = "/suppliers/"
+export const SUPPLIERS_ENDPOINT = "/suppliers"
 
 //my requests endpoint
 export const MY_REQUESTS_ENDPOINT = "/my-requests/"

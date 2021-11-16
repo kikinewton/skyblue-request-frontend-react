@@ -84,7 +84,7 @@ const AssignSuppliersToRequests = (props) => {
       fetchRequests({
         requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS
       })
-      setCurrent(1)
+      setCurrent(0)
     }
   }, [request_update_success, request_updating])
 

@@ -31,7 +31,11 @@ const quotationColumns = props => [
     dataIndex: "operations",
     key: "operations",
     align: "right",
-    render: (text, row) => <Button size="small" onClick={() => props.onSelect(row)} type="primary">Select Quotation <RightOutlined /></Button>
+    render: (text, row) => (
+      <Button size="small" onClick={() => props.onSelect(row)} type={props.selectedQuotation?.id === row.id ? "primary" : "default"}>
+        <RightOutlined />
+      </Button>
+    )
   },
 ]
 
@@ -146,6 +150,8 @@ const CreateLPO = (props) => {
     fetching_request_categories,
 
     quotations,
+    fetching_quotations,
+    resetQuotation,
 
     createLocalPurchaseOrder,
     submitting_local_purchase_order,
@@ -172,6 +178,7 @@ const CreateLPO = (props) => {
   const handleSubmit = () => {
     const payload = {
       deliveryDate: deliveryDate.format("YYYY-MM-DD"),
+      quotationId: selectedQuotation?.quotation?.id,
       items: selectedRequests.map(rq => {
         let data = rq
         data["requestCategory"] = request_categories.find(it => it.id === rq.requestCategory)
@@ -209,10 +216,22 @@ const CreateLPO = (props) => {
 
   useEffect(() => {
     props.resetSuppliers()
+    props.resetQuotation()
     //props.resetRequestCategory()
     fetchSuppliers({suppliersWithRQ: true})
     props.fetchRequestCategories({})
   }, [])
+
+  useEffect(() => {
+    if(!submitting_local_purchase_order && submit_local_purchase_order_success) {
+      setCurrent(0)
+      setSelectedSupplier(null)
+      setSelectedQuotation(null)
+      setSelectedRequests([])
+      resetQuotation()
+      fetchSuppliers({suppliersWithRQ: true})
+    }
+  }, [submit_local_purchase_order_success, submit_local_purchase_order_success])
 
   return (
     <>
@@ -260,8 +279,11 @@ const CreateLPO = (props) => {
                     onSelect: (row) => { 
                       console.log('selected quotation', row)
                       setSelectedQuotation(row) 
-                    }
+                      setCurrent(1)
+                    },
+                    selectedQuotation: selectedQuotation
                   })}
+                  loading={fetching_quotations}
                   size="small"
                   dataSource={quotations}
                   pagination={false}
@@ -269,7 +291,7 @@ const CreateLPO = (props) => {
                 />
               </Col>
             </Row>
-            <Row style={{padding: "10px 0px 10px 0px"}}>
+            {/* <Row style={{padding: "10px 0px 10px 0px"}}>
               <Col span={24}>
                 <Button type="default"
                   onClick={() => {
@@ -282,7 +304,7 @@ const CreateLPO = (props) => {
                   <RightOutlined />
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </>
         )}
         {current === 1 && (

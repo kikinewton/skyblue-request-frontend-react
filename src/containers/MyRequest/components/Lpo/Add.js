@@ -56,16 +56,20 @@ const AddNewRequest = (props) => {
   const [ form ] = Form.useForm()
   const departmentFieldRef = React.createRef()
   const history = useHistory()
+  const [requestType, setRequestType] = React.useState(REQUEST_TYPES[1]?.id)
 
   const addToEntires = (values) => {
     const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel } = values
     const department = departments.filter(item => item.id === departmentId)[0]
     const id = requests.length + 2;
     const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel}
+    if(requestType !== REQUEST_TYPES[1]?.id) {
+      data["quantity"] = 1;
+    }
     const list = requests.concat([data])
     storeLocalState("NEW-REQUEST", list)
     setRequests(list)
-    form.resetFields(["name", "reason", "purpose", "quantity", "requestType"])
+    form.resetFields(["name", "reason", "purpose", "quantity"])
     departmentFieldRef.current.focus()
   }
 
@@ -75,6 +79,9 @@ const AddNewRequest = (props) => {
       multipleRequestItem: requests.map(it=> {
         let dt = it
         dt['quantity'] = it.quantity
+        if(it.requestType !== REQUEST_TYPES[1]?.id) {
+          dt['quantity'] = 1
+        }
         return dt
       })
     }
@@ -118,7 +125,7 @@ const AddNewRequest = (props) => {
         title="Create New Request Form"
         extra={[
           <Button type="link" onClick={() => history.push("/app/my-requests/petty-cash-requests/add-new")}>Create Petty Cash</Button>
-        ]}  
+        ]}
       >
         <Row gutter={24}>
           <Col md={6}>
@@ -131,7 +138,7 @@ const AddNewRequest = (props) => {
                   form={form}
                   name="request-entry"
                   initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
-                    requestType: undefined, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
+                    requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
                   onFinish={addToEntires}
                 >
                   <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
@@ -142,7 +149,7 @@ const AddNewRequest = (props) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Request Type" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
-                    <Select>
+                    <Select onChange={(value) =>setRequestType(value)}>
                       {REQUEST_TYPES.map(rt => (
                         <Select.Option key={`request-type-${rt.id}`} value={rt.id}>{rt.label}</Select.Option>
                       ))}
@@ -168,13 +175,15 @@ const AddNewRequest = (props) => {
                   <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
                     <Input  placeholder="Purpose" />
                   </Form.Item>
-                  <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
-                    <Input type="number"  placeholder="Quantity" />
-                  </Form.Item>
+                  {(requestType === REQUEST_TYPES[1]?.id) && (
+                    <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
+                      <Input type="number"  placeholder="Quantity" />
+                    </Form.Item>
+                  )}
                   <Form.Item>
-                  <Button type="primary" htmlType="submit" className="bs-form-button">
-                    Add Entry
-                  </Button>
+                    <Button type="primary" htmlType="submit" className="bs-form-button">
+                      Add Entry
+                    </Button>
                   </Form.Item>
                 </Form>
               </Col>

@@ -243,7 +243,7 @@ export function fetchRequests(query) {
     case FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return getAllDepartmentItemRequests(query)
     case FETCH_REQUEST_TYPES.HOD_PENDING_REVIEW:
-      return fetchHODPendingReviewRequests(query)
+      return service({url: `/requestItemsByDepartment?toBeReviewed=${true}`})
     case FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
       return service({url: "/requestItems/endorsed", method: "GET"})
     case FETCH_REQUEST_TYPES.DOCUMENTED_REQUESTS_BY_SUPPLIER:

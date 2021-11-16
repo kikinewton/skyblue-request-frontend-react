@@ -5,6 +5,11 @@ import { CURRENCY_CODE } from '../../../../util/constants';
 
 const columns = [
   {
+    title: "Reference",
+    dataIndex: "pettyCashRef",
+    key: "pettyCashRef",
+  },
+  {
     title: "Descrption",
     dataIndex: "name",
     key: "name",

@@ -52,7 +52,7 @@ export function getAllQuotations(query) {
   const { requestType } = query
   switch(requestType) {
     case ALL_QUOTATIONS:
-      return getQuotations()
+      return service({url: `/quotations`})
     case QUOTATIONS_WITHOUT_DOCUMENT:
       return getAllQuotationsWithoutDocuments()
     case QUOTATIONS_WITHOUT_DOCUMENT_TEST:

@@ -59,7 +59,8 @@ const mapStateToProps = (store) => ({
   request_categories: store.requestCategory.request_categories,
   request_category_loading: store.requestCategory.loading,
   request_category_submit_success: store.requestCategory.submit_success,
-  request_category_submitting: store.requestCategory.submitting
+  request_category_submitting: store.requestCategory.submitting,
+  request_category: store.requestCategory.request_category
 })
 
 const mapActionsToState = (dispatch) => {

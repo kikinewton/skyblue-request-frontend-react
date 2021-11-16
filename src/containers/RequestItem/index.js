@@ -13,6 +13,7 @@ import ApprovePendingList from './components/ApprovePendingList';
 import { Menu, Row, Col } from "antd"
 import PrivateRoute from '../../presentation/PrivateRoute';
 import { FUNCTIONAL_ROLES } from '../../util/constants';
+import { EMPLOYEE_ROLE } from '../../util/datas';
 
 
 export const REQUEST_ITEMS = [
@@ -24,6 +25,8 @@ const RequestItemIndex = (props) => {
   const {
     currentUser
   } = props
+  console.log('curentUser', currentUser)
+
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
   console.log('my request path', path)
@@ -43,7 +46,6 @@ const RequestItemIndex = (props) => {
 
   React.useEffect(() => {
     const url = window.location.href
-    console.log("url", url)
     if(url.indexOf("/hod-pending-endorse") !== -1) {
       setKey("hod-pending-endorse")
     } else if(url.indexOf("/hod-pending-approve") !== -1) {
@@ -52,6 +54,19 @@ const RequestItemIndex = (props) => {
       setKey("gm-pending-approve")
     }
   }, [key])
+
+  const DefaultPage = () => {
+    console.log('currentUserRole', currentUser.role, "ROLE ID", EMPLOYEE_ROLE.ROLE_HOD)
+    const userRole = currentUser.role
+    switch(userRole) {
+      case EMPLOYEE_ROLE.ROLE_HOD:
+        return <Redirect to="/app/request-items/hod-pending-endorse" />
+      case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
+        return <Redirect to="/app/request-items/gm-pending-approve" />
+      default:
+        return <Redirect to="/app" />
+    }
+  }
 
   return (
     <>
@@ -65,21 +80,29 @@ const RequestItemIndex = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="hod-pending-endorse">
-              <NavLink to="/app/request-items/hod-pending-endorse">
-                <span>Pending Endorsement</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="hod-pending-approve">
-              <NavLink to="/app/request-items/hod-pending-approve">
-                <span>Pending Review</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="gm-pending-approve">
-              <NavLink to="/app/request-items/gm-pending-approve">
-                <span>Pending Approval</span>
-              </NavLink>
-            </Menu.Item>
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
+              <>
+                <Menu.Item key="hod-pending-endorse">
+                  <NavLink to="/app/request-items/hod-pending-endorse">
+                    <span>Pending Endorsement</span>
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="hod-pending-approve">
+                  <NavLink to="/app/request-items/hod-pending-approve">
+                    <span>Pending Review</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
+              <>
+                <Menu.Item key="gm-pending-approve">
+                  <NavLink to="/app/request-items/gm-pending-approve">
+                    <span>Pending Approval</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
           </Menu>
         )}
       >
@@ -89,21 +112,23 @@ const RequestItemIndex = (props) => {
             path={`${path}`}
             {...props}
           >
-            <Redirect to="/app/request-items/hod-pending-endorse" />
+            {DefaultPage}
           </AuthenticatedRoute>
           <AuthenticatedRoute
+            roles={[EMPLOYEE_ROLE.ROLE_HOD]}
             path={`/app/request-items/hod-pending-endorse`}
             component={HodEndorsePendingList}
             {...props}
           />
           <AuthenticatedRoute
+            roles={[EMPLOYEE_ROLE.ROLE_HOD]}
             exact
             path={`/app/request-items/hod-pending-approve`}
             component={HodReviewPendingList}
             {...props}
           />
           <AuthenticatedRoute 
-            // roles={FUNCTIONAL_ROLES.generalManagerApproveRoles}
+            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
             exact
             path={`/app/request-items/gm-pending-approve`}
             component={ApprovePendingList}

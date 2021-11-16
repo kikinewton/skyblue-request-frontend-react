@@ -24,7 +24,21 @@ const supplierColumns = props => [
     dataIndex: "actions",
     key: "actions",
     align: "right",
-    render: (text, row) => <Button onClick={() => props.onSelect(row)} size="small" className="submit-btn"><RightOutlined /></Button>
+    render: (text, row) => {
+      //console.log('row supplier id', row.supp)
+      const buttonType = props.selectedSupplier?.supplierId === row?.supplierId ? "primary" : "default"
+      return (
+        <>
+            <Button 
+              onClick={() => props.onSelect(row)} 
+              size="small" 
+              type={buttonType}
+            >
+              <RightOutlined />
+            </Button>
+        </>
+      )
+    }
   }
 ]
 
@@ -168,7 +182,9 @@ const CreateQuotation = (props) => {
                     onSelect: (row) => {
                       console.log('selected supplier', row)
                       setSelectedSupplier(row)
-                    }
+                      setCurrent(1)
+                    },
+                    selectedSupplier: selectedSupplier
                   })}
                   dataSource={quotations}
                   rowKey="supplierId"
@@ -179,7 +195,7 @@ const CreateQuotation = (props) => {
                 />
               </Col>
             </Row>
-            <Row style={{padding: "10px 0px 10px 0px"}}>
+            {/* <Row style={{padding: "10px 0px 10px 0px"}}>
               <Col span={24}>
                 <Button 
                   onClick={() => {
@@ -191,11 +207,18 @@ const CreateQuotation = (props) => {
                   <RightOutlined />
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </>
         )}
         {current == 1 && (
           <>
+            <Row>
+              <Col span={24} style={{padding: "10px 0px 10px 0px"}}>
+                <span style={{fontWeight: "bold"}}>
+                  selected Supplier: {selectedSupplier?.supplierName}
+                </span>
+              </Col>
+            </Row>
             <Row>
               <Col span={24}>
                 <Table 

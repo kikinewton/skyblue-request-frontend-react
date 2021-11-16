@@ -23,7 +23,7 @@ const Settings = React.lazy(()=> import('./containers/Settings'))
 const Account = React.lazy(() => import('./containers/Account'))
 const Report = React.lazy(()=> import('./containers/Report'))
 const Audit = React.lazy(() => import('./containers/Audit'))
-const QuotationView = React.lazy(() => import('./containers/QuotationView'))
+const QuotationView = React.lazy(() => import('./containers/Quotation'))
 const RequestItemIndex = React.lazy(() => import("./containers/RequestItem"))
 const PettyCashIndex = React.lazy(() => import("./containers/PettyCash"))
 const FloatIndex = React.lazy(() => import("./containers/Float"))
@@ -47,7 +47,7 @@ function App(props) {
           <AuthenticatedRoute path="/app/local-purchase-orders" component={LocalPurchaseOrderModule} />
           <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
           <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
-          <AuthenticatedRoute path="/app/quotations" component={QuotationView} {...props} />
+          <Route path="/app/quotations" component={QuotationView} {...props} />
           <AuthenticatedRoute path="/app/suppliers" component={SupplierModule} {...props} roles={[EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]} />
 
           <Route path="/app/request-items" component={RequestItemIndex} {...props} />

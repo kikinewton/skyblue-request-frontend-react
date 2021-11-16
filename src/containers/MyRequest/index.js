@@ -45,13 +45,13 @@ const MyRequest = (props)=> {
 
   return (
     <React.Fragment>
-      <AppLayout title="My Requests">
-        <Row style={{marginBottom: 20}}>
-          <Col span={24}>
-          <Menu
-            mode="horizontal"
-            selectedKeys={[current]}
-          >
+      <AppLayout 
+        title="My Requests"
+        subNav={(
+            <Menu
+              mode="horizontal"
+              selectedKeys={[current]}
+            >
               <Menu.Item 
                 key="my-lpos"
                 onClick={()=> {
@@ -112,8 +112,8 @@ const MyRequest = (props)=> {
                 </Menu.Item>
               </Menu.SubMenu>
             </Menu>
-          </Col>
-        </Row>
+        )}
+      >
         <Switch>
           <Route exact path={`${path}`}>
             <MyRequestsIndex {...props} />

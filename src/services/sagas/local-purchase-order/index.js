@@ -34,15 +34,16 @@ export function* createLocalPurchaseOrder(action) {
   try {
     const response = yield call(saveLocalPurchaseOrderApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Float', response?.message)
+      openNotification('success', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))
     } else {
-      openNotification('error', 'Create Float', response?.message)
+      openNotification('error', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Create Float', errorText)
+    const errors = error?.response?.data?.errors
+    const errorText = errors[0] || 'Failed to create local purchase order'
+    openNotification('error', 'Create Local Purchase Order', errorText)
     yield put(Creators.createLocalPurchaseOrderFailure(errorText))
   }
 }
