@@ -313,7 +313,7 @@ const CreateLPO = (props) => {
                   columns={requestColumns({})}
                   size="small"
                   rowKey="id"
-                  dataSource={selectedQuotation?.requestItems}
+                  dataSource={selectedQuotation?.requestItems.filter(it => !it?.unitPrice)}
                   pagination={false}
                   rowSelection={{
                     onChange: (selectedRowKeys, selectedRows) => {
@@ -329,6 +329,7 @@ const CreateLPO = (props) => {
               <Col span={24}>
                 <Button type="default"
                   onClick={() => {
+                    setSelectedRequests([])
                     setCurrent(0)
                   }}
                   style={{float: "left"}}
@@ -425,7 +426,9 @@ const CreateLPO = (props) => {
             </Row>
             <Row>
               <Col md={24} className="bs-stepper-nav">
-                <Button type="primary" onClick={()=> setCurrent(1)}>
+                <Button type="primary" onClick={()=> {
+                  setCurrent(1)
+                }}>
                   <LeftOutlined /> Prev
                 </Button>
                 <Button 
@@ -459,10 +462,11 @@ const CreateLPO = (props) => {
                 <Button type="primary" onClick={()=> setCurrent(2)}>
                   <LeftOutlined /> Prev
                 </Button>
-                <Button 
+                <Button
+                  loading={submitting_local_purchase_order} 
                   type="primary" 
                   onClick={()=> handleSubmit()}
-                  disabled={!deliveryDate || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
+                  disabled={!deliveryDate || submitting_local_purchase_order || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
                 >
                   SUBMIT
                 </Button>
