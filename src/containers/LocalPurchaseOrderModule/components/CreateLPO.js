@@ -191,7 +191,7 @@ const CreateLPO = (props) => {
       })
     }
     console.log('payload', payload)
-    //createLocalPurchaseOrder(payload)
+    createLocalPurchaseOrder(payload)
   }
 
   const handleUpdateRequestUnitPrice = (row, value) => {
