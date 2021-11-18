@@ -214,6 +214,8 @@ export function updateRequest(data) {
       return service({url: '/requestItems/updateStatus/CANCEL', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_COMMENT:
       return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
+    case UPDATE_REQUEST_TYPES.HOD_REVIEW:
+      return service({url: '/requestItems/updateStatus/REVIEW', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:
       return hodRejectBulkRequest(payload)
     case UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:

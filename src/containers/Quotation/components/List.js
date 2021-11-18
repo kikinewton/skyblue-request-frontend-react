@@ -1,27 +1,28 @@
-import { DownloadOutlined } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Badge } from 'antd'
-import React, { useEffect } from 'react'
+import { EyeFilled } from '@ant-design/icons'
+import { Card, PageHeader, Input, Button, Table, Row, Col, Badge, Drawer, List } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { prettifyDateTime } from '../../../util/common-helper'
-import { ALL_QUOTATIONS } from '../../../util/quotation-types'
+import { NOT_LINKED_TO_LPO } from '../../../util/quotation-types'
 
 const columns = (props) => [
   {
     title: 'Quotation Ref',
-    dataIndex: 'quotationRef',
+    dataIndex: 'quotation',
     key: 'quotationRef',
+    render: (text, row) => row.quotation?.quotationRef
   },
   {
     title: 'Created On',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    render: (text) => text ? prettifyDateTime(text) : "N/A"
+    render: (text, row) => prettifyDateTime(row.quotation?.createdAt) || "N/A"
   },
   {
     title: 'Supplier',
     dataIndex: 'supplier',
     key: 'supplier',
-    render: (text, row) => row?.supplier?.name
+    render: (text, row) => row?.quotation?.supplier?.name
   },
   {
     title: 'Action',
@@ -31,8 +32,8 @@ const columns = (props) => [
     render: (text, row) => (
       <Row>
         <Col md={24}>
-          <Button onClick={() => props.onDownloadPdfClick(row)} size="small">
-            <DownloadOutlined /> Download
+          <Button shape="circle" onClick={() => props.onView(row)} size="small">
+            <EyeFilled />
           </Button>
         </Col>
       </Row>
@@ -41,12 +42,38 @@ const columns = (props) => [
   },
 ]
 
+const requestItemColumns = props => [
+  {
+    title: "Reference",
+    dataIndex: "requestItemRef",
+    key: "requestItemRef"
+  },
+  {
+    title: "Descripton",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity"
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status"
+  },
+]
+
 const ListQuotations = (props) => {
   const {
     fetchQuotations,
+    filtered_quotations,
     quotations,
-    fetching_quotations
+    quotationLoading
   } = props
+  const [quotationViewVisible, setQuotationViewVisible] = useState(false)
+  const [selectedQuotation, setSelectedQuotation] = useState(null)
   const history = useHistory()
 
   const expandedRowRender = (row) => {
@@ -64,7 +91,7 @@ const ListQuotations = (props) => {
 
   useEffect(() => {
     fetchQuotations({
-      requestType: ALL_QUOTATIONS
+      requestType: NOT_LINKED_TO_LPO
     })
   }, [])
 
@@ -75,7 +102,13 @@ const ListQuotations = (props) => {
           <PageHeader 
             title="Quotations"
             extra={[
-              <Input type="search" style={{width: 300}} placeholder="search by supplier" key="input-search" />,
+              <Input 
+                type="search" 
+                style={{width: 300}} 
+                placeholder="search by supplier" 
+                key="input-search" 
+                onChange={(event) => props.filterQuotations(event.target.value)}
+              />,
               <Button type="primary" onClick={() => history.push("/app/quotations/add-new")} key="add-button">New Supplier Quote</Button>
             ]}
           />
@@ -85,17 +118,74 @@ const ListQuotations = (props) => {
       <Card>
         <Table 
           columns={columns({
-
+            onView: (row) => {
+              console.log('row', row)
+              setSelectedQuotation(row)
+              setQuotationViewVisible(true)
+            }
           })}
-          dataSource={quotations}
-          loading={fetching_quotations}
-          size="small"
+          loading={quotationLoading}
+          dataSource={filtered_quotations}
+          size="quotation.small"
+          rowKey="id"
           bordered
           pagination={{
             pageSize: 20
           }}
         />
       </Card>
+      <Drawer
+        visible={quotationViewVisible}
+        title="Quotation Detail"
+        placement="right"
+        width={700}
+        maskClosable={false}
+        onClose={() => {
+          setSelectedQuotation(null)
+          setQuotationViewVisible(false)
+        }}
+      >
+        <Row>
+          <Col span={24}>
+            <List 
+              itemLayout="horizontal"
+              
+            >
+              <List.Item>
+                <List.Item.Meta title="Quotation Reference" description={selectedQuotation?.quotation?.quotationRef || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Created Date" description={prettifyDateTime(selectedQuotation?.quotation?.createdAt) || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Supplier" description={selectedQuotation?.quotation?.supplier?.name} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            {/* {selectedQuotation ? } */}
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <span style={{fontWeight: "bold"}}>Request Item Entries</span>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Table 
+              rowKey="id"
+              columns={requestItemColumns({})}
+              dataSource={selectedQuotation?.requestItems || []}
+              size="small"
+              pagination={false}
+              bordered
+            />
+          </Col>
+        </Row>
+      </Drawer>
     </>
   )
 }

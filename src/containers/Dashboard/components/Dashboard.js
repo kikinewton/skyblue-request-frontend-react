@@ -21,7 +21,7 @@ const Dashboard = (props) => {
           <Row gutter={12}>
             <Col md={6}>
               <DashboardCard
-                title="Number of requests this month"
+                title="This month's requests"
                 value={countOfRequestPerCurrentMonth}
               />
             </Col><Col md={6}>

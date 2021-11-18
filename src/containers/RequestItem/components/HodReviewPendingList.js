@@ -1,8 +1,10 @@
 import React from 'react';
-import { Row, Col, Button, Table, Drawer, Divider, Card } from "antd"
+import { Row, Col, Button, Table, Drawer, Divider, Card, List, Image } from "antd"
 import { REQUEST_ITEMS } from '..';
-import { CheckOutlined } from '@ant-design/icons';
+import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types';
+import { prettifyDateTime } from '../../../util/common-helper';
+import { BASE_URL } from '../../../services/api/urls';
 
 const columns = props => [
   {
@@ -32,9 +34,20 @@ const columns = props => [
   },
   {
     title: "Date",
-    dataIndex: "createdAt",
-    key: "createdAt"
+    dataIndex: "createdDate",
+    key: "createdDate"
   },
+  {
+    title: "Reviewed",
+    dataIndex: "requestReview",
+    key: "requestReview"
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, row) => (<Button type="primary" onClick={() => props.onReview(row)}>Review</Button>)
+  }
 ]
 
 const HodReviewPendingList = (props) => {
@@ -43,12 +56,19 @@ const HodReviewPendingList = (props) => {
     setSelectedRequests,
     resetRequest,
     fetchRequests,
-    requests
+    requests,
+    updateRequest
   } = props
   const [drawer, setDrawer] = React.useState(false)
+  const [selectedRequest, setSelectedRequest] = React.useState(null)
+  const [imagePreview, setImagePreview] = React.useState(false)
 
   const submit = () => {
-
+    updateRequest({
+      updateType: "HOD_REVIEW",
+      role: "hod",
+      payload: {requestItems: selected_requests}
+    })
   }
 
   React.useEffect(() => {
@@ -63,18 +83,35 @@ const HodReviewPendingList = (props) => {
       <Card
         size="small"
         title="Requests Pending review from department HOD"
+        extra={[
+          <Button disabled={selected_requests.length < 1} type="primary"><CheckOutlined /> CONFIRM SELECTED REQUESTS</Button>
+        ]}
       >
         <Row>
           <Col span={24}>
             <Table
               size="small"
               columns={columns({
-
+                onReview: (row) => {
+                  console.log('row', row)
+                  const myRow = { ...row, quotation: row?.quotations?.filter(qt => qt?.supplier?.id == row?.suppliedBy)[0] }
+                  console.log('myRow', myRow)
+                  setSelectedRequest(myRow)
+                  setDrawer(true)
+                } 
               })}
+              loading={props.requestLoading}
               dataSource={requests}
               rowKey="id"
               pagination={{
                 pageSize: 20
+              }}
+              rowSelection={{
+                onChange: (selectedRowKeys, selectedRows) => {
+                  console.log('selectedrow', selectedRows)
+                  setSelectedRequests(selectedRows)
+                },
+                selectedRowKeys: selected_requests.map(it => it.id)
               }}
             />
           </Col>
@@ -92,27 +129,49 @@ const HodReviewPendingList = (props) => {
           setDrawer(false)
         }}
       >
-        <Row style={{marginBottom: 10}}>
-          <Col span={24}>
-            <Button 
-              type="primary" 
-              style={{float: "right"}}
-              onClick={submit}
-            >
-              <CheckOutlined /> SUBMIT
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
         <Row>
           <Col span={24}>
-            <Table 
-              columns={columns({})}
-              dataSource={selected_requests}
-              rowKey="id"
-              size="small"
-              pagination={false}
-            />
+            <List 
+              itemLayout="horizontal"
+              
+            >
+              <List.Item>
+                <List.Item.Meta title="Quotation Reference" description={selectedRequest?.quotation?.quotationRef || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Created Date" description={prettifyDateTime(selectedRequest?.quotation?.createdAt) || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Supplier" description={selectedRequest?.quotation?.supplier?.name} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        <Row style={{minHeight: 300, border: "#000 1px solid"}}>
+          <Col span={24}>
+            <Row>
+              <Col span={24}>
+
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                {selectedRequest?.quotation?.requestDocument?.documentType.includes("image/") && (
+                  <Image 
+                    onClick={() => setImagePreview(true)}
+                    preview={imagePreview}
+                    width={200}
+                    src={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}
+                  />
+                )}
+                {selectedRequest?.quotation?.requestDocument?.documentType.includes("pdf/") && (
+                  <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
+                )}
+                {selectedRequest?.quotation?.requestDocument?.documentType.includes("excel/") && (
+                  <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
+                )}
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Drawer>

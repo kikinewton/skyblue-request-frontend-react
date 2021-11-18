@@ -1,5 +1,6 @@
 import service from '../apiRequest'
-import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
+import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO }
+ from '../../../util/quotation-types'
 
 
 const path = "/quotations"
@@ -59,6 +60,8 @@ export function getAllQuotations(query) {
       return getAllQuotationsWithoutDocumentsTest()
     case QUOTATIONS_BY_SUPPLIER:
       return getQuotationBySupplier(query)
+    case NOT_LINKED_TO_LPO:
+      return service({url: `/quotations?linkedToLpo=${false}`, method: "GET"})
     default:
       return getQuotations()
   }

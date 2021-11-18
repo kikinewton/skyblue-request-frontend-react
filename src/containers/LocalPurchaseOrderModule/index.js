@@ -75,6 +75,7 @@ const mapStateToProps = store => ({
 
   quotations: store.quotation.quotations,
   fetching_quotations: store.quotation.loading,
+  filtered_quotations: store.quotation.filtered_quotations,
 
   request_categories: store.requestCategory.request_categories,
   fetching_request_categories: store.requestCategory.loading,
@@ -96,7 +97,8 @@ const mapActionsToState = dispatch => ({
   resetSuppliers: () => dispatch(SupplierCreators.resetSuppliers()),
 
   fetchQuotations: (query) => dispatch(QuotationCreators.fetchQuotations(query)),
-  resetQuotation: () => dispatch(QuotationCreators.resetQuotation())
+  resetQuotation: () => dispatch(QuotationCreators.resetQuotation()),
+  filterQuotations: (filter) => dispatch(QuotationCreators.filterQuotations(filter)),
 })
 
 export default connect(mapStateToProps, mapActionsToState)(LocalPurchaseOrderModule)

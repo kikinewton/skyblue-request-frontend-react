@@ -3,8 +3,9 @@ import { Document, Page, PDFViewer } from '@react-pdf/renderer'
 import { Card, Col, Row, Steps, Select, Table, Button, Input, DatePicker, Image } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BASE_URL } from '../../../services/api/urls'
+import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import { prettifyDateTime } from '../../../util/common-helper'
-import { QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
+import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
 // import { Document, Page } from "react-pdf"
 
 const quotationColumns = props => [
@@ -152,6 +153,9 @@ const CreateLPO = (props) => {
     quotations,
     fetching_quotations,
     resetQuotation,
+    fetchQuotations,
+    filterQuotations,
+    filtered_quotations,
 
     createLocalPurchaseOrder,
     submitting_local_purchase_order,
@@ -182,12 +186,12 @@ const CreateLPO = (props) => {
       items: selectedRequests.map(rq => {
         let data = rq
         data["requestCategory"] = request_categories.find(it => it.id === rq.requestCategory)
-        data["suppliedBy"] = selectedSupplier
+        data["suppliedBy"] = selectedQuotation?.quotation?.supplier?.id
         return data;
       })
     }
     console.log('payload', payload)
-    createLocalPurchaseOrder(payload)
+    //createLocalPurchaseOrder(payload)
   }
 
   const handleUpdateRequestUnitPrice = (row, value) => {
@@ -218,7 +222,10 @@ const CreateLPO = (props) => {
     props.resetSuppliers()
     props.resetQuotation()
     //props.resetRequestCategory()
-    fetchSuppliers({suppliersWithRQ: true})
+    //fetchSuppliers({suppliersWithRQ: true})
+    fetchQuotations({
+      requestType: NOT_LINKED_TO_LPO
+    })
     props.fetchRequestCategories({})
   }, [])
 
@@ -238,7 +245,7 @@ const CreateLPO = (props) => {
       <Row>
         <Col span={24}>
           <Steps current={current} size="small">
-            <Steps.Step title="Select Items" />
+            <Steps.Step title="Select Quotation" />
             <Steps.Step title="Select Request Items" />
             <Steps.Step title="Update Unit Price And Request Category" />
             <Steps.Step title="Confirm and submit" />
@@ -250,26 +257,17 @@ const CreateLPO = (props) => {
           <>
             <Row style={{marginBottom: 20}}>
               <Col span={24}>
-                <Select 
-                  loading={fetching_suppliers} 
-                  style={{width: '100%'}} 
-                  placeholder="Select a supplier" 
-                  defaultValue={selectedSupplier}
-                  onChange={(value)=> {
-                    setSelectedSupplier(value)
-                    fetchQuotationsBySupplier(value)
-                  }}
-                >
-                  <Select.Option value={undefined}>Select Supplier...</Select.Option >
-                  {suppliers && suppliers.map(item => (
-                    <Select.Option value={item.id} key={`supplier-select-${item.id}`}>{item.name}</Select.Option>
-                  ))}
-                </Select>
+                <span style={{fontWeight: "bold"}}>Selected Quotation: {selectedQuotation?.quotation?.quotationRef || "N/A"}</span>
               </Col>
             </Row>
-            <Row style={{marginBottom: 20}}>
+            <Row style={{padding: "10px 0px 10px 0px"}}>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Selected Quotation: {selectedQuotation?.quotation?.quotationRef || "N/A"}</span>
+                <Input 
+                  type="search"
+                  style={{width: 300}}
+                  onChange={(event) => filterQuotations(event.target.value)}
+                  placeholder="Search By Supplier / reference"
+                />
               </Col>
             </Row>
             <Row>
@@ -285,7 +283,7 @@ const CreateLPO = (props) => {
                   })}
                   loading={fetching_quotations}
                   size="small"
-                  dataSource={quotations}
+                  dataSource={filtered_quotations}
                   pagination={false}
                   bordered
                 />
@@ -335,10 +333,10 @@ const CreateLPO = (props) => {
                   }}
                   style={{float: "left"}}
                 >
+                  <LeftOutlined />
                   Previous
-                  <RightOutlined />
                 </Button>
-                <Button type="default"
+                <Button type="primary"
                   onClick={() => {
                     setCurrent(2)
                   }}

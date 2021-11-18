@@ -78,6 +78,7 @@ const mapStateToProps = (store) => ({
 
   quotations: store.quotation.quotations,
   quotationLoading: store.quotation.loading,
+  filtered_quotations: store.quotation.filtered_quotations,
   quotationSubmitSuccess: store.quotation.submitSuccess,
   quotationSubmitting: store.quotation.submitting,
 
@@ -124,6 +125,9 @@ const mapActionsToState = (dispatch) => {
   },
   updateQuotation: (quotationId, payload) => {
     dispatch(QuotationCreators.updateQuotation(quotationId, payload))
+  },
+  filterQuotations: (filter) => {
+    dispatch(QuotationCreators.filterQuotations(filter))
   },
   resetQuotation: (quotationId, payload) => {
     dispatch(QuotationCreators.resetQuotation())

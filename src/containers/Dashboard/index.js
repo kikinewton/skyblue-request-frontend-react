@@ -1,5 +1,6 @@
 import { Spin } from 'antd'
 import React from 'react'
+import { RESPONSE_SUCCESS_CODE } from '../../services/api/apiRequest'
 import { getDashboardData as getDashboardDataApi} from '../../services/api/dashboard'
 import openNotification from '../../util/notification'
 import AppLayout from '../AppLayout'
@@ -13,7 +14,7 @@ const Dashboard = (props) => {
     setLoading(true)
     try {
       const response = await getDashboardDataApi({})
-      if(response.status === 'OK') {
+      if(response.status === RESPONSE_SUCCESS_CODE) {
         const reasponseData = response.data
         setData(reasponseData)
       } else {

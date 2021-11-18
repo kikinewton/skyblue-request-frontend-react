@@ -14,6 +14,8 @@ export const { Types, Creators } = createActions(
     createQuotationSuccess: ["responseData"],
     createQuotationFailure: ["error"],
 
+    filterQuotations: ["filter"],
+
     resetQuotation: null
   }
 )
