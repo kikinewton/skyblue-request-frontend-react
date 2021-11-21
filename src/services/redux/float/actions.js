@@ -19,7 +19,7 @@ export const { Types, Creators } = createActions(
     createFloatRequestFailure: ["error"],
 
     updateFloatRequest: ["payload"],
-    updateFloatRequestSuccess: ["id", "responseData"],
+    updateFloatRequestSuccess: ["responseData"],
     updateFloatRequestFailure: ["error"],
 
     deleteFloatRequest: ["requestId", "payload"],

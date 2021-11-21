@@ -1,10 +1,8 @@
 import React from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader, Steps, Upload, message } from 'antd'
-import { CheckOutlined, FileAddFilled, FileAddOutlined, FileTextOutlined, LeftOutlined, MinusOutlined, RightOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons'
-import { REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
+import { Card, Col, Form, Row, Table, Input, Button, Steps, Upload, message } from 'antd'
+import { CheckOutlined, LeftOutlined, RightOutlined, MinusOutlined, UploadOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
-import { saveDocument, saveSingleDocument } from "../../../../services/api/document"
-import { file } from '@babel/types'
+import { saveDocument } from "../../../../services/api/document"
 import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 
 const columns = (props) => [

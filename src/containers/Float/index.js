@@ -115,8 +115,8 @@ const mapActionsToProps = (dispatch) => {
     updateFloatRequest: (options) => {
       dispatch(FloatCreators.updateFloatRequest(options))
     },
-    resetFloatRequests: () => {
-      dispatch(FloatCreators.resetRequest())
+    resetFloatRequests: (payload) => {
+      dispatch(FloatCreators.resetRequest(payload))
     },
     fetchSuppliers: (query)=> {
       dispatch(SupplierCreators.fetchSuppliers(query))

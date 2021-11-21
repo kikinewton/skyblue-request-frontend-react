@@ -1,11 +1,12 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/float/actions'
 
 import {
   fetchAllFloatRequests as fetchAllFloatRequestsApi,
   fetchMyFloatRequests as fetchMyFloatRequestsApi,
   saveFloatRequest as saveFloatRequestApi,
-  fetchFloatRequests as fetchFloatRequestsApi
+  fetchFloatRequests as fetchFloatRequestsApi,
+  updateFloatRequest as updateFloatRequestApi,
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -67,6 +68,25 @@ export function* createFloatRequest(action) {
   }
 }
 
+export function* updateFloatRequest(action) {
+  const { payload } = action
+  console.log('saga payload', payload)
+  try {
+    const response = yield call(updateFloatRequestApi, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Update Float', response?.message)
+      yield put(Creators.updateFloatRequestSuccess(response?.data))
+    } else {
+      openNotification('error', 'Update Float', response?.message)
+      yield put(Creators.updateFloatRequestFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    openNotification('error', 'Update Float', errorText)
+    yield put(Creators.updateFloatRequestFailure(errorText))
+  }
+}
+
 
 export function* resetFloatRequest(action) {
   yield put(Creators.resetFloatequest())
@@ -84,4 +104,8 @@ export function* watchFetchMyFloatRequests(action) {
 
 export function* watchCreateFloatRequest(action) {
   yield takeLatest(Types.CREATE_FLOAT_REQUEST, createFloatRequest)
+}
+
+export function* watchUpdateFloatRequest(action) {
+  yield takeLeading(Types.UPDATE_FLOAT_REQUEST, updateFloatRequest)
 }

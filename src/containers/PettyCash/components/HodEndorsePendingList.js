@@ -1,20 +1,20 @@
-import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
+import { CheckOutlined, CloseOutlined, EyeFilled, WarningOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES } from '../../../util/constants';
-import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
+import { CURRENCY_CODE } from '../../../util/constants';
+import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => [
+  {
+    title: "Reference",
+    dataIndex: "pettyCashRef",
+    key: "pettyCashRef"
+  },
   {
     title: "Description",
     dataIndex: "name",
     key: "name"
-  },
-  {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
   },
   {
     title: "purpose",
@@ -27,17 +27,29 @@ const columns = props => [
     key: "quantity"
   },
   {
-    title: "Priority",
-    dataIndex: "priorityLevel",
-    key: "priorityLevel",
-    render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
+    title: "Unit Price",
+    dataIndex: "amount",
+    key: "amount",
+    render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
+  {
+    title: "Endorsement Status",
+    dataIndex: "endorsement",
+    key: "endorsement"
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    align: "right",
+    render: (text, row) => (<EyeFilled onClick={() => props.viewDetails(row)} />)
+  }
 ]
 
 const selectedRequestsColumns = props => [
@@ -129,20 +141,22 @@ const HodEndorsePendingList = (props) => {
     update_request_success,
   } = props
   const [confirmDrawer, setConfirmDrawer] = useState(false)
+  const [infoVisible, setInfoVisible] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+  const [selectedRequest, setSelectedRequest] = useState(null)
 
   const submit = () => {
     console.log("action", actionType)
     updatePettyCashRequest({
-      updatetype: actionType,
-      
+      updateType: actionType,
     })
   }
 
   React.useEffect(()=> {
+    console.log('lets fetch petty cash pending endorse')
     resetPettyCashRequest()
     props.fetchPettyCashRequests({
-      requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
     })
   }, [])
 
@@ -150,7 +164,7 @@ const HodEndorsePendingList = (props) => {
     <>
       <Card title="Requests pending Endorsement" extra={[
         (
-          <Row style={{marginBottom: 10}}>
+          <Row style={{marginBottom: 10}} key="extras-first">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
             <Button 
               disabled={selected_petty_cash_requests.length < 1} 
@@ -193,7 +207,12 @@ const HodEndorsePendingList = (props) => {
             <Table
               loading={fetching_petty_cash_requests}
               size="small"
-              columns={columns({})}
+              columns={columns({
+                viewDetails: (row) => {
+                  setSelectedRequest(row)
+                  setInfoVisible(true)
+                }
+              })}
               dataSource={petty_cash_requests}
               rowKey="id"
               bordered
@@ -260,6 +279,40 @@ const HodEndorsePendingList = (props) => {
               bordered
               pagination={false}
             />
+          </Col>
+        </Row>
+      </Drawer>
+
+      <Drawer
+        forceRender
+        visible={infoVisible}
+        title={`Supporting Document`}
+        placement="right"
+        width={1000}
+        maskClosable={false}
+        onClose={() => {
+          setSelectedRequest(null)
+          setInfoVisible(false)
+        }}
+      >
+        <Row>
+          <Col span={24}>
+            <List>
+              <List.Item>
+                <List.Item.Meta title="Petty Cash Reference" description={selectedRequest?.pettyCashRef} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Description" description={selectedRequest?.name} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Date" description={ prettifyDateTime(selectedRequest?.createdDate)} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            
           </Col>
         </Row>
       </Drawer>

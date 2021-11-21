@@ -91,10 +91,6 @@ export function hodRejectBulkRequest(payload) {
     })
 }
 
-
-
-
-
 export function approveBulkRequests(data) {
   return service({
       url: `/requestItems/bulkApproval`,

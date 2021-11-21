@@ -26,11 +26,17 @@ const columns = props => [
   },
 ]
 
-const HodApprovePendingList = (props) => {
+const HodReviewPendingList = (props) => {
   const {
-    selected_requests,
-    setSelectedRequests,
-    resetRequest
+    selected_petty_cash_requests,
+    setSelectedPettyCashRequests,
+    fetchPettyCashRequests,
+    fetching_petty_cash_requests,
+    petty_cash_requests,
+    updatePettyCashRequest,
+    updating_request,
+    update_request_success,
+    resetPettyCashRequest
   } = props
   const [drawer, setDrawer] = React.useState(false)
 
@@ -39,7 +45,7 @@ const HodApprovePendingList = (props) => {
   }
 
   React.useEffect(() => {
-    resetRequest()
+    resetPettyCashRequest()
   }, [])
 
   return (
@@ -49,10 +55,10 @@ const HodApprovePendingList = (props) => {
           <Button 
             type="primary" 
             style={{marginRight: 5}}
-            disabled={selected_requests.length < 1}
-            onClick={() => {
-              setDrawer(true)
-            }}
+            disabled={selected_petty_cash_requests.length < 1}
+            // onClick={() => {
+            //   setDrawer(true)
+            // }}
           >
             Approve
           </Button>
@@ -73,9 +79,9 @@ const HodApprovePendingList = (props) => {
             rowSelection={{
               onChange: (selectedRowKeys, selectedRows) => {
                 console.log("selected row", selectedRows)
-                setSelectedRequests(selectedRows)
+                setSelectedPettyCashRequests(selectedRows)
               },
-              selectedRowKeys: (selected_requests || []).map(it => it.id)
+              selectedRowKeys: (selected_petty_cash_requests || []).map(it => it.id)
             }}
           />
         </Col>
@@ -88,7 +94,7 @@ const HodApprovePendingList = (props) => {
         width={1000}
         maskClosable={false}
         onClose={() => {
-          setSelectedRequests([])
+          setSelectedPettyCashRequests([])
           setDrawer(false)
         }}
       >
@@ -108,7 +114,7 @@ const HodApprovePendingList = (props) => {
           <Col span={24}>
             <Table 
               columns={columns({})}
-              dataSource={selected_requests}
+              dataSource={selected_petty_cash_requests}
               rowKey="id"
               size="small"
               pagination={false}
@@ -121,4 +127,4 @@ const HodApprovePendingList = (props) => {
 }
 
 
-export default HodApprovePendingList
+export default HodReviewPendingList

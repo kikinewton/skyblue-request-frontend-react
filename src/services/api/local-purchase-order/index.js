@@ -21,6 +21,15 @@ export function createLocalPurchaseOrder(payload) {
   })
 }
 
+export function createLocalPurchaseOrderDraft(payload) {
+  console.log('create LPO API')
+  return apiRequest({
+    method: "POST",
+    url: `/localPurchaseOrderDraft`,
+    data: payload
+  })
+}
+
 
 export function downloadLPODocument({lpoId}) {
   const url = `${BASE_URL}/localPurchaseOrders/${lpoId}/download`

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from 'antd'
-import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
+import { CheckOutlined, LeftCircleFilled, MinusOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
+import { CURRENCY_CODE } from '../../../../util/constants'
 
 const columns = (props) => [
   {
@@ -28,6 +29,7 @@ const columns = (props) => [
     title: "Action",
     dataIndex: "operation",
     key: "operation",
+    align: "right",
     render: (text, row) => (<Button size="small" type="primary" onClick={()=> props.removeEntry(row)}><MinusOutlined /></Button>)
   }
 ]
@@ -105,8 +107,8 @@ const AddNewRequest = (props) => {
                   <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
                     <Input type="number"  placeholder="Quantity" />
                   </Form.Item>
-                  <Form.Item label="Unit Price" name="unitPrice" rules={[{ required: true, message: 'Unit Price required' }]}>
-                    <Input type="number"  placeholder="Unit Price" />
+                  <Form.Item label={`Estimated Unit Price`} name="unitPrice" rules={[{ required: true, message: 'Unit Price required' }]}>
+                    <Input prefix={CURRENCY_CODE} type="number"  placeholder="Unit Price" />
                   </Form.Item>
                   <Form.Item>
                   <Button type="primary" htmlType="submit" className="bs-form-button">

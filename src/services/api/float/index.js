@@ -1,7 +1,6 @@
 import service from '../apiRequest'
-import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
+import { FETCH_FLOAT_REQUEST_TYPES, UPDATE_FLOAT_REQUEST_TYPES } from '../../../util/request-types'
 import { serializeQueryParams } from '../../../util/common-helper'
-import { FETCH_FLOAT_TYPES } from '../../../util/float-request-types'
 
 export function saveFloatRequest(payload){
   return service({
@@ -9,6 +8,23 @@ export function saveFloatRequest(payload){
     method: 'POST',
     data: payload
   })
+}
+
+export function updateFloatRequest(payload){
+  
+  const { updateType } = payload
+  console.log('update float api', updateType, 'compare', UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
+  switch(updateType) {
+    case UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE:
+      return service({url: `/bulkFloats/ENDORSE`, method: "PUT", data: payload})
+    default:
+      return service({url: `/bulkFloats`, method: "PUT", data: payload})
+  }
+  // return service({
+  //   url: `/bulkFloats/`,
+  //   method: 'PUT',
+  //   data: payload
+  // })
 }
 
 export function fetchMyFloatRequests(query) {
@@ -31,7 +47,7 @@ export function fetchFloatRequests(query) {
   console.log('fetch floats api', query)
   const queryStr = serializeQueryParams(query)
   switch(query.requestType) {
-    case FETCH_FLOAT_TYPES.HOD_PENDING_ENDORSEMENT:
+    case FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/floatsForDepartment`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)

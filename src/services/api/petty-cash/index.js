@@ -1,5 +1,6 @@
 import service from '../apiRequest'
 import { serializeQueryParams } from '../../../util/common-helper'
+import { FETCH_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types'
 
 export function savePettyCashRequest(payload){
   return service({
@@ -19,10 +20,12 @@ export function fetchMyPettyCashRequests(query) {
 
 export function fetchAllPettyCashRequests(query) {
   const queryStr = serializeQueryParams(query)
-  return service({
-    url: `/pettyCash${queryStr}`,
-    method: 'GET',
-  })
+  switch(query.requestType) {
+    case FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
+      return service({url: `/pettyCashByDepartment`, method: "GET"})
+    default:
+      return service({url: `/pettyCashRequests`, method: "GET"})
+  }
 }
 
 export function deletePettyCashRequest(id) {

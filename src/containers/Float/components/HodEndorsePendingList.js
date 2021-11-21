@@ -2,9 +2,7 @@ import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES } from '../../../util/constants';
-import { FETCH_FLOAT_TYPES, FLOAT_UPDATE_TYPES } from '../../../util/float-request-types';
-import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
+import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => [
   {
@@ -29,8 +27,8 @@ const columns = props => [
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
 ]
@@ -58,8 +56,8 @@ const selectedRequestsColumns = props => [
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
 ]
@@ -106,6 +104,8 @@ const HodEndorsePendingList = (props) => {
     resetFloatRequest,
     fetchFloatRequests,
     fetching_float_requests,
+    float_submit_success,
+    float_submitting,
     float_requests,
     updateFloatRequest,
     updating_request,
@@ -113,23 +113,32 @@ const HodEndorsePendingList = (props) => {
   } = props
   console.log('selected_float_requests', selected_float_requests)
   const [confirmDrawer, setConfirmDrawer] = useState(false)
-  const [actionType, setActionType] = useState(FLOAT_UPDATE_TYPES.HOD_ENDORSE)
+  const [actionType, setActionType] = useState(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
 
   const submit = () => {
     console.log("action", actionType)
     updateFloatRequest({
-      updatetype: actionType,
-      
+      updateType: actionType,
+      floats: selected_float_requests 
     })
   }
 
   React.useEffect(()=> {
     resetFloatRequest()
     props.fetchFloatRequests({
-      requestType: FETCH_FLOAT_TYPES.HOD_PENDING_ENDORSEMENT
+      requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
     })
   }, [])
 
+
+  React.useEffect(() => {
+    if(!float_submitting && float_submit_success) {
+      setSelectedFloatRequests([])
+      props.fetchFloatRequests({
+        requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+  }, [float_submit_success, float_submitting])
   return (
     <>
       <Card title="Requests pending Endorsement" extra={[
@@ -140,17 +149,17 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_float_requests.length < 1} 
               style={{backgroundColor: "yellow", marginRight: 5}}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_REJECT)
+                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT)
                 setConfirmDrawer(true)
               }}
             >
-              <WarningOutlined /> Reject With Comment
+              <WarningOutlined /> Comment
             </Button>
             <Button
               style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 
               disabled={selected_float_requests.length < 1}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_CANCEL)
+                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL)
                 setConfirmDrawer(true)
               }}
             >
@@ -161,7 +170,7 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_float_requests.length < 1} 
               type="primary" style={{marginRight: 5}}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
                 setConfirmDrawer(true)
               }}
             >
@@ -212,6 +221,8 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
+              disabled={float_submitting}
+              loading={float_submitting}
             >
               <CheckOutlined /> SUBMIT
             </Button>

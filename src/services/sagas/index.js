@@ -52,11 +52,13 @@ import {
 	watchCreateFloatRequest,
 	watchFetchMyFloatRequests,
 	watchFetchFloatRequests,
+	watchUpdateFloatRequest,
 } from "./float"
 
 import {
 	watchCreatePettyCashRequest,
-	watchFetchMyPettyCashRequests
+	watchFetchMyPettyCashRequests,
+	watchFetchPettyCashRequests
 } from "./petty-cash"
 
 import {
@@ -111,9 +113,11 @@ export default function* rootSaga() {
 		watchFetchMyFloatRequests(),
 		watchFetchFloatRequests(),
 		watchCreateFloatRequest(),
+		watchUpdateFloatRequest(),
 
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),
+		watchFetchPettyCashRequests(),
 
 		watchFetchRoles(),
 

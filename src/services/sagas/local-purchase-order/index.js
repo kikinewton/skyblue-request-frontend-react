@@ -3,7 +3,7 @@ import { Creators, Types } from '../../redux/local-purchase-order/actions'
 
 import {
   fetchLocalPurchaseOrders as fetchLocalPurchaseOrdersApi,
-  createLocalPurchaseOrder as saveLocalPurchaseOrderApi,
+  createLocalPurchaseOrderDraft as saveLocalPurchaseOrderApi,
 } from '../../api/local-purchase-order'
 
 import openNotification from '../../../util/notification'

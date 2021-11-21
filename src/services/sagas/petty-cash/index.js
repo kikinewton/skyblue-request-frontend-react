@@ -12,9 +12,10 @@ import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchPettyCashRequests(action) {
+  console.log('petty cash fetch saga-----')
   try {
     const response = yield call(fetchAllPettyCashRequestsApi, action.query)
-    if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response?.data || []
       yield put(Creators.fetchPettyCashRequestsSuccess(responseData))
     } else {

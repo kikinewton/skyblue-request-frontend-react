@@ -31,7 +31,7 @@ export const fetchPettyCashRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchPettyCashRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_requests: action.responseData, loading: false};
+  return { ...state, requests: action.responseData, loading: false};
 };
 
 export const fetchPettyCashRequestsFailure = (state = INITIAL_STATE, action) => {
