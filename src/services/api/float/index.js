@@ -13,18 +13,17 @@ export function saveFloatRequest(payload){
 export function updateFloatRequest(payload){
   
   const { updateType } = payload
-  console.log('update float api', updateType, 'compare', UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
+  console.log('update float api', updateType, 'compare', UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL)
   switch(updateType) {
     case UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE:
-      return service({url: `/bulkFloats/ENDORSE`, method: "PUT", data: payload})
+      return service({url: `/bulkFloats/ENDORSE`, method: "PUT", data: payload?.bulkFloat})
+    case UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT:
+      return service({url: `/bulkFloats/COMMENT`, method: "PUT", data: payload?.bulkFloat})
+    case UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL:
+      return service({url: `/bulkFloats/CANCEL`, method: "PUT", data: payload?.bulkFloat})
     default:
       return service({url: `/bulkFloats`, method: "PUT", data: payload})
   }
-  // return service({
-  //   url: `/bulkFloats/`,
-  //   method: 'PUT',
-  //   data: payload
-  // })
 }
 
 export function fetchMyFloatRequests(query) {

@@ -1,4 +1,4 @@
-import { Badge, Tag } from "antd"
+import { Tag } from "antd"
 import { EMPLOYEE_ROLE } from "./datas"
 
 export const USER_ROLES = {

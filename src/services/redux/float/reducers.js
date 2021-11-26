@@ -102,6 +102,7 @@ export const deleteRequestFailure = (state = INITIAL_STATE, action) => {
 
 
 export const setSelectedFloatRequests = (state = INITIAL_STATE, action) => {
+  console.log('set seleted float requests', action.requests)
   return { ...state, selected_requests: action?.requests};
 };
 

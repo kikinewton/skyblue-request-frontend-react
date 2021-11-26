@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
@@ -64,14 +64,14 @@ const selectedRequestsColumns = props => [
 
 const selectedRequestsColumnsForReject = props => [
   {
-    title: "Description",
-    dataIndex: "name",
-    key: "name"
+    title: "Reference",
+    dataIndex: "floatRef",
+    key: "floatRef"
   },
   {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
+    title: "Description",
+    dataIndex: "itemDescription",
+    key: "itemDescription"
   },
   {
     title: "purpose",
@@ -85,8 +85,8 @@ const selectedRequestsColumnsForReject = props => [
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
   {
@@ -117,9 +117,12 @@ const HodEndorsePendingList = (props) => {
 
   const submit = () => {
     console.log("action", actionType)
+    if((actionType !== UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE) && ((selected_float_requests.filter(it => !it.comment) || []).length > 0)) {
+      return message.error("Entries without comments not acccepted")
+    }
     updateFloatRequest({
       updateType: actionType,
-      floats: selected_float_requests 
+      bulkFloat: selected_float_requests
     })
   }
 
@@ -134,6 +137,7 @@ const HodEndorsePendingList = (props) => {
   React.useEffect(() => {
     if(!float_submitting && float_submit_success) {
       setSelectedFloatRequests([])
+      setConfirmDrawer(false)
       props.fetchFloatRequests({
         requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
@@ -232,7 +236,7 @@ const HodEndorsePendingList = (props) => {
         <Row>
           <Col span={24}>
             <Table 
-              columns={actionType !== "REJECT" ? selectedRequestsColumns({
+              columns={actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE ? selectedRequestsColumns({
                 actionType,
               }) 
               : selectedRequestsColumnsForReject({
