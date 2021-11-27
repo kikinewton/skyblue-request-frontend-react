@@ -4,11 +4,14 @@ import { Switch, useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as FloatCreators } from '../../services/redux/float/actions';
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
+import { Creators as CommentCreators } from '../../services/redux/comment/actions';
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
-import { Menu, Row, Col } from "antd"
-
+import ApprovePendingList from './components/ApprovePendingList';
+import { Menu} from "antd"
+import { EMPLOYEE_ROLE } from '../../util/datas';
+import { userHasAnyRole } from "../../services/api/auth"
 
 export const REQUEST_ITEMS = [
   {id: 1, name: "Coca cola", reason: "REPLACE", purpose: "refreshment", createdAt: "2021-12-18 14:00:50", status: "PENDING", quantity: 10},
@@ -23,9 +26,6 @@ const FloatIndex = (props) => {
   const { path } = useRouteMatch()
   console.log('my request path', path)
   console.log('path', path)
-  const displayPage = (props) => {
-
-  }
 
   const handleNavClick = (value) => {
     console.log('menus', value)
@@ -34,12 +34,10 @@ const FloatIndex = (props) => {
   React.useEffect(() => {
     const url = window.location.href
     console.log("url", url)
-    if(url.indexOf("/hod-pending-endorse") !== -1) {
+    if(url.indexOf("/float/hod-pending-endorse") !== -1) {
       setKey("hod-pending-endorse")
-    } else if(url.indexOf("/hod-pending-approve") !== -1) {
-      setKey("hod-pending-approve")
-    } else if(url.indexOf("gm-pending-approve") !== -1) {
-      setKey("gm-pending-approve")
+    } else if(url.indexOf("/float/approve") !== -1) {
+      setKey("/float/approve")
     }
   }, [key])
 
@@ -55,16 +53,20 @@ const FloatIndex = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="hod-pending-endorse">
-              <NavLink to="/app/float/hod-pending-endorse">
-                <span>Pending Endorsement</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="gm-pending-approve">
-              <NavLink to="/app/float/gm-approve-list">
-                <span>GM Awaiting Approval Requests</span>
-              </NavLink>
-            </Menu.Item>
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && (
+              <Menu.Item key="hod-pending-endorse">
+                <NavLink to="/app/float/hod-pending-endorse">
+                  <span>Floats Awaiting Endorsement</span>
+                </NavLink>
+              </Menu.Item>
+            )}
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
+              <Menu.Item key="/float/approve">
+                <NavLink to="/app/float/approve">
+                  <span>Floats Awaiting Approval</span>
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu>
         )}
       >
@@ -74,12 +76,21 @@ const FloatIndex = (props) => {
             path={`${path}`}
             {...props}
           >
-            <Redirect to="/app/float/hod-pending-endorse" />
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD ? <Redirect to="/app/float/hod-pending-endorse" /> :
+             <Redirect to="/app/float/approve" />
+             }
           </AuthenticatedRoute>
           <AuthenticatedRoute
             path={`${path}/hod-pending-endorse`}
             component={HodEndorsePendingList}
             {...props}
+            roles = {[EMPLOYEE_ROLE.ROLE_HOD]}
+          />
+          <AuthenticatedRoute 
+            path={`${path}/approve`}
+            component={ApprovePendingList}
+            {...props}
+            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
           />
         </Switch>
       </AppLayout>
@@ -101,7 +112,10 @@ const mapStateToProps = (store) => ({
   selected_float_requests: store.float.selected_requests,
 
   suppliers: store.supplier.suppliers,
-  authUser: store.auth
+  authUser: store.auth,
+
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -126,6 +140,9 @@ const mapActionsToProps = (dispatch) => {
     },
     resetFloatRequest: () => {
       dispatch(FloatCreators.resetFloatRequest())
+    },
+    createComment: (pT, comment) => {
+      dispatch(CommentCreators.createComment(pT,comment))
     }
   }
 }

@@ -1,4 +1,5 @@
 import * as dateFormatter from 'dateformat'
+import { CURRENCY_CODE } from './constants'
 
 export function prettifyDateTime(date) {
   if(!date) return 'N/A'
@@ -42,4 +43,17 @@ export function downloadFile(data, fileName, fileType) {
       document.body.appendChild(link);
       link.click();
   }
+}
+
+export function formatCurrency(value) {
+  let formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: CURRENCY_CODE,
+  
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
+  
+  return Number(value) ? formatter.format(value) : 0.00
 }

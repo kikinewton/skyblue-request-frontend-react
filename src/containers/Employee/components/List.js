@@ -113,6 +113,7 @@ const List = (props)=> {
   }
 
   React.useEffect(()=> {
+    props.resetEmployee()
     fetchRoles({})
     fetchEmployees({})
     fetchDepartments({})

@@ -155,14 +155,10 @@ const HodEndorsePendingList = (props) => {
                               let data = {
                                 procurementTypeId: it.id,
                                 comment: { description: it?.comment || "", process: actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL ? "HOD_REQUEST_ENDORSEMENT" : "HOD_REQUEST_ENDORSEMENT"},
+                                cancelled: true
                               }
                               return data
                             })
-      updateRequest({
-        updateType: actionType,
-        role: "hod",
-        payload: {requestItems: selected_requests}
-      })
       const commentPayload = {comments: comments}
       createComment("LPO", commentPayload)
     } else {

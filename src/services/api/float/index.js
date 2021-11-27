@@ -18,9 +18,11 @@ export function updateFloatRequest(payload){
     case UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE:
       return service({url: `/bulkFloats/ENDORSE`, method: "PUT", data: payload?.bulkFloat})
     case UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT:
-      return service({url: `/bulkFloats/COMMENT`, method: "PUT", data: payload?.bulkFloat})
+      return service({url: `/comment`, method: "POST", data: payload?.bulkFloat})
     case UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL:
       return service({url: `/bulkFloats/CANCEL`, method: "PUT", data: payload?.bulkFloat})
+    case UPDATE_FLOAT_REQUEST_TYPES.APPROVE:
+      return service({url: `/bulkFloats/APPROVE`, method: "PUT", data: payload?.bulkFloat})
     default:
       return service({url: `/bulkFloats`, method: "PUT", data: payload})
   }
@@ -48,6 +50,8 @@ export function fetchFloatRequests(query) {
   switch(query.requestType) {
     case FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/floatsForDepartment`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL:
+      return service({url: `/floats?endorsement=ENDORSED`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }

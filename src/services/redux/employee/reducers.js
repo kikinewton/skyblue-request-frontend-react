@@ -112,6 +112,7 @@ export const resetEmployee = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     employees: [],
+    filtered_employees: [],
     employee: {},
     error: null,
     loading: false,

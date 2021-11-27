@@ -27,7 +27,7 @@ export function* fetchComments(action) {
 }
 
 export function* createComment(action) {
-  console.log('create comment saga')
+  console.log('create comment saga', action)
   try {
     const response = yield call(createCommentApi, action.procurementType, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Table, Row, Col, PageHeader, Card, Button, Tag } from "antd"
+import { Table, Row, Col, Card, Button, Tag, Form } from "antd"
+import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
 
@@ -35,6 +36,11 @@ const columns = [
     key: "endorsement",
   },
   {
+    title: "Approval",
+    dataIndex: "approval",
+    key: "approval",
+  },
+  {
     title: "Status",
     dataIndex: "status",
     key: "status",
@@ -48,15 +54,32 @@ const columns = [
       return (<Tag color={color}>{text}</Tag>)
     }
   },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, row) => (<>
+      {row.status === "COMMENT" && <EditOutlined />}
+      <EyeOutlined />
+    </>)
+  }
 ]
 
 const List = (props) => {
   const { my_float_requests, fetchMyFloatRequests, fetching_float_requests } = props
   const history = useHistory()
 
+  const updateForm = () => (
+    <Form onSub>
+
+    </Form>
+  )
+
   React.useEffect(() => {
     fetchMyFloatRequests({})
   }, [])
+
+  
 
   return (
     <>

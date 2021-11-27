@@ -66,7 +66,8 @@ const mapActionsToProps = (dispatch) => {
     },
     filterEmployees: (filter) => {
       dispatch(Creators.filterEmployees(filter))
-    }
+    },
+    resetEmployee: () => dispatch(Creators.resetEmployee())
   }
 }
 

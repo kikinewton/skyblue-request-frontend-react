@@ -1,7 +1,8 @@
 import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message } from 'antd';
 import React, {useState } from 'react';
-import { prettifyDateTime } from '../../../util/common-helper';
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
+import { CURRENCY_CODE } from '../../../util/constants';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => [
@@ -19,6 +20,12 @@ const columns = props => [
     title: "purpose",
     dataIndex: "purpose",
     key: "purpose"
+  },
+  {
+    title: `Estimated Unit Price (${CURRENCY_CODE})`,
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: (text) => formatCurrency(text)
   },
   {
     title: "Quantity",
@@ -50,6 +57,12 @@ const selectedRequestsColumns = props => [
     key: "purpose"
   },
   {
+    title: `Estimated Unit Price (${CURRENCY_CODE})`,
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: (text) => formatCurrency(text)
+  },
+  {
     title: "Quantity",
     dataIndex: "quantity",
     key: "quantity"
@@ -79,6 +92,12 @@ const selectedRequestsColumnsForReject = props => [
     key: "purpose"
   },
   {
+    title: `Estimated Unit Price (${CURRENCY_CODE})`,
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: (text) => formatCurrency(text)
+  },
+  {
     title: "Quantity",
     dataIndex: "quantity",
     key: "quantity"
@@ -97,7 +116,7 @@ const selectedRequestsColumnsForReject = props => [
   }
 ]
 
-const HodEndorsePendingList = (props) => {
+const ApprovePendingList = (props) => {
   const {
     selected_float_requests,
     setSelectedFloatRequests,
@@ -111,36 +130,38 @@ const HodEndorsePendingList = (props) => {
     updating_request,
     update_request_success,
   } = props
-
+  console.log('selected_float_requests', selected_float_requests)
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
 
   const submit = () => {
-    if((actionType !== UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE) && ((selected_float_requests.filter(it => !it.comment) || []).length > 0)) {
+    console.log("action", actionType)
+    if((actionType !== UPDATE_FLOAT_REQUEST_TYPES.APPROVE) && ((selected_float_requests.filter(it => !it.comment) || []).length > 0)) {
       return message.error("Entries without comments not acccepted")
     }
+
     if(actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT) {
       const comments = selected_float_requests.map(it => {
         let data = {
           procurementTypeId: it.id,
-          comment: { description: it?.comment || "", process: "HOD_REQUEST_ENDORSEMENT"},
+          comment: { description: it?.comment || "", process: "REQUEST_APPROVAL_GM"},
         }
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload ----', payload)
+      console.log('payload comment gm ----', payload)
       props.createComment("FLOAT", payload)
     } else if(actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL) {
       const comments = selected_float_requests.map(it => {
         let data = {
           procurementTypeId: it.id,
-          comment: { description: it?.comment || "", process: "HOD_REQUEST_ENDORSEMENT"},
+          comment: { description: it?.comment || "", process: "REQUEST_APPROVAL_GM"},
           cancelled: true
         }
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload ----', payload)
+      console.log('payload cancel gm----', payload)
       props.createComment("FLOAT", payload)
     } else {
       updateFloatRequest({
@@ -153,7 +174,7 @@ const HodEndorsePendingList = (props) => {
   React.useEffect(()=> {
     resetFloatRequest()
     props.fetchFloatRequests({
-      requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL
     })
   }, [])
 
@@ -163,7 +184,7 @@ const HodEndorsePendingList = (props) => {
       setSelectedFloatRequests([])
       setConfirmDrawer(false)
       props.fetchFloatRequests({
-        requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+        requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL
       })
     }
   }, [float_submit_success, float_submitting])
@@ -173,20 +194,19 @@ const HodEndorsePendingList = (props) => {
       setSelectedFloatRequests([])
       setConfirmDrawer(false)
       props.fetchFloatRequests({
-        requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+        requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL
       })
     }
   }, [props.submitting_comment, props.submit_comment_success])
-
   return (
     <>
-      <Card title="Requests pending Endorsement" extra={[
+      <Card title="Requests pending Approval" extra={[
         (
-          <Row style={{marginBottom: 10}} key="list-buttons">
+          <Row style={{marginBottom: 10}} key="button-list">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button
-              disabled={selected_float_requests.length < 1} 
-              type="default"
+            <Button 
+              disabled={selected_float_requests.length < 1}
+              type="default" 
               style={{marginRight: 5}}
               onClick={() => {
                 setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT)
@@ -211,12 +231,12 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_float_requests.length < 1} 
               type="primary" style={{marginRight: 5}}
               onClick={() => {
-                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
+                setActionType(UPDATE_FLOAT_REQUEST_TYPES.APPROVE)
                 setConfirmDrawer(true)
               }}
             >
               <CheckOutlined />
-              Endorse
+              Approve
             </Button>
           </Col>
         </Row>
@@ -235,15 +255,6 @@ const HodEndorsePendingList = (props) => {
                 pageSize: 20
               }}
               rowSelection={{
-                // onChange: (selectedRowKeys, selectedRows) => {
-                //   setSelectedFloatRequests(selectedRows.map(item => {
-                //     let dt = item
-                //     if(dt['comment']) {
-                //       dt['comment'] = null
-                //     }
-                //     return dt
-                //   }))
-                // },
                 onChange: (selectedRowKeys, selectedRows) => {
                   setSelectedFloatRequests(selectedRows.map(it => Object.assign({}, it)))
                 },
@@ -272,7 +283,7 @@ const HodEndorsePendingList = (props) => {
               style={{float: "right"}}
               onClick={submit}
               disabled={float_submitting}
-              loading={float_submitting || props.submitting_comment}
+              loading={float_submitting}
             >
               <CheckOutlined /> SUBMIT
             </Button>
@@ -282,7 +293,7 @@ const HodEndorsePendingList = (props) => {
         <Row>
           <Col span={24}>
             <Table 
-              columns={actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE ? selectedRequestsColumns({
+              columns={actionType === UPDATE_FLOAT_REQUEST_TYPES.APPROVE ? selectedRequestsColumns({
                 actionType,
               }) 
               : selectedRequestsColumnsForReject({
@@ -311,4 +322,4 @@ const HodEndorsePendingList = (props) => {
   )
 }
 
-export default HodEndorsePendingList
+export default ApprovePendingList
