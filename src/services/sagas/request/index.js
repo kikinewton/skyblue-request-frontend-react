@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/request/actions'
 
 import {
@@ -7,6 +7,7 @@ import {
   saveRequest as createRequestApi,
   fetchMyRequests as fetchMyRequestsApi,
   getRequestById as fetchRequestByIdApi,
+  updateSingleRequest as updateSingleRequestApi
 } from '../../api/item-request'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -89,7 +90,7 @@ export function* createRequest(action) {
 }
 
 export function* updateRequest(action) {
-  console.log('action', action)
+  console.log('update action saga', action)
   try {
     const response = yield call(updateRequestApi, action.payload)
     if(["OK", "SUCCESS"].includes(response.status)) {
@@ -106,6 +107,28 @@ export function* updateRequest(action) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
     openNotification('error', 'Update Request', errors[0])
     yield put(Creators.updateRequestFailure(message))
+  }
+}
+
+export function* updateSingleRequest(action) {
+  console.log('action', action)
+  const {id, payload} = action
+  try {
+    const response = yield call(updateSingleRequestApi, id, payload)
+    if(["OK", "SUCCESS"].includes(response.status)) {
+      const responseData = response?.data
+      console.log('API RESPONSE DAYA', responseData)
+      openNotification('success', 'Update Request', response.message)
+      yield put(Creators.updateSingleRequestSuccess(responseData || {}))
+    } else {
+      openNotification('error', 'Update Request', response.message)
+      yield put(Creators.updateSingleRequestFailure(response.message))
+    }
+  } catch (error) {
+    const errors = error?.response?.data?.errors
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
+    openNotification('error', 'Update Request', errors[0])
+    yield put(Creators.updateSingleRequestFailure(message))
   }
 }
 
@@ -131,5 +154,10 @@ export function* watchCreateRequest(action) {
 }
 
 export function* watchUpdateRequest(action) {
-  yield takeLatest(Types.UPDATE_REQUEST, updateRequest)
+  yield takeLeading(Types.UPDATE_REQUEST, updateRequest)
+}
+
+
+export function* watchUpdateSingleRequest(action) {
+  yield takeLatest(Types.UPDATE_SINGLE_REQUEST, updateSingleRequest)
 }

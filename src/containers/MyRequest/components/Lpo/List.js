@@ -1,7 +1,7 @@
 import { Col, Table, Row, Button, Card, Form, Drawer, Input } from 'antd'
 import React from 'react'
 import { REQUEST_COLUMNS } from '../../../../util/constants'
-import { InfoOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 
 const columns = props => REQUEST_COLUMNS.concat([
@@ -17,22 +17,16 @@ const columns = props => REQUEST_COLUMNS.concat([
     key: "operations",
     align: "right",
     render: (text, row) => (
-      <div style={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
-        {/* <Button 
-          onClick={() => props.openUpdateRequest(row)}
-          type="default"
-          style={{marginRight: 5}}
-        >
-          Update Quantity
-        </Button> */}
-        <Button onClick={() => props.setRequest(row)} size="small" type="default" shape="circle"><InfoOutlined /></Button>
+      <div style={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+        {row.status !== "COMMENT" && (<EditOutlined onClick={() =>  props.openUpdateRequest(row)} />)}
+        <EyeOutlined onClick={() => props.setRequest(row)}/>
       </div>
     )
   }
 ])
 
 const List = (props) => {
-  const { fetchMyRequests, requestLoading, my_requests } = props
+  const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success } = props
   const [page, setPage] = React.useState(0)
   const history = useHistory()
   const { path } = useRouteMatch()
@@ -108,8 +102,11 @@ const List = (props) => {
             name: selectedRequest?.name,
             quantity: selectedRequest?.quantity
           }}
-          onFinish={() => {
-            
+          onFinish={(values) => {
+            const payload = { description: values.name, quantity: values.quantity }
+            console.log('update request single', payload)
+            console.log('selected request', selectedRequest)
+            updateSingleRequest(selectedRequest?.id, payload)
           }}
         >
           <Form.Item name="name" label="Description">
@@ -119,7 +116,7 @@ const List = (props) => {
             <Input type="number" />
           </Form.Item>
           <Form.Item>
-            <Button className="submit-btn">Update</Button>
+            <Button type="primary" htmlType="submit" >Update</Button>
           </Form.Item>
         </Form>
       </Drawer>

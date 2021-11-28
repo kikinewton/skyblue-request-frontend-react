@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Col, Button, Table, Drawer, Divider, Card, List, Image } from "antd"
+import { Row, Col, Button, Table, Drawer, Divider, Card, List, Image, PageHeader } from "antd"
 import { REQUEST_ITEMS } from '..';
 import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
-import { FETCH_REQUEST_TYPES } from '../../../util/request-types';
-import { prettifyDateTime } from '../../../util/common-helper';
+import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { BASE_URL } from '../../../services/api/urls';
 
 const columns = props => [
@@ -30,7 +30,8 @@ const columns = props => [
   {
     title: "Unit Price",
     dataIndex: "unitPrice",
-    key: "unitPrice"
+    key: "unitPrice",
+    render: (text) => formatCurrency(text)
   },
   {
     title: "Date",
@@ -80,12 +81,23 @@ const HodReviewPendingList = (props) => {
 
   return (
     <>
+      <PageHeader style={{padding: 0}} title="Requests Pending review from department HOD" extra={[
+        <Button 
+          key="submit-btn" 
+          disabled={selected_requests.length < 1} 
+          type="primary"
+          onClick={() => {
+            updateRequest({
+              updateType: UPDATE_REQUEST_TYPES.HOD_REVIEW,
+              role: "hod",
+              payload: {requestItems: selected_requests}
+            })
+          }}
+        >
+          <CheckOutlined /> CONFIRM SELECTED REQUESTS
+        </Button>
+      ]} />
       <Card
-        size="small"
-        title="Requests Pending review from department HOD"
-        extra={[
-          <Button disabled={selected_requests.length < 1} type="primary"><CheckOutlined /> CONFIRM SELECTED REQUESTS</Button>
-        ]}
       >
         <Row>
           <Col span={24}>
@@ -125,7 +137,6 @@ const HodReviewPendingList = (props) => {
         width={1000}
         maskClosable={false}
         onClose={() => {
-          setSelectedRequests([])
           setDrawer(false)
         }}
       >
@@ -143,6 +154,12 @@ const HodReviewPendingList = (props) => {
               </List.Item>
               <List.Item>
                 <List.Item.Meta title="Supplier" description={selectedRequest?.quotation?.supplier?.name} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Description" description={selectedRequest?.name} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Price" description={formatCurrency(selectedRequest?.unitPrice)} />
               </List.Item>
             </List>
           </Col>

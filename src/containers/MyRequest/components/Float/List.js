@@ -1,10 +1,14 @@
 import React from 'react';
-import { Table, Row, Col, Card, Button, Tag, Form } from "antd"
+import { Table, Row, Col, Card, Button, Tag, Form, Drawer, Descriptions } from "antd"
 import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
+import UpdateFloatForm from './UpdateForm';
+import FloatDetails from './Details';
 
-const columns = [
+const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
+
+const columns = props => [
   {
     title: "Reference",
     dataIndex: "floatRef",
@@ -58,16 +62,19 @@ const columns = [
     title: "Actions",
     dataIndex: "actions",
     key: "actions",
-    render: (text, row) => (<>
-      {row.status === "COMMENT" && <EditOutlined />}
-      <EyeOutlined />
-    </>)
+    render: (text, row) => (<div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+      {(row?.status === "COMMENT") && <EditOutlined onClick={() => props.handleEdit(row)}/>}
+      <EyeOutlined onClick={() => props.handleView(row)} />
+    </div>)
   }
 ]
 
 const List = (props) => {
-  const { my_float_requests, fetchMyFloatRequests, fetching_float_requests } = props
+  const { my_float_requests, fetchMyFloatRequests, fetching_float_requests, 
+    updateSingleFloatRequest, submiting_float_request, submit_float_request_success } = props
   const history = useHistory()
+  const [visible, setVisible] = React.useState(false)
+  const [selectionDetails, setSelectionDetails] = React.useState({type: SELECTION_TYPES.VIEW, row: null})
 
   const updateForm = () => (
     <Form onSub>
@@ -78,6 +85,14 @@ const List = (props) => {
   React.useEffect(() => {
     fetchMyFloatRequests({})
   }, [])
+
+  React.useEffect(() => {
+    if(!submiting_float_request && submit_float_request_success) {
+      setVisible(false)
+      setSelectionDetails({type: SELECTION_TYPES.VIEW, row: null})
+      fetchMyFloatRequests({})
+    }
+  }, [submit_float_request_success, submiting_float_request])
 
   
 
@@ -96,7 +111,18 @@ const List = (props) => {
           <Col span={24}>
             <Table
               loading={fetching_float_requests}
-              columns={columns}
+              columns={columns({
+                handleView: (row) => {
+                  console.log('lets view')
+                  setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
+                  setVisible(true)
+                },
+                handleEdit: (row) => {
+                  console.log('lets update')
+                  setSelectionDetails({type:SELECTION_TYPES.UPDATE, row})
+                  setVisible(true)
+                },
+              })}
               dataSource={my_float_requests}
               rowKey="id"
               bordered
@@ -105,6 +131,34 @@ const List = (props) => {
           </Col>
         </Row>
       </Card>
+      <Drawer
+        forceRender
+        visible={visible}
+        title={selectionDetails.type === SELECTION_TYPES.VIEW ? `REQUEST DETAILS` : "UPDATE FLOAT"}
+        placement="right"
+        width={700}
+        maskClosable={false}
+        onClose={() => {
+          setSelectionDetails(SELECTION_TYPES.VIEW, null)
+          setVisible(false)
+        }}
+      >
+        {selectionDetails.type === SELECTION_TYPES.UPDATE && (
+          <UpdateFloatForm 
+            onSubmit={(values) => {
+              console.log('values', values)
+              const payload = { description: values.description, quantity: values.quantity, estimatedPrice: values.estimatedUnitPrice }
+              
+              updateSingleFloatRequest(selectionDetails?.row?.id, payload)
+            }}
+            loading={submiting_float_request}
+            float={selectionDetails?.row}
+          />
+        )}
+        {selectionDetails.type === SELECTION_TYPES.VIEW && (
+          <FloatDetails float={selectionDetails.row} />
+        )}
+      </Drawer>
     </>
   )
 } 

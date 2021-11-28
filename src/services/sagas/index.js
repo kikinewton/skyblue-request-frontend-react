@@ -33,6 +33,7 @@ import {
 	watchUpdateRequest,
 	watchFetchMyRequests,
 	watchGetRequest,
+	watchUpdateSingleRequest,
 } from './request'
 
 import {
@@ -53,6 +54,7 @@ import {
 	watchFetchMyFloatRequests,
 	watchFetchFloatRequests,
 	watchUpdateFloatRequest,
+	watchUpdateSingleFloatRequest,
 } from "./float"
 
 import {
@@ -67,7 +69,8 @@ import {
 
 import {
 	watchFetchLocalPurchaseOrders,
-	watchCreateLocalPurchaseOrder
+	watchCreateLocalPurchaseOrder,
+	watchFetchLocalPurchaseOrderDrafts,
 } from "./local-purchase-order"
 
 import {
@@ -100,6 +103,7 @@ export default function* rootSaga() {
 		watchUpdateRequest(),
 		watchFetchMyRequests(),
 		watchGetRequest(),
+		watchUpdateSingleRequest(),
 
 		watchFetchQuotations(),
 		watchUpdateQuotation(),
@@ -114,6 +118,7 @@ export default function* rootSaga() {
 		watchFetchFloatRequests(),
 		watchCreateFloatRequest(),
 		watchUpdateFloatRequest(),
+		watchUpdateSingleFloatRequest(),
 
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),
@@ -123,6 +128,7 @@ export default function* rootSaga() {
 
 		watchFetchLocalPurchaseOrders(),
 		watchCreateLocalPurchaseOrder(),
+		watchFetchLocalPurchaseOrderDrafts(),
 
 		watchCreateComment()
 

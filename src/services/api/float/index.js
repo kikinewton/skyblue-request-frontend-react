@@ -28,6 +28,16 @@ export function updateFloatRequest(payload){
   }
 }
 
+export function updateSingleFloatRequest(id, payload){
+  return service({
+    url: `/floats/${id}`,
+    method: "PUT",
+    data: payload
+  })
+}
+
+
+
 export function fetchMyFloatRequests(query) {
   const queryStr = serializeQueryParams(query)
   return service({

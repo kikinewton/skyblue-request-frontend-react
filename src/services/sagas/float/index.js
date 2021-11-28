@@ -7,6 +7,7 @@ import {
   saveFloatRequest as saveFloatRequestApi,
   fetchFloatRequests as fetchFloatRequestsApi,
   updateFloatRequest as updateFloatRequestApi,
+  updateSingleFloatRequest as updateSingleFloatRequestApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -87,6 +88,25 @@ export function* updateFloatRequest(action) {
   }
 }
 
+export function* updateSingleFloatRequest(action) {
+  const { payload, id } = action
+  console.log('saga payload', action)
+  try {
+    const response = yield call(updateSingleFloatRequestApi, id, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Update Float', response?.message)
+      yield put(Creators.updateSingleFloatRequestSuccess(response?.data))
+    } else {
+      openNotification('error', 'Update Float', response?.message)
+      yield put(Creators.updateSingleFloatRequestFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    openNotification('error', 'Update Float', errorText)
+    yield put(Creators.updateSingleFloatRequestFailure(errorText))
+  }
+}
+
 
 export function* resetFloatRequest(action) {
   yield put(Creators.resetFloatequest())
@@ -108,4 +128,8 @@ export function* watchCreateFloatRequest(action) {
 
 export function* watchUpdateFloatRequest(action) {
   yield takeLeading(Types.UPDATE_FLOAT_REQUEST, updateFloatRequest)
+}
+
+export function* watchUpdateSingleFloatRequest(action) {
+  yield takeLeading(Types.UPDATE_SINGLE_FLOAT_REQUEST, updateSingleFloatRequest)
 }

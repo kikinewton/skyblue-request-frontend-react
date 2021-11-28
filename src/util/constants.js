@@ -14,7 +14,7 @@ export const USER_ROLES = {
 
 export const REQUEST_COLUMNS = [
   {
-    title: 'ID',
+    title: 'Reference',
     dataIndex: 'requestItemRef',
     key: 'requestItemRef'
   },

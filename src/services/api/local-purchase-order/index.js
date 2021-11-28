@@ -11,6 +11,13 @@ export function fetchLocalPurchaseOrders(query) {
   })
 }
 
+export function fetchLocalPurchaseOrderDraft(query) {
+  const queryStr = serializeQueryParams(query)
+  return apiRequest({
+    method: "GET",
+    url: `/localPurchaseOrderDrafts${queryStr}`
+  })
+}
 
 export function createLocalPurchaseOrder(payload) {
   console.log('create LPO API')

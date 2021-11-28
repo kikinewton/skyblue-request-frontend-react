@@ -3,6 +3,7 @@ import { Creators, Types } from '../../redux/local-purchase-order/actions'
 
 import {
   fetchLocalPurchaseOrders as fetchLocalPurchaseOrdersApi,
+  fetchLocalPurchaseOrderDraft as fetchLocalPurchaseOrderDraftApi,
   createLocalPurchaseOrderDraft as saveLocalPurchaseOrderApi,
 } from '../../api/local-purchase-order'
 
@@ -25,6 +26,24 @@ export function* fetchLocalPurchaseOrders(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchLocalPurchaseOrdersFailure(errorText))
+  }
+}
+
+export function* fetchLocalPurchaseOrderDrafts(action) {
+  console.log('=================>FETCH REQUEST', action)
+  const { query } = action
+  try {
+    const response = yield call(fetchLocalPurchaseOrderDraftApi, query)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchLocalPurchaseOrderDraftsSuccess(response?.data))
+    } else {
+      openNotification('error', 'Fetch Request', response?.message)
+      yield put(Creators.fetchLocalPurchaseOrderDraftsFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchLocalPurchaseOrderDraftsFailure(errorText))
   }
 }
 
@@ -62,4 +81,9 @@ export function* watchFetchLocalPurchaseOrders(action) {
 
 export function* watchCreateLocalPurchaseOrder(action) {
   yield takeLatest(Types.CREATE_LOCAL_PURCHASE_ORDER, createLocalPurchaseOrder)
+}
+
+
+export function* watchFetchLocalPurchaseOrderDrafts(action) {
+  yield takeLatest(Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS, fetchLocalPurchaseOrderDrafts)
 }

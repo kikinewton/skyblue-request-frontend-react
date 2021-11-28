@@ -22,6 +22,10 @@ export const { Types, Creators } = createActions(
     updateRequestSuccess: ["requestId", "responseData"],
     updateRequestFailure: ["error"],
 
+    updateSingleRequest: ["id", "payload"],
+    updateSingleRequestSuccess: ["responseData"],
+    updateSingleRequestFailure: ["error"],
+
     deleteRequest: ["requestId", "payload"],
     deleteRequestSuccess: ["responseData"],
     deleteRequestFailure: ["error"],

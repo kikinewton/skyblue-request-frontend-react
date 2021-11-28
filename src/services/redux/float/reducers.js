@@ -81,6 +81,23 @@ export const updateFloatRequestFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
+//edit single
+export const updateSingleFloatRequest = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
+};
+
+export const updateSingleFloatRequestSuccess = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state,
+    submitting: false,
+    submit_success: true
+  };
+};
+
+export const updateSingleFloatRequestFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false};
+};
+
 
 //delete
 export const deleteRequest = (state = INITIAL_STATE, action) => {
@@ -133,6 +150,10 @@ export const HANDLERS = {
   [Types.UPDATE_FLOAT_REQUEST]: updateFloatRequest,
   [Types.UPDATE_FLOAT_REQUEST_SUCCESS]: updateFloatRequestSuccess,
   [Types.UPDATE_FLOAT_REQUEST_FAILURE]: updateFloatRequestFailure,
+
+  [Types.UPDATE_SINGLE_FLOAT_REQUEST]: updateSingleFloatRequest,
+  [Types.UPDATE_SINGLE_FLOAT_REQUEST_SUCCESS]: updateSingleFloatRequestSuccess,
+  [Types.UPDATE_SINGLE_FLOAT_REQUEST_FAILURE]: updateSingleFloatRequestFailure,
 
   [Types.DELETE_FLOAT_REQUEST]: deleteRequest,
   [Types.DELETE_FLOAT_REQUEST_SUCCESS]: deleteRequestSuccess,

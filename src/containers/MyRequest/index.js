@@ -154,6 +154,8 @@ const mapStateToProps = (store) => ({
   requestSubmitting: store.request.submitting,
   my_requests: store.request.my_requests,
   submitSuccess: store.request.submitSuccess,
+  update_request_success: store.request.update_success,
+  updating_request: store.request.updating,
   request: store.request.request,
 
   my_petty_cash_requests: store.petty_cash.my_requests,
@@ -187,6 +189,9 @@ const mapActionsToProps = (dispatch) => {
     updateRequest: (options) => {
       dispatch(RequestCreators.updateRequest(options))
     },
+    updateSingleRequest: (id, payload) => {
+      dispatch(RequestCreators.updateSingleRequest(id, payload))
+    },
     fetchMyRequests: (query) => {
       dispatch(RequestCreators.fetchMyRequests(query))
     },
@@ -196,6 +201,9 @@ const mapActionsToProps = (dispatch) => {
     },
     createFloatRequest: (payload) => {
       dispatch(FloatCreators.createFloatRequest(payload))
+    },
+    updateSingleFloatRequest: (id, payload) => {
+      dispatch(FloatCreators.updateSingleFloatRequest(id, payload))
     },
 
     fetchMyPettyCashRequests: (query) => {

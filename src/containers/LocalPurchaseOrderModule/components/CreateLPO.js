@@ -236,7 +236,9 @@ const CreateLPO = (props) => {
       setSelectedQuotation(null)
       setSelectedRequests([])
       resetQuotation()
-      fetchSuppliers({suppliersWithRQ: true})
+      fetchQuotations({
+        requestType: NOT_LINKED_TO_LPO
+      })
     }
   }, [submit_local_purchase_order_success, submit_local_purchase_order_success])
 

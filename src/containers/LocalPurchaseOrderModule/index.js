@@ -49,7 +49,7 @@ const LocalPurchaseOrderModule = (props) => {
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new">
               <NavLink to="/app/local-purchase-orders/add-new">
-                <span>Create Local Purchase Order</span>
+                <span>Draft Local Purchase Order</span>
               </NavLink>
             </Menu.Item>
           </Menu>
@@ -66,6 +66,7 @@ const LocalPurchaseOrderModule = (props) => {
 
 const mapStateToProps = store => ({
   local_purchase_orders: store.local_purchase_order.local_purchase_orders,
+  local_purchase_order_drafts: store.local_purchase_order.local_purchase_order_drafts,
   fetching_local_purchase_orders: store.local_purchase_order.loading,
   submit_local_purchase_order_success: store.local_purchase_order.submit_success,
   submitting_local_purchase_order: store.local_purchase_order.submitting,
@@ -89,6 +90,7 @@ const mapActionsToState = dispatch => ({
   fetchLocalPurchaseOrders: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrders(query)),
   createLocalPurchaseOrder: (payload) => dispatch(LocalPurchaseOrderCreators.createLocalPurchaseOrder(payload)),
   resetLocalPurchaseOrder: () => dispatch(LocalPurchaseOrderCreators.resetLocalPurchaseOrder()),
+  fetchLocalPurchaseOrderDrafts: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrderDrafts(query)),
 
   fetchRequestCategories: (query) => dispatch(RequestCategoryCreators.fetchRequestCategories(query)),
   resetRequestCategory: () => dispatch(RequestCategoryCreators.resetRequestCategory()),

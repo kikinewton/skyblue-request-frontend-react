@@ -48,7 +48,9 @@ const List = (props) => {
 
   const {
     fetchLocalPurchaseOrders,
+    fetchLocalPurchaseOrderDrafts,
     local_purchase_orders,
+    local_purchase_order_drafts,
     fetching_local_purchase_orders,
     resetLocalPurchaseOrder
   } = props
@@ -70,7 +72,7 @@ const List = (props) => {
   React.useEffect(()=> {
     //fetchLpos()
     resetLocalPurchaseOrder()
-    fetchLocalPurchaseOrders({withGRN: false})
+    fetchLocalPurchaseOrderDrafts({q: "pendingApproval"})
   }, [])
 
   const expandedRowRender = (row) => {
@@ -100,7 +102,7 @@ const List = (props) => {
         <Col md={24}>
           <Table 
             columns={columns({ onDownloadPdfClick: handleDownloadPdf, onCreateGrnClick: (row)=> handleCreateGrn(row) })}
-            dataSource={local_purchase_orders}
+            dataSource={local_purchase_order_drafts}
             size="small"
             rowKey="id"
             expandable={{expandedRowRender}}

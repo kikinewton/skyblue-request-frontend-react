@@ -1,6 +1,7 @@
-import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
+import { CheckOutlined, CloseOutlined, CommentOutlined, WarningOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message } from 'antd';
 import React, {useState } from 'react';
+import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { FETCH_REQUEST_TYPES } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
@@ -38,6 +39,13 @@ const columns = props => [
     key: "requestDate",
     render: (text) => prettifyDateTime(text)
   },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    align: "right",
+    render: (text, row) => (<><Button type="default" onClick={() => props.onReview(row)}>Review Document</Button></>)
+  }
 ]
 
 const selectedRequestsColumns = props => [
@@ -127,17 +135,50 @@ const ApprovePendingList = (props) => {
     updateRequest,
     updating_request,
     update_request_success,
+    createComment,
+    submitting_comment,
+    submit_comment_success,
   } = props
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+  const [reviewDrawer, setReviewDrawer] = useState(false)
+  const [selectedRequest, setSelectedRequest] = useState(null)
 
   const submit = () => {
     console.log("action", actionType)
-    updateRequest({
-      updateType: actionType,
-      role: "hod",
-      payload: {requestItems: selected_requests}
-    })
+    if((actionType === UPDATE_REQUEST_TYPES.GM_CANCEL || actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) && selected_requests.filter(it => !it.comment).length > 0) {
+      return message.error("Please make sure comment field is not empty")
+    }
+    if(actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) {
+      const comments = selected_requests.map(it => {
+        let data = {
+          procurementTypeId: it.id,
+          comment: { description: it?.comment || "", process: "REQUEST_APPROVAL_GM"},
+        }
+        return data
+      })
+      const payload = {comments: comments, procurementType: "LPO"}
+      console.log('payload', payload)
+      createComment("LPO", payload)
+    } else if(actionType === UPDATE_REQUEST_TYPES.GM_CANCEL) {
+      const comments = selected_requests.map(it => {
+        let data = {
+          procurementTypeId: it.id,
+          comment: { description: it?.comment || "", process: "REQUEST_APPROVAL_GM"},
+          cancelled: true
+        }
+        return data
+      })
+      const payload = {comments: comments, procurementType: "LPO"}
+      console.log('payload', payload)
+      createComment("LPO", payload)
+    } else {
+      updateRequest({
+        updateType: actionType,
+        role: "gm",
+        payload: {requestItems: selected_requests}
+      })
+    }
   }
 
   React.useEffect(()=> {
@@ -157,55 +198,73 @@ const ApprovePendingList = (props) => {
     }
   }, [updating_request, update_request_success])
 
+  React.useEffect(() => {
+    if(!submitting_comment && submit_comment_success) {
+      setSelectedRequests([])
+      setConfirmDrawer(false);
+      props.fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
+      })
+    }
+  }, [submitting_comment, submit_comment_success])
+
   return (
     <>
-      <Card title="Requests pending Endorsement" extra={[
+      <PageHeader title="Requests awaiting approval" extra={[
         (
-          <Row style={{marginBottom: 10}}>
-          <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button
-              disabled={selected_requests.length < 1} 
-              style={{backgroundColor: "yellow", marginRight: 5}}
-              onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_COMMENT)
-                setConfirmDrawer(true)
-              }}
-            >
-              <WarningOutlined /> Comment
-            </Button>
-            <Button
-              style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 
-              disabled={selected_requests.length < 1}
-              onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_CANCEL)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CloseOutlined />
-              Cancel
-            </Button>
-            <Button 
-              disabled={selected_requests.length < 1} 
-              type="primary" style={{marginRight: 5}} 
-              onClick={() => {
-                console.log('action type on click', UPDATE_REQUEST_TYPES.HOD_ENDORSE)
-                setActionType(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CheckOutlined />
-              Endorse
-            </Button>
-          </Col>
-        </Row>
+          <Row style={{marginBottom: 10}} key="actions">
+            <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
+              <Button
+                disabled={selected_requests.length < 1} 
+                style={{marginRight: 5}}
+                type="default"
+                onClick={() => {
+                  setActionType(UPDATE_REQUEST_TYPES.GM_COMMENT)
+                  setConfirmDrawer(true)
+                }}
+              >
+                <CommentOutlined /> Comment Selected List
+              </Button>
+              <Button
+                style={{marginRight: 5}} 
+                type="default"
+                disabled={selected_requests.length < 1}
+                onClick={() => {
+                  setActionType(UPDATE_REQUEST_TYPES.GM_CANCEL)
+                  setConfirmDrawer(true)
+                }}
+              >
+                <CloseOutlined />
+                Reject Selected List
+              </Button>
+              <Button 
+                disabled={selected_requests.length < 1} 
+                type="primary" style={{marginRight: 5}} 
+                onClick={() => {
+                  console.log('action type on click', UPDATE_REQUEST_TYPES.GM_APPROVE)
+                  setActionType(UPDATE_REQUEST_TYPES.GM_APPROVE)
+                  setConfirmDrawer(true)
+                }}
+              >
+                <CheckOutlined />
+                Approve Selected List
+              </Button>
+            </Col>
+          </Row>
         )
-      ]}>
+      ]} />
+      <Card>
         <Row>
           <Col span={24}>
             <Table
               loading={fetching_requests}
               size="small"
-              columns={columns({})}
+              columns={columns({
+                onReview: (row) => {
+                  setSelectedRequest(row)
+                  setReviewDrawer(true)
+                }
+              })}
               dataSource={requests}
               rowKey="id"
               bordered
@@ -214,7 +273,7 @@ const ApprovePendingList = (props) => {
               }}
               rowSelection={{
                 onChange: (selectedRowKeys, selectedRows) => {
-                  setSelectedRequests(selectedRows)
+                  setSelectedRequests(selectedRows.map(it => Object.assign({}, it)))
                 },
                 selectedRowKeys: selected_requests?.map(it=> it.id),
               }}
@@ -240,6 +299,7 @@ const ApprovePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
+              loading={updating_request || submitting_comment}
             >
               <CheckOutlined /> SUBMIT
             </Button>
@@ -249,7 +309,7 @@ const ApprovePendingList = (props) => {
         <Row>
           <Col span={24}>
             <Table 
-              columns={actionType !== UPDATE_REQUEST_TYPES.HOD_COMMENT ? selectedRequestsColumns({
+              columns={actionType === UPDATE_REQUEST_TYPES.GM_APPROVE ? selectedRequestsColumns({
                 actionType,
               }) 
               : selectedRequestsColumnsForReject({
@@ -273,6 +333,23 @@ const ApprovePendingList = (props) => {
             />
           </Col>
         </Row>
+      </Drawer>
+      <Drawer
+        forceRender
+        visible={reviewDrawer}
+        title={`${actionType} REQUESTS`}
+        placement="right"
+        width={1000}
+        maskClosable={false}
+        onClose={() => {
+          setSelectedRequest(null)
+          setReviewDrawer(false)
+        }}
+      >
+        <RequestDocumentReview
+          requestItem={selectedRequest}
+          quotation={selectedRequest?.quotations.filter(qt => qt?.supplier?.id === selectedRequest.suppliedBy)[0]}
+        />
       </Drawer>
     </>
   )

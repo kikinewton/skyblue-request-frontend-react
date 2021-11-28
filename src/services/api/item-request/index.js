@@ -212,6 +212,8 @@ export function updateRequest(data) {
       return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REVIEW:
       return service({url: '/requestItems/updateStatus/HOD_REVIEW', method: "PUT", data: payload})
+    case UPDATE_REQUEST_TYPES.GM_APPROVE:
+      return service({url: '/requestItems/updateStatus/APPROVE', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:
       return hodRejectBulkRequest(payload)
     case UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
@@ -223,6 +225,10 @@ export function updateRequest(data) {
     default:
       break;
   }
+}
+
+export function updateSingleRequest(id, payload) {
+  return service({url: `/requestItems/${id}`, method: "PUT", data: payload})
 }
 
 export function fetchRequests(query) {

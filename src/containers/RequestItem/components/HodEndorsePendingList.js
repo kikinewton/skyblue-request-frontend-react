@@ -1,4 +1,4 @@
-import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
@@ -214,7 +214,7 @@ const HodEndorsePendingList = (props) => {
                 setConfirmDrawer(true)
               }}
             >
-              <WarningOutlined /> Comment
+              <CommentOutlined /> Comment
             </Button>
             <Button
               style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 

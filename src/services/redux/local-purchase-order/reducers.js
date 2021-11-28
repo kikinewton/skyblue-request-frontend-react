@@ -5,6 +5,7 @@ export const INITIAL_STATE = {
   errors: null,
   local_purchase_orders: [],
   local_purchase_order: null,
+  local_purchase_order_drafts: [],
   loading: false,
   submitting: false,
   submit_success: false,
@@ -20,6 +21,21 @@ export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) =
 };
 
 export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, local_purchase_orders: []};
+};
+
+
+//fetch drafts
+export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: true, errors: null, submitting: false, local_purchase_orders: [] };
+};
+
+export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, action) => {
+  console.log('actions succes fetch dafts', action)
+  return { ...state, local_purchase_order_drafts: action.responseData, loading: false};
+};
+
+export const fetchLocalPurchaseOrderDraftsFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error, local_purchase_orders: []};
 };
 
@@ -42,6 +58,7 @@ export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
     ...state,
     local_purchase_orders: [],
     local_purchase_order: null,
+    local_purchase_order_drafts: [],
     error: null,
     loading: false,
     submitting: false
@@ -52,6 +69,10 @@ export const HANDLERS = {
   [Types.FETCH_LOCAL_PURCHASE_ORDERS]: fetchLocalPurchaseOrders,
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_SUCCESS]: fetchLocalPurchaseOrdersSuccess,
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_FAILURE]: fetchLocalPurchaseOrdersFailure,
+
+  [Types.FETCH_LOCAL_PURCHASE_ORDERS]: fetchLocalPurchaseOrderDrafts,
+  [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS_SUCCESS]: fetchLocalPurchaseOrderDraftsSuccess,
+  [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS_FAILURE]: fetchLocalPurchaseOrderDraftsFailure,
 
   [Types.CREATE_LOCAL_PURCHASE_ORDER]: createLocalPurchaseOrder,
   [Types.CREATE_LOCAL_PURCHASE_ORDER_SUCCESS]: createLocalPurchaseOrderSuccess,

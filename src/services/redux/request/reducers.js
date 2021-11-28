@@ -88,6 +88,23 @@ export const updateRequestFailure = (state = INITIAL_STATE, action) => {
   return { ...state, updating: false, update_success: false, error: action.error };
 };
 
+//edit single
+export const updateSingleRequest = (state = INITIAL_STATE, action) => {
+  return { ...state, updating: true, update_success: false, errors: null, loading: false };
+};
+
+export const updateSingleRequestSuccess = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state,
+    updating: false,
+    update_success: true
+  };
+};
+
+export const updateSingleRequestFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, updating: false, update_success: false, error: action.error };
+};
+
 
 //delete
 export const deleteRequest = (state = INITIAL_STATE, action) => {
@@ -118,6 +135,7 @@ export const resetRequest = (state = INITIAL_STATE, action) => {
     requests: [],
     request: null,
     my_requests: [],
+    selected_requests: [],
     error: null,
     loading: false,
     submitting: false
@@ -144,6 +162,10 @@ export const HANDLERS = {
   [Types.UPDATE_REQUEST]: updateRequest,
   [Types.UPDATE_REQUEST_SUCCESS]: updateRequestSuccess,
   [Types.UPDATE_REQUEST_FAILURE]: updateRequestFailure,
+
+  [Types.UPDATE_SINGLE_REQUEST]: updateSingleRequest,
+  [Types.UPDATE_SINGLE_REQUEST_SUCCESS]: updateSingleRequestSuccess,
+  [Types.UPDATE_SINGLE_REQUEST_FAILURE]: updateSingleRequestFailure,
 
   [Types.DELETE_REQUEST]: deleteRequest,
   [Types.DELETE_REQUEST_SUCCESS]: deleteRequestSuccess,

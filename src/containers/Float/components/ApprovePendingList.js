@@ -130,7 +130,6 @@ const ApprovePendingList = (props) => {
     updating_request,
     update_request_success,
   } = props
-  console.log('selected_float_requests', selected_float_requests)
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
 
@@ -149,7 +148,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload comment gm ----', payload)
       props.createComment("FLOAT", payload)
     } else if(actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL) {
       const comments = selected_float_requests.map(it => {
@@ -161,7 +159,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload cancel gm----', payload)
       props.createComment("FLOAT", payload)
     } else {
       updateFloatRequest({
