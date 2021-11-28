@@ -10,6 +10,7 @@ import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import List from "./components/List"
 import { Menu } from 'antd'
 import { NavLink } from 'react-router-dom'
+import CreateLPODraft from './components/CreateLPODraft'
 import CreateLPO from './components/CreateLPO'
 
 
@@ -23,11 +24,13 @@ const LocalPurchaseOrderModule = (props) => {
 
   useEffect(() => {
     const { pathname } = location
-    if(pathname.includes("/app/local-purchase-orders/add-new")) {
+    if(pathname.includes("/app/local-purchase-orders/add-new-draft")) {
+      setKey("/app/local-purchase-orders/add-new-draft")
+    } else if(pathname.includes("/app/local-purchase-orders/add-new")) {
       setKey("/app/local-purchase-orders/add-new")
-    } else if(pathname.includes("/app/local-purchase-orders")) {
+    }else if(pathname.includes("/app/local-purchase-orders")) {
       setKey("/app/local-purchase-orders")
-    }
+    } 
   }, [key])
 
   return (
@@ -42,20 +45,26 @@ const LocalPurchaseOrderModule = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="/app/local-purchase-orders">
-              <NavLink to="/app/local-purchase-orders">
-                <span>Local purchase orders</span>
-              </NavLink>
-            </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new">
               <NavLink to="/app/local-purchase-orders/add-new">
+                <span>Create Local Purchase Order</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/app/local-purchase-orders/add-new-draft">
+              <NavLink to="/app/local-purchase-orders/add-new-draft">
                 <span>Draft Local Purchase Order</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/app/local-purchase-orders">
+              <NavLink to="/app/local-purchase-orders">
+                <span>Local Purchase Orders</span>
               </NavLink>
             </Menu.Item>
           </Menu>
         )}
       >
         <Switch>
+          <AuthenticatedRoute {...props} path="/app/local-purchase-orders/add-new-draft" component={CreateLPODraft} />
           <AuthenticatedRoute {...props} path="/app/local-purchase-orders/add-new" component={CreateLPO} />
           <AuthenticatedRoute {...props} path="/app/local-purchase-orders" component={List} />
         </Switch>
@@ -89,6 +98,7 @@ const mapStateToProps = store => ({
 const mapActionsToState = dispatch => ({
   fetchLocalPurchaseOrders: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrders(query)),
   createLocalPurchaseOrder: (payload) => dispatch(LocalPurchaseOrderCreators.createLocalPurchaseOrder(payload)),
+  createLocalPurchaseOrderDraft: (payload) => dispatch(LocalPurchaseOrderCreators.createLocalPurchaseOrderDraft(payload)),
   resetLocalPurchaseOrder: () => dispatch(LocalPurchaseOrderCreators.resetLocalPurchaseOrder()),
   fetchLocalPurchaseOrderDrafts: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrderDrafts(query)),
 

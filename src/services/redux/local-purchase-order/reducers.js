@@ -27,7 +27,8 @@ export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) =
 
 //fetch drafts
 export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: true, errors: null, submitting: false, local_purchase_orders: [] };
+  console.log('fetcing lpo drafts reducer')
+  return { ...state, loading: true, errors: null, local_purchase_order_drafts: [] };
 };
 
 export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, action) => {
@@ -70,7 +71,7 @@ export const HANDLERS = {
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_SUCCESS]: fetchLocalPurchaseOrdersSuccess,
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_FAILURE]: fetchLocalPurchaseOrdersFailure,
 
-  [Types.FETCH_LOCAL_PURCHASE_ORDERS]: fetchLocalPurchaseOrderDrafts,
+  [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS]: fetchLocalPurchaseOrderDrafts,
   [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS_SUCCESS]: fetchLocalPurchaseOrderDraftsSuccess,
   [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS_FAILURE]: fetchLocalPurchaseOrderDraftsFailure,
 

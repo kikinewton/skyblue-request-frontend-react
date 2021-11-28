@@ -4,7 +4,8 @@ import { Creators, Types } from '../../redux/local-purchase-order/actions'
 import {
   fetchLocalPurchaseOrders as fetchLocalPurchaseOrdersApi,
   fetchLocalPurchaseOrderDraft as fetchLocalPurchaseOrderDraftApi,
-  createLocalPurchaseOrderDraft as saveLocalPurchaseOrderApi,
+  createLocalPurchaseOrderDraft as saveLocalPurchaseOrderDraftApi,
+  createLocalPurchaseOrder as saveLocalPurchaseOrderApi,
 } from '../../api/local-purchase-order'
 
 import openNotification from '../../../util/notification'
@@ -52,6 +53,25 @@ export function* createLocalPurchaseOrder(action) {
   const { payload } = action
   try {
     const response = yield call(saveLocalPurchaseOrderApi, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Create Local Purchase Order', response?.message)
+      yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Create Local Purchase Order', response?.message)
+      yield put(Creators.createLocalPurchaseOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errors = error?.response?.data?.errors
+    const errorText = errors[0] || 'Failed to create local purchase order'
+    openNotification('error', 'Create Local Purchase Order', errorText)
+    yield put(Creators.createLocalPurchaseOrderFailure(errorText))
+  }
+}
+
+export function* createLocalPurchaseOrderDraft(action) {
+  const { payload } = action
+  try {
+    const response = yield call(saveLocalPurchaseOrderDraftApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))

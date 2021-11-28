@@ -32,7 +32,7 @@ export function createLocalPurchaseOrderDraft(payload) {
   console.log('create LPO API')
   return apiRequest({
     method: "POST",
-    url: `/localPurchaseOrderDraft`,
+    url: `/localPurchaseOrderDrafts`,
     data: payload
   })
 }

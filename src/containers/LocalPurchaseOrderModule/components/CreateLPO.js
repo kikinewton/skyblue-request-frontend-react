@@ -1,483 +1,220 @@
-import { RightOutlined, LeftOutlined } from '@ant-design/icons'
-import { Document, Page, PDFViewer } from '@react-pdf/renderer'
-import { Card, Col, Row, Steps, Select, Table, Button, Input, DatePicker, Image } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { BASE_URL } from '../../../services/api/urls'
-import { filterQuotations } from '../../../services/redux/quotation/reducers'
+import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
+import { Badge, Button, Col, Row, Table, Drawer, List, message, Divider } from 'antd'
+import React, { useState } from 'react'
+import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import { prettifyDateTime } from '../../../util/common-helper'
-import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
-// import { Document, Page } from "react-pdf"
+import { REQUEST_COLUMNS } from '../../../util/constants'
 
-const quotationColumns = props => [
+const columns = (props) => [
   {
-    title: "Quotation Ref",
-    dataIndex: "quotation",
-    key: "quotation",
-    render: (text, row) => row?.quotation?.quotationRef
+    title: 'Supplier',
+    dataIndex: 'supplierId',
+    key: 'supplierId',
+    render: (text, row)=> row?.requestItems[0]?.suppliers.find(item=> item.id === row.supplierId)?.name || 'N/A'
   },
   {
-    title: "Supplier",
-    dataIndex: "quotation",
-    key: "quotation",
-    render: (text, row) => row?.quotation?.supplier?.name
+    title: 'Created On',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render: (text) => text ? prettifyDateTime(text) : "N/A"
   },
   {
-    title: "Created Date",
-    dataIndex: "quotation",
-    key: "quotation",
-    render: (text, row) => prettifyDateTime(row?.quotation?.createdAt)
+    title: 'Delivery Date',
+    dataIndex: 'deliveryDate',
+    key: 'deliveryDate',
+    render: (text) => text ? prettifyDateTime(text) : 'N/A'
   },
   {
-    title: "Action",
-    dataIndex: "operations",
-    key: "operations",
-    align: "right",
+    title: 'Action',
+    dataIndex: 'action',
+    key: 'operation',
+    align: 'right',
     render: (text, row) => (
-      <Button size="small" onClick={() => props.onSelect(row)} type={props.selectedQuotation?.id === row.id ? "primary" : "default"}>
-        <RightOutlined />
-      </Button>
+      <Row>
+        <Col md={24}>
+          <Button onClick={() => props.onCreate(row)} size="small">
+            Create Local Purchase Order
+          </Button>
+        </Col>
+      </Row>
+      
     )
   },
 ]
 
-const updatePriceColumns = (props)=> [
+export const requestColumns = [
   {
-    title: 'Description',
-    dataIndex: 'name',
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
+  },
+  {
+    title: 'SUPPLIER',
+    dataIndex: 'suplier',
     key: 'name'
   },
   {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity'
-  },
-  {
-    title: 'Reason',
+    title: 'REASON',
     dataIndex: 'reason',
     key: 'reason'
   },
   {
-    title: 'Request Category',
-    dataIndex: 'requestCategory',
-    key: 'requestCategory',
-    render: (text, row) => (
-      <Select size="small" style={{width: "100%"}}
-        onChange={(value) => props.onRequestCategoryChange(row, value)}
-      >
-        {props.request_categories?.map(it => (
-          <Select.Option key={it.id} value={it.id}>{it.name}</Select.Option>
-        ))}
-      </Select>
-    )
-    // render: (text, row) => {
-    //   return (
-    //     <Select style={{width: '100%'}} defaultValue={row?.requestCategory} onChange={(value)=> props.onRequestCategoryChange(row, value)}>
-    //       <Select.Option value={undefined}>Select Request Category</Select.Option>
-    //       {props.request_categories.map(item=> (
-    //         <Select.Option key={`rqc-${item?.id}`} value={item?.id}>{item?.name}</Select.Option>
-    //       ))}
-    //     </Select>
-    //   )
-    // }
+    title: 'PURPOSE',
+    dataIndex: 'purpose',
+    key: 'purpose'
   },
   {
-    title: 'Unit price',
-    dataIndex: 'unitPrice',
-    key: 'unitPrice',
-    render: (text, row) => {
-      return (
-        <Input 
-          size="small"
-          type="number" 
-          min={1} 
-          defaultValue={row['unitPrice'] || 0} 
-          onChange={(event)=> props.onPriceChange(row, event.target.value)} />
-      )
-    }
+    title: 'QUANTITY',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'APPROVAL',
+    dataIndex: 'approval',
+    key: 'approval'
   },
 ]
-
-const requestColumns = props => [
-  {
-    title: "Reference",
-    dataIndex: "requestItemRef",
-    key: "requestItemRef",
-  },
-  {
-    title: "Description",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Requisition Date",
-    dataIndex: "createdDate",
-    key: "createdDate",
-    render: (text) => prettifyDateTime(text)
-  },
-]
-
-const confirmColumns = props => [
-  {
-    title: "Reference",
-    dataIndex: "requestItemRef",
-    key: "requestItemRef",
-  },
-  {
-    title: "Description",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Request Category",
-    dataIndex: "requestCategory",
-    key: "requestCategory",
-    render: (text) => props.request_categories.find(it => it.id === text)?.name
-  },
-  {
-    title: "Unit Price",
-    dataIndex: "unitPrice",
-    key: "unitPrice",
-  },
-]
-
 
 const CreateLPO = (props) => {
+  const [ lpos, setLpos ] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [visible, setVisible] = useState(false)
+  const [selectedDraft, setSelectedDraft] = useState(null)
+  const { history } = props
+
   const {
-    fetching_suppliers,
-    suppliers,
-    fetchSuppliers,
-
-    request_categories,
-    fetching_request_categories,
-
-    quotations,
-    fetching_quotations,
-    resetQuotation,
-    fetchQuotations,
-    filterQuotations,
-    filtered_quotations,
-
+    fetchLocalPurchaseOrders,
+    fetchLocalPurchaseOrderDrafts,
+    local_purchase_order_drafts,
+    resetLocalPurchaseOrder,
+    fetching_local_purchase_orders,
     createLocalPurchaseOrder,
     submitting_local_purchase_order,
     submit_local_purchase_order_success,
   } = props
 
-  const [current, setCurrent] = useState(0)
-  const [selectedSupplier, setSelectedSupplier] = useState(undefined)
-  const [selectedQuotation, setSelectedQuotation] = useState(null)
-  const [selectedRequests, setSelectedRequests] = useState([])
-  const [deliveryDate, setDeliveryDate] = useState(null)
-  const [imageVisible, setImageVisible] = useState(false)
-
-  const fetchQuotationsBySupplier = (supplierId) => {
-    console.log('supplier ', supplierId)
-    if(supplierId) {
-      props.fetchQuotations({
-        requestType: QUOTATIONS_BY_SUPPLIER,
-        supplierId: supplierId
-      })
+  const handleCreateLocalPurchaseOrder = (row)=> {
+    if(selectedDraft?.requestItems?.filter(rq => rq.status === "COMMENT").length > 0) {
+      return message.error("Please make sure all request items are approved!")
     }
-  }
-
-  const handleSubmit = () => {
-    const payload = {
-      deliveryDate: deliveryDate.format("YYYY-MM-DD"),
-      quotationId: selectedQuotation?.quotation?.id,
-      items: selectedRequests.map(rq => {
-        let data = rq
-        data["requestCategory"] = request_categories.find(it => it.id === rq.requestCategory)
-        data["suppliedBy"] = selectedQuotation?.quotation?.supplier?.id
-        return data;
-      })
+    if(selectedDraft?.requestItems?.filter(rq => rq.approval !== "APPROVED").length > 0) {
+      return message.error("Please make sure all request items are approved!")
     }
-    console.log('payload', payload)
+    const payload = {draftId: selectedDraft?.id}
     createLocalPurchaseOrder(payload)
   }
 
-  const handleUpdateRequestUnitPrice = (row, value) => {
-    setSelectedRequests(selectedRequests.map(item=> {
-      if(item.id === row.id) {
-        let data = item;
-        data['unitPrice'] = value
-        return data
-      } else {
-        return item
-      }
-    }))
+  const handleDownloadPdf = async (row)=> {
+    //console.log('lets download pdf', row)
+    //const response = await grnService.getLpoDocument(row.id)
+    try {
+      await downloadLPODocument({lpoId: row.id})
+    } catch (error) {
+      
+    }
   }
 
-  const handleUpdateRequestCategory = (row, value)=> {
-    setSelectedRequests(selectedRequests.map(item=> {
-      if(item.id === row.id) {
-        let data = item;
-        data['requestCategory'] = value
-        return data
-      } else {
-        return item
-      }
-    }))
-  }
-
-  useEffect(() => {
-    props.resetSuppliers()
-    props.resetQuotation()
-    //props.resetRequestCategory()
-    //fetchSuppliers({suppliersWithRQ: true})
-    fetchQuotations({
-      requestType: NOT_LINKED_TO_LPO
-    })
-    props.fetchRequestCategories({})
+  React.useEffect(()=> {
+    //fetchLpos()
+    resetLocalPurchaseOrder()
+    fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if(!submitting_local_purchase_order && submit_local_purchase_order_success) {
-      setCurrent(0)
-      setSelectedSupplier(null)
-      setSelectedQuotation(null)
-      setSelectedRequests([])
-      resetQuotation()
-      fetchQuotations({
-        requestType: NOT_LINKED_TO_LPO
-      })
+      setVisible(false)
+      setSelectedDraft(null)
+      fetchLocalPurchaseOrderDrafts({q: "pendingApproval"})
     }
-  }, [submit_local_purchase_order_success, submit_local_purchase_order_success])
+  }, [submitting_local_purchase_order, submit_local_purchase_order_success])
+
+  const expandedRowRender = (row) => {
+    const expandedColumns = [
+      {title: 'Description', dataIndex: 'name', key: 'name'},
+      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
+      {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
+      {title: 'Approval', dataIndex: 'approval', key: 'approval', render: (text) => (
+        <span><Badge status={text === 'APPROVED' ? 'success' : 'error'} />{text}</span>
+      )},
+      {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
+        <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
+      )},
+    ]
+    return <Table columns={expandedColumns} dataSource={row.requestItems} pagination={false} rowKey="id" />
+  }
 
   return (
-    <>
-      <Row>
-        <Col span={24}>
-          <Steps current={current} size="small">
-            <Steps.Step title="Select Quotation" />
-            <Steps.Step title="Select Request Items" />
-            <Steps.Step title="Update Unit Price And Request Category" />
-            <Steps.Step title="Confirm and submit" />
-          </Steps>
+    <React.Fragment>
+      <Row style={{marginBottom: 20}}>
+        <Col>
+          <span className="bs-page-title">Local Purchase Orders</span>
+          <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
+            fetchLocalPurchaseOrders({withGRN: false})
+          }} /></span>
         </Col>
       </Row>
-      <Card>
-        {current === 0 && (
-          <>
-            <Row style={{marginBottom: 20}}>
-              <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Selected Quotation: {selectedQuotation?.quotation?.quotationRef || "N/A"}</span>
-              </Col>
-            </Row>
-            <Row style={{padding: "10px 0px 10px 0px"}}>
-              <Col span={24}>
-                <Input 
-                  type="search"
-                  style={{width: 300}}
-                  onChange={(event) => filterQuotations(event.target.value)}
-                  placeholder="Search By Supplier / reference"
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Table 
-                  columns={quotationColumns({
-                    onSelect: (row) => { 
-                      console.log('selected quotation', row)
-                      setSelectedQuotation(row) 
-                      setCurrent(1)
-                    },
-                    selectedQuotation: selectedQuotation
-                  })}
-                  loading={fetching_quotations}
-                  size="small"
-                  dataSource={filtered_quotations}
-                  pagination={false}
-                  bordered
-                />
-              </Col>
-            </Row>
-            {/* <Row style={{padding: "10px 0px 10px 0px"}}>
-              <Col span={24}>
-                <Button type="default"
-                  onClick={() => {
-                    setCurrent(1)
-                  }}
-                  style={{float: "right"}}
-                  disabled={!selectedQuotation?.quotation?.quotationRef}
-                >
-                  Next (Select Request Items)
-                  <RightOutlined />
-                </Button>
-              </Col>
-            </Row> */}
-          </>
-        )}
-        {current === 1 && (
-          <>
-            <Row>
-              <Col span={24}>
-                <Table
-                  columns={requestColumns({})}
-                  size="small"
-                  rowKey="id"
-                  dataSource={selectedQuotation?.requestItems.filter(it => !it?.unitPrice)}
-                  pagination={false}
-                  rowSelection={{
-                    onChange: (selectedRowKeys, selectedRows) => {
-                      console.log('selected rows', selectedRows)
-                      setSelectedRequests(selectedRows)
-                    },
-                    selectedRowKeys: selectedRequests?.map(it=> it.id),
-                  }} 
-                />
-              </Col>
-            </Row>
-            <Row style={{padding: "10px 0px 10px 0px"}}>
-              <Col span={24}>
-                <Button type="default"
-                  onClick={() => {
-                    setSelectedRequests([])
-                    setCurrent(0)
-                  }}
-                  style={{float: "left"}}
-                >
-                  <LeftOutlined />
-                  Previous
-                </Button>
-                <Button type="primary"
-                  onClick={() => {
-                    setCurrent(2)
-                  }}
-                  style={{float: "right"}}
-                  disabled={!selectedQuotation?.quotation?.quotationRef}
-                >
-                  Next (Select Request Items)
-                  <RightOutlined />
-                </Button>
-              </Col>
-            </Row>
-          </>
-        )}
-        {current === 2 && (
-          <React.Fragment>
-            <Row style={{paddingTop: 20, paddingBottom: 20}}>
-              <Col md={24}>
-                <Card>
-                <Row style={{marginBottom: 20, borderBottom: "1px #bdbdbd solid"}}>
-                  <Col md={24}>
-                    <span style={{fontWeight: 'bold'}}>SUPPLIER: {suppliers.find(item=> item.id === selectedSupplier)?.name}</span>
-                  </Col>
-                </Row>
-                  <Row>
-                    <Col md={6}>Delivery Date:</Col>
-                    <Col md={18}>
-                      <DatePicker
-                        format="YYYY-MM-DD"
-                        style={{width: "100%"}} 
-                        value={deliveryDate}
-                        onChange={(date, dateStr)=> {
-                          console.log('date', date)
-                          setDeliveryDate(date)
-                        }} 
-                      />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-            <Row style={{padding: 10}}>
-              <Col span={24}>
-                {selectedQuotation?.quotation?.requestDocument?.documentType.includes("image/") && (
-                  <div style={{width: "100%", height: "auto", display: "flex", flexDirection: "row", alignContent: "center", justifyContent: "center"}}>
-                    <Image 
-                      preview={imageVisible}
-                      onClick={() => setImageVisible(true)}
-                      width={200}
-                      src={`${BASE_URL}/requestDocument/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}
-                    />
-                    <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <span style={{fontWeight: "bold"}}>Quotation Document</span>
-                    </div>
-                  </div>
-                )}
-                {selectedQuotation?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
-                  <div style={{width: "100%", height: "auto", display: "flex", flexDirection: "row", alignContent: "center", justifyContent: "center"}}>
-                    <PDFViewer>
-                      <Document>
-                        <Page size="A4" style={{flexDirection: 'row',backgroundColor: '#E4E4E4'}}>
-
-                        </Page>
-                      </Document>
-                    </PDFViewer>
-                    <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <span style={{fontWeight: "bold"}}>Quotation Document</span>
-                    </div>
-                  </div>
-                )}
-              </Col>
-            </Row>
-            <Row>
-              <Col md={24}>
-                <Table 
-                  columns={updatePriceColumns({
-                    request_categories: props.request_categories,
-                    onRequestCategoryChange: (row, value) => handleUpdateRequestCategory(row, value),
-                    onPriceChange: (row, value) => handleUpdateRequestUnitPrice(row, value)
-                  })}
-                  dataSource={selectedRequests}
-                  pagination={false}
-                  size="small"
-                  bordered
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={24} className="bs-stepper-nav">
-                <Button type="primary" onClick={()=> {
-                  setCurrent(1)
-                }}>
-                  <LeftOutlined /> Prev
-                </Button>
-                <Button 
-                  type="primary" onClick={()=> setCurrent(3)}
-                  disabled={!deliveryDate || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
-                >
-                  Next <RightOutlined />
-                </Button>
-              </Col>
-            </Row>
-          </React.Fragment>
-        )}
-        {current === 3 && (
-          <>
-            <Row>
-              <Col span={24}>
-                <Table 
-                  columns={confirmColumns({
-                    request_categories
-                  })}
-                  dataSource={selectedRequests}
-                  rowKey="id"
-                  size="small"
-                  pagination={false}
-                  bordered
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={24} className="bs-stepper-nav">
-                <Button type="primary" onClick={()=> setCurrent(2)}>
-                  <LeftOutlined /> Prev
-                </Button>
-                <Button
-                  loading={submitting_local_purchase_order} 
-                  type="primary" 
-                  onClick={()=> handleSubmit()}
-                  disabled={!deliveryDate || submitting_local_purchase_order || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
-                >
-                  SUBMIT
-                </Button>
-              </Col>
-            </Row>
-          </>
-        )}
-      </Card>
-    </>
+      <Row>
+        <Col md={24}>
+          <Table 
+            columns={columns({ onDownloadPdfClick: handleDownloadPdf, 
+              onCreate: (row)=> {
+                setSelectedDraft(row)
+                setVisible(true)
+              } })}
+            dataSource={local_purchase_order_drafts}
+            size="small"
+            rowKey="id"
+            expandable={{expandedRowRender}}
+            bordered
+            loading={fetching_local_purchase_orders}
+          />
+        </Col>
+      </Row>
+      <Drawer
+        visible={visible}
+        onClose={() => {
+          setSelectedDraft(null)
+          setVisible(false)
+        }}
+        width={700}
+      >
+        <Divider />
+        <Row style={{marginTop: 30}}>
+          <Col span={24}>
+            <Button style={{float: "right"}} type="primary" onClick={() => handleCreateLocalPurchaseOrder()}>Create LPO</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <List>
+              <List.Item>
+                <List.Item.Meta title="Supplier" description={selectedDraft?.requestItems[0]?.suppliers.filter(sp => sp.id === selectedDraft.supplierId)[0]?.name} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Delivery Date" description={prettifyDateTime(selectedDraft?.deliveryDate)} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <span style={{fontWeight: "bold"}}>Entries</span>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Table 
+              columns={requestColumns}
+              dataSource={selectedDraft?.requestItems}
+              pagination={false}
+              size="small"
+              bordered
+            />
+          </Col>
+        </Row>
+      </Drawer>
+    </React.Fragment>
   )
 }
 

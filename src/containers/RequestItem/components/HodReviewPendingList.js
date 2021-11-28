@@ -58,7 +58,9 @@ const HodReviewPendingList = (props) => {
     resetRequest,
     fetchRequests,
     requests,
-    updateRequest
+    updateRequest,
+    updating_request,
+    update_request_success,
   } = props
   const [drawer, setDrawer] = React.useState(false)
   const [selectedRequest, setSelectedRequest] = React.useState(null)
@@ -71,6 +73,14 @@ const HodReviewPendingList = (props) => {
       payload: {requestItems: selected_requests}
     })
   }
+
+  React.useEffect(() => {
+    if(!updating_request && update_request_success) {
+      fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REVIEW
+      })
+    }
+  }, [update_request_success, updating_request])
 
   React.useEffect(() => {
     resetRequest()

@@ -72,7 +72,7 @@ const List = (props) => {
   React.useEffect(()=> {
     //fetchLpos()
     resetLocalPurchaseOrder()
-    fetchLocalPurchaseOrderDrafts({q: "pendingApproval"})
+    fetchLocalPurchaseOrders({})
   }, [])
 
   const expandedRowRender = (row) => {
