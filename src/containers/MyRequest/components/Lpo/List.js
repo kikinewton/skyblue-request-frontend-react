@@ -18,7 +18,7 @@ const columns = props => REQUEST_COLUMNS.concat([
     align: "right",
     render: (text, row) => (
       <div style={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
-        {row.status !== "COMMENT" && (<EditOutlined onClick={() =>  props.openUpdateRequest(row)} />)}
+        {row.status === "COMMENT" && (<EditOutlined onClick={() =>  props.openUpdateRequest(row)} />)}
         <EyeOutlined onClick={() => props.setRequest(row)}/>
       </div>
     )
@@ -40,6 +40,17 @@ const List = (props) => {
     })
     // eslint-disable-next-line
   }, [])
+
+  React.useEffect(() => {
+    if(!updating_request && update_request_success) {
+      setSelectedRequest(null)
+      setUpdateDrawer(false)
+      updatePriceForm.setFieldsValue({
+        name: "",
+        quantity: ""
+      })
+    }
+  }, [updating_request, update_request_success])
   return (
     <React.Fragment>
       <Card

@@ -2,134 +2,102 @@ import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/float/actions'
 
 import {
-  fetchAllFloatRequests as fetchAllFloatRequestsApi,
-  fetchMyFloatRequests as fetchMyFloatRequestsApi,
-  saveFloatRequest as saveFloatRequestApi,
-  fetchFloatRequests as fetchFloatRequestsApi,
-  updateFloatRequest as updateFloatRequestApi,
-  updateSingleFloatRequest as updateSingleFloatRequestApi
+  getAllGoodsReceiveNotes as getAllGoodsReceiveNotesApi,
+  getGoodsReceiveNoteById as getGoodsReceiveNoteByIdApi,
+  createGoodsReceiveNote as createGoodsReceiveNoteApi,
+  updateGoodsReceiveNote as updateGoodsReceiveNoteApi,
 } from '../../api/goods-receive-note'
+
 import openNotification from '../../../util/notification'
-import { clearLocalState } from '../../app-storage'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
-export function* fetchAllFloatRequests(action) {
-  console.log('=================>FETCH REQUEST', action)
+export function* fetchGrns(action) {
   const { query } = action
   try {
-    const response = yield call(fetchFloatRequestsApi, query)
+    const response = yield call(getAllGoodsReceiveNotesApi, query)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      yield put(Creators.fetchFloatRequestsSuccess(response?.data))
+      yield put(Creators.fetchGrnsSuccess(response?.data))
     } else {
-      openNotification('error', 'Fetch Request', response?.message)
-      yield put(Creators.fetchAFloatRequestsFailure(response?.message))
+      openNotification('error', 'Fetch Goods Received Notes', response?.message)
+      yield put(Creators.fetchGrnsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
-    openNotification('error', 'Fetch Request', errorText)
-    yield put(Creators.fetchFloatRequestsFailure(errorText))
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Fetch Goods Received Notes'
+    openNotification('error', 'Fetch Goods Received Notes', errorText)
+    yield put(Creators.fetchGrnsFailure(errorText))
   }
 }
 
-export function* fetchMyFloatRequests(action) {
-  console.log('=================>FETCH REQUEST', action)
-  const { query } = action
+export function* fetchGrn(action) {
+  const { id } = action
   try {
-    const response = yield call(fetchMyFloatRequestsApi, query)
+    const response = yield call(getGoodsReceiveNoteByIdApi, id)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      yield put(Creators.fetchMyFloatRequestsSuccess(response?.data))
+      yield put(Creators.getGrnSuccess(response?.data))
     } else {
-      openNotification('error', 'Fetch Request', response?.message)
-      yield put(Creators.fetchMyFloatRequestsFailure(response?.message))
+      openNotification('error', 'Fetch GRN', response?.message)
+      yield put(Creators.getGrnFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Fetch Request', errorText)
-    yield put(Creators.fetchMyFloatRequestsFailure(errorText))
+    openNotification('error', 'Fetch GRN', errorText)
+    yield put(Creators.getGrnFailure(errorText))
   }
 }
 
 
-export function* createFloatRequest(action) {
+export function* createGrn(action) {
   const { payload } = action
   try {
-    const response = yield call(saveFloatRequestApi, payload)
+    const response = yield call(createGoodsReceiveNoteApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Float', response?.message)
-      yield put(Creators.createFloatRequestSuccess(response?.data))
+      openNotification('success', 'Create Supplier Goods Received Note', response?.message)
+      yield put(Creators.createGrnSuccess(response?.data))
     } else {
-      openNotification('error', 'Create Float', response?.message)
-      yield put(Creators.createFloatRequestFailure(response?.message))
+      openNotification('error', 'Create Supplier Goods Received Note', response?.message)
+      yield put(Creators.createGrnFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Create Float', errorText)
-    yield put(Creators.createFloatRequestFailure(errorText))
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Create Supplier Goods Received Note'
+    openNotification('error', 'Create Supplier Goods Received Note', errorText)
+    yield put(Creators.createGrnFailure(errorText))
   }
 }
 
-export function* updateFloatRequest(action) {
+export function* updateGrn(action) {
   const { payload } = action
   console.log('saga payload', payload)
   try {
-    const response = yield call(updateFloatRequestApi, payload)
+    const response = yield call(updateGoodsReceiveNoteApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Update Float', response?.message)
-      yield put(Creators.updateFloatRequestSuccess(response?.data))
+      openNotification('success', 'Update Supplier Goods Received Note', response?.message)
+      yield put(Creators.updateGrnSuccess(response?.data))
     } else {
-      openNotification('error', 'Update Float', response?.message)
-      yield put(Creators.updateFloatRequestFailure(response?.message))
+      openNotification('error', 'Update Supplier Goods Received Note', response?.message)
+      yield put(Creators.updateGrnFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Update Float', errorText)
-    yield put(Creators.updateFloatRequestFailure(errorText))
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Update Supplier Goods Received Note'
+    openNotification('error', 'Update Supplier Goods Received Note', errorText)
+    yield put(Creators.updateGrnFailure(errorText))
   }
-}
-
-export function* updateSingleFloatRequest(action) {
-  const { payload, id } = action
-  console.log('saga payload', action)
-  try {
-    const response = yield call(updateSingleFloatRequestApi, id, payload)
-    if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Update Float', response?.message)
-      yield put(Creators.updateSingleFloatRequestSuccess(response?.data))
-    } else {
-      openNotification('error', 'Update Float', response?.message)
-      yield put(Creators.updateSingleFloatRequestFailure(response?.message))
-    }
-  } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Update Float', errorText)
-    yield put(Creators.updateSingleFloatRequestFailure(errorText))
-  }
-}
-
-
-export function* resetFloatRequest(action) {
-  yield put(Creators.resetFloatequest())
 }
 
 //watchers
 
-export function* watchFetchFloatRequests(action) {
-  yield takeLatest(Types.FETCH_FLOAT_REQUESTS, fetchAllFloatRequests)
+export function* watchFetchGrns(action) {
+  yield takeLatest(Types.FETCH_GRNS, fetchGrns)
 }
 
-export function* watchFetchMyFloatRequests(action) {
-  yield takeLatest(Types.FETCH_MY_FLOAT_REQUESTS, fetchMyFloatRequests)
+export function* watchFetchGrn(action) {
+  yield takeLatest(Types.FETCH_GRN, fetchGrn)
 }
 
-export function* watchCreateFloatRequest(action) {
-  yield takeLatest(Types.CREATE_FLOAT_REQUEST, createFloatRequest)
+export function* watchCreateGrn(action) {
+  yield takeLatest(Types.CREATE_GRN, createGrn)
 }
 
-export function* watchUpdateFloatRequest(action) {
-  yield takeLeading(Types.UPDATE_FLOAT_REQUEST, updateFloatRequest)
-}
-
-export function* watchUpdateSingleFloatRequest(action) {
-  yield takeLeading(Types.UPDATE_SINGLE_FLOAT_REQUEST, updateSingleFloatRequest)
+export function* watchUpdateGrn(action) {
+  yield takeLeading(Types.UPDATE_GRN, updateGrn)
 }

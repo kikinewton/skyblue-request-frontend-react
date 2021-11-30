@@ -78,6 +78,13 @@ import {
 	watchCreateComment
 } from "./comment"
 
+import {
+	watchCreateGrn,
+	watchFetchGrn,
+	watchFetchGrns,
+	watchUpdateGrn,
+} from "./grn"
+
 export default function* rootSaga() {
 	yield all([
 		watchLogin(),
@@ -132,7 +139,11 @@ export default function* rootSaga() {
 		watchFetchLocalPurchaseOrderDrafts(),
 		watchCreateLocalPurchaseOrderDraft(),
 
-		watchCreateComment()
+		watchCreateComment(),
 
+		// watchCreateGrn(),
+		// watchUpdateGrn(),
+		// watchFetchGrns(),
+		// watchFetchGrn(),
 	]);
 }

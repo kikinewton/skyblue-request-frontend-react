@@ -68,20 +68,6 @@ export const updateGrnFailure = (state = INITIAL_STATE, action) => {
 };
 
 
-//delete
-export const deleteGrn = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false };
-};
-
-export const deleteGrnSuccess = (state = INITIAL_STATE, action) => {
-  const { departmentId } = action
-  return { 
-    ...state, 
-    grns: state.grns.filter(item=> item.id !== departmentId),
-    submitting: false
-  };
-};
-
 export const deleteGrnFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error};
 };
@@ -96,7 +82,7 @@ export const resetGrn = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     grns: [],
-    my_grns: [],
+    grn: null,
     error: null,
     loading: false,
     submitting: false
@@ -115,10 +101,6 @@ export const HANDLERS = {
   [Types.UPDATE_GRN]: updateGrn,
   [Types.UPDATE_GRN_SUCCESS]: updateGrnSuccess,
   [Types.UPDATE_GRN_FAILURE]: updateGrnFailure,
-
-  [Types.DELETE_GRN]: deleteGrn,
-  [Types.DELETE_GRN_SUCCESS]: deleteGrnSuccess,
-  [Types.DELETE_GRN_FAILURE]: deleteGrnFailure,
 
   [Types.SET_SELECTED_GRNS]: setSelectedGrns,
   
