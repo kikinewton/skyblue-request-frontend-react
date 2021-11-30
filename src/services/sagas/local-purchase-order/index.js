@@ -74,16 +74,16 @@ export function* createLocalPurchaseOrderDraft(action) {
     const response = yield call(saveLocalPurchaseOrderDraftApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Local Purchase Order', response?.message)
-      yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))
+      yield put(Creators.createLocalPurchaseOrderDraftSuccess(response?.data))
     } else {
       openNotification('error', 'Create Local Purchase Order', response?.message)
-      yield put(Creators.createLocalPurchaseOrderFailure(response?.message))
+      yield put(Creators.createLocalPurchaseOrderDraftFailure(response?.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
     const errorText = errors[0] || 'Failed to create local purchase order'
     openNotification('error', 'Create Local Purchase Order', errorText)
-    yield put(Creators.createLocalPurchaseOrderFailure(errorText))
+    yield put(Creators.createLocalPurchaseOrderDraftFailure(errorText))
   }
 }
 
@@ -103,6 +103,9 @@ export function* watchCreateLocalPurchaseOrder(action) {
   yield takeLatest(Types.CREATE_LOCAL_PURCHASE_ORDER, createLocalPurchaseOrder)
 }
 
+export function* watchCreateLocalPurchaseOrderDraft(action) {
+  yield takeLatest(Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT, createLocalPurchaseOrderDraft)
+}
 
 export function* watchFetchLocalPurchaseOrderDrafts(action) {
   yield takeLatest(Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS, fetchLocalPurchaseOrderDrafts)

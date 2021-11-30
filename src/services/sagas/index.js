@@ -71,6 +71,7 @@ import {
 	watchFetchLocalPurchaseOrders,
 	watchCreateLocalPurchaseOrder,
 	watchFetchLocalPurchaseOrderDrafts,
+	watchCreateLocalPurchaseOrderDraft,
 } from "./local-purchase-order"
 
 import {
@@ -129,6 +130,7 @@ export default function* rootSaga() {
 		watchFetchLocalPurchaseOrders(),
 		watchCreateLocalPurchaseOrder(),
 		watchFetchLocalPurchaseOrderDrafts(),
+		watchCreateLocalPurchaseOrderDraft(),
 
 		watchCreateComment()
 

@@ -1,0 +1,21 @@
+import { createTypes } from "reduxsauce";
+
+export default createTypes(
+  `
+  FETCH_GRNS
+  FETCH_GRNS_SUCCESS
+  FETCH_GRNS_FAILURE
+
+  FETCH_GRN_DRAFTS
+  FETCH_GRN_DRAFTS_SUCCESS
+  FETCH_GRN_DRAFTS_FAILURE
+
+  CREATE_GRN
+  CREATE_GRN_SUCCESS
+  CREATE_GRN_FAILURE
+
+  RESET_GRN
+
+`,
+  {}
+);

@@ -53,6 +53,19 @@ export const createLocalPurchaseOrderFailure = (state = INITIAL_STATE, action) =
   return { ...state, submitting: false, error: action.error, local_purchase_order: null};
 };
 
+//create draft
+export const createLocalPurchaseOrderDraft = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const createLocalPurchaseOrderDraftSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const createLocalPurchaseOrderDraftFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error};
+};
+
 
 export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
   return {
@@ -78,6 +91,10 @@ export const HANDLERS = {
   [Types.CREATE_LOCAL_PURCHASE_ORDER]: createLocalPurchaseOrder,
   [Types.CREATE_LOCAL_PURCHASE_ORDER_SUCCESS]: createLocalPurchaseOrderSuccess,
   [Types.CREATE_LOCAL_PURCHASE_ORDER_FAILURE]: createLocalPurchaseOrderFailure,
+
+  [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT]: createLocalPurchaseOrderDraft,
+  [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_SUCCESS]: createLocalPurchaseOrderDraftSuccess,
+  [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_FAILURE]: createLocalPurchaseOrderDraftFailure,
   
   [Types.RESET_LOCAL_PURCHASE_ORDER]: resetLocalPurchaseOrder
 };

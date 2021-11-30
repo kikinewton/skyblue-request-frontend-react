@@ -85,6 +85,8 @@ const CollapsibleLayout = (props) => {
       setKey("/app/quotations")
     } else if(pathname.includes("/app/procurement/assign-suppliers")) {
       setKey("assign-suppliers")
+    } else if(pathname.includes("/app/store")) {
+      setKey("/app/store")
     }
     else {
       setKey("home")
@@ -230,11 +232,32 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && 
-            <Menu.Item key="/app/store/lpos" icon={<ShopOutlined />}>
-              <NavLink to="/app/store/lpos">
-                Store
-              </NavLink>
-            </Menu.Item>
+            <Menu.SubMenu
+              title="Store"
+              icon={<ShopOutlined />}
+              key="/app/store"
+            >
+              <Menu.Item key="/app/store/lpo">
+                <NavLink to="/app/store/lpo">
+                  Create Goods Received Note
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="/app/store/float">
+                <NavLink to="/app/store/float">
+                  Floats
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="/app/store/petty-cash">
+                <NavLink to="/app/store/petty-cash">
+                  Petty Cash
+                </NavLink>
+              </Menu.Item>
+            </Menu.SubMenu>
+            // <Menu.Item key="/app/store" icon={<ShopOutlined />}>
+            //   <NavLink to="/app/store/lpos">
+            //     Store
+            //   </NavLink>
+            // </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
             <Menu.SubMenu  
