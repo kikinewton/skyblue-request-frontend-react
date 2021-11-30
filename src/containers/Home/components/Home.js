@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Table, Row, Col, Spin } from 'antd'
 import { REQUEST_COLUMNS } from '../../../util/constants';
+import { NavLink } from "react-router-dom"
 
 
 const Home = (props) => {
@@ -27,7 +28,8 @@ const Home = (props) => {
         </Row>
         <Row>
           <Col md={24} style={{display:'flex', justifyContent: 'flex-end', alignItems: 'center', padding: 5}}>
-            <a href="/#app/my-requests">View All</a>
+            {/* <NavLink to="/app/my-request/lpos">View All</NavLink> */}
+            
           </Col>
         </Row>
 

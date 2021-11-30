@@ -20,6 +20,9 @@ const Store = (props) => {
   return (
     <React.Fragment>
       <Switch>
+        <AuthenticatedRoute exact path={`${path}`}>
+          <Redirect to="/app/store/lpos" />
+        </AuthenticatedRoute>
         <AuthenticatedRoute path={`${path}/grn-success`} {...props} component={Success} />
         <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />
         <AuthenticatedRoute path={`${path}/lpos`} component={LocalPurchaseOrders} />

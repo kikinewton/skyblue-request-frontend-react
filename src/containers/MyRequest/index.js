@@ -7,9 +7,9 @@ import { Creators as FloatCreators } from "../../services/redux/float/actions"
 import { Creators as PettyCashCreators } from "../../services/redux/petty-cash/actions"
 import AppLayout from '../AppLayout'
 import MyRequestsIndex from './components'
-import { Row, Col, Menu } from 'antd'
+import { Menu } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
-import ListLpos from "./components/Lpo/List"
+import ListLpos from "./components/Lpo/LpoList"
 import AddLpo from "./components/Lpo/Add"
 import ListPettyCash from "./components/PettyCash/List"
 import AddPettyCash from "./components/PettyCash/Add"
