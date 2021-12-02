@@ -1,0 +1,105 @@
+import { Card, Button, Table, Drawer } from 'antd'
+import React, { useEffect, useState } from 'react'
+import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
+import { prettifyDateTime } from '../../../util/common-helper'
+
+const columns = props => [
+  {
+    title: "Invoice Number",
+    dataIndex: "invoice",
+    key: "invoice",
+    render: (text, row) => row?.invoice?.invoiceNumber
+  },
+  // {
+  //   title: "Created On",
+  //   dataIndex: "createdDate",
+  //   key: "createdDate",
+  //   render: (text) => prettifyDateTime(text)
+  // },
+  {
+    title: "Amount",
+    dataIndex: "invoiceAmountPayable",
+    key: "invoiceAmountPayable"
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    align: "right",
+    render: (text,row) => (<><Button type="default" onClick={() => props.onEndorse(row)}>Approve</Button></>)
+  },
+]
+
+const GrnPendingApproval = (props) => {
+  const {
+    grns,
+    fetching_grns,
+    fetchGrns,
+    resetGrn,
+    submitting_grn,
+    submit_grn_success,
+    updateGrn,
+  } = props
+  const [visible, setVisible] = useState(false)
+  const [selectedGrn, setSelectedGrn] = useState(null)
+
+  useEffect(() => {
+    resetGrn()
+    fetchGrns({notApprovedByGM: true})
+  }, [])
+
+  useEffect(() => {
+    if(!submitting_grn && submit_grn_success) {
+      setVisible(false)
+      setSelectedGrn(null)
+      fetchGrns({notApprovedByHOD: true})
+    }
+  }, [submit_grn_success, submitting_grn])
+
+  return (
+    <>
+      <Card
+        title="Goods Received Notes Awaiting Endorsement"
+        size="small"
+      >
+        <Table
+          columns={columns({
+            onEndorse: (row) => {
+              setSelectedGrn(row)
+              setVisible(true)
+            }
+          })}
+          dataSource={grns}
+          loading={fetching_grns}
+          size="small"
+          bordered
+          rowKey="id"
+        />
+      </Card>
+      <Drawer
+        forceRender
+        visible={visible}
+        title="Review and endorse"
+        placement="right"
+        width={800}
+        maskClosable={false}
+        onClose={() => {
+          setSelectedGrn(null)
+          setVisible(false)
+        }}
+      >
+        <GrnDocumentReview 
+          grn={selectedGrn}
+          invoice={selectedGrn?.invoice}
+          invoiceDocument={selectedGrn?.invoice?.invoiceDocument}
+          onFinishText="Approve"
+          onFinish={() => {
+            updateGrn(selectedGrn?.id, {updateType: "approve"})
+          }}
+        />
+      </Drawer>
+    </>
+  )
+}
+
+export default GrnPendingApproval

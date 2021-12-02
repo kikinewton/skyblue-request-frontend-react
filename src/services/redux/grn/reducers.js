@@ -25,15 +25,15 @@ export const fetchGrnsFailure = (state = INITIAL_STATE, action) => {
 };
 
 //get
-export const getGrn = (state = INITIAL_STATE, action) => {
+export const fetchGrn = (state = INITIAL_STATE, action) => {
   return { ...state, loading: true, errors: null, submitting: false };
 };
 
-export const getGrnSuccess = (state = INITIAL_STATE, action) => {
+export const fetchGrnSuccess = (state = INITIAL_STATE, action) => {
   return { ...state, department: action.responseData, loading: false};
 };
 
-export const getGrnFailure = (state = INITIAL_STATE, action) => {
+export const fetchGrnFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error};
 };
 
@@ -94,9 +94,9 @@ export const HANDLERS = {
   [Types.FETCH_GRNS_SUCCESS]: fetchGrnsSuccess,
   [Types.FETCH_GRNS_FAILURE]: fetchGrnsFailure,
 
-  [Types.FETCH_GRN]: getGrn,
-  [Types.FETCH_GRN_SUCCESS]: getGrnSuccess,
-  [Types.FETCH_GRN_FAILURE]: getGrnFailure,
+  [Types.FETCH_GRN]: fetchGrn,
+  [Types.FETCH_GRN_SUCCESS]: fetchGrnSuccess,
+  [Types.FETCH_GRN_FAILURE]: fetchGrnFailure,
 
   [Types.CREATE_GRN]: createGrn,
   [Types.CREATE_GRN_SUCCESS]: createGrnSuccess,

@@ -6,15 +6,15 @@ export const { Types, Creators } = createActions(
     fetchGrnsSuccess: ["responseData"],
     fetchGrnsFailure: ["error"],
 
-    getGrn: ["requestId"],
-    getGrnSuccess: ["responseData"],
-    getGrnFailure: ["error"],
+    fetchGrn: ["requestId"],
+    fetchGrnSuccess: ["responseData"],
+    fetchGrnFailure: ["error"],
 
     createGrn: ["payload"],
     createGrnSuccess: ["responseData"],
     createGrnFailure: ["error"],
 
-    updateGrn: ["payload"],
+    updateGrn: ["id", "payload"],
     updateGrnSuccess: ["responseData"],
     updateGrnFailure: ["error"],
 

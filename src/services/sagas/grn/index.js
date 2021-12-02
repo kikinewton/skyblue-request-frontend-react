@@ -1,5 +1,5 @@
 import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
-import { Creators, Types } from '../../redux/float/actions'
+import { Creators, Types } from '../../redux/grn/actions'
 
 import {
   getAllGoodsReceiveNotes as getAllGoodsReceiveNotesApi,
@@ -34,15 +34,15 @@ export function* fetchGrn(action) {
   try {
     const response = yield call(getGoodsReceiveNoteByIdApi, id)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      yield put(Creators.getGrnSuccess(response?.data))
+      yield put(Creators.fetchGrnSuccess(response?.data))
     } else {
       openNotification('error', 'Fetch GRN', response?.message)
-      yield put(Creators.getGrnFailure(response?.message))
+      yield put(Creators.fetchGrnFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
     openNotification('error', 'Fetch GRN', errorText)
-    yield put(Creators.getGrnFailure(errorText))
+    yield put(Creators.fetchGrnFailure(errorText))
   }
 }
 
@@ -66,10 +66,10 @@ export function* createGrn(action) {
 }
 
 export function* updateGrn(action) {
-  const { payload } = action
+  const { id, payload } = action
   console.log('saga payload', payload)
   try {
-    const response = yield call(updateGoodsReceiveNoteApi, payload)
+    const response = yield call(updateGoodsReceiveNoteApi, id, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Update Supplier Goods Received Note', response?.message)
       yield put(Creators.updateGrnSuccess(response?.data))

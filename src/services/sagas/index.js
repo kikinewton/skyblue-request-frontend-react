@@ -143,9 +143,9 @@ export default function* rootSaga() {
 
 		watchCreateComment(),
 
-		// watchCreateGrn(),
-		// watchUpdateGrn(),
-		// watchFetchGrns(),
-		// watchFetchGrn(),
+		watchCreateGrn(),
+		watchUpdateGrn(),
+		watchFetchGrns(),
+		watchFetchGrn(),
 	]);
 }

@@ -29,6 +29,7 @@ const PettyCashIndex = React.lazy(() => import("./containers/PettyCash"))
 const FloatIndex = React.lazy(() => import("./containers/Float"))
 const SupplierModule = React.lazy(() => import("./containers/SupplierModule"))
 const LocalPurchaseOrderModule = React.lazy(() => import("./containers/LocalPurchaseOrderModule"))
+const GrnIndex = React.lazy(() => import("./containers/Grn"))
 
 function App(props) {
   return (
@@ -37,6 +38,7 @@ function App(props) {
         <Switch>
           <Route path="/app/account" component={Account} {...props} />
           <Route path="/app/store" component={Store} {...props} />
+          <Route path="/app/grn" component={GrnIndex} />
           <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
           <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
           <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />

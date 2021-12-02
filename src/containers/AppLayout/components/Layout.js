@@ -87,6 +87,8 @@ const CollapsibleLayout = (props) => {
       setKey("assign-suppliers")
     } else if(pathname.includes("/app/store")) {
       setKey("/app/store")
+    } else if(pathname.includes("/app/grn")) {
+      setKey("/app/grn")
     }
     else {
       setKey("home")
@@ -154,6 +156,14 @@ const CollapsibleLayout = (props) => {
                 </NavLink>
               </Menu.Item>
             </>
+          )}
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && (
+            <Menu.Item key="/app/grn">
+              <NavLink to="/app/grn">
+                <ShopOutlined />
+                <span>Goods Received Notes</span>
+              </NavLink>
+            </Menu.Item>
           )}
           {/* {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.requestMenu) && 
             <Menu.SubMenu key="/app/requests" icon={<DesktopOutlined/>} title="Request Mgmt">

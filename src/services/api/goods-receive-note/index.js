@@ -6,7 +6,7 @@ const path = "/goodsReceivedNote"
 export function getAllGoodsReceiveNotes(query) {
   const qs = serializeQueryParams(query)
   return service({
-    url: `${path}/${qs}`,
+    url: `${path}${qs}`,
     method: 'GET'
   })
 }
@@ -52,17 +52,17 @@ export function createGoodsReceiveNote(payload) {
   })
 }
 
-export function updateGoodsReceiveNote(payload) {
-  const data = {
-    invoice: payload.invoice,
-    invoiceAmountPayable: payload.invoiceAmountPayable,
-    lpo: payload.lpo,
-    supplier: payload.supplier
-  }
+export function updateGoodsReceiveNote(id, payload) {
+  // const data = {
+  //   invoice: payload.invoice,
+  //   invoiceAmountPayable: payload.invoiceAmountPayable,
+  //   lpo: payload.lpo,
+  //   supplier: payload.supplier
+  // }
   return service({
-    url: `${path}/${payload.goodsReceiveNoteId}`,
-    method: 'POST',
-    data
+    url: `/goodsReceivedNotes/${id}/${payload.updateType}`,
+    method: 'PUT',
+    data: payload
   })
 }
 
