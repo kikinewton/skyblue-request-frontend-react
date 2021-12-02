@@ -114,7 +114,7 @@ const CreateQuotation = (props) => {
       const response = await saveSingleDocument({file: file, docType: file?.type})
       if(response.status === 'SUCCESS') {
         const responseData = response.data
-        const docId = responseData.documentId
+        const docId = responseData.id
         console.log('doc id', docId)
         if(docId) {
           console.log('oo yeah, lets create quotation')

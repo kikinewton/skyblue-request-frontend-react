@@ -98,10 +98,6 @@ const columns = (props) => [
 const CreateQuotation = (props) => {
   const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, quotationLoading, createQuotation, quotationSubmitting } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
-  const [ quotation, setQuotation ] = React.useState({}) 
-  const [modalOpen, setModalOpen] = React.useState(false)
-  const [selectedRow, setSelectedRow] = React.useState({supplierId: null, requests: []})
-  const [ items, setItems ] = React.useState([])
   const [current, setCurrent] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
   const [selectedRequestItems, setSelectedRequestItems] = React.useState([])
@@ -116,17 +112,17 @@ const CreateQuotation = (props) => {
       const response = await saveSingleDocument({file: file, docType: file?.type})
       if(response.status === 'SUCCESS') {
         const responseData = response.data
-        const docId = responseData.documentId
+        const docId = responseData.id
         console.log('doc id', docId)
         if(docId) {
           console.log('oo yeah, lets create quotation')
           createQuotation({
-            documentId: docId, 
+            documentId: docId,
             requestItemIds: selectedRequestItems.map(it => it.id), 
             supplierId: selectedSupplier.supplierId
           })
         }
-        //await fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
+        await fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
       }
       setFiles([])
     } catch (e) {

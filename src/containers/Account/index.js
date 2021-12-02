@@ -14,7 +14,9 @@ const Account = (props) => {
   const { path } = useRouteMatch()
   return (
     <React.Fragment>
-      <AppLayout>
+      <AppLayout
+        title="Accounts"
+      >
         <Switch>
           <AuthenticatedRoute path={`${path}/payment-success`} component={PaymentSuccess} {...props} />
           <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />

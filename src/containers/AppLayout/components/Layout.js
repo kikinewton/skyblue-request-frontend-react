@@ -89,7 +89,11 @@ const CollapsibleLayout = (props) => {
       setKey("/app/store")
     } else if(pathname.includes("/app/grn")) {
       setKey("/app/grn")
-    }
+    } else if(pathname.includes("/app/account/goods-receive-notes")) {
+      setKey("/app/account/goods-receive-notes")
+    } else if(pathname.includes("/app/account")) {
+      setKey("/app/account")
+    } 
     else {
       setKey("home")
     }
@@ -250,13 +254,7 @@ const CollapsibleLayout = (props) => {
           }
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
             <Menu.SubMenu  
-              key={()=> {
-                if(path.indexOf("/app/account")) {
-                  return path
-                } else {
-                  return "/app/accounts"
-                }
-              }} 
+              key="/app/account" 
               title="Accounts" 
               icon={<AccountBookOutlined />}
             >
