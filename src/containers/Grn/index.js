@@ -8,10 +8,10 @@ import GrnSuccessPage from './components/GrnSuccessPage'
 import ReceiveItems from './components/ReceiveItems'
 import GrnPendingEndorsement from './components/GrnPendingEndorsement'
 import GrnPendingApproval from './components/GrnPendingApproval'
-import Success from '../GoodsReceiveSuccessPage'
 import { Creators as LpoCreators } from "../../services/redux/local-purchase-order/actions"
 import { Creators as GrnCreators } from "../../services/redux/grn/actions"
 import {Menu} from "antd"
+import { EMPLOYEE_ROLE } from '../../util/datas'
 
 
 const GrnIndex = (props) => {
@@ -34,6 +34,17 @@ const GrnIndex = (props) => {
   //     setKey("/app/grn/list")
   //   }
   // }, [])
+
+  const DefaultRedirect = () => {
+    const role = currentUser.role
+    if(role === EMPLOYEE_ROLE.ROLE_STORE_OFFICER) {
+      return <Redirect to="/app/grn/list" />
+    } else if(role === EMPLOYEE_ROLE.ROLE_HOD) {
+      return <Redirect to="/app/grn/pending-endorsement" />
+    } else if(role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
+      return <Redirect to="/app/grn/pending-approval" />
+    }
+  }
 
   React.useEffect(() => {
     const { pathname } = location
@@ -60,32 +71,40 @@ const GrnIndex = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="/app/grn/add-new">
-              <NavLink to="/app/grn/add-new">
-                Create Goods Receive Note
-              </NavLink>
-            </Menu.Item>
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_STORE_OFFICER && (
+              <>
+                <Menu.Item key="/app/grn/add-new">
+                  <NavLink to="/app/grn/add-new">
+                    Create Goods Receive Note
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="/app/grn/list">
+                  <NavLink to="/app/grn/list">
+                    Goods Receive Notes
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
             <Menu.Item key="/app/grn/pending-endorsement">
               <NavLink to="/app/grn/pending-endorsement">
                 Goods Receive Notes Awaiting Endorsement
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="/app/grn/pending-approval">
-              <NavLink to="/app/grn/pending-approval">
-                Goods Receive Notes Awaiting Approval
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="/app/grn/list">
-              <NavLink to="/app/grn/list">
-                Goods Receive Notes
-              </NavLink>
-            </Menu.Item>
+            )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
+              <Menu.Item key="/app/grn/pending-approval">
+                <NavLink to="/app/grn/pending-approval">
+                  Goods Receive Notes Awaiting Approval
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu>
         )}
       >
         <Switch>
           <AuthenticatedRoute exact path={`${path}`}>
-            <Redirect to="/app/grn/list" />
+            {DefaultRedirect}
           </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/pending-endorsement`} {...props} component={GrnPendingEndorsement} />
           <AuthenticatedRoute path={`${path}/pending-approval`} {...props} component={GrnPendingApproval} />
