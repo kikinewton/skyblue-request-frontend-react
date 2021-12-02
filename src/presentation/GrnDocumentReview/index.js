@@ -74,10 +74,10 @@ const GrnDocumentReview = (props) => {
                   src={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}
                 />
               )}
-              {grn?.requestDocument?.documentType.includes("pdf/") && (
+              {invoiceDocument?.documentFormat.includes("application/pdf") && (
                 <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
               )}
-              {grn?.requestDocument?.documentType.includes("excel/") && (
+              {invoiceDocument?.documentFormat.includes("excel/") && (
                 <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
               )}
             </Col>
