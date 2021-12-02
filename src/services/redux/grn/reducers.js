@@ -39,7 +39,7 @@ export const getGrnFailure = (state = INITIAL_STATE, action) => {
 
 //create
 export const createGrn = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
+  return { ...state, submitting: true, errors: null, submit_success: false };
 };
 
 export const createGrnSuccess = (state = INITIAL_STATE, action) => {
@@ -93,6 +93,10 @@ export const HANDLERS = {
   [Types.FETCH_GRNS]: fetchGrns,
   [Types.FETCH_GRNS_SUCCESS]: fetchGrnsSuccess,
   [Types.FETCH_GRNS_FAILURE]: fetchGrnsFailure,
+
+  [Types.FETCH_GRN]: getGrn,
+  [Types.FETCH_GRN_SUCCESS]: getGrnSuccess,
+  [Types.FETCH_GRN_FAILURE]: getGrnFailure,
 
   [Types.CREATE_GRN]: createGrn,
   [Types.CREATE_GRN_SUCCESS]: createGrnSuccess,

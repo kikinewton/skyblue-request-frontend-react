@@ -3,6 +3,7 @@ import { Creators, Types } from '../../redux/local-purchase-order/actions'
 
 import {
   fetchLocalPurchaseOrders as fetchLocalPurchaseOrdersApi,
+  fetchLocalPurchaseOrder as fetchLocalPurchaseOrderApi,
   fetchLocalPurchaseOrderDraft as fetchLocalPurchaseOrderDraftApi,
   createLocalPurchaseOrderDraft as saveLocalPurchaseOrderDraftApi,
   createLocalPurchaseOrder as saveLocalPurchaseOrderApi,
@@ -27,6 +28,23 @@ export function* fetchLocalPurchaseOrders(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchLocalPurchaseOrdersFailure(errorText))
+  }
+}
+
+export function* fetchLocalPurchaseOrder(action) {
+  const { id } = action
+  try {
+    const response = yield call(fetchLocalPurchaseOrderApi, id)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchLocalPurchaseOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Fetch Lpo', response?.message)
+      yield put(Creators.fetchLocalPurchaseOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to Lpo'
+    openNotification('error', 'Fetch Lpo', errorText)
+    yield put(Creators.fetchLocalPurchaseOrderFailure(errorText))
   }
 }
 
@@ -96,6 +114,10 @@ export function* resetLocalPurchaseOrder(action) {
 
 export function* watchFetchLocalPurchaseOrders(action) {
   yield takeLeading(Types.FETCH_LOCAL_PURCHASE_ORDERS, fetchLocalPurchaseOrders)
+}
+
+export function* watchFetchLocalPurchaseOrder(action) {
+  yield takeLeading(Types.FETCH_LOCAL_PURCHASE_ORDER, fetchLocalPurchaseOrder)
 }
 
 

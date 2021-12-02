@@ -6,6 +6,10 @@ export const { Types, Creators } = createActions(
     fetchLocalPurchaseOrdersSuccess: ["responseData"],
     fetchLocalPurchaseOrdersFailure: ["error"],
 
+    fetchLocalPurchaseOrder: ["id"],
+    fetchLocalPurchaseOrderSuccess: ["responseData"],
+    fetchLocalPurchaseOrderFailure: ["error"],
+
     fetchLocalPurchaseOrderDrafts: ["query"],
     fetchLocalPurchaseOrderDraftsSuccess: ["responseData"],
     fetchLocalPurchaseOrderDraftsFailure: ["error"],

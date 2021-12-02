@@ -11,6 +11,13 @@ export function fetchLocalPurchaseOrders(query) {
   })
 }
 
+export function fetchLocalPurchaseOrder(id) {
+  return apiRequest({
+    method: "GET",
+    url: `/localPurchaseOrders/${id}`
+  })
+}
+
 export function fetchLocalPurchaseOrderDraft(query) {
   const queryStr = serializeQueryParams(query)
   return apiRequest({

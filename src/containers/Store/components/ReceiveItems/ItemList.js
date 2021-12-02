@@ -32,6 +32,8 @@ const ItemList = (props) => {
               dataSource={items || []}
               pagination={false}
               rowKey="id"
+              bordered
+              size="small"
               rowSelection={{
                 onChange: (selectedkeys, selectedRows) => onItemSelect(selectedkeys, selectedRows),
                 selectedRowKeys: selectedItems.map(item=> item.id)

@@ -18,11 +18,7 @@ export const { Types, Creators } = createActions(
     updateGrnSuccess: ["responseData"],
     updateGrnFailure: ["error"],
 
-    deleteGrn: ["requestId", "payload"],
-    deleteGrnSuccess: ["responseData"],
-    deleteGrnFailure: ["error"],
-
-    setSelectedGrn: ["requests"],
+    setSelectedGrn: ["grns"],
 
     resetGrn: null
   }

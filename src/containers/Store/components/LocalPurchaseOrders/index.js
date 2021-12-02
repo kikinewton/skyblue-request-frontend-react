@@ -7,16 +7,27 @@ import { prettifyDateTime } from '../../../../util/common-helper'
 
 const columns = (props) => [
   {
+    title: 'Reference',
+    dataIndex: 'lpoRef',
+    key: 'lpoRef',
+  },
+  {
     title: 'Supplier',
     dataIndex: 'supplierId',
     key: 'supplierId',
     render: (text, row) => row?.requestItems[0]?.suppliers.find(item => item.id === row.supplierId)?.name || 'N/A'
   },
   {
-    title: 'Comment',
-    dataIndex: 'comment',
-    key: 'comment',
-    render: (text) => text || 'N/A'
+    title: 'Created On',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: 'Delivery Date',
+    dataIndex: 'deliveryDate',
+    key: 'deliveryDate',
+    render: (text) => prettifyDateTime(text)
   },
   {
     title: 'Action',
@@ -32,12 +43,16 @@ const columns = (props) => [
 ]
 
 const LocalPurchaseOrders = (props) => {
-  const [lpos, setLpos] = React.useState([])
   const [loading, setLoading] = React.useState(false)
-  const { history } = props
+  const { 
+    history,
+    local_purchase_orders,
+    fetchLocalPurchaseOrders,
+    fetching_local_purchase_orders,
+    resetLocalPurchaseOrder
+  } = props
 
   const handleCreateGrn = (row) => {
-    console.log('lpoId', row)
     history.push(`/app/store/lpos/${row.id}/create-goods-receive-note`)
   }
 
@@ -45,21 +60,9 @@ const LocalPurchaseOrders = (props) => {
     const response = await grnService.getLpoDocument(row.id)
   }
 
-  const fetchLpos = async () => {
-    setLoading(true)
-    try {
-      const response = await grnService.getGoodsReceiveNoteWithoutGRN({})
-      if (response.status === RESPONSE_SUCCESS_CODE) {
-        setLpos(response.data)
-      }
-    } catch (error) {
-
-    }
-    setLoading(false)
-  }
-
   React.useEffect(() => {
-    fetchLpos()
+    resetLocalPurchaseOrder()
+    fetchLocalPurchaseOrders({lpoWithoutGRN: true})
   }, [])
 
   const expandedRowRender = (row) => {
@@ -82,7 +85,7 @@ const LocalPurchaseOrders = (props) => {
       <Row>
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
-          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLpos()} /></span>
+          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLocalPurchaseOrders({})} /></span>
         </Col>
       </Row>
       <Row>
@@ -90,11 +93,12 @@ const LocalPurchaseOrders = (props) => {
           {loading ? (<Spin />) : 
             <Table
               columns={columns({ onDownloadPdfClick: handleDownloadPdf, onCreateGrnClick: (row) => handleCreateGrn(row) })}
-              dataSource={lpos}
+              dataSource={local_purchase_orders}
               size="small"
               rowKey="id"
               expandable={{ expandedRowRender }}
               bordered
+              loading={fetching_local_purchase_orders}
             />
           }
         </Col>

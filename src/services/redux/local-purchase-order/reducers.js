@@ -24,6 +24,19 @@ export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) =
   return { ...state, loading: false, error: action.error, local_purchase_orders: []};
 };
 
+//fetch by id
+export const fetchLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: true, errors: null, submitting: false, local_purchase_order: null };
+};
+
+export const fetchLocalPurchaseOrderSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, local_purchase_order: action.responseData, loading: false};
+};
+
+export const fetchLocalPurchaseOrderFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, local_purchase_order: action.responseData};
+};
+
 
 //fetch drafts
 export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => {
@@ -83,6 +96,10 @@ export const HANDLERS = {
   [Types.FETCH_LOCAL_PURCHASE_ORDERS]: fetchLocalPurchaseOrders,
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_SUCCESS]: fetchLocalPurchaseOrdersSuccess,
   [Types.FETCH_LOCAL_PURCHASE_ORDERS_FAILURE]: fetchLocalPurchaseOrdersFailure,
+
+  [Types.FETCH_LOCAL_PURCHASE_ORDER]: fetchLocalPurchaseOrder,
+  [Types.FETCH_LOCAL_PURCHASE_ORDER_SUCCESS]: fetchLocalPurchaseOrderSuccess,
+  [Types.FETCH_LOCAL_PURCHASE_ORDER_FAILURE]: fetchLocalPurchaseOrderFailure,
 
   [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS]: fetchLocalPurchaseOrderDrafts,
   [Types.FETCH_LOCAL_PURCHASE_ORDER_DRAFTS_SUCCESS]: fetchLocalPurchaseOrderDraftsSuccess,

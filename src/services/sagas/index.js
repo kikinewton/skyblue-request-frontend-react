@@ -69,6 +69,7 @@ import {
 
 import {
 	watchFetchLocalPurchaseOrders,
+	watchFetchLocalPurchaseOrder,
 	watchCreateLocalPurchaseOrder,
 	watchFetchLocalPurchaseOrderDrafts,
 	watchCreateLocalPurchaseOrderDraft,
@@ -135,6 +136,7 @@ export default function* rootSaga() {
 		watchFetchRoles(),
 
 		watchFetchLocalPurchaseOrders(),
+		watchFetchLocalPurchaseOrder(),
 		watchCreateLocalPurchaseOrder(),
 		watchFetchLocalPurchaseOrderDrafts(),
 		watchCreateLocalPurchaseOrderDraft(),

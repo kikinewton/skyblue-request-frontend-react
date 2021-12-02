@@ -1,14 +1,13 @@
-import { Button, Card, Col, Row, Steps } from 'antd'
+import { Card, Col, PageHeader, Row, Steps } from 'antd'
 import React from 'react'
 import LpoList from './LpoList'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import * as documentService from '../../../../services/api/document'
-import { CheckOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
 import UploadInvoice from './UploadInvoice'
-import SelectItems from './SelectItems'
 import AddInvoice from './AddInvoice'
 import AddGrn from './AddGrn'
 import openNotification from '../../../../util/notification'
+import { useHistory } from 'react-router'
 
 const { Step } = Steps
 
@@ -21,6 +20,7 @@ const GoodsReceived = (props) => {
   const [grn, setGrn] = React.useState({comment: '', items: []})
   const [submitting, setSubmitting] = React.useState(false)
   const { currentUser } = props
+  const history = useHistory()
 
   const handleSelectLpo = (row)=> {
     console.log('select lpo', row)
@@ -111,7 +111,11 @@ const GoodsReceived = (props) => {
     <React.Fragment>
       <Row>
         <Col>
-          <span className="bs-page-title">Receive Items</span>
+          <PageHeader 
+            title="Create Goods Receive Note Form" 
+            onBack={() => history.goBack()}
+            style={{padding: 0}}
+          />
         </Col>
       </Row>
       <Card>

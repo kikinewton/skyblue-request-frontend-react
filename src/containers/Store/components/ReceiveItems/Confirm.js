@@ -1,6 +1,7 @@
 import { CheckOutlined, LeftOutlined } from '@ant-design/icons'
 import { Button, Card, Col, List, Row, Table } from 'antd'
 import React from 'react'
+import { formatCurrency } from '../../../../util/common-helper'
 
 const columns = [
   {
@@ -9,20 +10,10 @@ const columns = [
     key: 'name'
   },
   {
-    title: 'Received Items',
-    dataIndex: 'replacement',
-    key: 'replacement',
-  },
-  {
     title: 'Unit Price',
     dataIndex: 'unitPrice',
-    key: 'unitPrice'
-  },
-  {
-    title: 'Invoice unit Price',
-    dataIndex: 'invoiceUnitPrice',
-    key: 'invoiceUnitPrice',
-    width: '200px'
+    key: 'unitPrice',
+    render: (text) => formatCurrency(text)
   },
 ]
 
@@ -35,7 +26,7 @@ const Confirm = (props) => {
           <Card title="Invoice">
             <List>
               <List.Item.Meta title="Invoice Number" description={formData.invoiceNumber} />
-              <List.Item.Meta title="Invoice Amount Payable" description={formData.invoiceAmountPayable} />
+              <List.Item.Meta title="Amount" description={formData.invoiceAmountPayable} />
               <List.Item.Meta title="Number Of Days Payment Due" description={formData.numberOfDaysToPayment} />
             </List>
           </Card>

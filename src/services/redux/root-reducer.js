@@ -11,7 +11,7 @@ import pettyCashReducer from "./petty-cash/reducers"
 import roleReducer from "./role/reducers"
 import LocalPurchaseOrderReducer from "./local-purchase-order/reducers"
 import commentReducer from "./comment/reducers"
-// import grnReducer from "./grn/reducers"
+import grnReducer from "./grn/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -26,5 +26,6 @@ export default combineReducers({
   role: roleReducer,
   local_purchase_order: LocalPurchaseOrderReducer,
   comment: commentReducer,
+  grn: grnReducer
   
 })
