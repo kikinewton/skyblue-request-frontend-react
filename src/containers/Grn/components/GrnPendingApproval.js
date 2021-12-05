@@ -1,26 +1,10 @@
 import { Card, Button, Table, Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { GRN_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import { prettifyDateTime } from '../../../util/common-helper'
 
-const columns = props => [
-  {
-    title: "Invoice Number",
-    dataIndex: "invoice",
-    key: "invoice",
-    render: (text, row) => row?.invoice?.invoiceNumber
-  },
-  // {
-  //   title: "Created On",
-  //   dataIndex: "createdDate",
-  //   key: "createdDate",
-  //   render: (text) => prettifyDateTime(text)
-  // },
-  {
-    title: "Amount",
-    dataIndex: "invoiceAmountPayable",
-    key: "invoiceAmountPayable"
-  },
+const columns = props => GRN_COLUMNS.concat([
   {
     title: "Actions",
     dataIndex: "actions",
@@ -28,7 +12,7 @@ const columns = props => [
     align: "right",
     render: (text,row) => (<><Button type="default" onClick={() => props.onEndorse(row)}>Approve</Button></>)
   },
-]
+])
 
 const GrnPendingApproval = (props) => {
   const {
@@ -52,7 +36,7 @@ const GrnPendingApproval = (props) => {
     if(!submitting_grn && submit_grn_success) {
       setVisible(false)
       setSelectedGrn(null)
-      fetchGrns({notApprovedByHOD: true})
+      fetchGrns({notApprovedByGM: true})
     }
   }, [submit_grn_success, submitting_grn])
 

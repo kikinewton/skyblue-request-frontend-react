@@ -45,7 +45,7 @@ const GrnDocumentReview = (props) => {
                 <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdData)} />
+                <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
               </List.Item>
               <List.Item>
                 <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />

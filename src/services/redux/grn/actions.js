@@ -6,7 +6,7 @@ export const { Types, Creators } = createActions(
     fetchGrnsSuccess: ["responseData"],
     fetchGrnsFailure: ["error"],
 
-    fetchGrn: ["requestId"],
+    fetchGrn: ["id"],
     fetchGrnSuccess: ["responseData"],
     fetchGrnFailure: ["error"],
 

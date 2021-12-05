@@ -12,6 +12,7 @@ import roleReducer from "./role/reducers"
 import LocalPurchaseOrderReducer from "./local-purchase-order/reducers"
 import commentReducer from "./comment/reducers"
 import grnReducer from "./grn/reducers"
+import paymentReducer from "./payment/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -26,6 +27,6 @@ export default combineReducers({
   role: roleReducer,
   local_purchase_order: LocalPurchaseOrderReducer,
   comment: commentReducer,
-  grn: grnReducer
-  
+  grn: grnReducer,
+  payment: paymentReducer,
 })

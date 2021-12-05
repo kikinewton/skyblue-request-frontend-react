@@ -26,11 +26,11 @@ export const fetchGrnsFailure = (state = INITIAL_STATE, action) => {
 
 //get
 export const fetchGrn = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: true, errors: null, submitting: false };
+  return { ...state, loading: true, errors: null };
 };
 
 export const fetchGrnSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, department: action.responseData, loading: false};
+  return { ...state, grn: action.responseData, loading: false};
 };
 
 export const fetchGrnFailure = (state = INITIAL_STATE, action) => {

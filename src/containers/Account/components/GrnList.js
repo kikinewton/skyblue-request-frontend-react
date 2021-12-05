@@ -3,20 +3,9 @@ import React from 'react'
 import * as grnService from '../../../services/api/goods-receive-note'
 import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
+import { GRN_COLUMNS } from '../../Grn'
 
-const columns = (props) => [
-  {
-    title: "Supplier",
-    dataIndex: "invoice",
-    key: "invoiceSupplier",
-    render: (text, row) => row.invoice?.supplier?.name
-  },
-  {
-    title: "Invoice Number",
-    dataIndex: "invoiceNumber",
-    key: "invoiceNumber",
-    render: (text, row) => row.invoice.invoiceNumber
-  },
+const columns = (props) => GRN_COLUMNS.concat([
   {
     title: "Actions",
     dataIndex: "operation",
@@ -30,32 +19,24 @@ const columns = (props) => [
       </Row>
     )
   },
-]
+])
 
 const GrnList = (props) => {
-  const [ grns, setGrns ] = React.useState([])
+  const {
+    grns,
+    fetchGrns,
+    fetching_grns,
+  } = props
   const [ loading, setLoading ] = React.useState(false)
-
-  const fetchGrnsPendingPayment = async () => {
-    setLoading(true)
-    try {
-      const response = await grnService.getAllGoodsReceiveNotes({status: "Not-paid"})
-      if(response.status === 'OK') {
-        console.log('yes grns success')
-        setGrns(response.data)
-      }
-    } catch (error) {
-      openNotification('error', 'Fetch Grns', error.message || 'Failed')
-    }
-    setLoading(false)
-  }
 
   const handleGoToNewPayment = (row) => {
     history.push(`/app/account/goods-receive-notes/${row.id}/add-new-payment`)
   }
 
   React.useEffect(()=> {
-    fetchGrnsPendingPayment()
+    fetchGrns({
+      paymentInComplete: true
+    })
   }, [])
 
   return (
@@ -74,6 +55,7 @@ const GrnList = (props) => {
                 dataSource={grns}
                 size="small"
                 rowKey="id"
+                bordered
               />
             )
           }

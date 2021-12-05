@@ -97,7 +97,7 @@ const CreateGrn = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col md={4}>Number of Days to payment: </Col>
                 <Col md={20}>
                   <Input 
@@ -109,7 +109,7 @@ const CreateGrn = (props) => {
                     style={{marginBottom: 20}}
                   />
                 </Col>
-              </Row>
+              </Row> */}
               
             </div>
           </Card>

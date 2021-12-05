@@ -1,7 +1,7 @@
 import { serializeQueryParams } from '../../../util/common-helper'
 import service from '../apiRequest'
 import { BASE_URL } from '../urls'
-const path = "/goodsReceivedNote"
+const path = "/goodsReceivedNotes"
 
 export function getAllGoodsReceiveNotes(query) {
   const qs = serializeQueryParams(query)
@@ -11,9 +11,9 @@ export function getAllGoodsReceiveNotes(query) {
   })
 }
 
-export function getGoodsReceiveNoteById(query) {
+export function getGoodsReceiveNoteById(id) {
   return service({
-    url: `${path}/${query.goodsReceivedNoteId}`,
+    url: `${path}/${id}`,
     method: 'GET'
   })
 }
@@ -53,17 +53,21 @@ export function createGoodsReceiveNote(payload) {
 }
 
 export function updateGoodsReceiveNote(id, payload) {
-  // const data = {
-  //   invoice: payload.invoice,
-  //   invoiceAmountPayable: payload.invoiceAmountPayable,
-  //   lpo: payload.lpo,
-  //   supplier: payload.supplier
-  // }
-  return service({
-    url: `/goodsReceivedNotes/${id}/${payload.updateType}`,
-    method: 'PUT',
-    data: payload
-  })
+  
+  if(payload?.paymentAdvice) {
+    const queryStr = serializeQueryParams({paymentAdvice: payload?.paymentAdvice, paymentDate: payload?.paymentDate})
+    return service({
+      url: `/goodsReceivedNotes/${id}${queryStr}`,
+      method: "PUT",
+      data: payload
+    })
+  } else {
+    return service({
+      url: `/goodsReceivedNotes/${id}/${payload.updateType}`,
+      method: 'PUT',
+      data: payload
+    })
+  }
 }
 
 export function getLpoDocument(lpoId) {

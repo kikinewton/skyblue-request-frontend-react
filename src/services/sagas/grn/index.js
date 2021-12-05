@@ -30,6 +30,7 @@ export function* fetchGrns(action) {
 }
 
 export function* fetchGrn(action) {
+  console.log('action fetch grn', action.id)
   const { id } = action
   try {
     const response = yield call(getGoodsReceiveNoteByIdApi, id)

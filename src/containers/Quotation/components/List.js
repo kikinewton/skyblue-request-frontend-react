@@ -70,7 +70,8 @@ const ListQuotations = (props) => {
     fetchQuotations,
     filtered_quotations,
     quotations,
-    quotationLoading
+    quotationLoading,
+    resetQuotation
   } = props
   const [quotationViewVisible, setQuotationViewVisible] = useState(false)
   const [selectedQuotation, setSelectedQuotation] = useState(null)
@@ -90,6 +91,7 @@ const ListQuotations = (props) => {
   }
 
   useEffect(() => {
+    resetQuotation()
     fetchQuotations({
       requestType: NOT_LINKED_TO_LPO
     })
@@ -103,10 +105,10 @@ const ListQuotations = (props) => {
             title="Quotations"
             extra={[
               <Input 
-                type="search" 
-                style={{width: 300}} 
-                placeholder="search by supplier" 
-                key="input-search" 
+                type="search"
+                style={{width: 300}}
+                placeholder="search by supplier"
+                key="input-search"
                 onChange={(event) => props.filterQuotations(event.target.value)}
               />,
               <Button type="primary" onClick={() => history.push("/app/quotations/add-new")} key="add-button">New Supplier Quote</Button>
@@ -147,9 +149,8 @@ const ListQuotations = (props) => {
       >
         <Row>
           <Col span={24}>
-            <List 
+            <List
               itemLayout="horizontal"
-              
             >
               <List.Item>
                 <List.Item.Meta title="Quotation Reference" description={selectedQuotation?.quotation?.quotationRef || "N/A"} />

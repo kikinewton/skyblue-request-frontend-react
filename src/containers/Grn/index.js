@@ -8,10 +8,44 @@ import GrnSuccessPage from './components/GrnSuccessPage'
 import ReceiveItems from './components/ReceiveItems'
 import GrnPendingEndorsement from './components/GrnPendingEndorsement'
 import GrnPendingApproval from './components/GrnPendingApproval'
+import GrnPendingPaymentAdvice from './components/GrnPendingPaymentAdvice'
 import { Creators as LpoCreators } from "../../services/redux/local-purchase-order/actions"
 import { Creators as GrnCreators } from "../../services/redux/grn/actions"
 import {Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas'
+import { formatCurrency } from '../../util/common-helper'
+
+export const GRN_COLUMNS = [
+  {
+    title: "Refrence",
+    dataIndex: "grnRef",
+    key: "grnRef"
+  },
+  {
+    title: "Invoice Number",
+    dataIndex: "invoice",
+    key: "invoice",
+    render: (text, row) => row?.invoice?.invoiceNumber
+  },
+  {
+    title: "Supplier",
+    dataIndex: "finalSupplier",
+    key: "finalSupplier",
+    render: (text, row) => row?.finalSupplier?.name
+  },
+  {
+    title: "Amount",
+    dataIndex: "invoiceAmountPayable",
+    key: "invoiceAmountPayable",
+    render: (text) => formatCurrency(text)
+  },
+  {
+    title: "Number of items",
+    dataIndex: "receivedItems",
+    key: "receivedItems",
+    render: (text, row) => row?.receivedItems.length
+  },
+]
 
 
 const GrnIndex = (props) => {
@@ -43,6 +77,8 @@ const GrnIndex = (props) => {
       return <Redirect to="/app/grn/pending-endorsement" />
     } else if(role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
       return <Redirect to="/app/grn/pending-approval" />
+    } else if(role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER) {
+      return <Redirect to="/app/grn/pending-payment-advice" />
     }
   }
 
@@ -56,13 +92,15 @@ const GrnIndex = (props) => {
       setKey("/app/grn/pending-approval")
     } else if(pathname.includes("/app/grn/list")) {
       setKey("/app/grn/list")
+    } else if(pathname.includes("/app/grn/pending-payment-advice")) {
+      setKey("/app/grn/pending-payment-advice")
     }
   }, [key])
 
   return (
     <React.Fragment>
       <AppLayout
-        title="STORE MANAGEMENT"
+        title="GRN MANAGEMENT"
         subNav={(
           <Menu
             selectedKeys={[key]}
@@ -80,7 +118,7 @@ const GrnIndex = (props) => {
                 </Menu.Item>
                 <Menu.Item key="/app/grn/list">
                   <NavLink to="/app/grn/list">
-                    Goods Receive Notes
+                    GRNs
                   </NavLink>
                 </Menu.Item>
               </>
@@ -88,14 +126,21 @@ const GrnIndex = (props) => {
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
             <Menu.Item key="/app/grn/pending-endorsement">
               <NavLink to="/app/grn/pending-endorsement">
-                Goods Receive Notes Awaiting Endorsement
+                GRNs Awaiting Endorsement
               </NavLink>
             </Menu.Item>
             )}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
               <Menu.Item key="/app/grn/pending-approval">
                 <NavLink to="/app/grn/pending-approval">
-                  Goods Receive Notes Awaiting Approval
+                  GRNs Awaiting Approval
+                </NavLink>
+              </Menu.Item>
+            )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER && (
+              <Menu.Item key="/app/grn/pending-payment-advice">
+                <NavLink to="/app/grn/pending-payment-advice">
+                  GRNs Awaiting Payment Advice
                 </NavLink>
               </Menu.Item>
             )}
@@ -113,6 +158,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />
           <AuthenticatedRoute path={`${path}/lpos`} component={LocalPurchaseOrders} {...props} />
           <AuthenticatedRoute path={`${path}/list`} {...props} component={LocalPurchaseOrders} />
+          <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
         </Switch>
       </AppLayout>
     </React.Fragment>
@@ -122,7 +168,7 @@ const GrnIndex = (props) => {
 const mapStateToProps = (store) => ({
   currentUser: store.auth.user,
 
-  fetching_grn: store.grn.loading,
+  fetching_grns: store.grn.loading,
   submitting_grn: store.grn.submitting,
   submit_grn_success: store.grn.submit_success,
   grns: store.grn.grns,

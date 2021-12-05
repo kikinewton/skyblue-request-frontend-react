@@ -81,7 +81,6 @@ const ReceiveItems = (props) => {
           invoice: {
             invoiceDocument: doc,
             invoiceNumber: formData.invoiceNumber,
-            numberOfDaysToPayment: parseInt(formData.numberOfDaysToPayment) || 0,
             supplier: supplier
           },
           invoiceAmountPayable: parseInt(formData.invoiceAmountPayable),

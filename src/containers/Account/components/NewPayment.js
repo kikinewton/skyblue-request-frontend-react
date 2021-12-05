@@ -1,36 +1,30 @@
-import { Card, Col, Row, Form, Input, Select, Button, message, Spin } from 'antd'
-import React from 'react'
+import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps } from 'antd'
+import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
 import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
-import * as grnService from '../../../services/api/goods-receive-note'
 import { history } from '../../../util/browser-history'
+import { DollarTwoTone, FileExcelFilled, RightOutlined } from '@ant-design/icons'
+import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
+import MyPageHeader from "../../../shared/MyPageHeader"
+
 const { Option } = Select
 
 
 const NewPayment = (props) => {
+  const {
+    fetchGrn,
+    grn,
+    fetchng_grns,
+  } = props
   const [ form ] = Form.useForm()
   const [submitting, setSubmitting] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
-  const [grn, setGrn] = React.useState({})
+  const [current, setCurrent] = useState(0)
   const { grnId } = useParams()
 
-  const fetchGoodsReceiveNote = async (goodsReceivedNoteId) => {
-    setLoading(true)
-    try {
-      const response = await grnService.getGoodsReceiveNoteById({goodsReceivedNoteId})
-      if(response.status === 'OK') {
-        setGrn(response.data)
-      }
-    } catch (error) {
-      message.error('Fetch Goods Receive Note Failed')
-    }
-    setLoading(false)
-  }
-
   const handleSubmit = async (values) => {
-    console.log('values', values)
     setSubmitting(true)
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus } = values
     const payload = {
@@ -57,23 +51,64 @@ const NewPayment = (props) => {
   }
 
   React.useEffect(()=> {
-    if(grnId) {
-      fetchGoodsReceiveNote(grnId)
-    }
+    // if(grnId) {
+    //   fetchGoodsReceiveNote(grnId)
+    // }
+    fetchGrn(grnId)
   }, [grnId])
 
   return (
     <React.Fragment>
       <Row>
-        <Col md={24}>
+        {/* <Col md={24}>
           <span className="bs-page-title">Make Payment</span>
+        </Col> */}
+        <MyPageHeader 
+          title="Make Payment"
+          onBack={() => history.goBack()}
+        />
+      </Row>
+      <Row style={{margin: "20px 0 20px 0"}}>
+        <Col span={24}>
+          <Steps current={current} size="small">
+            <Steps.Step icon={<FileExcelFilled />} title="Review Documents" key={0} />
+            <Steps.Step icon={<DollarTwoTone />} title="Make Payment" key={1} />
+          </Steps>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
           {loading ? <Spin /> : 
             <Card>
-              <Form
+              {current === 0 && (
+                <>
+                  <Row>
+                    <Col span={24}>
+                      <GrnDocumentReview 
+                        grn={grn}
+                        invoice={grn?.invoice}
+                        invoiceDocument={grn?.invoice?.invoiceDocument}
+                      />
+                    </Col>
+                  </Row>
+                  <Row style={{margin: "10px 0 10px 0"}}>
+                    <Col span={24}>
+                      <Button 
+                        type="primary" 
+                        style={{float: "right"}}
+                        onClick={() => {
+                          setCurrent(1)
+                        }}
+                      >
+                        Review and proceed to make payment
+                        <RightOutlined />
+                      </Button>
+                    </Col>
+                  </Row>
+                </> 
+              )}
+              {current === 1 && (
+                <Form
                 form={form}
                 onFinish={handleSubmit}
                 layout="vertical"
@@ -124,6 +159,7 @@ const NewPayment = (props) => {
                   </Button>
                 </Form.Item>
               </Form>
+              )}
             </Card>
           }
         </Col>

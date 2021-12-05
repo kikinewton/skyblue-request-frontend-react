@@ -8,6 +8,8 @@ import NewPayment from './components/NewPayment'
 import PaymentList from './components/PaymentList'
 import PaymentSuccess from './components/PaymentSuccess'
 import { Creators as SupplierCreator } from '../../services/redux/supplier/actions'
+import { Creators as LpoCreators } from "../../services/redux/local-purchase-order/actions"
+import { Creators as GrnCreators } from "../../services/redux/grn/actions"
 
 
 const Account = (props) => {
@@ -31,14 +33,34 @@ const Account = (props) => {
 const mapStateToProps = (store) => ({
   currentUser: store.auth.user,
   suppliers: store.supplier.suppliers,
-  suppliersLoading: store.supplier.loading
+  suppliersLoading: store.supplier.loading,
+
+  fetching_grns: store.grn.loading,
+  submitting_grn: store.grn.submitting,
+  submit_grn_success: store.grn.submit_success,
+  grns: store.grn.grns,
+  grn: store.grn.grn,
+
+  local_purchase_orders: store.local_purchase_order.local_purchase_orders,
+  local_purchase_order: store.local_purchase_order.local_purchase_order,
+  fetching_local_purchase_orders: store.local_purchase_order.loading,
 })
 
 const mapActionToProps = (dispatch) => {
   return {
     fetchSuppliers: (query) => {
       dispatch(SupplierCreator.fetchSuppliers(query))
-    }
+    },
+    fetchGrns: (query) => dispatch(GrnCreators.fetchGrns(query)),
+    fetchGrn: (id) => dispatch(GrnCreators.fetchGrn(id)),
+    createGrn: (payload) => dispatch(GrnCreators.createGrn(payload)),
+    updateGrn: (id, payload) => dispatch(GrnCreators.updateGrn(id, payload)),
+    resetGrn: () => dispatch(GrnCreators.resetGrn()),
+
+    fetchLocalPurchaseOrders: (query) => dispatch(LpoCreators.fetchLocalPurchaseOrders(query)),
+    fetchLocalPurchaseOrder: (id) => dispatch(LpoCreators.fetchLocalPurchaseOrder(id)),
+    resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
+    resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
   }
 }
 
