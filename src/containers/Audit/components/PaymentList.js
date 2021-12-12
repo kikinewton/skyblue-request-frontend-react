@@ -1,7 +1,6 @@
-import { Badge, Button, Card, Col, DatePicker, message, Row, Select, Spin, Table } from 'antd'
+import { Badge, Button, Card, Col, DatePicker, Row, Select, Spin, Table } from 'antd'
 import React from 'react'
-import * as paymentDraftService from '../../../services/api/payment-draft'
-import { prettifyDateTime, serializeQueryParams } from '../../../util/common-helper'
+import { prettifyDateTime } from '../../../util/common-helper'
 import { PAYMENT_APPROVE_STATUS } from '../../../util/datas'
 
 
@@ -57,30 +56,19 @@ const columns = (props) => [
 ]
 
 const PaymentList = (props) => {
-  const [ payments, setPayments ] = React.useState([])
+  const {
+    fetchPayments,
+    payments,
+    fetching_payments,
+  } = props
+  
   const { suppliers, fetchSuppliers, suppliersLoading } = props
   const [ loading, setLoading ] = React.useState(false)
   const [ filter, setFilter ] = React.useState({ fromDate: "", toDate: "", supplierId: undefined, status: undefined })
 
-  const fetchPayments = async () => {
-    setLoading(true)
-    const query = {...filter, periodStart: Date.parse(filter.fromDate), periodEnd: Date.parse(filter.toDate)}
-    const queryString = serializeQueryParams(query)
-    console.log('filter', queryString)
-    try {
-      const response = await paymentDraftService.getAllPayments(query)
-      if(response.status === 'OK') {
-        setPayments(response.data)
-      }
-    } catch (error) {
-      message.error("Failed to load payments!")
-    }
-    setLoading(false)
-  }
-
   React.useEffect(()=> {
     fetchSuppliers({})
-    fetchPayments()
+    fetchPayments({})
     // eslint-disable-next-line
   }, [])
 

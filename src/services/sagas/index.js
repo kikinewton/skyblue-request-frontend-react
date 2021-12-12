@@ -86,6 +86,18 @@ import {
 	watchUpdateGrn,
 } from "./grn"
 
+import {
+	watchCreatePayment,
+	watchFetchPayment,
+	watchFetchPayments,
+	watchUpdatePayment,
+
+	watchCreatePaymentDraft,
+	watchFetchPaymentDraft,
+	watchFetchPaymentDrafts,
+	watchUpdatePaymentDraft,
+} from "./payment"
+
 export default function* rootSaga() {
 	yield all([
 		watchLogin(),
@@ -147,5 +159,15 @@ export default function* rootSaga() {
 		watchUpdateGrn(),
 		watchFetchGrns(),
 		watchFetchGrn(),
+
+		watchCreatePayment(),
+		watchFetchPayment(),
+		watchFetchPayments(),
+		watchUpdatePayment(),
+
+		watchCreatePaymentDraft(),
+		watchFetchPaymentDraft(),
+		watchFetchPaymentDrafts(),
+		watchUpdatePaymentDraft(),
 	]);
 }

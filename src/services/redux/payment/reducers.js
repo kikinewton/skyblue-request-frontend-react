@@ -114,7 +114,7 @@ export const updatePaymentDraft = (state = INITIAL_STATE, action) => {
 
 export const updatePaymentDraftSuccess = (state = INITIAL_STATE, action) => {
   const { paymentId, responseData } = action
-  return { 
+  return {
     ...state, 
     payment_drafts: state.payments.map(item=> {
       if(item.id === paymentId) {

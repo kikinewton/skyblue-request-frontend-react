@@ -5,7 +5,7 @@ import { serializeQueryParams } from '../../../util/common-helper'
 const path = "/paymentDraft"
 
 
-export function savePaymentDraft(payload) {
+export function createPaymentDraft(payload) {
   return service({
     url: `${path}`,
     method: 'POST',
@@ -13,20 +13,37 @@ export function savePaymentDraft(payload) {
   })
 }
 
-export function getPaymentDraft(query) {
+export function fetchPaymentDraft(query) {
   return service({
     url: `${path}/${query.paymentDraftId}`,
     method: 'GET',
   })
 }
 
-export function updatePaymentDraft(payload) {
+export function updatePaymentDraft(id, payload) {
+  if(payload.approval) {
+    return service({
+      url: `${path}/${id}/approval`,
+      method: 'PUT'
+    })
+  } else {
+    return service({
+      url: `${path}/${payload.paymentDraftId}`,
+      method: 'POST',
+      data: payload
+    })
+  }
+  
+}
+
+export function fetchPaymentDrafts(query) {
+  const queryString = serializeQueryParams(query)
   return service({
-    url: `${path}/${payload.paymentDraftId}`,
-    method: 'POST',
-    data: payload
+    url: `/paymentDrafts${queryString}`,
+    method: 'GET'
   })
 }
+
 
 export function approvePaymentDraft(paymentDraftId, payload) {
   const queryStr = serializeQueryParams(payload)
@@ -36,18 +53,33 @@ export function approvePaymentDraft(paymentDraftId, payload) {
   })
 }
 
-export function getAllPaymentDrafts(query) {
+export function fetchPayments(query) {
   const queryString = serializeQueryParams(query)
   return service({
-    url: `/paymentDraft/all/${queryString.length > 1 ? queryString : ""}`,
+    url: `/payments${queryString}`,
     method: 'GET'
   })
 }
 
-export function getAllPayments(query) {
-  const queryString = serializeQueryParams(query)
+export function fetchPayment(id) {
   return service({
-    url: `/payments/all/${queryString.length > 1 ? queryString : ""}`,
+    url: `/payments/${id}`,
     method: 'GET'
+  })
+}
+
+export function createPayment(payload) {
+  return service({
+    url: `/payments`,
+    method: 'POST',
+    data: payload
+  })
+}
+
+export function updatePayment(id, payload) {
+  return service({
+    url: `/payments/${id}`,
+    method: 'PUT',
+    data: payload
   })
 }

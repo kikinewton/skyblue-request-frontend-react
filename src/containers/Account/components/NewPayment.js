@@ -2,10 +2,10 @@ import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
-import * as paymentDraftService from '../../../services/api/payment-draft'
+// import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
-import { DollarTwoTone, FileExcelFilled, RightOutlined } from '@ant-design/icons'
+import { CheckCircleTwoTone, DollarTwoTone, FileExcelFilled, RightOutlined } from '@ant-design/icons'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import MyPageHeader from "../../../shared/MyPageHeader"
 
@@ -17,6 +17,9 @@ const NewPayment = (props) => {
     fetchGrn,
     grn,
     fetchng_grns,
+    createPayment,
+    submit_payment_success,
+    submitting_payment,
   } = props
   const [ form ] = Form.useForm()
   const [submitting, setSubmitting] = React.useState(false)
@@ -36,18 +39,19 @@ const NewPayment = (props) => {
       paymentAmount: parseInt(paymentAmount),
       paymentStatus
     }
+    createPayment(payload)
     
-    try {
-      const response = await paymentDraftService.savePaymentDraft(payload)
-      if(response.status === 'OK') {
-        history.push("/#app/account/payment-success")
-      } else {
-        openNotification('error', 'Add Payment', response.message || 'Error')
-      }
-    } catch (error) {
-      openNotification('error', 'Add Payment', error.message || 'Error')
-    }
-    setSubmitting(false)
+    // try {
+    //   const response = await paymentDraftService.savePaymentDraft(payload)
+    //   if(response.status === 'OK') {
+    //     history.push("/#app/account/payment-success")
+    //   } else {
+    //     openNotification('error', 'Add Payment', response.message || 'Error')
+    //   }
+    // } catch (error) {
+    //   openNotification('error', 'Add Payment', error.message || 'Error')
+    // }
+    // setSubmitting(false)
   }
 
   React.useEffect(()=> {
@@ -56,6 +60,12 @@ const NewPayment = (props) => {
     // }
     fetchGrn(grnId)
   }, [grnId])
+
+  React.useEffect(() => {
+    if(!submitting_payment && submit_payment_success) {
+      history.push("/app/payments/payment-succes")
+    }
+  }, [submit_payment_success, submitting_payment])
 
   return (
     <React.Fragment>

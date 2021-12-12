@@ -41,16 +41,16 @@ const GrnDocumentReview = (props) => {
             <List 
               itemLayout="horizontal"
             >
-              <List.Item>
+              <List.Item key="invoiceNumber">
                 <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
               </List.Item>
-              <List.Item>
+              <List.Item key="createdOn">
                 <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
               </List.Item>
-              <List.Item>
+              <List.Item key="supplier">
                 <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
               </List.Item>
-              <List.Item>
+              <List.Item key="amount">
                 <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable)} />
               </List.Item>
             </List>

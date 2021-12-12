@@ -30,7 +30,7 @@ const FloatIndex = React.lazy(() => import("./containers/Float"))
 const SupplierModule = React.lazy(() => import("./containers/SupplierModule"))
 const LocalPurchaseOrderModule = React.lazy(() => import("./containers/LocalPurchaseOrderModule"))
 const GrnIndex = React.lazy(() => import("./containers/Grn"))
-
+const PaymentsModule = React.lazy(() => import("./containers/Payment"))
 function App(props) {
   return (
     <>
@@ -39,6 +39,7 @@ function App(props) {
           <Route path="/app/account" component={Account} {...props} />
           <Route path="/app/store" component={Store} {...props} />
           <Route path="/app/grn" component={GrnIndex} />
+          <Route path="/app/payments" component={PaymentsModule} {...props} />
           <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
           <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
           <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />

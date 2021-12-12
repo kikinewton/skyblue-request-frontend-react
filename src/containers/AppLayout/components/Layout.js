@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Menu, Layout, Dropdown, Col, Row } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
@@ -24,6 +24,7 @@ import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
+import SubMenu from 'antd/lib/menu/SubMenu';
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';
 
 const CollapsibleLayout = (props) => {
@@ -93,7 +94,12 @@ const CollapsibleLayout = (props) => {
       setKey("/app/account/goods-receive-notes")
     } else if(pathname.includes("/app/account")) {
       setKey("/app/account")
-    } 
+    }  else if(pathname.includes("/app/payments/goods-receive-notes")) {
+      setKey("/app/payments/goods-receive-notes")
+    } else if(pathname.includes("/app/payments/pending-approval")) {
+
+      setKey("/app/payments/pending-approval")
+    }
     else {
       setKey("home")
     }
@@ -108,7 +114,7 @@ const CollapsibleLayout = (props) => {
           <span>Blueskies</span>
         </div>
         
-        <Menu 
+        <Menu
           theme="dark" 
           style={{height: "100vh", overflowY: "auto"}}
           mode="inline"
@@ -161,6 +167,29 @@ const CollapsibleLayout = (props) => {
               </Menu.Item>
             </>
           )}
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER,
+           EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+             <Menu.SubMenu
+              key="/app/payments"
+              icon={<ReconciliationOutlined />} 
+              title="Payments"
+             >
+              <Menu.Item
+                key="/app/payments/goods-receive-notes"
+              >
+                <NavLink to="/app/payments/goods-receive-notes">
+                  <span>GRNs Make Payment</span>
+                </NavLink>
+               </Menu.Item>
+               <Menu.Item
+                key="/app/payments/pending-approval"
+              >
+                <NavLink to="/app/payments/pending-approval">
+                  <span>Approve Payments</span>
+                </NavLink>
+              </Menu.Item>
+             </Menu.SubMenu>
+           )}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, 
             EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && (
             <Menu.Item key="/app/grn">
@@ -198,8 +227,8 @@ const CollapsibleLayout = (props) => {
           } */}
           {authService.userHasAnyRole(currentUser.role, 
             [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
-            <Menu.SubMenu 
-              key="procurement" 
+            <Menu.SubMenu
+              key="procurement"
               icon={<ReconciliationOutlined />} 
               title="Procurement"
             >
@@ -253,7 +282,7 @@ const CollapsibleLayout = (props) => {
               </NavLink>
             </Menu.Item>
           }
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
+          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
             <Menu.SubMenu  
               key="/app/account" 
               title="Accounts" 
@@ -281,7 +310,7 @@ const CollapsibleLayout = (props) => {
                 </Menu.Item>
               }
             </Menu.SubMenu>
-          }
+          } */}
           {/* <Menu.SubMenu key="/app/audit" title="Audit" icon={<AccountBookOutlined />}>
             <Menu.Item key="/app/audit/approve-payment">
               <NavLink to="/app/audit/approve-payment">
@@ -351,7 +380,7 @@ const CollapsibleLayout = (props) => {
             </Col>
             <Col span={14}>
               {props.title && (
-                <span style={{fontSize: 20, fontWeight: "lighter", color: "#6e7273"}}>{props.title?.toUpperCase()}</span>
+                <span style={{fontSize: 20, fontWeight: "lighter", color: "#6e7273"}}>{props.title}</span>
               )}
             </Col>
             <Col span={8}>

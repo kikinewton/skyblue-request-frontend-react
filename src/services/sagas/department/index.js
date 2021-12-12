@@ -9,6 +9,7 @@ import {
   getDepartment as getDepartmentApi
 } from '../../api/department'
 import openNotification from '../../../util/notification'
+import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchDepartments(action) {
@@ -31,7 +32,7 @@ export function* fetchDepartments(action) {
 export function* getDepartment(action) {
   try {
     const response = yield call(getDepartmentApi, action.departmentId)
-    if(response.status === 'OK') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       yield put(Creators.getDepartmentSuccess(responseData))
     } else {
@@ -49,7 +50,7 @@ export function* createDepartment(action) {
   console.log('action data', action)
   try {
     const response = yield call(saveDepartment, action.payload)
-    if(response.status === 'CREATED') {
+    if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       yield put(Creators.createDepartmentSuccess(responseData))
       openNotification('success', 'CREATE DEPARTMENT', response.message)

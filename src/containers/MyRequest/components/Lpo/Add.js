@@ -163,7 +163,7 @@ const AddNewRequest = (props) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
-                    <Input placeholder="Description" />
+                    <Input.TextArea placeholder="Description" rows={3} />
                   </Form.Item>
                   <Form.Item label="Reason" name="reason" rules={[{ required: true, message: 'Reason required' }]}>
                     <Select>
@@ -203,6 +203,7 @@ const AddNewRequest = (props) => {
                     pagination={false}
                     size="small"
                     rowKey="id"
+                    bordered
                   />
                 </Col>  
               </Row>

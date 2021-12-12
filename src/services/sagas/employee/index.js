@@ -60,7 +60,8 @@ export function* createEmployee(action) {
       yield put(Creators.createEmployeeFailure(response.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to create Employees'
+    console.log("eror", error)
+    const message = (error?.response?.data?.message || "Hey no")
     openNotification('error', 'Create Employee', message)
     yield put(Creators.createEmployeeFailure(message))
   }

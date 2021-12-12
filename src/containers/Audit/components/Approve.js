@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, List, message, Modal, Row, Spin, Table } from 'antd'
+import { Button, Card, Col, Input, List, Modal, Row, Table } from 'antd'
 import React from 'react'
 import * as paymentApi from '../../../services/api/payment-draft'
 import { CheckOutlined, CloseOutlined, SyncOutlined } from '@ant-design/icons'
@@ -59,6 +59,11 @@ const columns = (props) => [
 ]
 
 const Approve = (props) => {
+  const {
+    fetchPaymentDrafts,
+    payment_drafts,
+    fetching_payments,
+  } = props
   const [ payments, setPayments ] = React.useState([])
   const [ loading, setLoading ] = React.useState(false)
   const [ modal, setModal ] = React.useState(false)
@@ -71,21 +76,21 @@ const Approve = (props) => {
     setModal(true)
   }
 
-  const fetchAllPaymentDrafts = async (query) => {
-    setLoading(true)
-    try {
-      const response = await paymentApi.getAllPaymentDrafts(query)
-      if(response.status === 'OK') {
-        setPayments(response.data || [])
-      } else {
-        message.error(response.message || "Fetch payments failed!")
-      }
-      setLoading(false)
-    } catch (error) {
-      message.error(error.response?.message || "Fetch payments failed!")
-      setLoading(false)
-    }
-  }
+  // const fetchAllPaymentDrafts = async (query) => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await paymentApi.getAllPaymentDrafts(query)
+  //     if(response.status === 'OK') {
+  //       setPayments(response.data || [])
+  //     } else {
+  //       message.error(response.message || "Fetch payments failed!")
+  //     }
+  //     setLoading(false)
+  //   } catch (error) {
+  //     message.error(error.response?.message || "Fetch payments failed!")
+  //     setLoading(false)
+  //   }
+  // }
 
   
 
@@ -98,7 +103,7 @@ const Approve = (props) => {
       if(response.status === "OK") {
         openNotification("success", `${payment.actionType === 'approve' ? "Approve" : "Cancel"} payment`, response.message||"Success")
         setModal(false)
-        fetchAllPaymentDrafts({})
+        fetchPaymentDrafts({})
       } else {
         openNotification("error", `${payment.actionType === 'approve' ? "Approve" : "Cancel"} payment`, response.message||"Failed")
       }
@@ -109,7 +114,7 @@ const Approve = (props) => {
   }
 
   React.useEffect(()=> {
-    fetchAllPaymentDrafts({})
+    fetchPaymentDrafts({})
   }, [])
 
   return (
@@ -117,21 +122,20 @@ const Approve = (props) => {
       <Row>
         <Col md={24}>
           <span className="bs-page-title">Approve Payments</span> 
-          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchAllPaymentDrafts({})} /></span>
+          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchPaymentDrafts({})} /></span>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
           <Card>
-            { loading ? <Spin /> : 
               <Table 
                 columns={columns({onRowClick: (row)=> handleRowClick(row)})}
-                dataSource={payments}
+                dataSource={payment_drafts}
                 size="small"
                 rowKey="id"
                 bordered
+                loading={fetching_payments}
               />
-            }
           </Card>
         </Col>
       </Row>

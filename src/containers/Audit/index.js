@@ -5,6 +5,7 @@ import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import Approve from './components/Approve'
 import List from './components/PaymentList'
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
+import { Creators as PaymentCreators } from '../../services/redux/payment/actions'
 import { connect } from 'react-redux'
 
 const Audit = (props) => {
@@ -24,11 +25,16 @@ const Audit = (props) => {
 const mapStateToProps = (store) => ({
   suppliers: store.supplier.suppliers,
   suppliersLoading: store.supplier.loading,
+  payment_drafts: store.payment.payment_drafts,
+  fetching_payments: store.payment.loading,
 })
 
 const mapActionsToProps = (dispatch) => ({
   fetchSuppliers: (query) => {
     dispatch(SupplierCreators.fetchSuppliers(query))
-  }
+  },
+
+  fetchPayments: query => dispatch(PaymentCreators.fetchPayments(query)),
+  fetchPaymentDraft: (query) => dispatch(PaymentCreators.fetchPaymentDrafts)
 })
 export default connect(mapStateToProps, mapActionsToProps)(Audit)
