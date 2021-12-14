@@ -9,7 +9,6 @@ import {
 import openNotification from '../../../util/notification'
 import { message } from 'antd'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
-import { createQuotationFailure } from '../../redux/quotation/reducers'
 
 
 export function* fetchQuotations(action) {

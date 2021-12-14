@@ -1,6 +1,6 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { BASE_URL, QUOTATION_ENDPOINT } from "../urls";
+import { BASE_URL } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
   console.log('fetch supplie API', query)

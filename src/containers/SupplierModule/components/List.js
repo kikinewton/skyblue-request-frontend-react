@@ -1,10 +1,9 @@
-import { Button, Col, Row, Table, Form, Input, Spin, Card, PageHeader } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Card, PageHeader } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
-import { filterSuppliers } from '../../../services/redux/supplier/reducers'
 
 const columns = (props)=> SUPPLIER_COLUMNS.concat({
   title: 'Action', key: 'operation', fixed: 'right', width: 100,
@@ -26,7 +25,7 @@ const columns = (props)=> SUPPLIER_COLUMNS.concat({
 })
 
 const List = (props)=> {
-  const { suppliers, fetching_suppliers, fetchSuppliers, deleteSupplier, supplier_submit_success, 
+  const { fetching_suppliers, fetchSuppliers, deleteSupplier, supplier_submit_success, 
     submitting_supplier, createSupplier, updateSupplier, resetSupplier, filtered_suppliers, filterSuppliers } = props
   const [ openAdd, setOpenAdd ] = React.useState(false)
   const [ openEdit, setOpenEdit ] = React.useState(false)

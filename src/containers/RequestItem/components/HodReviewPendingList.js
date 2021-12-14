@@ -1,6 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, Table, Drawer, Divider, Card, List, Image, PageHeader } from "antd"
-import { REQUEST_ITEMS } from '..';
+import { Row, Col, Button, Table, Drawer, Card, List, Image, PageHeader } from "antd"
 import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
@@ -66,13 +65,13 @@ const HodReviewPendingList = (props) => {
   const [selectedRequest, setSelectedRequest] = React.useState(null)
   const [imagePreview, setImagePreview] = React.useState(false)
 
-  const submit = () => {
-    updateRequest({
-      updateType: "HOD_REVIEW",
-      role: "hod",
-      payload: {requestItems: selected_requests}
-    })
-  }
+  // const submit = () => {
+  //   updateRequest({
+  //     updateType: "HOD_REVIEW",
+  //     role: "hod",
+  //     payload: {requestItems: selected_requests}
+  //   })
+  // }
 
   React.useEffect(() => {
     if(!updating_request && update_request_success) {
@@ -80,6 +79,7 @@ const HodReviewPendingList = (props) => {
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REVIEW
       })
     }
+    // eslint-disable-next-line
   }, [update_request_success, updating_request])
 
   React.useEffect(() => {
@@ -87,6 +87,7 @@ const HodReviewPendingList = (props) => {
     fetchRequests({
       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_REVIEW
     })
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -116,7 +117,7 @@ const HodReviewPendingList = (props) => {
               columns={columns({
                 onReview: (row) => {
                   console.log('row', row)
-                  const myRow = { ...row, quotation: row?.quotations?.filter(qt => qt?.supplier?.id == row?.suppliedBy)[0] }
+                  const myRow = { ...row, quotation: row?.quotations?.filter(qt => qt?.supplier?.id === row?.suppliedBy)[0] }
                   console.log('myRow', myRow)
                   setSelectedRequest(myRow)
                   setDrawer(true)

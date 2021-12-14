@@ -1,7 +1,6 @@
-import { FileOutlined, ShoppingOutlined, SyncOutlined } from '@ant-design/icons'
+import { ShoppingOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
-import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import { prettifyDateTime } from '../../../../util/common-helper'
 
@@ -43,7 +42,6 @@ const columns = (props) => [
 ]
 
 const LocalPurchaseOrders = (props) => {
-  const [loading, setLoading] = React.useState(false)
   const { 
     history,
     local_purchase_orders,
@@ -57,12 +55,13 @@ const LocalPurchaseOrders = (props) => {
   }
 
   const handleDownloadPdf = async (row) => {
-    const response = await grnService.getLpoDocument(row.id)
+    await grnService.getLpoDocument(row.id)
   }
 
   React.useEffect(() => {
     resetLocalPurchaseOrder()
     fetchLocalPurchaseOrders({lpoWithoutGRN: true})
+    // eslint-disable-next-line
   }, [])
 
   const expandedRowRender = (row) => {
@@ -85,12 +84,12 @@ const LocalPurchaseOrders = (props) => {
       <Row>
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
-          <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLocalPurchaseOrders({})} /></span>
+          <span style={{marginLeft: 10}}><SyncOutlined spin={fetching_local_purchase_orders} disabled={fetching_local_purchase_orders} onClick={()=> fetchLocalPurchaseOrders({})} /></span>
         </Col>
       </Row>
       <Row>
         <Col md={24}>
-          {loading ? (<Spin />) : 
+          {fetching_local_purchase_orders ? (<Spin />) : 
             <Table
               columns={columns({ onDownloadPdfClick: handleDownloadPdf, onCreateGrnClick: (row) => handleCreateGrn(row) })}
               dataSource={local_purchase_orders}

@@ -169,6 +169,7 @@ const Settings = (props) => {
           </Form.Item>
           <Form.Item>
             <Button 
+              loading={changingPassword}
               type="primary" 
               htmlType="submit" 
               className="bs-form-button"

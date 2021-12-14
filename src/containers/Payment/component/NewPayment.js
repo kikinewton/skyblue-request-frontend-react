@@ -24,7 +24,6 @@ const NewPayment = (props) => {
   } = props
   const [ form ] = Form.useForm()
   const [submitting, setSubmitting] = React.useState(false)
-  const [loading, setLoading] = React.useState(false)
   const [current, setCurrent] = useState(0)
   const { grnId } = useParams()
 
@@ -41,24 +40,9 @@ const NewPayment = (props) => {
       paymentStatus
     }
     createPaymentDraft(payload)
-    
-    // try {
-    //   const response = await paymentDraftService.savePaymentDraft(payload)
-    //   if(response.status === 'OK') {
-    //     history.push("/#app/account/payment-success")
-    //   } else {
-    //     openNotification('error', 'Add Payment', response.message || 'Error')
-    //   }
-    // } catch (error) {
-    //   openNotification('error', 'Add Payment', error.message || 'Error')
-    // }
-    // setSubmitting(false)
   }
 
   React.useEffect(()=> {
-    // if(grnId) {
-    //   fetchGoodsReceiveNote(grnId)
-    // }
     fetchGrn(grnId)
   }, [grnId])
 
@@ -71,9 +55,6 @@ const NewPayment = (props) => {
   return (
     <React.Fragment>
       <Row>
-        {/* <Col md={24}>
-          <span className="bs-page-title">Make Payment</span>
-        </Col> */}
         <MyPageHeader 
           title="Make Payment"
           onBack={() => history.goBack()}

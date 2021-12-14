@@ -2,7 +2,6 @@ import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/float/actions'
 
 import {
-  fetchAllFloatRequests as fetchAllFloatRequestsApi,
   fetchMyFloatRequests as fetchMyFloatRequestsApi,
   saveFloatRequest as saveFloatRequestApi,
   fetchFloatRequests as fetchFloatRequestsApi,
@@ -10,7 +9,6 @@ import {
   updateSingleFloatRequest as updateSingleFloatRequestApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
-import { clearLocalState } from '../../app-storage'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 

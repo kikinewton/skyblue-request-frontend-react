@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table, Form, Input, Spin, Card } from 'antd'
+import { Button, Col, Row, Table, Form, Input, Card } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../../../util/constants'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'

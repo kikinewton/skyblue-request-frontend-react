@@ -11,7 +11,6 @@ export function fetchMyRequests(query) {
 }
 
 export function fetchHODPendingReviewRequests(query) {
-  const queryStr = serializeQueryParams(query)
   return service({
     url: `/requestItemsByDepartment?toBeReviewed=${true}`,
     method: 'get'

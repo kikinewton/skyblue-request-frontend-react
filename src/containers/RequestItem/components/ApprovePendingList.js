@@ -1,4 +1,4 @@
-import { CheckOutlined, CloseOutlined, CommentOutlined, WarningOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message } from 'antd';
 import React, {useState } from 'react';
 import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
@@ -129,7 +129,6 @@ const ApprovePendingList = (props) => {
     selected_requests,
     setSelectedRequests,
     resetRequest,
-    fetchRequests,
     fetching_requests,
     requests,
     updateRequest,
@@ -186,6 +185,7 @@ const ApprovePendingList = (props) => {
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
     })
+    // eslint-disable-next-line
   }, [])
 
   React.useEffect(() => {
@@ -196,6 +196,7 @@ const ApprovePendingList = (props) => {
         requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
       })
     }
+    // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
   React.useEffect(() => {
@@ -206,6 +207,7 @@ const ApprovePendingList = (props) => {
         requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
       })
     }
+    // eslint-disable-next-line
   }, [submitting_comment, submit_comment_success])
 
   return (

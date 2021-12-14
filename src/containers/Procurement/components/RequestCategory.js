@@ -41,7 +41,7 @@ const columns = (props) => [
 const RequestCategory = (props) => {
   const { request_categories, fetchRequestCategories, createRequestCategory, 
     request_category_submitting, request_category_submit_success, request_category_loading, deleteRequestCategory,
-    updateRequestCategory, resetRequestCategory, request_category, setRequestCategory
+    updateRequestCategory, request_category, setRequestCategory
    } = props
   const [ addModal, setAddModal ] = React.useState(false)
   const [ editModal, setEditModal ] = React.useState(false)

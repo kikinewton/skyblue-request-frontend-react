@@ -1,5 +1,5 @@
 import { EyeFilled } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Badge, Drawer, List } from 'antd'
+import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { prettifyDateTime } from '../../../util/common-helper'
@@ -69,7 +69,6 @@ const ListQuotations = (props) => {
   const {
     fetchQuotations,
     filtered_quotations,
-    quotations,
     quotationLoading,
     resetQuotation
   } = props
@@ -77,24 +76,25 @@ const ListQuotations = (props) => {
   const [selectedQuotation, setSelectedQuotation] = useState(null)
   const history = useHistory()
 
-  const expandedRowRender = (row) => {
-    const expandedColumns = [
-      {title: 'Description', dataIndex: 'name', key: 'name'},
-      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
-      {title: 'Qauntity', dataIndex: 'quantity', key: 'quantity'},
-      {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
-      {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
-        <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
-      )},
-    ]
-    return <Table columns={expandedColumns} dataSource={row.requestItems} pagination={false} rowKey="id" />
-  }
+  // const expandedRowRender = (row) => {
+  //   const expandedColumns = [
+  //     {title: 'Description', dataIndex: 'name', key: 'name'},
+  //     {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+  //     {title: 'Qauntity', dataIndex: 'quantity', key: 'quantity'},
+  //     {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
+  //     {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
+  //       <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
+  //     )},
+  //   ]
+  //   return <Table columns={expandedColumns} dataSource={row.requestItems} pagination={false} rowKey="id" />
+  // }
 
   useEffect(() => {
     resetQuotation()
     fetchQuotations({
       requestType: NOT_LINKED_TO_LPO
     })
+    // eslint-disable-next-line
   }, [])
 
   return (

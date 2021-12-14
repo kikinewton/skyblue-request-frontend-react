@@ -57,7 +57,6 @@ export function* updateRequestCategory(action) {
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to save category'
     openNotification('error', 'Login', errors[0])
     yield put(Creators.updateRequestCategoryFailure(errors[0]))
   }
@@ -68,7 +67,6 @@ export function* deleteRequestCategory(action) {
   try {
     const response = yield call(deleteRequestCategoryApi, action.id)
     if(response.status === 'SUCCESS') {
-      const responseData = response.data
       yield put(Creators.deleteRequestCategorySuccess(action.id))
       openNotification('success', 'DELETE REQUEST CATEGORY', response.message)
     } else {

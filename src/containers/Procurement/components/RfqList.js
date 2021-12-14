@@ -45,6 +45,7 @@ const RfqList = (props) => {
     fetchSuppliers({
       suppliersForRequestProcurement: true
     })
+    // eslint-disable-next-line
   }, [])
   return (
     <>

@@ -56,7 +56,6 @@ export function fetchAllFloatRequests(query) {
 
 export function fetchFloatRequests(query) {
   console.log('fetch floats api', query)
-  const queryStr = serializeQueryParams(query)
   switch(query.requestType) {
     case FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/floatsForDepartment`, method: "GET"})

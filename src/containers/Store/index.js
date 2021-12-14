@@ -13,9 +13,7 @@ import {Menu} from "antd"
 
 const Store = (props) => {
   const [key, setKey] = useState("/app/store/lpo")
-  const {
-    currentUser
-  } = props
+  
   const { path } = useRouteMatch()
   const location = useLocation()
 
@@ -26,6 +24,7 @@ const Store = (props) => {
     } else if(pathname.includes("/app/store/grns")) {
       setKey("/app/store/grns")
     }
+    // eslint-disable-next-line
   }, [key])
   return (
     <React.Fragment>
@@ -37,7 +36,6 @@ const Store = (props) => {
             mode="horizontal"
             onClick={value => setKey(value)}
             forceSubMenuRender
-            mode="horizontal"
           >
             <Menu.Item key="/app/store/lpos">
               <NavLink to="/app/store/lpos">
@@ -89,7 +87,6 @@ const mapActionsToProps = dispatch => ({
 
   fetchLocalPurchaseOrders: (query) => dispatch(LpoCreators.fetchLocalPurchaseOrders(query)),
   fetchLocalPurchaseOrder: (id) => dispatch(LpoCreators.fetchLocalPurchaseOrder(id)),
-  resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
   resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
 })
 

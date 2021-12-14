@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch, useRouteMatch, NavLink, Redirect } from 'react-router-dom';
+import { Switch, useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
@@ -10,9 +10,7 @@ import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import ApprovePendingList from './components/ApprovePendingList';
-import { Menu, Row, Col } from "antd"
-import PrivateRoute from '../../presentation/PrivateRoute';
-import { FUNCTIONAL_ROLES } from '../../util/constants';
+import { Menu } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 
 
@@ -29,11 +27,7 @@ const RequestItemIndex = (props) => {
 
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
-  console.log('my request path', path)
-  console.log('path', path)
-  const displayPage = (props) => {
-
-  }
+  
 
   const handleNavClick = (value) => {
     console.log('menus', value)
@@ -78,7 +72,6 @@ const RequestItemIndex = (props) => {
             mode="horizontal"
             onClick={handleNavClick}
             forceSubMenuRender
-            mode="horizontal"
           >
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
               <>

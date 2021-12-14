@@ -82,7 +82,6 @@ export function* createRequest(action) {
       yield put(Creators.createRequestFailure(response.message))
     }
   } catch (error) {
-    const errorTxt = (error && error.response.data && error.response.data.error) || 'Create Request Failed'
     const errors = error?.response?.data?.errors[0]
     openNotification('error', 'Create Requests', errors)
     yield put(Creators.createRequestFailure(errors))

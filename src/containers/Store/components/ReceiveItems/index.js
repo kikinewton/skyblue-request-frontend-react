@@ -20,7 +20,6 @@ const initForm = {
 const ReceiveItems = (props) => {
   const [ current, setCurrent ] = React.useState(0)
   const [ selectedItems, setSelectedItems ] = React.useState([])
-  const [lpo, setLpo] = React.useState({})
   const [items, setItems] = React.useState([])
   const { lpoId } = useParams()
   const [formData, setFormData] = React.useState(initForm)
@@ -32,7 +31,6 @@ const ReceiveItems = (props) => {
     fetching_local_purchase_orders
   } = props
   const [submitting, setSubmitting] = React.useState(false)
-  const [ loading, setLoading ] = React.useState(false)
   const history = useHistory()
 
   const handleSelectedItemUpdate = (event, row) => {

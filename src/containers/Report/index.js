@@ -4,8 +4,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import * as reportApi from '../../services/api/report'
-import { downloadFile } from '../../util/common-helper'
-import fileDownload from 'js-file-download'
 
 const Report = (props) => {
   const [ fromDate, setFromDate ] = React.useState(undefined)

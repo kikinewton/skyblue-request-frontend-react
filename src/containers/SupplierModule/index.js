@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import AppLayout from '../AppLayout'
 import { Creators as SupplierCreators } from "../../services/redux/supplier/actions"
 import { connect } from 'react-redux'
 import List from "./components/List"
-import { Menu,Row, Col, } from "antd"
-import { NavLink } from 'react-router-dom'
 
 const SupplierModule = (props) => {
-  const [key, setKey] = useState("ho")
   return (
     <>
       <AppLayout

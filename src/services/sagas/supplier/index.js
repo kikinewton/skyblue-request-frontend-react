@@ -80,7 +80,6 @@ export function* deleteSupplier(action) {
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Suppliers'
     openNotification('error', 'Login', errors[0])
     yield put(Creators.updateSupplierFailure(errors[0]))
   }

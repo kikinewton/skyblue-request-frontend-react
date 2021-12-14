@@ -121,7 +121,6 @@ const HodEndorsePendingList = (props) => {
     selected_requests,
     setSelectedRequests,
     resetRequest,
-    fetchRequests,
     fetching_requests,
     requests,
     updateRequest,
@@ -147,7 +146,6 @@ const HodEndorsePendingList = (props) => {
       createComment("LPO", payload)
 
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
-      let updatePayload = {}
       
 
       const comments = selected_requests.filter(it => it.comment)
@@ -175,6 +173,7 @@ const HodEndorsePendingList = (props) => {
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
     })
+    // eslint-disable-next-line
   }, [])
 
   React.useEffect(() => {
@@ -185,6 +184,7 @@ const HodEndorsePendingList = (props) => {
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
     }
+    // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
   React.useEffect(() => {
@@ -195,7 +195,7 @@ const HodEndorsePendingList = (props) => {
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
     }
-
+    // eslint-disable-next-line
   }, [props.submitting_comment, props.submit_comment_success])
 
   return (

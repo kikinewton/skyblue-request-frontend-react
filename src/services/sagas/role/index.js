@@ -5,7 +5,6 @@ import {
   fetchRoles as fetchRolesApi
 } from '../../api/auth'
 import openNotification from '../../../util/notification'
-import { clearLocalState } from '../../app-storage'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 

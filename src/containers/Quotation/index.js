@@ -4,7 +4,7 @@ import { Creators as QuotationCreators } from '../../services/redux/quotation/ac
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import {  Creators as RequestCategoryCreator } from '../../services/redux/request-category/actions'
 import { connect } from 'react-redux'
-import { Switch, useRouteMatch, Redirect, NavLink, useLocation } from 'react-router-dom'
+import { Switch, useRouteMatch, NavLink, useLocation } from 'react-router-dom'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import AppLayout from '../AppLayout'
 import ListQuotations from './components/List'
@@ -30,6 +30,7 @@ const Quotation = (props) => {
         setKey("list")
         break
     }
+    // eslint-disable-next-line
   }, [key])
 
   return (
@@ -41,7 +42,6 @@ const Quotation = (props) => {
             selectedKeys={[key]}
             defaultSelectedKeys={[key]}
             onClick={(value) => setKey(value)}
-            selectedKeys={[key]}
             mode="horizontal"
           >
             <Menu.Item key="list">
