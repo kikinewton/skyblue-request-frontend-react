@@ -168,7 +168,8 @@ const CollapsibleLayout = (props) => {
             </>
           )}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER,
-           EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+           EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, 
+            EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER]) && (
              <Menu.SubMenu
               key="/app/payments"
               icon={<ReconciliationOutlined />} 
