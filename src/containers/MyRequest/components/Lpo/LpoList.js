@@ -51,6 +51,7 @@ const LpoList = (props) => {
         quantity: ""
       })
     }
+    fetchMyRequests({})
   }, [updating_request, update_request_success])
   return (
     <React.Fragment>
@@ -124,8 +125,6 @@ const LpoList = (props) => {
           }}
           onFinish={(values) => {
             const payload = { description: values.name, quantity: values.quantity }
-            console.log('update request single', payload)
-            console.log('selected request', selectedRequest)
             updateSingleRequest(selectedRequest?.id, payload)
           }}
         >

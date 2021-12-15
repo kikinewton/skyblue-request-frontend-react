@@ -9,6 +9,7 @@ import ReceiveItems from './components/ReceiveItems'
 import GrnPendingEndorsement from './components/GrnPendingEndorsement'
 import GrnPendingApproval from './components/GrnPendingApproval'
 import GrnPendingPaymentAdvice from './components/GrnPendingPaymentAdvice'
+import CreateGrn from './components/CreateGrn'
 import { Creators as LpoCreators } from "../../services/redux/local-purchase-order/actions"
 import { Creators as GrnCreators } from "../../services/redux/grn/actions"
 import {Menu} from "antd"
@@ -55,19 +56,6 @@ const GrnIndex = (props) => {
   } = props
   const { path } = useRouteMatch()
   const location = useLocation()
-
-  // React.useEffect(() => {
-  //   const { pathname } = location
-  //   if(pathname.includes("/app/grn/add-new")) {
-  //     setKey("/app/grn/add-new")
-  //   } else if(pathname.includes("/app/grn/pending-endorsement")) {
-  //     setKey("/app/grn/pending-endorsement")
-  //   } else if(pathname.includes("/app/grn/pending-approval")) {
-  //     setKey("/app/grn/pending-approval")
-  //   } else if(pathname.includes("/app/grn/list")) {
-  //     setKey("/app/grn/list")
-  //   }
-  // }, [])
 
   const DefaultRedirect = () => {
     const role = currentUser.role
@@ -153,7 +141,7 @@ const GrnIndex = (props) => {
           </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/pending-endorsement`} {...props} component={GrnPendingEndorsement} />
           <AuthenticatedRoute path={`${path}/pending-approval`} {...props} component={GrnPendingApproval} />
-          <AuthenticatedRoute path={`${path}/add-new`} {...props} component={LocalPurchaseOrders} />
+          <AuthenticatedRoute path={`${path}/add-new`} {...props} component={CreateGrn} />
           <AuthenticatedRoute path={`${path}/grn-success`} {...props} component={GrnSuccessPage} />
           <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />
           <AuthenticatedRoute path={`${path}/lpos`} component={LocalPurchaseOrders} {...props} />
@@ -177,6 +165,7 @@ const mapStateToProps = (store) => ({
   local_purchase_orders: store.local_purchase_order.local_purchase_orders,
   local_purchase_order: store.local_purchase_order.local_purchase_order,
   fetching_local_purchase_orders: store.local_purchase_order.loading,
+  filtered_local_purchase_orders: store.local_purchase_order.filtered_local_purchase_orders,
 
 })
 
@@ -190,7 +179,7 @@ const mapActionsToProps = dispatch => ({
   fetchLocalPurchaseOrders: (query) => dispatch(LpoCreators.fetchLocalPurchaseOrders(query)),
   fetchLocalPurchaseOrder: (id) => dispatch(LpoCreators.fetchLocalPurchaseOrder(id)),
   resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
-  resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
+  filterLocalPurchaseOrders: filter => dispatch(LpoCreators.filterLocalPurchaseOrders(filter))
 })
 
 

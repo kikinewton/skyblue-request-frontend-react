@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col, Card } from 'antd'
 import DashboardCard from '../../../presentation/DashboardCard'
 import { BarChart, PieChart } from '../../../presentation/Chart'
+import MyPieChart from '../../../shared/MyPieChart'
 
 
 const Dashboard = (props) => {
@@ -45,7 +46,7 @@ const Dashboard = (props) => {
           </Row>
           <Row gutter={12} style={{marginTop: 20}}>
             <Col md={8}>
-              <Card style={{height: 350}} title="Supplier Spend Analysis" hoverable>
+              <Card style={{height: 350}} title="Approved number of requests per department" hoverable>
                 {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                   <PieChart
                     type="doughnut"
@@ -55,6 +56,13 @@ const Dashboard = (props) => {
                     data={(supplierSpendAnalysis || []).map(item=> item.paymentAmount)}
                   />
                 }
+                {/* {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
+                  <MyPieChart
+                    data={(supplierSpendAnalysis || []).map(item=> {
+                      return {type: item?.name, value: item?.paymentAmount}
+                    })}
+                  />
+                } */}
               </Card>
             </Col>
             <Col md={8}>

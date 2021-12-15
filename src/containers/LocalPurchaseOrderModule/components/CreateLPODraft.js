@@ -1,10 +1,11 @@
-import { RightOutlined, LeftOutlined } from '@ant-design/icons'
+import { RightOutlined, LeftOutlined, DownloadOutlined, CheckOutlined } from '@ant-design/icons'
 import { Document, Page, PDFViewer } from '@react-pdf/renderer'
 import { Card, Col, Row, Steps, Select, Table, Button, Input, DatePicker, Image } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import { prettifyDateTime } from '../../../util/common-helper'
+import { CURRENCY_CODE } from '../../../util/constants'
 import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
 // import { Document, Page } from "react-pdf"
 
@@ -87,6 +88,7 @@ const updatePriceColumns = (props)=> [
     render: (text, row) => {
       return (
         <Input 
+          prefix={CURRENCY_CODE}
           size="small"
           type="number" 
           min={1} 
@@ -396,18 +398,19 @@ const CreateLPO = (props) => {
                   </div>
                 )}
                 {selectedQuotation?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
-                  <div style={{width: "100%", height: "auto", display: "flex", flexDirection: "row", alignContent: "center", justifyContent: "center"}}>
-                    <PDFViewer>
-                      <Document>
-                        <Page size="A4" style={{flexDirection: 'row',backgroundColor: '#E4E4E4'}}>
+                  <a href={`${BASE_URL}/requestDocument/download/${selectedQuotation?.quotation?.requestDocument?.fileNamee}`}><DownloadOutlined /> Download PDF</a>
+                  // <div style={{width: "100%", height: "auto", display: "flex", flexDirection: "row", alignContent: "center", justifyContent: "center"}}>
+                  //   <PDFViewer>
+                  //     <Document>
+                  //       <Page size="A4" style={{flexDirection: 'row',backgroundColor: '#E4E4E4'}}>
 
-                        </Page>
-                      </Document>
-                    </PDFViewer>
-                    <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <span style={{fontWeight: "bold"}}>Quotation Document</span>
-                    </div>
-                  </div>
+                  //       </Page>
+                  //     </Document>
+                  //   </PDFViewer>
+                  //   <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
+                  //     <span style={{fontWeight: "bold"}}>Quotation Document</span>
+                  //   </div>
+                  // </div>
                 )}
               </Col>
             </Row>
@@ -470,6 +473,7 @@ const CreateLPO = (props) => {
                   onClick={()=> handleSubmit()}
                   disabled={!deliveryDate || submitting_local_purchase_order || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
                 >
+                  <CheckOutlined />
                   SUBMIT
                 </Button>
               </Col>

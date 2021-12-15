@@ -6,6 +6,7 @@ export const INITIAL_STATE = {
   local_purchase_orders: [],
   local_purchase_order: null,
   local_purchase_order_drafts: [],
+  filtered_local_purchase_orders: [],
   loading: false,
   submitting: false,
   submit_success: false,
@@ -17,11 +18,11 @@ export const fetchLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, local_purchase_orders: action.responseData, loading: false};
+  return { ...state, local_purchase_orders: action.responseData, loading: false, filtered_local_purchase_orders: action.responseData};
 };
 
 export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error, local_purchase_orders: []};
+  return { ...state, loading: false, error: action.error, local_purchase_orders: [], filtered_local_purchase_orders: []};
 };
 
 //fetch by id
@@ -79,6 +80,14 @@ export const createLocalPurchaseOrderDraftFailure = (state = INITIAL_STATE, acti
   return { ...state, submitting: false, error: action.error};
 };
 
+export const filterLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
+  const {filter} = action
+  const filteredResult = state.local_purchase_orders.filter(lpo => 
+      lpo.referenceNumber === filter
+    ) || []
+  return { ...state, filtered_local_purchase_orders:  filteredResult}
+}
+
 
 export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
   return {
@@ -112,6 +121,8 @@ export const HANDLERS = {
   [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT]: createLocalPurchaseOrderDraft,
   [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_SUCCESS]: createLocalPurchaseOrderDraftSuccess,
   [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_FAILURE]: createLocalPurchaseOrderDraftFailure,
+
+  [Types.FILTER_LOCAL_PURCHASE_ORDERS]: filterLocalPurchaseOrders,
   
   [Types.RESET_LOCAL_PURCHASE_ORDER]: resetLocalPurchaseOrder
 };

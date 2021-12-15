@@ -44,14 +44,9 @@ const columns = (props) => [
 
 export const requestColumns = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id'
-  },
-  {
-    title: 'SUPPLIER',
-    dataIndex: 'suplier',
-    key: 'name'
+    title: 'Reference',
+    dataIndex: 'requestItemRef',
+    key: 'requestItemRef'
   },
   {
     title: 'REASON',

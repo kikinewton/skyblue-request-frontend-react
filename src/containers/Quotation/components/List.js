@@ -32,7 +32,7 @@ const columns = (props) => [
     render: (text, row) => (
       <Row>
         <Col md={24}>
-          <Button shape="circle" onClick={() => props.onView(row)} size="small">
+          <Button size="small" shape="circle" onClick={() => props.onView(row)} size="small">
             <EyeFilled />
           </Button>
         </Col>
@@ -128,7 +128,7 @@ const ListQuotations = (props) => {
           })}
           loading={quotationLoading}
           dataSource={filtered_quotations}
-          size="quotation.small"
+          size="small"
           rowKey="id"
           bordered
           pagination={{

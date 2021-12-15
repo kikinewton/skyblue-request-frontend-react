@@ -175,16 +175,19 @@ const CollapsibleLayout = (props) => {
               icon={<ReconciliationOutlined />} 
               title="Payments"
              >
+              
+              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
+                <Menu.Item
+                  key="/app/payments/goods-receive-notes"
+                >
+                  <NavLink to="/app/payments/goods-receive-notes">
+                    <span>GRNs Make Payment</span>
+                  </NavLink>
+                </Menu.Item>
+                )}
               <Menu.Item
-                key="/app/payments/goods-receive-notes"
-              >
-                <NavLink to="/app/payments/goods-receive-notes">
-                  <span>GRNs Make Payment</span>
-                </NavLink>
-               </Menu.Item>
-               <Menu.Item
                 key="/app/payments/pending-approval"
-              >
+                >
                 <NavLink to="/app/payments/pending-approval">
                   <span>Approve Payments</span>
                 </NavLink>

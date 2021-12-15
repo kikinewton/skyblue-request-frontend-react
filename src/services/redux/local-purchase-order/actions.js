@@ -22,6 +22,8 @@ export const { Types, Creators } = createActions(
     createLocalPurchaseOrderDraftSuccess: ["responseData"],
     createLocalPurchaseOrderDraftFailure: ["error"],
 
+    filterLocalPurchaseOrders: ["filter"],
+
     resetLocalPurchaseOrder: null
   }
 )

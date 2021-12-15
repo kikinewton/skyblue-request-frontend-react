@@ -133,14 +133,6 @@ const List = (props)=> {
 
   return (
     <>
-      {/* <Row>
-        <Col md={10} style={{paddingBottom: 5}}>
-          <span className="bs-page-title">Employees</span>
-        </Col>
-        <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={handleAdd}>Register new employee</Button>
-        </Col>
-      </Row> */}
       <PageHeader 
         title="Employees"
         style={{padding: 0}}
@@ -159,6 +151,7 @@ const List = (props)=> {
             rowKey="id"
             bordered
             size="small"
+            pagination={{pageSize: 20}}
           />
         </Col>
       </Row>

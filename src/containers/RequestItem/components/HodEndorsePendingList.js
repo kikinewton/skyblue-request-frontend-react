@@ -207,8 +207,9 @@ const HodEndorsePendingList = (props) => {
           <Row style={{marginBottom: 10}}>
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
             <Button 
-              disabled={selected_requests.length < 1} 
-              style={{backgroundColor: "yellow", marginRight: 5}}
+              disabled={selected_requests.length < 1}
+              type="default" 
+              style={{marginRight: 5}}
               onClick={() => {
                 setActionType(UPDATE_REQUEST_TYPES.HOD_COMMENT)
                 setConfirmDrawer(true)
@@ -217,7 +218,8 @@ const HodEndorsePendingList = (props) => {
               <CommentOutlined /> Comment
             </Button>
             <Button
-              style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 
+              type="default"
+              style={{marginRight: 5}} 
               disabled={selected_requests.length < 1}
               onClick={() => {
                 setActionType(UPDATE_REQUEST_TYPES.HOD_CANCEL)
@@ -270,7 +272,7 @@ const HodEndorsePendingList = (props) => {
         visible={confirmDrawer}
         title={`${actionType} REQUESTS`}
         placement="right"
-        width={1000}
+        width={900}
         maskClosable={false}
         onClose={() => {
           setSelectedRequests([])

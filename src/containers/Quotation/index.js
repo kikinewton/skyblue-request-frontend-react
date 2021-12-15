@@ -10,6 +10,7 @@ import AppLayout from '../AppLayout'
 import ListQuotations from './components/List'
 import CreateQuotation from './components/Add'
 import { Menu } from "antd"
+import { FileDoneOutlined, SolutionOutlined } from '@ant-design/icons'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -46,11 +47,13 @@ const Quotation = (props) => {
           >
             <Menu.Item key="list">
               <NavLink to="/app/quotations">
-                <span>Quotations</span>
+                <SolutionOutlined />
+                <span>Supplier Quotes</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="add">
               <NavLink to="/app/quotations/add-new">
+                <FileDoneOutlined />
                 <span>Create Quotation</span>
               </NavLink>
             </Menu.Item>

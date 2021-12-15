@@ -25,7 +25,6 @@ const columns = (props)=> DEPARTMENT_COLUMNS.concat({
 })
 
 const List = (props)=> {
-  console.log('props', props)
   const [openEdit, setOpenEdit] = React.useState(false)
   const [openAdd, setOpenAdd] = React.useState(false)
   const [editData, setEditData] = React.useState({})
@@ -105,6 +104,7 @@ const List = (props)=> {
             rowKey="id"
             bordered
             size="small"
+            pagination={{pageSize: 20}}
           />
         </Col>
       </Row>
