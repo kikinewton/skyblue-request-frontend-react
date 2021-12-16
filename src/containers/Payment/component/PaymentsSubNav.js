@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { Menu } from "antd"
 import { CheckOutlined, FileFilled } from "@ant-design/icons"
 import { NavLink, useLocation } from 'react-router-dom'
+import { userHasAnyRole } from "../../../services/api/auth"
+import { EMPLOYEE_ROLE } from '../../../util/datas'
 
 
 const PaymentsSubNav = (props) => {
   const [key, setKey] = useState("/app/payments")
   const location = useLocation()
+  const {
+    currentUser
+  } = props
+
+  console.log('current user', currentUser)
 
   useEffect(() => {
     const { pathname } = location
@@ -22,22 +29,26 @@ const PaymentsSubNav = (props) => {
         mode="horizontal"
         selectedKeys={[key]}
       >
-        <Menu.Item
-          key="/app/payments/goods-receive-notes"
-        >
-          <NavLink to="/app/payments/goods-receive-notes">
-            <FileFilled />
-            <span>Goods Receive notes pending payments</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/app/payments/pending-approval"
-        >
-          <NavLink to="/app/payments/pending-approval">
-            <CheckOutlined />
-            <span>Approve Payments</span>
-          </NavLink>
-        </Menu.Item>
+        {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
+          <Menu.Item
+            key="/app/payments/goods-receive-notes"
+          >
+            <NavLink to="/app/payments/goods-receive-notes">
+              <FileFilled />
+              <span>Create Payment Entry</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+        {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+          <Menu.Item
+            key="/app/payments/pending-approval"
+          >
+            <NavLink to="/app/payments/pending-approval">
+              <CheckOutlined />
+              <span>Approve Payments</span>
+            </NavLink>
+          </Menu.Item>
+        )}
       </Menu>
     </>
   )

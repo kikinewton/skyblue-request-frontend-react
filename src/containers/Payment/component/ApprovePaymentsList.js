@@ -54,7 +54,7 @@ const ApprovePaymentList = (props) => {
     <>
       <AppLayout
         title="Payments"
-        subNav={<PaymentsSubNav />}
+        subNav={<PaymentsSubNav currentUser={current_user} />}
       >
         <Row>
           <Col span={24}>

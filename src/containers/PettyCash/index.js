@@ -10,6 +10,9 @@ import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import { Menu } from "antd"
+import { EMPLOYEE_ROLE } from '../../util/datas';
+import ApprovePendingList from './components/ApprovePendingList';
+import { userHasAnyRole } from "../../services/api/auth"
 
 
 export const REQUEST_ITEMS = [
@@ -20,8 +23,9 @@ export const REQUEST_ITEMS = [
 const PettyCashIndex = (props) => {
   console.log('petty cash index')
   const {
-    currentUser
+    authUser
   } = props
+
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
   const location = useLocation()
@@ -33,7 +37,7 @@ const PettyCashIndex = (props) => {
   }
 
   const handleNavClick = (value) => {
-    console.log('menus', value)
+    setKey(value)
   }
 
   React.useEffect(() => {
@@ -42,10 +46,21 @@ const PettyCashIndex = (props) => {
       setKey("hod-pending-endorse")
     } else if(pathname.includes("/petty-cash/hod-pending-review")) {
       setKey("hod-pending-review")
-    } else if(pathname.includes("/petty-cash/gm-pending-approve")) {
-      setKey("gm-pending-approve")
+    } else if(pathname.includes("/petty-cash/gm-approve-list")) {
+      setKey("/petty-cash/gm-approve-list")
     }
   }, [key])
+
+  const DefaultPage = () => {
+    switch(authUser.role) {
+      case EMPLOYEE_ROLE.ROLE_HOD:
+        return <Redirect to="/app/petty-cash/hod-pending-endorse" />
+      case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
+        return <Redirect to="/app/petty-cash/gm-approve-list" />
+      default:
+        return <Redirect to="/app" />
+    }
+  }
 
   return (
     <>
@@ -59,21 +74,26 @@ const PettyCashIndex = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="hod-pending-endorse">
-              <NavLink to="/app/petty-cash/hod-pending-endorse">
-                <span>Pending Endorsement</span>
-              </NavLink>
-            </Menu.Item>
+            {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && (
+              <Menu.Item key="hod-pending-endorse">
+                <NavLink to="/app/petty-cash/hod-pending-endorse">
+                  <span>Pending Endorsement</span>
+                </NavLink>
+              </Menu.Item>
+            )}
             <Menu.Item key="hod-pending-review">
               <NavLink to="/app/petty-cash/hod-pending-review">
                 <span>Pending Review</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="gm-pending-approve">
-              <NavLink to="/app/petty-cash/gm-approve-list">
-                <span>Awaiting Approval</span>
-              </NavLink>
-            </Menu.Item>
+            {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
+              <Menu.Item key="/petty-cash/gm-approve-list">
+                <NavLink to="/app/petty-cash/gm-approve-list">
+                  <span>Awaiting Approval</span>
+                </NavLink>
+              </Menu.Item>
+            )}
+            
           </Menu>
         )}
       >
@@ -83,7 +103,7 @@ const PettyCashIndex = (props) => {
             path={`${path}`}
             {...props}
           >
-            <Redirect to="/app/petty-cash/hod-pending-endorse" />
+            <DefaultPage />
           </AuthenticatedRoute>
           <AuthenticatedRoute
             path={`${path}/hod-pending-endorse`}
@@ -96,6 +116,7 @@ const PettyCashIndex = (props) => {
             component={HodReviewPendingList} 
             {...props}
           />
+          <AuthenticatedRoute path={`${path}/gm-approve-list`} component={ApprovePendingList} {...props} />
         </Switch>
       </AppLayout>
     </>
@@ -113,7 +134,7 @@ const mapStateToProps = (store) => ({
   petty_cash_submitting: store.petty_cash.submitting,
   suppliers: store.supplier.suppliers,
   selected_petty_cash_requests: store.petty_cash.selected_requests,
-  authUser: store.auth,
+  authUser: store.auth.user,
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success
 })

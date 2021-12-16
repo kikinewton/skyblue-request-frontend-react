@@ -59,7 +59,7 @@ const PaymentModule = (props) => {
       case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
         return <Redirect to="/app/payments/goods-receive-notes"/>
       default:
-        return <Redirect to="/app/payments/goods-receive-notes" />
+        return <Redirect to="/app/payments/pending-approval" />
     }
   }
 

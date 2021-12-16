@@ -27,6 +27,7 @@ const GrnPendingPaymentList = (props) => {
     fetchGrns,
     fetching_grns,
     resetGrn,
+    current_user
   } = props
   const [ loading, setLoading ] = React.useState(false)
 
@@ -44,9 +45,7 @@ const GrnPendingPaymentList = (props) => {
   return (
     <React.Fragment>
       <AppLayout
-        subNav={(
-          <PaymentsSubNav />
-        )}
+        subNav={<PaymentsSubNav currentUser={current_user} />}
       >
         <Row>
           <Col md={24}>
