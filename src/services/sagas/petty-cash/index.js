@@ -1,10 +1,12 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/petty-cash/actions'
 
 import {
   savePettyCashRequest as savePettyCashRequestApi,
   fetchMyPettyCashRequests as fetchMyPettyCashRequestsApi,
   fetchAllPettyCashRequests as fetchAllPettyCashRequestsApi,
+  updatePettyCashRequest as updatePettyCashRequestApi,
+  updateBulkPettyCashRequest as updateBulkPettyCashRequestApi
 } from '../../api/petty-cash'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -68,8 +70,9 @@ export function* createPettyCashRequest(action) {
 }
 
 export function* updatePettyCashRequest(action) {
+  const {id, payload} = action
   try {
-    const response = yield call(savePettyCashRequestApi, action.payload)
+    const response = yield call(updatePettyCashRequestApi, id, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       yield put(Creators.updatePettyCashRequestSuccess(responseData))
@@ -83,6 +86,25 @@ export function* updatePettyCashRequest(action) {
     const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to update petty cash'
     openNotification('error', 'Login', errorTxt)
     yield put(Creators.updatePettyCashRequestFailure(errorTxt))
+  }
+}
+
+export function* updateBulkPettyCashRequest(action) {
+  try {
+    const response = yield call(updateBulkPettyCashRequestApi, action.payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      yield put(Creators.updateBulkPettyCashRequestSuccess(responseData))
+      clearLocalState("NEW-REQUEST")
+      openNotification('success', 'UPDATE PETTY CASH', response.message)
+    } else {
+      openNotification('error', 'UPDATE PETTY CASH', response.message)
+      yield put(Creators.updateBulkPettyCashRequestFailure(response.message))
+    }
+  } catch (error) {
+    const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to update petty cash'
+    openNotification('error', 'Login', errorTxt)
+    yield put(Creators.updateBulkPettyCashRequestFailure(errorTxt))
   }
 }
 
@@ -101,5 +123,14 @@ export function* watchFetchMyPettyCashRequests(action) {
 
 export function* watchCreatePettyCashRequest(action) {
   yield takeLatest(Types.CREATE_PETTY_CASH_REQUEST, createPettyCashRequest)
+}
+
+export function* watchUpdatePettyCashRequest(action) {
+  yield takeLeading(Types.UPDATE_PETTY_CASH_REQUEST, updatePettyCashRequest)
+}
+
+
+export function* watchUpdateBulkPettyCashRequest(action) {
+  yield takeLeading(Types.UPDATE_BULK_PETTY_CASH_REQUEST, updateBulkPettyCashRequest)
 }
 

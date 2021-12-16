@@ -5,6 +5,8 @@ import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
 import UpdateFloatForm from './UpdateForm';
 import FloatDetails from './Details';
+import AppLayout from '../../../AppLayout';
+import MyRequestMenu from '../MyRequestMenu';
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 
@@ -98,67 +100,72 @@ const List = (props) => {
 
   return (
     <>
-      <Card
-        size="small"
+      <AppLayout
         title="My Float Requests"
-        extra={[
-          <Button size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
-            Create New Float Request
-          </Button>
-        ]}
+        subNav={<MyRequestMenu />}
       >
-        <Row>
-          <Col span={24}>
-            <Table
-              loading={fetching_float_requests}
-              columns={columns({
-                handleView: (row) => {
-                  console.log('lets view')
-                  setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
-                  setVisible(true)
-                },
-                handleEdit: (row) => {
-                  console.log('lets update')
-                  setSelectionDetails({type:SELECTION_TYPES.UPDATE, row})
-                  setVisible(true)
-                },
-              })}
-              dataSource={my_float_requests}
-              rowKey="id"
-              bordered
-              size="small"
+        <Card
+          size="small"
+          title="My Float Requests"
+          extra={[
+            <Button size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
+              Create New Float Request
+            </Button>
+          ]}
+        >
+          <Row>
+            <Col span={24}>
+              <Table
+                loading={fetching_float_requests}
+                columns={columns({
+                  handleView: (row) => {
+                    console.log('lets view')
+                    setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
+                    setVisible(true)
+                  },
+                  handleEdit: (row) => {
+                    console.log('lets update')
+                    setSelectionDetails({type:SELECTION_TYPES.UPDATE, row})
+                    setVisible(true)
+                  },
+                })}
+                dataSource={my_float_requests}
+                rowKey="id"
+                bordered
+                size="small"
+              />
+            </Col>
+          </Row>
+        </Card>
+        <Drawer
+          forceRender
+          visible={visible}
+          title={selectionDetails.type === SELECTION_TYPES.VIEW ? `REQUEST DETAILS` : "UPDATE FLOAT"}
+          placement="right"
+          width={700}
+          maskClosable={false}
+          onClose={() => {
+            setSelectionDetails(SELECTION_TYPES.VIEW, null)
+            setVisible(false)
+          }}
+        >
+          {selectionDetails.type === SELECTION_TYPES.UPDATE && (
+            <UpdateFloatForm 
+              onSubmit={(values) => {
+                console.log('values', values)
+                const payload = { description: values.description, quantity: values.quantity, estimatedPrice: values.estimatedUnitPrice }
+                
+                updateSingleFloatRequest(selectionDetails?.row?.id, payload)
+              }}
+              loading={submiting_float_request}
+              float={selectionDetails?.row}
             />
-          </Col>
-        </Row>
-      </Card>
-      <Drawer
-        forceRender
-        visible={visible}
-        title={selectionDetails.type === SELECTION_TYPES.VIEW ? `REQUEST DETAILS` : "UPDATE FLOAT"}
-        placement="right"
-        width={700}
-        maskClosable={false}
-        onClose={() => {
-          setSelectionDetails(SELECTION_TYPES.VIEW, null)
-          setVisible(false)
-        }}
-      >
-        {selectionDetails.type === SELECTION_TYPES.UPDATE && (
-          <UpdateFloatForm 
-            onSubmit={(values) => {
-              console.log('values', values)
-              const payload = { description: values.description, quantity: values.quantity, estimatedPrice: values.estimatedUnitPrice }
-              
-              updateSingleFloatRequest(selectionDetails?.row?.id, payload)
-            }}
-            loading={submiting_float_request}
-            float={selectionDetails?.row}
-          />
-        )}
-        {selectionDetails.type === SELECTION_TYPES.VIEW && (
-          <FloatDetails float={selectionDetails.row} />
-        )}
-      </Drawer>
+          )}
+          {selectionDetails.type === SELECTION_TYPES.VIEW && (
+            <FloatDetails float={selectionDetails.row} />
+          )}
+        </Drawer>
+      </AppLayout>
     </>
   )
 } 

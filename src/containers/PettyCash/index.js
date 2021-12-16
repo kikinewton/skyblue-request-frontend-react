@@ -4,6 +4,7 @@ import { Switch, useRouteMatch, NavLink, Redirect, useLocation } from 'react-rou
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as PettyCashCreators } from '../../services/redux/petty-cash/actions';
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
+import { Creators as CommentCreatores } from '../../services/redux/comment/actions';
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
@@ -34,10 +35,6 @@ const PettyCashIndex = (props) => {
   const handleNavClick = (value) => {
     console.log('menus', value)
   }
-
-  React.useEffect(() => {
-    console.log('init')
-  }, [])
 
   React.useEffect(() => {
     const { pathname } = location
@@ -116,7 +113,9 @@ const mapStateToProps = (store) => ({
   petty_cash_submitting: store.petty_cash.submitting,
   suppliers: store.supplier.suppliers,
   selected_petty_cash_requests: store.petty_cash.selected_requests,
-  authUser: store.auth
+  authUser: store.auth,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -131,6 +130,9 @@ const mapActionsToProps = (dispatch) => {
     updatePettyCashRequest: (options) => {
       dispatch(PettyCashCreators.updatePettyCashRequest(options))
     },
+    updateBulkPettyCashRequest: (payload) => {
+      dispatch(PettyCashCreators.updateBulkPettyCashRequest(payload))
+    },
     resetRequests: () => {
       dispatch(PettyCashCreators.resetRequest())
     },
@@ -142,7 +144,8 @@ const mapActionsToProps = (dispatch) => {
     },
     resetPettyCashRequest: () => {
       dispatch(PettyCashCreators.resetPettyCashRequest())
-    }
+    },
+    createComment: (type, payload) => dispatch(CommentCreatores.createComment(type, payload)),
   }
 }
 

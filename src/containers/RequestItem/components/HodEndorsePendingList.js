@@ -144,10 +144,7 @@ const HodEndorsePendingList = (props) => {
       const payload = {comments: comments, procurementType: "LPO"}
       console.log('payload', payload)
       createComment("LPO", payload)
-
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
-      
-
       const comments = selected_requests.filter(it => it.comment)
                             .map(it => {
                               let data = {

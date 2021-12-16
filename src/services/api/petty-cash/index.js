@@ -30,7 +30,24 @@ export function fetchAllPettyCashRequests(query) {
 
 export function deletePettyCashRequest(id) {
   return service({
-    url: `/floats/${id}`,
+    url: `/pettyCash/${id}`,
     method: 'DELETE',
+  })
+}
+
+export function updatePettyCashRequest(id, payload) {
+  return service({
+    url: `/pettyCash/${id}`,
+    method: 'PUT',
+    data: payload
+  })
+}
+
+export function updateBulkPettyCashRequest(payload) {
+  const { statusChange, items } = payload
+  return service({
+    url: `/bulkPettyCash/${statusChange}`,
+    method: "PUT",
+    data: items
   })
 }

@@ -1,16 +1,17 @@
 import React from 'react'
 import {Creators as PaymentCreators} from "../../services/redux/payment/actions"
 import { Creators as GrnCreators } from '../../services/redux/grn/actions'
+import { Redirect, Route } from "react-router-dom"
 import { connect } from 'react-redux'
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
-import AppLayout from '../AppLayout'
 import { Switch, useRouteMatch } from "react-router-dom"
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
-import GrnPendingList from './component/GrnPendingPaymentList'
+import GrnPendingPaymentList from './component/GrnPendingPaymentList'
 import NewPayment from './component/NewPayment'
 import PaymentSuccess from './component/PaymentSuccess'
 import ApprovePaymentList from './component/ApprovePaymentsList'
 import PaymentList from './component/PaymentList'
+import { EMPLOYEE_ROLE } from '../../util/datas'
 
 
 
@@ -45,20 +46,32 @@ export const PAYMENT_COLUMNS = [
 ]
 
 const PaymentModule = (props) => {
+  const {
+    current_user
+  } = props
+
   const { path } = useRouteMatch()
+  console.log('path', path)
+
+  const DefaultPage = () => {
+    console.log('hey')
+    switch(current_user.role) {
+      case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
+        return <Redirect to="/app/payments/goods-receive-notes"/>
+      default:
+        return <Redirect to="/app/payments/goods-receive-notes" />
+    }
+  }
+
   return (
     <>
-      <AppLayout
-        title="Payments"
-      >
-        <Switch>
-          <AuthenticatedRoute path={`${path}/payment-success`} component={PaymentSuccess} {...props} />
-          <AuthenticatedRoute path={`${path}/pending-approval`} component={ApprovePaymentList} {...props} />
-          <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />
-          <AuthenticatedRoute path={`${path}/goods-receive-notes`} component={GrnPendingList} {...props} />
-          <AuthenticatedRoute path={`${path}`} component={PaymentList} {...props} />
-        </Switch>
-      </AppLayout>
+      <Switch>
+        <AuthenticatedRoute path={`${path}/payment-success`} component={PaymentSuccess} {...props} />
+        <AuthenticatedRoute path={`${path}/pending-approval`} component={ApprovePaymentList} {...props} />
+        <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />
+        <AuthenticatedRoute path={`${path}/goods-receive-notes`} component={GrnPendingPaymentList} {...props} />
+        <AuthenticatedRoute path={`${path}`} component={DefaultPage} exact {...props} />
+      </Switch>
     </>
   )
 }

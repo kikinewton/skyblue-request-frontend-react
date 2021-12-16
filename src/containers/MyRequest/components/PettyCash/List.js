@@ -1,9 +1,13 @@
-import React from 'react';
-import { Table, Row, Col, PageHeader, Badge, Tag, Pagination, Button, Card } from "antd"
+import React, { useEffect, useState } from 'react';
+import { Table, Row, Col, Form, Tag, Button, Card, Drawer, Input } from "antd"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
+import { EditOutlined } from '@ant-design/icons';
+import { useForm } from 'antd/lib/form/Form';
+import AppLayout from '../../../AppLayout';
+import MyRequestMenu from '../MyRequestMenu';
 
-const columns = [
+const columns = props => [
   {
     title: "Reference",
     dataIndex: "pettyCashRef",
@@ -48,44 +52,118 @@ const columns = [
       return (<Tag color={color}>{text}</Tag>)
     }
   },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, row) => (
+      <EditOutlined onClick={() => props.onEdit(row)} />
+    )
+  }
 ]
 
 const List = (props) => {
   const history = useHistory()
-  const { my_petty_cash_requests, fetching_petty_cash_requests, fetchMyPettyCashRequests } = props
+  const { my_petty_cash_requests, fetching_petty_cash_requests, 
+    fetchMyPettyCashRequests, resetPettyCashRequest, updatePettyCashRequest, 
+    submitting_petty_cash_request, submit_petty_cash_request_success
+  } = props
+  const [updateVisible, setUpdateVisible] = useState(false)
+  const [selectedPettyCash, setSelectedPettyCash] = useState(null)
+  const [updateForm] = useForm()
 
   React.useEffect(() => {
+    resetPettyCashRequest()
     fetchMyPettyCashRequests({
       
     })
   }, [])
 
+  useEffect(() => {
+    if(!submitting_petty_cash_request && submit_petty_cash_request_success) {
+      setSelectedPettyCash(null)
+      setUpdateVisible(false)
+    }
+  }, [submitting_petty_cash_request, submit_petty_cash_request_success])
+
   return (
     <>
-      <Card
-        hoverable
+      <AppLayout
         title="My Petty Cash Requests"
-        extra={[
-          <Button type="primary"
-            onClick={()=> history.push("/app/my-requests/petty-cash-requests/add-new")}
-          >
-            Create New Petty Cash Request
-          </Button>
-        ]}
+        subNav={<MyRequestMenu />}
       >
-        <Row>
-          <Col span={24}>
-            <Table
-              columns={columns}
-              dataSource={my_petty_cash_requests}
-              rowKey="id"
-              loading={fetching_petty_cash_requests}
-              size="small"
-              bordered
-            />
-          </Col>
-        </Row>
-      </Card>
+        <Card
+          hoverable
+          title="My Petty Cash Requests"
+          extra={[
+            <Button type="primary"
+              onClick={()=> history.push("/app/my-requests/petty-cash-requests/add-new")}
+            >
+              Create New Petty Cash Request
+            </Button>
+          ]}
+        >
+          <Row>
+            <Col span={24}>
+              <Table
+                columns={columns({
+                  onEdit: (row) => {
+                    const data = Object.assign({}, row)
+                    console.log("data", data)
+                    setSelectedPettyCash(data)
+                    updateForm.setFieldsValue({name: data?.name, quantity: data?.quantity})
+                    setUpdateVisible(true)
+                  }
+                })}
+                dataSource={my_petty_cash_requests}
+                rowKey="id"
+                loading={fetching_petty_cash_requests}
+                size="small"
+                bordered
+                pagination={{pageSize: 20}}
+              />
+            </Col>
+          </Row>
+        </Card>
+        <Drawer
+          forceRender
+          visible={updateVisible}
+          title={`Supporting Document`}
+          placement="right"
+          width={600}
+          maskClosable={false}
+          onClose={() => {
+            setSelectedPettyCash(null)
+            setUpdateVisible(false)
+          }}
+        >
+          <Form
+            form={updateForm}
+            layout="vertical"
+            onFinish={values => {
+              const payload = {
+                name: values?.name,
+                quantity: values?.quantity
+              }
+              updatePettyCashRequest(selectedPettyCash?.id, payload)
+            }}
+            initialValues={{
+              name: selectedPettyCash?.name,
+              quantity: selectedPettyCash?.quantity
+            }}
+          >
+            <Form.Item label="Description" name="name">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+            <Form.Item label="Quantity" name="quantity">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item>
+              <Button loading={submitting_petty_cash_request} type='primary'>Update Petty Cash</Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
+      </AppLayout>
     </>
   )
 } 

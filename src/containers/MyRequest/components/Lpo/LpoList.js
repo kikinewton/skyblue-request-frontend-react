@@ -4,6 +4,8 @@ import { REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
+import AppLayout from '../../../AppLayout'
+import MyRequestMenu from '../MyRequestMenu'
 
 const columns = props => REQUEST_COLUMNS.concat([
   {
@@ -55,90 +57,94 @@ const LpoList = (props) => {
   }, [updating_request, update_request_success])
   return (
     <React.Fragment>
-      <Card
-        size="small"
-        title="My request items"
-        extra={[
-          <Button type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
-            Add New
-          </Button>
-        ]}
+      <AppLayout
+        subNav={<MyRequestMenu />}
       >
-        <Row>
-          <Col md={24}>
-            <Table
-              loading={requestLoading}
-              columns={columns({
-                setRequest: (row) => {
-                  history.push(`${path}/${row.id}/details`)
-                },
-                openUpdateRequest: (row) => {
-                  setSelectedRequest(row)
-                  updatePriceForm.setFieldsValue({
-                    name: row?.name,
-                    quantity: row?.quantity
-                  })
-                  setUpdateDrawer(true)
-                }
-              })}
-              dataSource={my_requests}
-              size="small"
-              rowKey="id"
-              bordered
-            />
-          </Col>
-        </Row>
-      </Card>
-      <Drawer
-        forceRender
-        visible={updateDrawer}
-        title="Update Item Price"
-        placement="right"
-        width={700}
-        maskClosable={false}
-        onClose={() => {
-          setSelectedRequest([])
-          setUpdateDrawer(false)
-        }}
-      >
-        <Row style={{width: "100%", padding: 10, minHeight: 60, backgroundColor: "#e0dddc", borderRadius: 10, marginBottom: 10}}>
-          <Col span={24}>
-            <List>
-              <List.Item>
-                <List.Item.Meta title="Message" description={(selectedRequest?.comment || [])[0]?.description} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Commentor" description={(selectedRequest?.comment || [])[0]?.employee?.fullName} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Commented on" description={prettifyDateTime((selectedRequest?.comment || [])[0]?.createdDate)} />
-              </List.Item>
-            </List>
-          </Col>
-        </Row>
-        <Form
-          layout="vertical"
-          form={updatePriceForm}
-          initialValues={{
-            name: selectedRequest?.name,
-            quantity: selectedRequest?.quantity
-          }}
-          onFinish={(values) => {
-            const payload = { description: values.name, quantity: values.quantity }
-            updateSingleRequest(selectedRequest?.id, payload)
+        <Card
+          size="small"
+          title="My request items"
+          extra={[
+            <Button type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
+              Add New
+            </Button>
+          ]}
+        >
+          <Row>
+            <Col md={24}>
+              <Table
+                loading={requestLoading}
+                columns={columns({
+                  setRequest: (row) => {
+                    history.push(`${path}/${row.id}/details`)
+                  },
+                  openUpdateRequest: (row) => {
+                    setSelectedRequest(row)
+                    updatePriceForm.setFieldsValue({
+                      name: row?.name,
+                      quantity: row?.quantity
+                    })
+                    setUpdateDrawer(true)
+                  }
+                })}
+                dataSource={my_requests}
+                size="small"
+                rowKey="id"
+                bordered
+              />
+            </Col>
+          </Row>
+        </Card>
+        <Drawer
+          forceRender
+          visible={updateDrawer}
+          title="Update Item Price"
+          placement="right"
+          width={700}
+          maskClosable={false}
+          onClose={() => {
+            setSelectedRequest([])
+            setUpdateDrawer(false)
           }}
         >
-          <Form.Item name="name" label="Description">
-            <Input />
-          </Form.Item>
-          <Form.Item name="quantity" label="Quantity">
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" >Update</Button>
-          </Form.Item>
-        </Form>
-      </Drawer>
+          <Row style={{width: "100%", padding: 10, minHeight: 60, backgroundColor: "#e0dddc", borderRadius: 10, marginBottom: 10}}>
+            <Col span={24}>
+              <List>
+                <List.Item>
+                  <List.Item.Meta title="Message" description={(selectedRequest?.comment || [])[0]?.description} />
+                </List.Item>
+                <List.Item>
+                  <List.Item.Meta title="Commentor" description={(selectedRequest?.comment || [])[0]?.employee?.fullName} />
+                </List.Item>
+                <List.Item>
+                  <List.Item.Meta title="Commented on" description={prettifyDateTime((selectedRequest?.comment || [])[0]?.createdDate)} />
+                </List.Item>
+              </List>
+            </Col>
+          </Row>
+          <Form
+            layout="vertical"
+            form={updatePriceForm}
+            initialValues={{
+              name: selectedRequest?.name,
+              quantity: selectedRequest?.quantity
+            }}
+            onFinish={(values) => {
+              const payload = { description: values.name, quantity: values.quantity }
+              updateSingleRequest(selectedRequest?.id, payload)
+            }}
+          >
+            <Form.Item name="name" label="Description">
+              <Input />
+            </Form.Item>
+            <Form.Item name="quantity" label="Quantity">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" >Update</Button>
+            </Form.Item>
+          </Form>
+        </Drawer>
+      </AppLayout>
     </React.Fragment>
   )
 }

@@ -3,12 +3,10 @@ import "antd/dist/antd.less";
 import { Switch, Route, Redirect } from 'react-router-dom'
 import React from "react";
 import { Spin } from "antd";
-import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, REQUEST_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
+import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
 import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
 import { connect } from 'react-redux'
-import PrivateRoute from "./presentation/PrivateRoute";
-import { FUNCTIONAL_ROLES } from "./util/constants";
 import { EMPLOYEE_ROLE } from "./util/datas";
 const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))

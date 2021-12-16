@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Menu, Layout, Dropdown, Col, Row } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
@@ -15,16 +15,15 @@ import {
   ShopOutlined,
   ReconciliationOutlined,
   UserOutlined,
-  AccountBookOutlined,
   SendOutlined,
   ShoppingCartOutlined,
   ProfileOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
-import SubMenu from 'antd/lib/menu/SubMenu';
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';
 
 const CollapsibleLayout = (props) => {
@@ -94,11 +93,8 @@ const CollapsibleLayout = (props) => {
       setKey("/app/account/goods-receive-notes")
     } else if(pathname.includes("/app/account")) {
       setKey("/app/account")
-    }  else if(pathname.includes("/app/payments/goods-receive-notes")) {
-      setKey("/app/payments/goods-receive-notes")
-    } else if(pathname.includes("/app/payments/pending-approval")) {
-
-      setKey("/app/payments/pending-approval")
+    }  else if(pathname.includes("/app/payments")) {
+      setKey("/app/payments")
     }
     else {
       setKey("home")
@@ -170,29 +166,34 @@ const CollapsibleLayout = (props) => {
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER,
            EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, 
             EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER]) && (
-             <Menu.SubMenu
-              key="/app/payments"
-              icon={<ReconciliationOutlined />} 
-              title="Payments"
-             >
-              
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
-                <Menu.Item
-                  key="/app/payments/goods-receive-notes"
-                >
-                  <NavLink to="/app/payments/goods-receive-notes">
-                    <span>GRNs Make Payment</span>
-                  </NavLink>
-                </Menu.Item>
-                )}
-              <Menu.Item
-                key="/app/payments/pending-approval"
-                >
-                <NavLink to="/app/payments/pending-approval">
-                  <span>Approve Payments</span>
+              <Menu.Item key="/app/payments">
+                <NavLink to="/app/payments">
+                  <WalletOutlined />
+                  <span>Payments</span>
                 </NavLink>
               </Menu.Item>
-             </Menu.SubMenu>
+            //  <Menu.SubMenu
+            //   key="/app/payments"
+            //   icon={<ReconciliationOutlined />} 
+            //   title="Payments"
+            //  >
+            //   {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
+            //     <Menu.Item
+            //       key="/app/payments/goods-receive-notes"
+            //     >
+            //       <NavLink to="/app/payments/goods-receive-notes">
+            //         <span>GRNs Make Payment</span>
+            //       </NavLink>
+            //     </Menu.Item>
+            //     )}
+            //   <Menu.Item
+            //     key="/app/payments/pending-approval"
+            //     >
+            //     <NavLink to="/app/payments/pending-approval">
+            //       <span>Approve Payments</span>
+            //     </NavLink>
+            //   </Menu.Item>
+            //  </Menu.SubMenu>
            )}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, 
             EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && (
@@ -425,7 +426,7 @@ const CollapsibleLayout = (props) => {
           </Row>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Blueskies Procurement Application ©2021 Created by Tech-Bridge
+          Blueskies Procurement System ©2021 Created by Tech-Bridge
         </Footer>
       </Layout>
     </Layout>

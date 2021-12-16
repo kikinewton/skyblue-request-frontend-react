@@ -45,102 +45,32 @@ const MyRequest = (props)=> {
 
   return (
     <React.Fragment>
-      <AppLayout 
-        title="My Requests"
-        subNav={(
-            <Menu
-              mode="horizontal"
-              selectedKeys={[current]}
-            >
-              <Menu.Item 
-                key="my-lpos"
-                onClick={()=> {
-                  setCurrent("my-lpos")
-                  history.push("/app/my-requests/lpos")
-                }}
-              >
-                LPO Requests
-              </Menu.Item>
-              <Menu.Item 
-                key="my-petty-cash-requests"
-                onClick={() => {
-                  setCurrent("my-petty-cash-requests")
-                  history.push("/app/my-requests/petty-cash-requests")
-                }}
-              >
-                Petty Cash Requests
-              </Menu.Item>
-              <Menu.Item 
-                key="my-float-requests"
-                onClick={() => {
-                  setCurrent("my-float-requests")
-                  history.push("/app/my-requests/float-requests")
-                }}
-              >
-                Float Requests
-              </Menu.Item>
-              <Menu.SubMenu key="create-request-submenu" title="Create Request">
-                <Menu.Item
-                  key="create-request"
-                  onClick={() => {
-                    setCurrent("create-request")
-                    history.push("/app/my-requests/lpos/add-new")
-                  }}
-                >
-                  <PlusCircleOutlined />
-                  New LPO Request
-                </Menu.Item>
-                <Menu.Item
-                  key="create-petty-cash"
-                  onClick={() => {
-                    setCurrent("create-petty-cash")
-                    history.push("/app/my-requests/petty-cash-requests/add-new")
-                  }}
-                >
-                  <PlusCircleOutlined />
-                  New Petty Cash Request
-                </Menu.Item>
-                <Menu.Item
-                  key="create-float"
-                  onClick={() => {
-                    setCurrent("create-float")
-                    history.push("/app/my-requests/float-requests/add-new")
-                  }}
-                >
-                  <PlusCircleOutlined />
-                  New Float Request
-                </Menu.Item>
-              </Menu.SubMenu>
-            </Menu>
-        )}
-      >
-        <Switch>
-          <Route exact path={`${path}`}>
-            <MyRequestsIndex {...props} />
-          </Route>
-          <Route path={`${path}/lpos/add-new`}>
-            <AddLpo {...props} />
-          </Route>
-          <Route path={`${path}/lpos/:request_id/details`}>
-            <RequestTracker {...props} />
-          </Route>
-          <Route exact path={`${path}/lpos`}>
-            <ListLpos {...props} />
-          </Route>
-          <Route path={`${path}/petty-cash-requests/add-new`}>
-            <AddPettyCash {...props} />
-          </Route>
-          <Route path={`${path}/petty-cash-requests`}>
-            <ListPettyCash {...props} />
-          </Route>
-          <Route path={`${path}/float-requests/add-new`}>
-            <AddFloat {...props} />
-          </Route>
-          <Route exact path={`${path}/float-requests`}>
-            <ListFloat {...props} />
-          </Route>
-        </Switch>
-      </AppLayout>
+      <Switch>
+        <Route exact path={`${path}`}>
+          <MyRequestsIndex {...props} />
+        </Route>
+        <Route path={`${path}/lpos/add-new`}>
+          <AddLpo {...props} />
+        </Route>
+        <Route path={`${path}/lpos/:request_id/details`}>
+          <RequestTracker {...props} />
+        </Route>
+        <Route exact path={`${path}/lpos`}>
+          <ListLpos {...props} />
+        </Route>
+        <Route path={`${path}/petty-cash-requests/add-new`}>
+          <AddPettyCash {...props} />
+        </Route>
+        <Route path={`${path}/petty-cash-requests`}>
+          <ListPettyCash {...props} />
+        </Route>
+        <Route path={`${path}/float-requests/add-new`}>
+          <AddFloat {...props} />
+        </Route>
+        <Route exact path={`${path}/float-requests`}>
+          <ListFloat {...props} />
+        </Route>
+      </Switch>
     </React.Fragment>
   )
 }
@@ -174,6 +104,7 @@ const mapActionsToProps = (dispatch) => {
     fetchDepartments: (query) => {
       dispatch(DepartmentCreators.fetchDepartments(query))
     },
+    resetRequest: () => dispatch(RequestCreators.resetRequest()),
     createRequest: (payload) => {
       dispatch(RequestCreators.createRequest(payload))
     },
@@ -212,6 +143,10 @@ const mapActionsToProps = (dispatch) => {
     createPettyCashRequest: (payload) => {
       dispatch(PettyCashCreators.createPettyCashRequest(payload))
     },
+    updatePettyCashRequest: (id, payload) => {
+      dispatch(PettyCashCreators.updatePettyCashRequest(id, payload))
+    },
+    resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest())
   }
 }
 export default connect(mapStateToProps, mapActionsToProps)(MyRequest)

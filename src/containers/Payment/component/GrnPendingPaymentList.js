@@ -1,9 +1,9 @@
-import { Button, Card, Col, Row, Spin, Table } from 'antd'
+import { Button, Card, Col, Row, Table } from 'antd'
 import React from 'react'
-import * as grnService from '../../../services/api/goods-receive-note'
-import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
 import { GRN_COLUMNS } from '../../Grn'
+import AppLayout from '../../AppLayout'
+import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => GRN_COLUMNS.concat([
   {
@@ -14,14 +14,14 @@ const columns = (props) => GRN_COLUMNS.concat([
     render: (text, row) => (
       <Row>
         <Col span={24}>
-          <Button onClick={()=> props.onNewPaymentClick(row)}>Make Payment</Button>
+          <Button size="small" onClick={()=> props.onNewPaymentClick(row)}>Make Payment</Button>
         </Col>
       </Row>
     )
   },
 ])
 
-const GrnPendingList = (props) => {
+const GrnPendingPaymentList = (props) => {
   const {
     grns,
     fetchGrns,
@@ -41,21 +41,27 @@ const GrnPendingList = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
-        <Col md={24}>
-          <Card title="Goods Receive Notes With Pending Payments">
-            <Table
-              columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
-              dataSource={grns}
-              size="small"
-              rowKey="id"
-              bordered
-              loading={fetching_grns}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <AppLayout
+        subNav={(
+          <PaymentsSubNav />
+        )}
+      >
+        <Row>
+          <Col md={24}>
+            <Card size="small" title="Goods Receive Notes With Pending Payments">
+              <Table
+                columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
+                dataSource={grns}
+                size="small"
+                rowKey="id"
+                bordered
+                loading={fetching_grns}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </AppLayout>
     </React.Fragment>
   )
 }
-export default GrnPendingList
+export default GrnPendingPaymentList

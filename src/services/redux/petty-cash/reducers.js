@@ -81,6 +81,23 @@ export const updatePettyCashRequestFailure = (state = INITIAL_STATE, action) => 
   return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
+//edit bulk
+export const updateBulkPettyCashRequest = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const updateBulkPettyCashRequestSuccess = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state,
+    submitting: false,
+    submit_success: true
+  };
+};
+
+export const updateBulkPettyCashRequestFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false};
+};
+
 
 //delete
 export const deletePettyCashRequest = (state = INITIAL_STATE, action) => {
@@ -113,7 +130,8 @@ export const resetPettyCashRequest = (state = INITIAL_STATE, action) => {
     my_requests: [],
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    submit_success: false,
   };
 };
 
@@ -133,6 +151,10 @@ export const HANDLERS = {
   [Types.UPDATE_PETTY_CASH_REQUEST]: updatePettyCashRequest,
   [Types.UPDATE_PETTY_CASH_REQUEST_SUCCESS]: updatePettyCashRequestSuccess,
   [Types.UPDATE_PETTY_CASH_REQUEST_FAILURE]: updatePettyCashRequestFailure,
+
+  [Types.UPDATE_BULK_PETTY_CASH_REQUEST]: updateBulkPettyCashRequest,
+  [Types.UPDATE_BULK_PETTY_CASH_REQUEST_SUCCESS]: updateBulkPettyCashRequestSuccess,
+  [Types.UPDATE_BULK_PETTY_CASH_REQUEST_FAILURE]: updateBulkPettyCashRequestFailure,
 
   [Types.DELETE_PETTY_CASH_REQUEST]: deletePettyCashRequest,
   [Types.DELETE_PETTY_CASH_REQUEST_SUCCESS]: deletePettyCashRequestSuccess,

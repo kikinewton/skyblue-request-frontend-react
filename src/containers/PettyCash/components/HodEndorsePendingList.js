@@ -1,9 +1,9 @@
-import { CheckOutlined, CloseOutlined, EyeFilled, WarningOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, CommentOutlined, EyeFilled, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { CURRENCY_CODE } from '../../../util/constants';
-import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
+import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => [
   {
@@ -54,14 +54,14 @@ const columns = props => [
 
 const selectedRequestsColumns = props => [
   {
+    title: "Reference",
+    dataIndex: "pettyCashRef",
+    key: "pettyCashRef"
+  },
+  {
     title: "Description",
     dataIndex: "name",
     key: "name"
-  },
-  {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
   },
   {
     title: "purpose",
@@ -74,29 +74,34 @@ const selectedRequestsColumns = props => [
     key: "quantity"
   },
   {
-    title: "Priority",
-    dataIndex: "priorityLevel",
-    key: "priorityLevel",
-    render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
+    title: "Unit Price",
+    dataIndex: "amount",
+    key: "amount",
+    render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "Endorsement Status",
+    dataIndex: "endorsement",
+    key: "endorsement"
   },
 ]
 
 const selectedRequestsColumnsForReject = props => [
   {
+    title: "Reference",
+    dataIndex: "pettyCashRef",
+    key: "pettyCashRef"
+  },
+  {
     title: "Description",
     dataIndex: "name",
     key: "name"
-  },
-  {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
   },
   {
     title: "purpose",
@@ -109,16 +114,21 @@ const selectedRequestsColumnsForReject = props => [
     key: "quantity"
   },
   {
-    title: "Priority",
-    dataIndex: "priorityLevel",
-    key: "priorityLevel",
-    render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
+    title: "Unit Price",
+    dataIndex: "amount",
+    key: "amount",
+    render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
     title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
+    dataIndex: "createdDate",
+    key: "createdDate",
     render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "Endorsement Status",
+    dataIndex: "endorsement",
+    key: "endorsement"
   },
   {
     title: "Comment",
@@ -136,20 +146,58 @@ const HodEndorsePendingList = (props) => {
     fetchPettyCashRequests,
     fetching_petty_cash_requests,
     petty_cash_requests,
-    updatePettyCashRequest,
-    updating_request,
-    update_request_success,
+    updateBulkPettyCashRequest,
+    createComment,
+    submitting_petty_cash,
+    submit_petty_cash_success,
+    submitting_comment,
+    submit_comment_success,
+    petty_cash_submitting,
+    petty_cash_submit_success
+
   } = props
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [infoVisible, setInfoVisible] = useState(false)
-  const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+  const [actionType, setActionType] = useState(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_ENDORSE)
   const [selectedRequest, setSelectedRequest] = useState(null)
+
+  const fetchRequests = () => {
+    props.fetchPettyCashRequests({
+      requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+    })
+  }
 
   const submit = () => {
     console.log("action", actionType)
-    updatePettyCashRequest({
-      updateType: actionType,
-    })
+    if(actionType === UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_COMMENT) {
+      const comments = selected_petty_cash_requests.map(it => {
+        let data = {
+          procurementTypeId: it.id,
+          comment: { description: it?.comment || "", process: "HOD_REQUEST_ENDORSEMENT" },
+        }
+        return data
+      })
+      const payload = {comments: comments, procurementType: "PETTY_CASH"}
+      console.log('create comment payload', payload)
+      createComment("PETTY_CASH", payload)
+    } else if(actionType === UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_CANCEL) {
+      const comments = selected_petty_cash_requests.filter(it => it.comment)
+                            .map(it => {
+                              let data = {
+                                procurementTypeId: it.id,
+                                comment: { description: it?.comment || "", process: "HOD_REQUEST_ENDORSEMENT" },
+                                cancelled: true
+                              }
+                              return data
+                            })
+      const commentPayload = {comments: comments}
+      createComment("PETTY_CASH", commentPayload)
+    } else {
+      updateBulkPettyCashRequest({
+        statusChange: "ENDORSE",
+        items: selected_petty_cash_requests,
+      })
+    }
   }
 
   React.useEffect(()=> {
@@ -160,27 +208,56 @@ const HodEndorsePendingList = (props) => {
     })
   }, [])
 
+  useEffect(() => {
+    if(!petty_cash_submitting && petty_cash_submit_success) {
+      setConfirmDrawer(false)
+      setSelectedPettyCashRequests([])
+      props.fetchPettyCashRequests({
+        requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+  }, [petty_cash_submitting, petty_cash_submit_success])
+
+  useEffect(() => {
+    if(!submitting_comment && submit_comment_success) {
+      setConfirmDrawer(false)
+      setSelectedPettyCashRequests([])
+      props.fetchPettyCashRequests({
+        requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+  }, [submitting_comment, submit_comment_success])
+
   return (
     <>
-      <Card title="Requests pending Endorsement" extra={[
+      <Card 
+        size='small'
+        title={(<Row>
+          <Col span={24}>
+            <span style={{marginRight: 5}}>Petty Cash Requests Awaiting Endorsement</span>
+            <SyncOutlined spin={fetching_petty_cash_requests} onClick={() => fetchRequests()} />
+          </Col>
+        </Row>)} 
+        extra={[
         (
           <Row style={{marginBottom: 10}} key="extras-first">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
             <Button 
               disabled={selected_petty_cash_requests.length < 1} 
-              style={{backgroundColor: "yellow", marginRight: 5}}
+              type="default"
+              style={{marginRight: 5}}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_REJECT)
+                setActionType(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_COMMENT)
                 setConfirmDrawer(true)
               }}
             >
-              <WarningOutlined /> Reject With Comment
+              <CommentOutlined /> Comment
             </Button>
             <Button
-              style={{backgroundColor: "red", marginRight: 5, color: "#ffffff"}} 
+              style={{marginRight: 5}} 
               disabled={selected_petty_cash_requests.length < 1}
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_CANCEL)
+                setActionType(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_CANCEL)
                 setConfirmDrawer(true)
               }}
             >
@@ -191,7 +268,7 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_petty_cash_requests.length < 1} 
               type="primary" style={{marginRight: 5}} 
               onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+                setActionType(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_ENDORSE)
                 setConfirmDrawer(true)
               }}
             >
@@ -222,7 +299,7 @@ const HodEndorsePendingList = (props) => {
               rowSelection={{
                 onChange: (selectedRowKeys, selectedRows) => {
                   console.log("selected row", selectedRows)
-                  setSelectedPettyCashRequests(selectedRows)
+                  setSelectedPettyCashRequests(selectedRows.map(it => Object.assign({}, it)))
                 },
                 selectedRowKeys: selected_petty_cash_requests?.map(it=> it.id),
               }}
@@ -248,6 +325,7 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
+              loading={submitting_comment || submitting_petty_cash}
             >
               <CheckOutlined /> SUBMIT
             </Button>
@@ -257,7 +335,7 @@ const HodEndorsePendingList = (props) => {
         <Row>
           <Col span={24}>
             <Table 
-              columns={actionType !== "REJECT" ? selectedRequestsColumns({
+              columns={actionType === UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_ENDORSE ? selectedRequestsColumns({
                 actionType,
               }) 
               : selectedRequestsColumnsForReject({

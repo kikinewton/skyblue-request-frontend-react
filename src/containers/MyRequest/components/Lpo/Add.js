@@ -1,9 +1,12 @@
 import React from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from 'antd'
+import { Card, Col, Form, Row, Table, Input, Button, Select } from 'antd'
 import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
 import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { useHistory } from 'react-router'
+import MyPageHeader from '../../../../shared/MyPageHeader'
+import AppLayout from '../../../AppLayout'
+
 
 const columns = props => [
   {
@@ -114,110 +117,113 @@ const AddNewRequest = (props) => {
 
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <PageHeader 
-            style={{padding: 0}}
-          />
-        </Col>
-      </Row>
-      <Card 
-        title="Create New Request Form"
-        extra={[
-          <Button type="link" onClick={() => history.push("/app/my-requests/petty-cash-requests/add-new")}>Create Petty Cash</Button>
-        ]}
-      >
-        <Row gutter={24}>
-          <Col md={6}>
-            <Card>
-            <Row>
-              <Col md={24}>
-                <Form
-                  size="middle"
-                  layout="vertical"
-                  form={form}
-                  name="request-entry"
-                  initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
-                    requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
-                  onFinish={addToEntires}
-                >
-                  <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
-                    <Select loading={departmentLoading}  ref={departmentFieldRef}>
-                      {departments && departments.map(department=> (
-                        <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="Request Type" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
-                    <Select onChange={(value) =>setRequestType(value)}>
-                      {REQUEST_TYPES.map(rt => (
-                        <Select.Option key={`request-type-${rt.id}`} value={rt.id}>{rt.label}</Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
-                    <Select >
-                      {PRIORITY_LEVELS.map(it=> (
-                        <Select.Option key={`priority-${it.key}`} value={it.key}>{it.name}</Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
-                    <Input.TextArea placeholder="Description" rows={3} />
-                  </Form.Item>
-                  <Form.Item label="Reason" name="reason" rules={[{ required: true, message: 'Reason required' }]}>
-                    <Select>
-                      {REQUEST_REASONS.map(item=> (
-                        <Select.Option key={`reason-${item.id}`} value={item.id}>{item.label}</Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
-                    <Input  placeholder="Purpose" />
-                  </Form.Item>
-                  {(requestType === REQUEST_TYPES[1]?.id) && (
-                    <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
-                      <Input type="number"  placeholder="Quantity" />
-                    </Form.Item>
-                  )}
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit" className="bs-form-button">
-                      Add Entry
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Col>
-            </Row>
-            </Card>
-          </Col>
-          <Col md={18}>
-              <Row>
-                <Col md={24}>
-                  <Table 
-                    columns={columns({
-                      removeEntry: (row) => {
-                        handleRemove(row)
-                      }
-                    })}
-                    dataSource={requests}
-                    pagination={false}
-                    size="small"
-                    rowKey="id"
-                    bordered
-                  />
-                </Col>  
-              </Row>
-              <Row>
-                <Col md={24} style={{textAlign: 'right', marginTop: 20}}>
-                  <Button type="primary" onClick={handleSubmit} loading={requestSubmitting} disabled={requestSubmitting || requests.length < 1}>
-                    <CheckOutlined />
-                    SUBMIT REQUEST
-                  </Button>
-                </Col>
-              </Row>
+      <AppLayout>
+        <Row>
+          <Col span={24}>
+            <MyPageHeader 
+              title="Request New Item/Items"
+              onBack={() => history.goBack()}
+            />
           </Col>
         </Row>
-      </Card>
+        <Card 
+          title="Create New Request Form"
+          extra={[
+            <Button type="link" onClick={() => history.push("/app/my-requests/petty-cash-requests/add-new")}>Create Petty Cash</Button>
+          ]}
+        >
+          <Row gutter={24}>
+            <Col md={6}>
+              <Card>
+              <Row>
+                <Col md={24}>
+                  <Form
+                    size="middle"
+                    layout="vertical"
+                    form={form}
+                    name="request-entry"
+                    initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
+                      requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
+                    onFinish={addToEntires}
+                  >
+                    <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
+                      <Select loading={departmentLoading}  ref={departmentFieldRef}>
+                        {departments && departments.map(department=> (
+                          <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Request Type" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
+                      <Select onChange={(value) =>setRequestType(value)}>
+                        {REQUEST_TYPES.map(rt => (
+                          <Select.Option key={`request-type-${rt.id}`} value={rt.id}>{rt.label}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
+                      <Select >
+                        {PRIORITY_LEVELS.map(it=> (
+                          <Select.Option key={`priority-${it.key}`} value={it.key}>{it.name}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
+                      <Input.TextArea placeholder="Description" rows={3} />
+                    </Form.Item>
+                    <Form.Item label="Reason" name="reason" rules={[{ required: true, message: 'Reason required' }]}>
+                      <Select>
+                        {REQUEST_REASONS.map(item=> (
+                          <Select.Option key={`reason-${item.id}`} value={item.id}>{item.label}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
+                      <Input  placeholder="Purpose" />
+                    </Form.Item>
+                    {(requestType === REQUEST_TYPES[1]?.id) && (
+                      <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
+                        <Input type="number"  placeholder="Quantity" />
+                      </Form.Item>
+                    )}
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit" className="bs-form-button">
+                        Add Entry
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+              </Card>
+            </Col>
+            <Col md={18}>
+                <Row>
+                  <Col md={24}>
+                    <Table 
+                      columns={columns({
+                        removeEntry: (row) => {
+                          handleRemove(row)
+                        }
+                      })}
+                      dataSource={requests}
+                      pagination={false}
+                      size="small"
+                      rowKey="id"
+                      bordered
+                    />
+                  </Col>  
+                </Row>
+                <Row>
+                  <Col md={24} style={{textAlign: 'right', marginTop: 20}}>
+                    <Button type="primary" onClick={handleSubmit} loading={requestSubmitting} disabled={requestSubmitting || requests.length < 1}>
+                      <CheckOutlined />
+                      SUBMIT REQUEST
+                    </Button>
+                  </Col>
+                </Row>
+            </Col>
+          </Row>
+        </Card>
+      </AppLayout>
     </>
   )
 }
