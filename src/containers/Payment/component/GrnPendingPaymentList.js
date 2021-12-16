@@ -26,6 +26,7 @@ const GrnPendingPaymentList = (props) => {
     grns,
     fetchGrns,
     fetching_grns,
+    resetGrn,
   } = props
   const [ loading, setLoading ] = React.useState(false)
 
@@ -34,6 +35,7 @@ const GrnPendingPaymentList = (props) => {
   }
 
   React.useEffect(()=> {
+    resetGrn()
     fetchGrns({
       paymentInComplete: true
     })

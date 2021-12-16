@@ -106,7 +106,8 @@ const mapActionToProps = dispatch => ({
   resetPaymentDraft: () => dispatch(PaymentCreators.resetPaymentDraft()),
 
   fetchGrns: query => dispatch(GrnCreators.fetchGrns(query)),
-  fetchGrn: id => dispatch(GrnCreators.fetchGrn(id))
+  fetchGrn: id => dispatch(GrnCreators.fetchGrn(id)),
+  resetGrn: () => dispatch(GrnCreators.resetGrn()),
 
 })
 

@@ -11,6 +11,7 @@ export const INITIAL_STATE = {
   submitting: false,
   submit_success: false,
   filtered_payments: [],
+  filtered_payment_drafts: [],
 
   filtered_payment_drafts: [],
 
@@ -85,10 +86,13 @@ export const filterPayments = (state = INITIAL_STATE, action) => {
 export const resetPayment = (state = INITIAL_STATE, action) => {
   return {
     ...state,
+    errors: null,
     payments: [],
-    error: null,
+    payment: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    submit_success: false,
+    filtered_payments: [],
   };
 };
 

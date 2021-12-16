@@ -18,7 +18,7 @@ import { formatCurrency } from '../../util/common-helper'
 
 export const GRN_COLUMNS = [
   {
-    title: "Refrence",
+    title: "Reference",
     dataIndex: "grnRef",
     key: "grnRef"
   },
