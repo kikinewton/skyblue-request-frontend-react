@@ -30,8 +30,6 @@ const PettyCashIndex = (props) => {
   const { path } = useRouteMatch()
   const location = useLocation()
 
-  console.log('my request path', path)
-  console.log('path', path)
   const displayPage = (props) => {
 
   }
@@ -81,11 +79,6 @@ const PettyCashIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
-            <Menu.Item key="hod-pending-review">
-              <NavLink to="/app/petty-cash/hod-pending-review">
-                <span>Pending Review</span>
-              </NavLink>
-            </Menu.Item>
             {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
               <Menu.Item key="/petty-cash/gm-approve-list">
                 <NavLink to="/app/petty-cash/gm-approve-list">
@@ -145,7 +138,6 @@ const mapActionsToProps = (dispatch) => {
       dispatch(DepartmentCreators.fetchDepartments(query))
     },
     fetchPettyCashRequests: (query) => {
-      console.log('lets fetch from index')
       dispatch(PettyCashCreators.fetchPettyCashRequests(query))
     },
     updatePettyCashRequest: (options) => {
