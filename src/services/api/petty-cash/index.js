@@ -24,7 +24,9 @@ export function fetchAllPettyCashRequests(query) {
     case FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/pettyCashByDepartment${queryStr}`, method: "GET"})
     case FETCH_PETTY_CASH_REQUEST_TYPES.GM_PENDING_APPROVAL:
-      return service(`/pettyCash?endorsed=true`)
+      return service({url: `/pettyCash?endorsed=true`})
+    case FETCH_PETTY_CASH_REQUEST_TYPES.PENDING_FUND_ALLOCATION:
+      return service({url: '/pettyCash?approved=true', method: "GET"})
     default:
       return service({url: `/pettyCashRequests`, method: "GET"})
   }
@@ -51,5 +53,13 @@ export function updateBulkPettyCashRequest(payload) {
     url: `/bulkPettyCash/${statusChange}`,
     method: "PUT",
     data: items
+  })
+}
+
+export function allocateFundsToPettyCash(id, payload) {
+  return service({
+    url: `/pettyCash/receiveFunds`,
+    method: 'PUT',
+    data: payload
   })
 }

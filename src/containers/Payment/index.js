@@ -1,7 +1,9 @@
 import React from 'react'
 import {Creators as PaymentCreators} from "../../services/redux/payment/actions"
 import { Creators as GrnCreators } from '../../services/redux/grn/actions'
-import { Redirect, Route } from "react-router-dom"
+import { Creators as PettyCashCreators } from '../../services/redux/petty-cash/actions'
+import { Creators as FloatCreators } from '../../services/redux/float/actions'
+import { Redirect} from "react-router-dom"
 import { connect } from 'react-redux'
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
 import { Switch, useRouteMatch } from "react-router-dom"
@@ -10,8 +12,9 @@ import GrnPendingPaymentList from './component/GrnPendingPaymentList'
 import NewPayment from './component/NewPayment'
 import PaymentSuccess from './component/PaymentSuccess'
 import ApprovePaymentList from './component/ApprovePaymentsList'
-import PaymentList from './component/PaymentList'
 import { EMPLOYEE_ROLE } from '../../util/datas'
+import PettyCashAllocateFunds from './component/PettyCashAllocateFunds'
+import FloatAllocateFunds from './component/FloatAllocateFunds'
 
 
 
@@ -70,6 +73,8 @@ const PaymentModule = (props) => {
         <AuthenticatedRoute path={`${path}/pending-approval`} component={ApprovePaymentList} {...props} />
         <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />
         <AuthenticatedRoute path={`${path}/goods-receive-notes`} component={GrnPendingPaymentList} {...props} />
+        <AuthenticatedRoute path={`${path}/petty-cash/allocate-funds`} component={PettyCashAllocateFunds} {...props} />
+        <AuthenticatedRoute path={`${path}/float/allocate-funds`} component={FloatAllocateFunds} {...props} />
         <AuthenticatedRoute path={`${path}`} component={DefaultPage} exact {...props} />
       </Switch>
     </>
@@ -89,7 +94,15 @@ const mapStateToProps = store => ({
 
   grns: store.grn.grns,
   fetching_grns: store.grn.loading,
-  grn: store.grn.grn
+  grn: store.grn.grn,
+
+  petty_cash_requests: store.petty_cash.petty_cash_requests,
+  fetching_petty_cash_requests: store.petty_cash.loading,
+  submit_petty_cash_request_success: store.petty_cash.submit_success,
+  submitting_petty_cash_request: store.petty_cash.submitting,
+
+  float_requests: store.float.float_requests,
+  fetching_float_requests: store.float.loading
 })
 
 const mapActionToProps = dispatch => ({
@@ -108,6 +121,15 @@ const mapActionToProps = dispatch => ({
   fetchGrns: query => dispatch(GrnCreators.fetchGrns(query)),
   fetchGrn: id => dispatch(GrnCreators.fetchGrn(id)),
   resetGrn: () => dispatch(GrnCreators.resetGrn()),
+
+  fetchPettyCashRequests: query => dispatch(PettyCashCreators.fetchPettyCashRequests(query)),
+  resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest()),
+  allocateFundsToPettyCashRequest: payload => PettyCashCreators.allocateFundsToPettyCashRequest(payload),
+
+  fetchFloatRequests: query => dispatch(FloatCreators.fetchFloatRequests(query)),
+  resetFloatRequest: () => dispatch(FloatCreators.resetFLoatRequest()),
+
+  
 
 })
 

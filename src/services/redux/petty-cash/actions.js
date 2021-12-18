@@ -30,6 +30,10 @@ export const { Types, Creators } = createActions(
     deletePettyCashRequestSuccess: ["responseData"],
     deletePettyCashRequestFailure: ["error"],
 
+    allocateFundsToPettyCashRequest: ["payload"],
+    allocateFundsToPettyCashRequestSuccess: ["responseData"],
+    allocateFundsToPettyCashRequestFailure: ["error"],
+
     setSelectedPettyCashRequests: ["requests"],
 
     resetPettyCashRequest: null

@@ -6,7 +6,8 @@ import {
   fetchMyPettyCashRequests as fetchMyPettyCashRequestsApi,
   fetchAllPettyCashRequests as fetchAllPettyCashRequestsApi,
   updatePettyCashRequest as updatePettyCashRequestApi,
-  updateBulkPettyCashRequest as updateBulkPettyCashRequestApi
+  updateBulkPettyCashRequest as updateBulkPettyCashRequestApi,
+  allocateFundsToPettyCash as allocateFundsToPettyCashApi
 } from '../../api/petty-cash'
 import openNotification from '../../../util/notification'
 import { clearLocalState } from '../../app-storage'
@@ -109,6 +110,25 @@ export function* updateBulkPettyCashRequest(action) {
 }
 
 
+export function* allocateFundsToPettyCashRequest(action) {
+  try {
+    const response = yield call(allocateFundsToPettyCashApi, action.payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      yield put(Creators.allocateFundsToPettyCashRequestSuccess(responseData))
+      openNotification('success', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', response.message)
+    } else {
+      openNotification('error', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', response.message)
+      yield put(Creators.allocateFundsToPettyCashRequestFailure(response.message))
+    }
+  } catch (error) {
+    const errors = error?.response?.data?.errors || ['Failed to allocate funds'];
+    openNotification('error', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', errors[0])
+    yield put(Creators.allocateFundsToPettyCashRequestFailure(errors[0]))
+  }
+}
+
+
 export function* resetRequest(action) {
   yield put(Creators.resetRequest())
 }
@@ -134,3 +154,7 @@ export function* watchUpdateBulkPettyCashRequest(action) {
   yield takeLeading(Types.UPDATE_BULK_PETTY_CASH_REQUEST, updateBulkPettyCashRequest)
 }
 
+
+export function* watchAllocateFundsToPettyCashRequest(action) {
+  yield takeLeading(Types.UPDATE_BULK_PETTY_CASH_REQUEST, allocateFundsToPettyCashRequest)
+}

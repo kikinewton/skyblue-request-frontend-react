@@ -62,7 +62,8 @@ import {
 	watchFetchMyPettyCashRequests,
 	watchFetchPettyCashRequests,
 	watchUpdatePettyCashRequest,
-	watchUpdateBulkPettyCashRequest
+	watchUpdateBulkPettyCashRequest,
+	watchAllocateFundsToPettyCashRequest,
 } from "./petty-cash"
 
 import {
@@ -148,6 +149,7 @@ export default function* rootSaga() {
 		watchFetchPettyCashRequests(),
 		watchUpdatePettyCashRequest(),
 		watchUpdateBulkPettyCashRequest(),
+		watchAllocateFundsToPettyCashRequest(),
 		
 		watchFetchRoles(),
 

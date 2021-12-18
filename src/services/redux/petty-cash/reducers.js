@@ -122,6 +122,20 @@ export const setSelectedPettyCashRequests = (state = INITIAL_STATE, action) => {
 }
 
 
+//allocate funds
+export const allocateFundsToPettyCashRequest = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const allocateFundsToPettyCashRequestSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const allocateFundsToPettyCashRequestFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error};
+};
+
+
 export const resetPettyCashRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -159,6 +173,10 @@ export const HANDLERS = {
   [Types.DELETE_PETTY_CASH_REQUEST]: deletePettyCashRequest,
   [Types.DELETE_PETTY_CASH_REQUEST_SUCCESS]: deletePettyCashRequestSuccess,
   [Types.DELETE_PETTY_CASH_REQUEST_FAILURE]: deletePettyCashRequestFailure,
+
+  [Types.ALLOCATE_FUNDS_TO_PETTY_CASH_REQUEST]: allocateFundsToPettyCashRequest,
+  [Types.ALLOCATE_FUNDS_TO_PETTY_CASH_REQUEST_SUCCESS]: allocateFundsToPettyCashRequestSuccess,
+  [Types.ALLOCATE_FUNDS_TO_PETTY_CASH_REQUEST_FAILURE]: allocateFundsToPettyCashRequestFailure,
 
   [Types.SET_SELECTED_PETTY_CASH_REQUESTS]: setSelectedPettyCashRequests,
   

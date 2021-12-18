@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Menu } from "antd"
-import { CheckOutlined, FileFilled } from "@ant-design/icons"
+import { CheckOutlined, FileFilled, WalletFilled, WalletOutlined } from "@ant-design/icons"
 import { NavLink, useLocation } from 'react-router-dom'
 import { userHasAnyRole } from "../../../services/api/auth"
 import { EMPLOYEE_ROLE } from '../../../util/datas'
@@ -21,8 +21,13 @@ const PaymentsSubNav = (props) => {
       setKey("/app/payments/goods-receive-notes")
     } else if(pathname.includes("/app/payments/pending-approval")) {
       setKey("/app/payments/pending-approval")
+    } else if(pathname.includes("/app/payments/petty-cash/allocate-funds")) {
+      setKey("/app/payments/petty-cash/allocate-funds")
+    } else if(pathname.includes("/app/payments/float/allocate-funds")) {
+      setKey("/app/payments/float/allocate-funds")
     }
-  }, [])
+  }, [key])
+
   return (
     <>
       <Menu
@@ -49,6 +54,18 @@ const PaymentsSubNav = (props) => {
             </NavLink>
           </Menu.Item>
         )}
+        <Menu.Item key="/app/payments/petty-cash/allocate-funds">
+          <NavLink to="/app/payments/petty-cash/allocate-funds">
+            <WalletOutlined />
+            <span>Allocate Funds to Petty Cash</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="/app/payments/float/allocate-funds">
+          <NavLink to="/app/payments/float/allocate-funds">
+            <WalletOutlined />
+            <span>Allocate Funds to Float</span>
+          </NavLink>
+        </Menu.Item>
       </Menu>
     </>
   )
