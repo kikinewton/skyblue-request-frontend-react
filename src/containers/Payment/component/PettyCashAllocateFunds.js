@@ -255,16 +255,18 @@ const PettyCashAllocateFunds = (props) => {
                 </List>
               </Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <Card size='small' title="Supporting DOcument">
-                  {/* <DocumentView 
-                    docFormat={}
-                    src={}
-                  /> */}
-                </Card>
-              </Col>
-            </Row>
+            {selectedRequest?.supportingDocument && (
+              <Row>
+                <Col span={24}>
+                  <Card size='small' title="Supporting DOcument">
+                    {/* <DocumentView 
+                      docFormat={}
+                      src={}
+                    /> */}
+                  </Card>
+                </Col>
+              </Row>
+            )}
           </>
         </Drawer>
       </AppLayout>
