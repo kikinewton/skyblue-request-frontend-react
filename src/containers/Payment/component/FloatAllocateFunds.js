@@ -249,14 +249,14 @@ const FloatAllocateFunds = (props) => {
                     <List.Item.Meta title="Description" description={selectedRequest?.itemDescription} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Unit Price" description={formatCurrency(selectedRequest?.amount)} />
+                    <List.Item.Meta title="Unit Price" description={formatCurrency(selectedRequest?.estimatedUnitPrice)} />
                   </List.Item>
                   <List.Item>
                     <List.Item.Meta title="Quantity" description={selectedRequest?.quantity} />
                   </List.Item>
                   <List.Item></List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Total Amount" description={formatCurrency(selectedRequest?.amount * selectedRequest?.quantity)} />
+                    <List.Item.Meta title="Total Amount" description={formatCurrency(selectedRequest?.estimatedUnitPrice * selectedRequest?.quantity)} />
                   </List.Item>
                   <List.Item>
                     <List.Item.Meta title="Requested By" description={selectedRequest?.createdBy?.fullName} />

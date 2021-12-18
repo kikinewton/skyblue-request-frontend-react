@@ -132,8 +132,6 @@ const mapActionToProps = dispatch => ({
   resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
   allocateFundsToFloatRequest: (payload) => dispatch(FloatCreators.allocateFundsToFloatRequest(payload)),
 
-  
-
 })
 
 export default connect(mapStateToProps, mapActionToProps)(PaymentModule)

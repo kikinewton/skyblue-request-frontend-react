@@ -107,7 +107,7 @@ const AddNewRequest = (props) => {
                     onFinish={addToEntires}
                   >
                     <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
-                      <Input placeholder="Description" />
+                      <Input.TextArea rows={3} placeholder="Description" />
                     </Form.Item>
                     <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
                       <Input  placeholder="Purpose" />
@@ -119,9 +119,9 @@ const AddNewRequest = (props) => {
                       <Input prefix={CURRENCY_CODE} type="number"  placeholder="Unit Price" />
                     </Form.Item>
                     <Form.Item>
-                    <Button type="primary" htmlType="submit" className="bs-form-button">
-                      Add Entry
-                    </Button>
+                      <Button type="primary" htmlType="submit" className="bs-form-button">
+                        Add Entry
+                      </Button>
                     </Form.Item>
                   </Form>
                 </Col>

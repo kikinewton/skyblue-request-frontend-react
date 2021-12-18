@@ -54,6 +54,7 @@ const AddNewRequest = (props) => {
       const response = await saveDocument({
         files: file
       })
+      console.log('upload doc', response)
       if(response.status === RESPONSE_SUCCESS_CODE) {
         setDocument(response?.data[0])
       } else {
@@ -87,7 +88,7 @@ const AddNewRequest = (props) => {
     const payload = {
       items: requests.map(item => {
         let rq = item
-        rq["document"] = document
+        rq["supportingDocument"] = [document]
         return rq
       }),
     }
@@ -195,7 +196,7 @@ const AddNewRequest = (props) => {
                         onFinish={addToEntires}
                       >
                         <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
-                          <Input ref={descriptionRef} placeholder="Description" />
+                          <Input.TextArea rows={3} ref={descriptionRef} placeholder="Description" />
                         </Form.Item>
                         <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
                           <Input  placeholder="Purpose" />
@@ -247,7 +248,7 @@ const AddNewRequest = (props) => {
                         disabled={submitting_petty_cash_request || requests.length < 1}
                       >
                         <CheckOutlined />
-                        SUBMI PETTY CASH REQUESTS
+                        SUBMIT PETTY CASH REQUESTS
                       </Button>
                     </Col>
                   </Row>
