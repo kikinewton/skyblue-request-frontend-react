@@ -111,6 +111,7 @@ export function* updateBulkPettyCashRequest(action) {
 
 
 export function* allocateFundsToPettyCashRequest(action) {
+  console.log('saga allcate')
   try {
     const response = yield call(allocateFundsToPettyCashApi, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {

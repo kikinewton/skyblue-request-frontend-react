@@ -32,7 +32,7 @@ const columns = (props) => [
     render: (text, row) => (
       <Row>
         <Col md={24}>
-          <Button size="small" shape="circle" onClick={() => props.onView(row)} size="small">
+          <Button size="small" shape="circle" onClick={() => props.onView(row)}>
             <EyeFilled />
           </Button>
         </Col>

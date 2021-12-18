@@ -56,7 +56,7 @@ export function updateBulkPettyCashRequest(payload) {
   })
 }
 
-export function allocateFundsToPettyCash(id, payload) {
+export function allocateFundsToPettyCash(payload) {
   return service({
     url: `/pettyCash/receiveFunds`,
     method: 'PUT',

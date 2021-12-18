@@ -124,6 +124,7 @@ export const setSelectedPettyCashRequests = (state = INITIAL_STATE, action) => {
 
 //allocate funds
 export const allocateFundsToPettyCashRequest = (state = INITIAL_STATE, action) => {
+  console.log('hey in reducer')
   return { ...state, submitting: true, errors: null, submit_success: false };
 };
 

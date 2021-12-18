@@ -13,8 +13,6 @@ export const INITIAL_STATE = {
   filtered_payments: [],
   filtered_payment_drafts: [],
 
-  filtered_payment_drafts: [],
-
 };
 
 //fetch

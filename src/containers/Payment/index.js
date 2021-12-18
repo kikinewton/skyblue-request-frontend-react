@@ -96,7 +96,7 @@ const mapStateToProps = store => ({
   fetching_grns: store.grn.loading,
   grn: store.grn.grn,
 
-  petty_cash_requests: store.petty_cash.petty_cash_requests,
+  petty_cash_requests: store.petty_cash.requests,
   fetching_petty_cash_requests: store.petty_cash.loading,
   submit_petty_cash_request_success: store.petty_cash.submit_success,
   submitting_petty_cash_request: store.petty_cash.submitting,
@@ -124,7 +124,7 @@ const mapActionToProps = dispatch => ({
 
   fetchPettyCashRequests: query => dispatch(PettyCashCreators.fetchPettyCashRequests(query)),
   resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest()),
-  allocateFundsToPettyCashRequest: payload => PettyCashCreators.allocateFundsToPettyCashRequest(payload),
+  allocateFundsToPettyCashRequest: (payload) => dispatch(PettyCashCreators.allocateFundsToPettyCashRequest(payload)),
 
   fetchFloatRequests: query => dispatch(FloatCreators.fetchFloatRequests(query)),
   resetFloatRequest: () => dispatch(FloatCreators.resetFLoatRequest()),
