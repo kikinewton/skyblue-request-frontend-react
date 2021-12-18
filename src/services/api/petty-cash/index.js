@@ -22,7 +22,7 @@ export function fetchAllPettyCashRequests(query) {
   const queryStr = serializeQueryParams(query)
   switch(query.requestType) {
     case FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
-      return service({url: `/pettyCashByDepartment${queryStr}`, method: "GET"})
+      return service({url: `/pettyCashByDepartment`, method: "GET"})
     case FETCH_PETTY_CASH_REQUEST_TYPES.GM_PENDING_APPROVAL:
       return service({url: `/pettyCash?endorsed=true`})
     case FETCH_PETTY_CASH_REQUEST_TYPES.PENDING_FUND_ALLOCATION:

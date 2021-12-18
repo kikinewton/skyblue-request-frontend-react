@@ -139,6 +139,7 @@ const selectedRequestsColumnsForReject = props => [
 ]
 
 const HodEndorsePendingList = (props) => {
+  console.log('my props', props)
   const {
     selected_petty_cash_requests,
     setSelectedPettyCashRequests,
@@ -149,12 +150,10 @@ const HodEndorsePendingList = (props) => {
     updateBulkPettyCashRequest,
     createComment,
     submitting_petty_cash,
-    submit_petty_cash_success,
     submitting_comment,
     submit_comment_success,
     petty_cash_submitting,
     petty_cash_submit_success
-
   } = props
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [infoVisible, setInfoVisible] = useState(false)
@@ -162,7 +161,7 @@ const HodEndorsePendingList = (props) => {
   const [selectedRequest, setSelectedRequest] = useState(null)
 
   const fetchRequests = () => {
-    props.fetchPettyCashRequests({
+    fetchPettyCashRequests({
       requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
     })
   }
@@ -209,6 +208,8 @@ const HodEndorsePendingList = (props) => {
   }, [])
 
   useEffect(() => {
+    console.log("Yeah petty cash update success-----------", petty_cash_submit_success)
+    console.log("Yeah petty cash updating-----------", petty_cash_submitting)
     if(!petty_cash_submitting && petty_cash_submit_success) {
       setConfirmDrawer(false)
       setSelectedPettyCashRequests([])

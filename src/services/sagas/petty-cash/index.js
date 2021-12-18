@@ -156,5 +156,5 @@ export function* watchUpdateBulkPettyCashRequest(action) {
 
 
 export function* watchAllocateFundsToPettyCashRequest(action) {
-  yield takeLeading(Types.UPDATE_BULK_PETTY_CASH_REQUEST, allocateFundsToPettyCashRequest)
+  yield takeLeading(Types.ALLOCATE_FUNDS_TO_PETTY_CASH_REQUEST, allocateFundsToPettyCashRequest)
 }

@@ -123,7 +123,7 @@ const mapStateToProps = (store) => ({
   currentUser: store.auth.user,
   petty_cash_requests: store.petty_cash.requests,
   fetching_petty_cash_requests: store.petty_cash.loading,
-  petty_cash_submit_success: store.request.submit_success,
+  petty_cash_submit_success: store.petty_cash.submit_success,
   petty_cash_submitting: store.petty_cash.submitting,
   suppliers: store.supplier.suppliers,
   selected_petty_cash_requests: store.petty_cash.selected_requests,
