@@ -55,12 +55,13 @@ export function fetchAllFloatRequests(query) {
 }
 
 export function fetchFloatRequests(query) {
-  console.log('fetch floats api', query)
   switch(query.requestType) {
     case FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/floatsForDepartment`, method: "GET"})
     case FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL:
       return service({url: `/floats?endorsement=ENDORSED`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION:
+      return service({url: `/floats?approve=true`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }
@@ -70,5 +71,13 @@ export function deleteFloatRequest(id) {
   return service({
     url: `/floats/${id}`,
     method: 'POST'
+  })
+}
+
+export function allocateFundsToFloat(payload) {
+  return service({
+    url: `/floats/receiveFunds`,
+    method: 'PUT',
+    data: payload
   })
 }

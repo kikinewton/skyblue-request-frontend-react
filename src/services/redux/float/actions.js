@@ -30,6 +30,10 @@ export const { Types, Creators } = createActions(
     deleteFloatRequestSuccess: ["responseData"],
     deleteFloatRequestFailure: ["error"],
 
+    allocateFundsToFloatRequest: ["payload"],
+    allocateFundsToFloatRequestSuccess: ["responseData"],
+    allocateFundsToFloatRequestFailure: ["error"],
+
     setSelectedFloatRequests: ["requests"],
 
     resetFloatRequest: null

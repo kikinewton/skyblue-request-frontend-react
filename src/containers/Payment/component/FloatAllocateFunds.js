@@ -1,9 +1,9 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Drawer, List, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
-import { FETCH_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types'
+import { FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 import DocumentView from "../../../presentation/DocumentView"
@@ -16,13 +16,13 @@ const columns = props => [
   },
   {
     title: "Description",
-    dataIndex: "name",
-    key: "name"
+    dataIndex: "itemDescription",
+    key: "itemDescription"
   },
   {
     title: "Unit Price",
-    dataIndex: "amount",
-    key: "amount",
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
     render: (text) => formatCurrency(text)
   },
   {
@@ -34,7 +34,7 @@ const columns = props => [
     title: "Total Amount",
     dataIndex: "amountTotal",
     key: "amountTotal",
-    render: (text, row) => formatCurrency(row?.amount * row?.quantity)
+    render: (text, row) => formatCurrency(row?.estimatedUnitPrice * row?.quantity)
   },
   {
     title: "Requested By",
@@ -69,18 +69,18 @@ const columns = props => [
 const summaryColumns = [
   {
     title: "Reference",
-    dataIndex: "pettyCashRef",
-    key: "pettyCashRef"
+    dataIndex: "floatRef",
+    key: "floatRef"
   },
   {
     title: "Description",
-    dataIndex: "name",
-    key: "name"
+    dataIndex: "itemDescription",
+    key: "itemDescription"
   },
   {
     title: "Unit Price",
-    dataIndex: "amount",
-    key: "amount",
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
     render: (text) => formatCurrency(text)
   },
   {
@@ -92,7 +92,7 @@ const summaryColumns = [
     title: "Total Amount",
     dataIndex: "amountTotal",
     key: "amountTotal",
-    render: (text, row) => formatCurrency(row?.amount * row?.quantity)
+    render: (text, row) => formatCurrency(row?.estimatedUnitPrice * row?.quantity)
   },
   {
     title: "Requested By",
@@ -116,13 +116,13 @@ const summaryColumns = [
 const FloatAllocateFunds = (props) => {
   const {
     current_user,
-    petty_cash_requests,
-    fetching_petty_cash_requests,
-    fetchPettyCashRequests,
-    resetPettyCashRequest,
-    allocateFundsToPettyCashRequest,
-    submitting_petty_cash_request,
-    submit_petty_cash_request_success,
+    float_requests,
+    fetching_float_requests,
+    fetchFloatRequests,
+    resetFloatRequest,
+    allocateFundsToFloatRequest,
+    submitting_float_request,
+    submit_float_request_success,
   } = props
   const [visible, setVisible] = useState(false)
   const [selectedRequests, setSelectedRequests] = useState([])
@@ -130,30 +130,42 @@ const FloatAllocateFunds = (props) => {
   const [infoVisible, setInfoVisible] = useState(false)
 
   useEffect(() => {
-    resetPettyCashRequest()
-    fetchPettyCashRequests({
-      requestType: FETCH_PETTY_CASH_REQUEST_TYPES.PENDING_FUND_ALLOCATION
+    resetFloatRequest()
+    fetchFloatRequests({
+      requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION
     })
   }, [])
 
   useEffect(() => {
-    if(!submitting_petty_cash_request && submit_petty_cash_request_success) {
+    if(!submitting_float_request && submit_float_request_success) {
       setSelectedRequests([])
       setVisible(false)
       setSelectedRequest(null)
       setInfoVisible(false)
-      fetchPettyCashRequests({
-        requestType: FETCH_PETTY_CASH_REQUEST_TYPES.PENDING_FUND_ALLOCATION
+      fetchFloatRequests({
+        requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION
       })
     }
-  }, [submit_petty_cash_request_success, submitting_petty_cash_request])
+  }, [submit_float_request_success, submitting_float_request])
 
   return (
     <>
       <AppLayout
         subNav={<PaymentsSubNav currentUser={current_user} />}
       >
-        <MyPageHeader title="Allocate Funds to Petty Cash" extra={[
+        <MyPageHeader 
+          title={
+            <Row>
+              <Col span={24}>
+                <span style={{marginRight: 10}}>Allocate Funds to Petty Cash</span>
+                <SyncOutlined
+                  spin={fetching_float_requests}  
+                  size="small" 
+                  onClick={() => fetchFloatRequests({requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION})}  />
+              </Col>
+            </Row>
+          } 
+          extra={[
           <Button
             disabled={selectedRequests.length < 1} 
             key="allocate-btn" 
@@ -162,7 +174,7 @@ const FloatAllocateFunds = (props) => {
               setVisible(true)
             }}
         >
-          Allocate Funds To Selected Petty Cash
+          Allocate Funds To Selected Float
         </Button>
         ]} />
         <Card>
@@ -174,8 +186,8 @@ const FloatAllocateFunds = (props) => {
               }
             })}
             rowKey="id"
-            dataSource={petty_cash_requests}
-            loading={fetching_petty_cash_requests}
+            dataSource={float_requests}
+            loading={fetching_float_requests}
             size='small'
             bordered
             pagination={{pageSize: 30}}
@@ -197,15 +209,15 @@ const FloatAllocateFunds = (props) => {
           <Row>
             <Col span={24}>
               <Button
-                loading={submitting_petty_cash_request} 
+                loading={submitting_float_request} 
                 type='primary'
                 onClick={() => {
-                  allocateFundsToPettyCashRequest({
-                    pettyCash: selectedRequests
+                  allocateFundsToFloatRequest({
+                    floats: selectedRequests
                   })
                 }}
               >
-                Allocate Funds To Selected Petty Cash Requests 
+                Allocate Funds To Selected Float Requests 
               </Button>
             </Col>
           </Row>
@@ -231,10 +243,10 @@ const FloatAllocateFunds = (props) => {
               <Col span={24}>
                 <List>
                   <List.Item>
-                    <List.Item.Meta title="Reference" description={selectedRequest?.pettyCashRef} />
+                    <List.Item.Meta title="Reference" description={selectedRequest?.FloatRef} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Description" description={selectedRequest?.name} />
+                    <List.Item.Meta title="Description" description={selectedRequest?.itemDescription} />
                   </List.Item>
                   <List.Item>
                     <List.Item.Meta title="Unit Price" description={formatCurrency(selectedRequest?.amount)} />

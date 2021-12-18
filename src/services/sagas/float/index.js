@@ -6,7 +6,8 @@ import {
   saveFloatRequest as saveFloatRequestApi,
   fetchFloatRequests as fetchFloatRequestsApi,
   updateFloatRequest as updateFloatRequestApi,
-  updateSingleFloatRequest as updateSingleFloatRequestApi
+  updateSingleFloatRequest as updateSingleFloatRequestApi,
+  allocateFundsToFloat as allocateFundsToFloatApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -106,6 +107,25 @@ export function* updateSingleFloatRequest(action) {
 }
 
 
+export function* allocateFundsToFloatRequest(action) {
+  const { payload } = action
+  try {
+    const response = yield call(allocateFundsToFloatApi, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Allocate Funds To Float', response?.message)
+      yield put(Creators.allocateFundsToFloatRequestSuccess(response?.data))
+    } else {
+      openNotification('error', 'Allocate Funds To Float', response?.message)
+      yield put(Creators.allocateFundsToFloatRequestFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Allocate Funds To Float'
+    openNotification('error', 'Allocate Funds To Float', errorText)
+    yield put(Creators.allocateFundsToFloatRequestFailure(errorText))
+  }
+}
+
+
 export function* resetFloatRequest(action) {
   yield put(Creators.resetFloatequest())
 }
@@ -130,4 +150,8 @@ export function* watchUpdateFloatRequest(action) {
 
 export function* watchUpdateSingleFloatRequest(action) {
   yield takeLeading(Types.UPDATE_SINGLE_FLOAT_REQUEST, updateSingleFloatRequest)
+}
+
+export function* watchAllocateFundsToFloatRequest(action) {
+  yield takeLeading(Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST, allocateFundsToFloatRequest)
 }

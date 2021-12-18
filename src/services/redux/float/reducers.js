@@ -123,6 +123,19 @@ export const setSelectedFloatRequests = (state = INITIAL_STATE, action) => {
   return { ...state, selected_requests: action?.requests};
 };
 
+//allocate funds
+export const allocateFundsToFloatRequest = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const allocateFundsToFloatRequestSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const allocateFundsToFloatRequestFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error};
+};
+
 export const resetFloatRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -158,6 +171,10 @@ export const HANDLERS = {
   [Types.DELETE_FLOAT_REQUEST]: deleteRequest,
   [Types.DELETE_FLOAT_REQUEST_SUCCESS]: deleteRequestSuccess,
   [Types.DELETE_FLOAT_REQUEST_FAILURE]: deleteRequestFailure,
+
+  [Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST]: allocateFundsToFloatRequest,
+  [Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST_SUCCESS]: allocateFundsToFloatRequestSuccess,
+  [Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST_FAILURE]: allocateFundsToFloatRequestFailure,
 
   [Types.SET_SELECTED_FLOAT_REQUESTS]: setSelectedFloatRequests,
   
