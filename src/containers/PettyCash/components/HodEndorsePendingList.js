@@ -326,7 +326,7 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
-              loading={submitting_comment || submitting_petty_cash}
+              loading={submitting_comment || petty_cash_submitting}
             >
               <CheckOutlined /> SUBMIT
             </Button>

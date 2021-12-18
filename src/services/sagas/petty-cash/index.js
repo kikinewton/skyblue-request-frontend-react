@@ -117,14 +117,14 @@ export function* allocateFundsToPettyCashRequest(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       yield put(Creators.allocateFundsToPettyCashRequestSuccess(responseData))
-      openNotification('success', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', response.message)
+      openNotification('success', 'ALLOCATE FUNDS TO PETTY CASH RQUESTS', response.message)
     } else {
-      openNotification('error', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', response.message)
+      openNotification('error', 'ALLOCATE FUNDS TO PETTY CASH RQUESTS', response.message)
       yield put(Creators.allocateFundsToPettyCashRequestFailure(response.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors || ['Failed to allocate funds'];
-    openNotification('error', 'ALLOCATE FUNDS TO PEETY CASH RQUESTS', errors[0])
+    openNotification('error', 'ALLOCATE FUNDS TO PETTY CASH RQUESTS', errors[0])
     yield put(Creators.allocateFundsToPettyCashRequestFailure(errors[0]))
   }
 }
