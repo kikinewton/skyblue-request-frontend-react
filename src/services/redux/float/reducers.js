@@ -5,6 +5,7 @@ export const INITIAL_STATE = {
   errors: null,
   requests: [],
   my_requests: [],
+  filtered_requests: [],
   request: null,
   selected_requests: [],
   loading: false,
@@ -18,7 +19,7 @@ export const fetchMyFloatRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyFloatRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_requests: action.responseData, loading: false};
+  return { ...state, my_requests: action.responseData, loading: false, filtered_requests: action.responseData};
 };
 
 export const fetchMyFloatRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -27,6 +28,7 @@ export const fetchMyFloatRequestsFailure = (state = INITIAL_STATE, action) => {
 
 //fetch
 export const fetchFloatRequests = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
   return { ...state, loading: true, errors: null, submitting: false };
 };
 
@@ -136,6 +138,17 @@ export const allocateFundsToFloatRequestFailure = (state = INITIAL_STATE, action
   return { ...state, submitting: false, error: action.error};
 };
 
+//filter
+export const filterFloatRequests = (state = INITIAL_STATE, action) => {
+  const {filter} = action
+  return{
+    ...state,
+    filtered_requests: state.requests.filter(rq => {
+      return rq?.createdBy?.fullName === filter || rq?.floatRef === filter
+    })
+  }
+}
+
 export const resetFloatRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -143,7 +156,8 @@ export const resetFloatRequest = (state = INITIAL_STATE, action) => {
     my_requests: [],
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    filtered_requests: []
   };
 };
 
@@ -177,6 +191,8 @@ export const HANDLERS = {
   [Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST_FAILURE]: allocateFundsToFloatRequestFailure,
 
   [Types.SET_SELECTED_FLOAT_REQUESTS]: setSelectedFloatRequests,
+
+  [Types.FILTER_FLOAT_REQUESTS]: filterFloatRequests,
   
   [Types.RESET_FLOAT_REQUEST]: resetFloatRequest
 };

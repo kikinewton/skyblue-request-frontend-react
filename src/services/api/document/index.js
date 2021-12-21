@@ -31,7 +31,6 @@ export function getAllDocument(query) {
 
 export function saveDocument(payload) {
   const fd = new FormData()
-  console.log('file send', payload.files)
   fd.append("files", payload.files)
   return service({
     url: `${path}/uploadMultipleFiles`,
@@ -72,5 +71,3 @@ export function saveMultipleDocument(payload) {
 //     data: fd,
 //   })
 // }
-
-

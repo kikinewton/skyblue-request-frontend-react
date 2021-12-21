@@ -143,12 +143,9 @@ const AddNewRequest = (props) => {
                     form={form}
                     name="request-entry"
                     initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
-                      requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL",  isService: false}}
+                      requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL"}}
                     onFinish={addToEntires}
                   >
-                    <Form.Item name="isService" valuePropName="checked" wrapperCol={{ span: 16 }}>
-                      <Checkbox>Is service or Transaport</Checkbox>
-                    </Form.Item>
                     <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
                       <Select loading={departmentLoading}  ref={departmentFieldRef}>
                         {departments && departments.map(department=> (

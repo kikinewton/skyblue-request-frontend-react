@@ -36,6 +36,8 @@ export default createTypes(
 
   SET_SELECTED_FLOAT_REQUESTS
 
+  FILTER_FLOAT_REQUESTS
+
   RESET_FLOAT_REQUEST
 
 `,

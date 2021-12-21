@@ -62,6 +62,8 @@ export function fetchFloatRequests(query) {
       return service({url: `/floats?endorsement=ENDORSED`, method: "GET"})
     case FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION:
       return service({url: `/floats?approval=APPROVED`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.PENDING_GRN:
+      return service({url: `/floats?awaitingFunds=true`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }

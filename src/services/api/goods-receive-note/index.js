@@ -46,7 +46,7 @@ export function createGoodsReceiveNote(payload) {
   //   supplier: payload.supplier
   // }
   return service({
-    url: `/goodsReceivedNote`,
+    url: `/goodsReceivedNotes`,
     method: 'POST',
     data: payload
   })

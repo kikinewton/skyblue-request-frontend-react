@@ -36,6 +36,8 @@ export const { Types, Creators } = createActions(
 
     setSelectedFloatRequests: ["requests"],
 
+    filterFloatRequests: ["filter"],
+
     resetFloatRequest: null
   }
 )

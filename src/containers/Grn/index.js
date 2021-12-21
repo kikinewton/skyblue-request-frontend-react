@@ -12,6 +12,8 @@ import GrnPendingPaymentAdvice from './components/GrnPendingPaymentAdvice'
 import CreateGrn from './components/CreateGrn'
 import { Creators as LpoCreators } from "../../services/redux/local-purchase-order/actions"
 import { Creators as GrnCreators } from "../../services/redux/grn/actions"
+import { Creators as EmployeeCreators } from "../../services/redux/employee/actions"
+import { Creators as FloatCreators } from '../../services/redux/float/actions' 
 import {Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas'
 import { formatCurrency } from '../../util/common-helper'
@@ -178,6 +180,13 @@ const mapStateToProps = (store) => ({
   fetching_local_purchase_orders: store.local_purchase_order.loading,
   filtered_local_purchase_orders: store.local_purchase_order.filtered_local_purchase_orders,
 
+  float_requests: store.float.requests,
+  fetching_float_requests: store.float.loading,
+  filtered_float_requests: store.float.filtered_requests,
+
+  employees: store.employee.employees,
+  fetching_employees: store.employee.loading
+
 })
 
 const mapActionsToProps = dispatch => ({
@@ -190,7 +199,14 @@ const mapActionsToProps = dispatch => ({
   fetchLocalPurchaseOrders: (query) => dispatch(LpoCreators.fetchLocalPurchaseOrders(query)),
   fetchLocalPurchaseOrder: (id) => dispatch(LpoCreators.fetchLocalPurchaseOrder(id)),
   resetLocalPurchaseOrder: () => dispatch(LpoCreators.resetLocalPurchaseOrder()),
-  filterLocalPurchaseOrders: filter => dispatch(LpoCreators.filterLocalPurchaseOrders(filter))
+  filterLocalPurchaseOrders: filter => dispatch(LpoCreators.filterLocalPurchaseOrders(filter)),
+
+  fetchFloatRequests: query => dispatch(FloatCreators.fetchFloatRequests(query)),
+  filterFloatRequests: filter => dispatch(FloatCreators.filterFloatRequests(filter)),
+  resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
+
+  fetchEmployees: query => dispatch(EmployeeCreators.fetchEmployees(query)),
+  resetEmployee: () => dispatch(EmployeeCreators.resetEmployee())
 })
 
 
