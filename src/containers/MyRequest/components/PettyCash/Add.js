@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Steps, Upload, message } from 'antd'
+import { Card, Col, Form, Row, Table, Input, Button, Steps, Upload, message, Checkbox } from 'antd'
 import { CheckOutlined, LeftOutlined, RightOutlined, MinusOutlined, UploadOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { saveDocument } from "../../../../services/api/document"
@@ -33,6 +33,7 @@ const columns = (props) => [
     title: "Action",
     dataIndex: "operation",
     key: "operation",
+    align: "right",
     render: (text, row) => (<Button size="small" type="primary" onClick={()=> props.removeEntry(row)}><MinusOutlined /></Button>)
   }
 ]
@@ -88,7 +89,7 @@ const AddNewRequest = (props) => {
     const payload = {
       items: requests.map(item => {
         let rq = item
-        rq["supportingDocument"] = [document]
+        rq["documents"] = [document]
         return rq
       }),
     }
@@ -154,11 +155,6 @@ const AddNewRequest = (props) => {
                         }, 0)
                         uploadFile(file)
                       }}
-                      // onChange={file => {
-                      //   console.log('file uploadded', file)
-                      //   setFiles([file])
-                      //   uploadFile(file)
-                      // }}
                       defaultFileList={files}
                       multiple={false}
                       maxCount={1}
@@ -183,7 +179,7 @@ const AddNewRequest = (props) => {
             )}
             {current === 2 &&
               <Row gutter={24}>
-                <Col md={6}>
+                <Col md={8}>
                   <Card>
                   <Row>
                     <Col md={24}>
@@ -192,9 +188,12 @@ const AddNewRequest = (props) => {
                         layout="vertical"
                         form={form}
                         name="request-entry"
-                        initialValues={{ name: "", purpose: "", quantity: "", departmentId: undefined, unit_price: "" }}
+                        initialValues={{ name: "", purpose: "", quantity: "", departmentId: undefined, unit_price: "", isService: true }}
                         onFinish={addToEntires}
                       >
+                        <Form.Item name="isService" valuePropName="checked" wrapperCol={{ span: 16 }}>
+                          <Checkbox>Is service or Transaport</Checkbox>
+                        </Form.Item>
                         <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
                           <Input.TextArea rows={3} ref={descriptionRef} placeholder="Description" />
                         </Form.Item>
@@ -217,7 +216,7 @@ const AddNewRequest = (props) => {
                   </Row>
                   </Card>
                 </Col>
-                <Col md={18}>
+                <Col md={16}>
                   <Card>
                     <Row>
                       <Col md={24}>

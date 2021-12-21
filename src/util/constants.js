@@ -1,4 +1,5 @@
 import { Tag } from "antd"
+import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
 
 export const USER_ROLES = {
@@ -169,6 +170,54 @@ export const EMPLOYEE_COLUMNS = [
       //return roleName.replcae('_', ' ')
     }
   }
+]
+
+
+export const FLOAT_COLUMNS =  [
+  {
+    title: "Reference",
+    dataIndex: "floatRef",
+    key: "floatRef"
+  },
+  {
+    title: "Description",
+    dataIndex: "itemDescription",
+    key: "itemDescription"
+  },
+  {
+    title: "Unit Price",
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: (text) => formatCurrency(text)
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity"
+  },
+  {
+    title: "Total Amount",
+    dataIndex: "amountTotal",
+    key: "amountTotal",
+    render: (text, row) => formatCurrency(row?.estimatedUnitPrice * row?.quantity)
+  },
+  {
+    title: "Requested By",
+    dataIndex: "createdBy",
+    key: "createdBy",
+    render: (text, row) => row?.createdBy?.fullName
+  },
+  {
+    title: "Requested On",
+    dataIndex: "createdDate",
+    key: "createdDate",
+    render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "Approval Status",
+    dataIndex: "approval",
+    key: "approval"
+  },
 ]
 
 export const FETCH_REQUEST_TYPES = {

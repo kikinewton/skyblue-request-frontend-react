@@ -15,6 +15,7 @@ import { Creators as GrnCreators } from "../../services/redux/grn/actions"
 import {Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas'
 import { formatCurrency } from '../../util/common-helper'
+import CreateFloatGrn from './components/CreateFloatGrn'
 
 export const GRN_COLUMNS = [
   {
@@ -82,6 +83,8 @@ const GrnIndex = (props) => {
       setKey("/app/grn/list")
     } else if(pathname.includes("/app/grn/pending-payment-advice")) {
       setKey("/app/grn/pending-payment-advice")
+    } else if(pathname.includes("/app/grn/new-float-grn")) {
+      setKey("/app/grn/new-float-grn")
     }
   }, [key])
 
@@ -132,6 +135,13 @@ const GrnIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
+              <Menu.Item key="/app/grn/new-float-grn">
+                <NavLink to="/app/grn/new-float-grn">
+                  Create GRN for Float
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu>
         )}
       >
@@ -146,6 +156,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />
           <AuthenticatedRoute path={`${path}/lpos`} component={LocalPurchaseOrders} {...props} />
           <AuthenticatedRoute path={`${path}/list`} {...props} component={LocalPurchaseOrders} />
+          <AuthenticatedRoute path={`${path}/new-float-grn`} component={CreateFloatGrn} {...props} />
           <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
         </Switch>
       </AppLayout>

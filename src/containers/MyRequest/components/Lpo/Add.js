@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Select } from 'antd'
+import { Card, Col, Form, Row, Table, Input, Button, Select, Checkbox } from 'antd'
 import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
 import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
@@ -143,9 +143,12 @@ const AddNewRequest = (props) => {
                     form={form}
                     name="request-entry"
                     initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
-                      requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL" }}
+                      requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL",  isService: false}}
                     onFinish={addToEntires}
                   >
+                    <Form.Item name="isService" valuePropName="checked" wrapperCol={{ span: 16 }}>
+                      <Checkbox>Is service or Transaport</Checkbox>
+                    </Form.Item>
                     <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
                       <Select loading={departmentLoading}  ref={departmentFieldRef}>
                         {departments && departments.map(department=> (
