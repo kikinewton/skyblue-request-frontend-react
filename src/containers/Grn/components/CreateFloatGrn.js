@@ -29,7 +29,6 @@ const CreateFloatGrn = (props) => {
   const [files, setFiles] = useState([])
   const [loadingDocument, setLoadingDocument] = useState(false)
 
-
   useEffect(() => {
     resetEmployee()
     resetFloatRequest()
@@ -69,7 +68,7 @@ const CreateFloatGrn = (props) => {
                         filterFloatRequests(value || "")
                       }}
                       onSearch={value => {
-
+                        
                       }}
                       filterOption={(input, option) => {
                         return option.children.toLowerCase().indexOf(input.toLowerCase() >= 0)

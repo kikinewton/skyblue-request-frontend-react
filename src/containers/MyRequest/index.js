@@ -16,6 +16,9 @@ import AddPettyCash from "./components/PettyCash/Add"
 import ListFloat from "./components/Float/List"
 import AddFloat from "./components/Float/Add"
 import RequestTracker from './components/Lpo/RequestTracker'
+import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
+import UploadDocuments from './components/Float/UploadDocuments'
+import FloatsPendingUploadDocument from './components/Float/FloatsPendingUploadDocument'
 
 const MyRequest = (props)=> {
   const [current, setCurrent] = React.useState("my-lpos")
@@ -33,6 +36,8 @@ const MyRequest = (props)=> {
       key= "create-float"
     } else if(url.indexOf("/my-requests/lpos") !== -1) {
       key = "my-lpos"
+    } else if(url.indexOf("/app/my-requests/float-request-pending-document") !== -1) {
+      key = "float-request-pending-document"
     } else if(url.indexOf("/my-requests/petty-cash-requests") !== -1) {
       key = "my-petty-cash-requests"
     } else if(url.indexOf("/my-requests/float-requests") !== -1) {
@@ -70,6 +75,7 @@ const MyRequest = (props)=> {
         <Route exact path={`${path}/float-requests`}>
           <ListFloat {...props} />
         </Route>
+        <AuthenticatedRoute path={`${path}/float-request-pending-document`} component={FloatsPendingUploadDocument} {...props} />
       </Switch>
     </React.Fragment>
   )

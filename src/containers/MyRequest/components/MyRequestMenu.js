@@ -1,7 +1,7 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import React, { useState, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { NavLink, useHistory, useLocation } from 'react-router-dom'
 
 
 const MyRequestMenu = props => {
@@ -20,6 +20,8 @@ const MyRequestMenu = props => {
       key= "create-float"
     } else if(pathname.includes("/my-requests/lpos")) {
       key = "my-lpos"
+    } else if(pathname.includes("/app/my-requests/float-request-pending-document")) {
+      key = "float-request-pending-document"
     } else if(pathname.includes("/my-requests/petty-cash-requests")) {
       key = "my-petty-cash-requests"
     } else if(pathname.includes("/my-requests/float-requests")) {
@@ -62,6 +64,16 @@ const MyRequestMenu = props => {
           }}
         >
           Float Requests
+        </Menu.Item>
+        <Menu.Item
+          key="float-request-pending-document"
+          onClick={() => {
+            setCurrent("float-request-pending-document")
+          }}
+        >
+          <NavLink to="/app/my-requests/float-request-pending-document">
+            Floats Awaiting Supporting Document Upload
+          </NavLink>
         </Menu.Item>
         <Menu.SubMenu key="create-request-submenu" title="Create Request">
           <Menu.Item
