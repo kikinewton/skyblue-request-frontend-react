@@ -63,7 +63,7 @@ const GrnIndex = (props) => {
   const DefaultRedirect = () => {
     const role = currentUser.role
     if(role === EMPLOYEE_ROLE.ROLE_STORE_OFFICER) {
-      return <Redirect to="/app/grn/list" />
+      return <Redirect to="/app/grn/lpos-pending-grn" />
     } else if(role === EMPLOYEE_ROLE.ROLE_HOD) {
       return <Redirect to="/app/grn/pending-endorsement" />
     } else if(role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
@@ -75,8 +75,8 @@ const GrnIndex = (props) => {
 
   React.useEffect(() => {
     const { pathname } = location
-    if(pathname.includes("/app/grn/add-new")) {
-      setKey("/app/grn/add-new")
+    if(pathname.includes("/app/grn/lpos-pending-grn")) {
+      setKey("/app/grn/lpos-pending-grn")
     } else if(pathname.includes("/app/grn/pending-endorsement")) {
       setKey("/app/grn/pending-endorsement")
     } else if(pathname.includes("/app/grn/pending-approval")) {
@@ -104,9 +104,9 @@ const GrnIndex = (props) => {
           >
             {currentUser.role === EMPLOYEE_ROLE.ROLE_STORE_OFFICER && (
               <>
-                <Menu.Item key="/app/grn/add-new">
-                  <NavLink to="/app/grn/add-new">
-                    Create Goods Receive Note
+                <Menu.Item key="/app/grn/lpos-pending-grn">
+                  <NavLink to="/app/grn/lpos-pending-grn">
+                    Local Purchase Orders Awaiting GRN
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="/app/grn/list">
@@ -156,8 +156,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/add-new`} {...props} component={CreateGrn} />
           <AuthenticatedRoute path={`${path}/grn-success`} {...props} component={GrnSuccessPage} />
           <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />
-          <AuthenticatedRoute path={`${path}/lpos`} component={LocalPurchaseOrders} {...props} />
-          <AuthenticatedRoute path={`${path}/list`} {...props} component={LocalPurchaseOrders} />
+          <AuthenticatedRoute path={`${path}/lpos-pending-grn`} component={LocalPurchaseOrders} {...props} />
           <AuthenticatedRoute path={`${path}/new-float-grn`} component={CreateFloatGrn} {...props} />
           <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
         </Switch>

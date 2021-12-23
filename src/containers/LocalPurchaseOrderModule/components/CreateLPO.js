@@ -49,6 +49,11 @@ export const requestColumns = [
     key: 'requestItemRef'
   },
   {
+    title: 'Description',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
     title: 'REASON',
     dataIndex: 'reason',
     key: 'reason'

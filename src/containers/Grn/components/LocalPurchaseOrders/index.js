@@ -53,7 +53,7 @@ const LocalPurchaseOrders = (props) => {
   } = props
 
   const handleCreateGrn = (row) => {
-    history.push(`/app/store/lpos/${row.id}/create-goods-receive-note`)
+    history.push(`/app/grn/lpos/${row.id}/create-goods-receive-note`)
   }
 
   const handleDownloadPdf = async (row) => {

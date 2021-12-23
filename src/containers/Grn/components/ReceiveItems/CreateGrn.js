@@ -150,9 +150,8 @@ const CreateGrn = (props) => {
             type="primary" 
             onClick={()=> props.onStep(2)}
             disabled={!formData.invoiceNumber || 
-                !formData.invoiceAmountPayable || 
-                !formData.numberOfDaysToPayment ||
-                !file
+                !formData.invoiceAmountPayable ||
+                file.length < 1
               }
           >
             Next <RightOutlined />

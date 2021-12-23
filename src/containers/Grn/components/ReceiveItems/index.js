@@ -25,6 +25,7 @@ const ReceiveItems = (props) => {
   const { lpoId } = useParams()
   const [formData, setFormData] = React.useState(initForm)
   const [file, setFile] = React.useState([])
+  console.log('file is true', file)
   const { 
     currentUser,
     fetchLocalPurchaseOrder,

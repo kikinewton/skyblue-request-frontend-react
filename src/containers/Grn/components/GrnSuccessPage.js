@@ -10,7 +10,7 @@ const GrnSuccessPage = (props)=> {
         status="success"
         title="Successfully Created Goods Receive Note and invoice"
         extra={[
-          <Button type="primary" key="lpos" onClick={()=>history.push("/app/grn/add-new")}>
+          <Button type="primary" key="lpos" onClick={()=>history.push("/app/grn/lpos-pending-grn")}>
             Back to Local Purchase Orders
           </Button>,
           <Button type="primary" key="home" onClick={()=>history.push("/app")}>
