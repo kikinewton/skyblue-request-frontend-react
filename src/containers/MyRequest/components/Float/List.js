@@ -7,8 +7,33 @@ import UpdateFloatForm from './UpdateForm';
 import FloatDetails from './Details';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
+import { prettifyDateTime } from '../../../../util/common-helper';
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
+
+const FLOAT_ORDERS_COLUMN = props => [
+  {
+    title: "Float Reference",
+    dataIndex: "floatRef",
+    key: "floatRef"
+  },
+  {
+    title: "Requested By",
+    dataIndex: "requestedBy",
+    key: "requestedBy"
+  },
+  {
+    title: "Phone Number",
+    dataIndex: "requestedByPhoneNo",
+    key: "requestedByPhoneNo"
+  },
+  {
+    title: "Request Date",
+    dataIndex: "createdDate",
+    key: "createdDate",
+    render: (text, row) => prettifyDateTime(text)
+  },
+]
 
 const columns = props => [
   {
@@ -73,7 +98,7 @@ const columns = props => [
 
 const List = (props) => {
   const { my_float_requests, fetchMyFloatRequests, fetching_float_requests, 
-    updateSingleFloatRequest, submiting_float_request, submit_float_request_success } = props
+    updateSingleFloatRequest, submiting_float_request, submit_float_request_success, fetchFloatOrders, float_orders } = props
   const history = useHistory()
   const [visible, setVisible] = React.useState(false)
   const [selectionDetails, setSelectionDetails] = React.useState({type: SELECTION_TYPES.VIEW, row: null})
@@ -85,7 +110,8 @@ const List = (props) => {
   )
 
   React.useEffect(() => {
-    fetchMyFloatRequests({})
+    //fetchMyFloatRequests({})
+    fetchFloatOrders({myRequest: true})
   }, [])
 
   React.useEffect(() => {
@@ -108,7 +134,7 @@ const List = (props) => {
           size="small"
           title="My Float Requests"
           extra={[
-            <Button size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
+            <Button key="create-new-float-btn" size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
               Create New Float Request
             </Button>
           ]}
@@ -117,7 +143,7 @@ const List = (props) => {
             <Col span={24}>
               <Table
                 loading={fetching_float_requests}
-                columns={columns({
+                columns={FLOAT_ORDERS_COLUMN({
                   handleView: (row) => {
                     console.log('lets view')
                     setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
@@ -129,7 +155,7 @@ const List = (props) => {
                     setVisible(true)
                   },
                 })}
-                dataSource={my_float_requests}
+                dataSource={float_orders}
                 rowKey="id"
                 bordered
                 size="small"

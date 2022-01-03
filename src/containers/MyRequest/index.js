@@ -103,7 +103,8 @@ const mapStateToProps = (store) => ({
   float_requests: store.float.requests,
   fetching_float_requests: store.float.loading,
   submitting_float_request: store.float.submitting,
-  submit_float_request_success: store.float.submit_success
+  submit_float_request_success: store.float.submit_success,
+  float_orders: store.float.orders,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -140,6 +141,7 @@ const mapActionsToProps = (dispatch) => {
     fetchFloatRequests: (query) => {
       dispatch(FloatCreators.fetchFloatRequests(query))
     },
+    fetchFloatOrders: query => dispatch(FloatCreators.fetchFloatOrders(query)),
     createFloatRequest: (payload) => {
       dispatch(FloatCreators.createFloatRequest(payload))
     },

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Steps, Upload, message, Checkbox } from 'antd'
-import { CheckOutlined, LeftOutlined, RightOutlined, MinusOutlined, UploadOutlined } from '@ant-design/icons'
+import { CheckOutlined, LeftOutlined, RightOutlined, MinusOutlined, UploadOutlined, UserOutlined, FileAddOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { saveDocument } from "../../../../services/api/document"
 import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
@@ -40,9 +40,10 @@ const columns = (props) => [
 
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
-  const [current, setCurrent] = React.useState(1)
+  const [current, setCurrent] = React.useState(0)
   const [files, setFiles] = React.useState([])
   const [uploading, setUploading] = React.useState(false)
+  const [userDetails, setUserDetails] = useState({name: "", phoneNo: ""})
   const [document, setDocument] = React.useState(null)
   const { submit_petty_cash_request_success, createPettyCashRequest, submitting_petty_cash_request } = props
   const [ form ] = Form.useForm()
@@ -92,6 +93,8 @@ const AddNewRequest = (props) => {
         rq["documents"] = [document]
         return rq
       }),
+      requestedBy: userDetails.name,
+      requestedByPhoneNo: userDetails.phoneNo
     }
     console.log("request petty cash", payload)
     createPettyCashRequest(payload)
@@ -130,15 +133,57 @@ const AddNewRequest = (props) => {
           <Col span={16} offset={4}>
             <Steps
               size="small"
-              current={1}
+              current={current}
             >
-              <Steps.Step title="Upload Petty Cash Document" status={document ? "finish" : ""} />
-              <Steps.Step title="Add Petty Cash Entries" status={current !==2 ? "wait" : ""} />
+              <Steps.Step icon={<UserOutlined size="small" />} title="Employee Basic Info" />
+              <Steps.Step icon={<UploadOutlined size="small" />} title="Upload Petty Cash Document" />
+              <Steps.Step icon={<FileAddOutlined size="small" /> } title="Add Petty Cash Entries" />
             </Steps>
           </Col>
         </Row>
         <Row>
           <Col span={24}>
+            {current === 0 && (
+              <>
+                <Row style={{padding: "10px 0 10px 0"}}>
+                  <Col span={24}>
+                    <Card title="User Details" size='small'>
+                      <Form 
+                        layout="vertical"
+                      >
+                        <Form.Item label="Name">
+                          <Input 
+                            type="text"
+                            value={userDetails.name}
+                            onChange={(event) => setUserDetails({...userDetails, name: event.target.value})}
+                          />
+                        </Form.Item>
+                        <Form.Item label="Phone Number">
+                          <Input 
+                            type="text"
+                            value={userDetails.phoneNo}
+                            onChange={(event) => setUserDetails({...userDetails, phoneNo: event.target.value})}
+                          />
+                        </Form.Item>
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    <Button 
+                      style={{float: "right"}} 
+                      type='primary' 
+                      onClick={() => setCurrent(1)}
+                      disabled={!userDetails.name}
+                    >
+                      Next (Upload Supporting Documents)
+                      <RightOutlined />
+                    </Button>
+                  </Col>
+                </Row>
+              </>
+            )}
             {current === 1 && (
               <>
                 <Card style={{minHeight: 300}} title="Upload Petty Cash Document">

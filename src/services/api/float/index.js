@@ -85,3 +85,11 @@ export function allocateFundsToFloat(payload) {
     data: payload
   })
 }
+
+export function fetchFloatOrders(query) {
+  const queryStr = serializeQueryParams(query)
+  return service({
+    url: `/floatOrders${queryStr}`,
+    method: "GET"
+  })
+}

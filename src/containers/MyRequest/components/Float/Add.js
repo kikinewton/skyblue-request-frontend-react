@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from 'antd'
 import { CheckOutlined, LeftCircleFilled, MinusOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
@@ -40,6 +40,7 @@ const columns = (props) => [
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
   const { createFloatRequest, submitting_float_request, submit_float_request_success } = props
+  const [userDetails, setUserDetails] = useState({name: "", phoneNo: ""})
   const [ form ] = Form.useForm()
   const history = useHistory()
 
@@ -62,7 +63,9 @@ const AddNewRequest = (props) => {
 
   const handleSubmit = async ()=> {
     const payload = {
-      items: requests
+      items: requests,
+      requestedBy: userDetails.name,
+      requestedByPhoneNo: userDetails.phoneNo
     }
     await createFloatRequest(payload)
   }
@@ -80,7 +83,7 @@ const AddNewRequest = (props) => {
       const fd = JSON.parse(localData)
       setRequests(fd)
     }
-    //fetchDepartments({}) 
+    //fetchDepartments({})
     // eslint-disable-next-line
   }, [])
   return (
@@ -93,6 +96,32 @@ const AddNewRequest = (props) => {
           onBack={()=> history.goBack()}
         />
         <Card>
+          <Row style={{padding: "10px 0 10px 0"}}>
+            <Col span={24}>
+              <Card title="User Details" size='small'>
+                <Row gutter={12}>
+                  <Col span={12}>
+                    <Form.Item label="Name">
+                      <Input 
+                        type="text"
+                        value={userDetails.name}
+                        onChange={(event) => setUserDetails({...userDetails, name: event.target.value})}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Phone Number">
+                      <Input 
+                        type="text"
+                        value={userDetails.phoneNo}
+                        onChange={(event) => setUserDetails({...userDetails, phoneNo: event.target.value})}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
           <Row gutter={24}>
             <Col md={6}>
               <Card>
@@ -149,7 +178,7 @@ const AddNewRequest = (props) => {
                 <Col md={24} style={{textAlign: 'right', marginTop: 20}}>
                   <Button type="primary" onClick={handleSubmit} 
                     loading={submitting_float_request} 
-                    disabled={submitting_float_request || requests.length < 1}
+                    disabled={submitting_float_request || requests.length < 1 || !userDetails.name}
                   >
                     <CheckOutlined />
                     SUBMIT FLOAT REQUEST

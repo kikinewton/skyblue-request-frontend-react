@@ -7,7 +7,8 @@ import {
   fetchFloatRequests as fetchFloatRequestsApi,
   updateFloatRequest as updateFloatRequestApi,
   updateSingleFloatRequest as updateSingleFloatRequestApi,
-  allocateFundsToFloat as allocateFundsToFloatApi
+  allocateFundsToFloat as allocateFundsToFloatApi,
+  fetchFloatOrders as fetchFloatOrdersApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -28,6 +29,24 @@ export function* fetchAllFloatRequests(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchFloatRequestsFailure(errorText))
+  }
+}
+
+
+export function* fetchFloatOrders(action) {
+  const { query } = action
+  try {
+    const response = yield call(fetchFloatOrdersApi, query)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchFloatOrdersSuccess(response?.data))
+    } else {
+      openNotification('error', 'Fetch Request', response?.message)
+      yield put(Creators.fetchAFloatOrdersFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchFloatOrdersFailure(errorText))
   }
 }
 
@@ -154,4 +173,8 @@ export function* watchUpdateSingleFloatRequest(action) {
 
 export function* watchAllocateFundsToFloatRequest(action) {
   yield takeLeading(Types.ALLOCATE_FUNDS_TO_FLOAT_REQUEST, allocateFundsToFloatRequest)
+}
+
+export function* watchFetchFloatOrders(action) {
+  yield takeLeading(Types.FETCH_FLOAT_ORDERS, fetchFloatOrders)
 }

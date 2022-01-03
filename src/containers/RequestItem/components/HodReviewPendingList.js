@@ -179,7 +179,7 @@ const HodReviewPendingList = (props) => {
           <Col span={24}>
             <Row>
               <Col span={24}>
-
+                
               </Col>
             </Row>
             <Row>

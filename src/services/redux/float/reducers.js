@@ -6,6 +6,7 @@ export const INITIAL_STATE = {
   requests: [],
   my_requests: [],
   filtered_requests: [],
+  orders: [],
   request: null,
   selected_requests: [],
   loading: false,
@@ -38,6 +39,20 @@ export const fetchFloatRequestsSuccess = (state = INITIAL_STATE, action) => {
 
 export const fetchFloatRequestsFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error, requests: []};
+};
+
+//fetch orders
+export const fetchFloatOrders = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, loading: true, errors: null, submitting: false };
+};
+
+export const fetchFloatOrdersSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, orders: action.responseData, loading: false};
+};
+
+export const fetchFloatOrdersFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, orders: []};
 };
 
 //get
@@ -165,6 +180,10 @@ export const HANDLERS = {
   [Types.FETCH_FLOAT_REQUESTS]: fetchFloatRequests,
   [Types.FETCH_FLOAT_REQUESTS_SUCCESS]: fetchFloatRequestsSuccess,
   [Types.FETCH_FLOAT_REQUESTS_FAILURE]: fetchFloatRequestsFailure,
+
+  [Types.FETCH_FLOAT_ORDERS]: fetchFloatOrders,
+  [Types.FETCH_FLOAT_ORDERS_SUCCESS]: fetchFloatOrdersSuccess,
+  [Types.FETCH_FLOAT_ORDERS_FAILURE]: fetchFloatOrdersFailure,
 
   [Types.FETCH_MY_FLOAT_REQUESTS]: fetchMyFloatRequests,
   [Types.FETCH_MY_FLOAT_REQUESTS_SUCCESS]: fetchMyFloatRequestsSuccess,

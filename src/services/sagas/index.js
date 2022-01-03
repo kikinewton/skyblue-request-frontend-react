@@ -55,7 +55,8 @@ import {
 	watchFetchFloatRequests,
 	watchUpdateFloatRequest,
 	watchUpdateSingleFloatRequest,
-	watchAllocateFundsToFloatRequest
+	watchAllocateFundsToFloatRequest,
+	watchFetchFloatOrders
 } from "./float"
 
 import {
@@ -145,6 +146,7 @@ export default function* rootSaga() {
 		watchUpdateFloatRequest(),
 		watchUpdateSingleFloatRequest(),
 		watchAllocateFundsToFloatRequest(),
+		watchFetchFloatOrders(),
 
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),
