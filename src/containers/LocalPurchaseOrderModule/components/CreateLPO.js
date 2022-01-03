@@ -182,7 +182,14 @@ const CreateLPO = (props) => {
         <Divider />
         <Row style={{marginTop: 30}}>
           <Col span={24}>
-            <Button style={{float: "right"}} type="primary" onClick={() => handleCreateLocalPurchaseOrder()}>Create LPO</Button>
+            <Button 
+              style={{float: "right"}} 
+              type="primary" 
+              onClick={() => handleCreateLocalPurchaseOrder()}
+              loading={submitting_local_purchase_order}
+            >
+              Create LPO
+            </Button>
           </Col>
         </Row>
         <Row>

@@ -249,16 +249,16 @@ const CollapsibleLayout = (props) => {
                   RFQs
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="/app/procurement/create-quotation">
+              {/* <Menu.Item key="/app/procurement/create-quotation">
                 <NavLink to={`${PROCUREMENT_ROUTE}/create-quotation`}>
                   Create Quotation
                 </NavLink>
-              </Menu.Item>
-              <Menu.Item key={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
+              </Menu.Item> */}
+              {/* <Menu.Item key={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
                   Create LPO
                 </NavLink>
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item key={`${PROCUREMENT_ROUTE}/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
                   Request Categories

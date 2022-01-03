@@ -4,6 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import * as reportApi from '../../services/api/report'
+import { getMetabaseUri } from '../../util/common-helper'
 
 const Report = (props) => {
   
@@ -11,7 +12,17 @@ const Report = (props) => {
   return (
     <React.Fragment>
       <AppLayout>
-        
+        <Row>
+          <Col span={24}>
+          <iframe
+            src={getMetabaseUri()}
+            frameBorder={0}
+            width="100%"
+            height="600"
+            allowtransparency="true"
+          ></iframe>
+          </Col>
+        </Row>
       </AppLayout>
     </React.Fragment>
   )
