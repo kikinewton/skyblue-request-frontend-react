@@ -24,7 +24,8 @@ import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
-const logo = require("../../../assets/logo.png")
+//const logo = require("../../../assets/logo.png")
+import logo from "../../../assets/logo512.png"
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';
 
 const CollapsibleLayout = (props) => {
@@ -108,7 +109,8 @@ const CollapsibleLayout = (props) => {
         {/* <div className="bs-logo" /> */}
         <div style={{color: '#fff', padding: '10px 0px 10px 20px', marginBottom: 10}}>
           {/* <img width="30" height="40" src="https://www.blueskies.com/wp-content/uploads/2017/10/logo-01.png" alt="" loading="eager" /> */}
-          <img width="30" height="40" src="/logo512.png" alt="logo"/>
+          {/* <img width="30" height="40" src="logo512.png" alt="logo"/> */}
+          <img width="30" height="40" src={logo} alt="company_logo" />
           <span>Blueskies</span>
         </div>
         
