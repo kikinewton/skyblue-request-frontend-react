@@ -108,7 +108,7 @@ const CollapsibleLayout = (props) => {
         {/* <div className="bs-logo" /> */}
         <div style={{color: '#fff', padding: '10px 0px 10px 20px', marginBottom: 10}}>
           {/* <img width="30" height="40" src="https://www.blueskies.com/wp-content/uploads/2017/10/logo-01.png" alt="" loading="eager" /> */}
-          <img width="30" height="40" src="/logo512.png" alt="Blueskies logo"/>
+          <img width="30" height="40" src="/logo512.png" alt="logo"/>
           <span>Blueskies</span>
         </div>
         
