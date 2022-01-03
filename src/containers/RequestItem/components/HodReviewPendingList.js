@@ -192,7 +192,7 @@ const HodReviewPendingList = (props) => {
                     src={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}
                   />
                 )}
-                {selectedRequest?.quotation?.requestDocument?.documentType.includes("pdf/") && (
+                {selectedRequest?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
                   <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
                 )}
                 {selectedRequest?.quotation?.requestDocument?.documentType.includes("excel/") && (
