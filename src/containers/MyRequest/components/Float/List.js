@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Row, Col, Card, Button, Tag, Form, Drawer, Descriptions } from "antd"
+import { Table, Row, Col, Card, Button, Tag, Badge, Drawer } from "antd"
 import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
@@ -14,8 +14,8 @@ const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 const FLOAT_ORDERS_COLUMN = props => [
   {
     title: "Float Reference",
-    dataIndex: "floatRef",
-    key: "floatRef"
+    dataIndex: "floatOrderRef",
+    key: "floatOrderRef"
   },
   {
     title: "Requested By",
@@ -103,11 +103,16 @@ const List = (props) => {
   const [visible, setVisible] = React.useState(false)
   const [selectionDetails, setSelectionDetails] = React.useState({type: SELECTION_TYPES.VIEW, row: null})
 
-  const updateForm = () => (
-    <Form onSub>
-
-    </Form>
-  )
+  const expandedRowRender = (row) => {
+    const expandedColumns = [
+      {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
+      {title: 'Purpose', dataIndex: 'purpose', key: 'purpose'},
+      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
+      {title: "Endorsement Status", dataIndex: 'endorsement', key: 'endorsement'},
+      {title: "Approval Status", dataIndex: 'approval', key: 'approval'},
+    ]
+    return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
+  }
 
   React.useEffect(() => {
     //fetchMyFloatRequests({})
@@ -159,6 +164,7 @@ const List = (props) => {
                 rowKey="id"
                 bordered
                 size="small"
+                expandable={{expandedRowRender}}
               />
             </Col>
           </Row>

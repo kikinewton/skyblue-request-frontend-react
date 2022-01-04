@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Select, PageHeader } from 'antd'
-import { CheckOutlined, LeftCircleFilled, MinusOutlined } from '@ant-design/icons'
+import { Card, Col, Form, Row, Table, Input, Button, Steps, List } from 'antd'
+import { BookOutlined, CheckOutlined, ContactsOutlined, FileDoneOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { CURRENCY_CODE } from '../../../../util/constants'
 import AppLayout from '../../../AppLayout'
 import MyPageHeader from '../../../../shared/MyPageHeader'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom' 
+const { Step } = Steps
 
 const columns = (props) => [
   {
@@ -37,10 +38,35 @@ const columns = (props) => [
   }
 ]
 
+const verificationColumns = [
+  {
+    title: 'Description',
+    dataIndex: 'name',
+    key: "name"
+  },
+  {
+    title: 'Purpose',
+    dataIndex: 'purpose',
+    key: "purpose"
+  },
+  {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    key: "quantity"
+  },
+  {
+    title: 'Unit Price',
+    dataIndex: 'unitPrice',
+    key: "unitPrice"
+  }
+]
+
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
   const { createFloatRequest, submitting_float_request, submit_float_request_success } = props
-  const [userDetails, setUserDetails] = useState({name: "", phoneNo: ""})
+  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: ""})
+  const [basicForm] = Form.useForm()
+  const [current, setCurrent] = useState(0)
   const [ form ] = Form.useForm()
   const history = useHistory()
 
@@ -64,18 +90,23 @@ const AddNewRequest = (props) => {
   const handleSubmit = async ()=> {
     const payload = {
       items: requests,
-      requestedBy: userDetails.name,
-      requestedByPhoneNo: userDetails.phoneNo
+      requestedBy: floatOrder.name,
+      requestedByPhoneNo: floatOrder.phoneNo,
+      description: floatOrder.description,
+      amount: floatOrder.amount
     }
+    console.log('payload', payload)
     await createFloatRequest(payload)
   }
 
   React.useEffect(() => {
-    if(submit_float_request_success) {
+    if(!submitting_float_request && submit_float_request_success) {
       setRequests([])
       clearLocalState("NEW-FLOAT-REQUEST")
+      setCurrent(0)
+      setFloatOrder({name: "", description: "", amount: 0, phoneNo: ""})
     }
-  }, [submit_float_request_success])
+  }, [submit_float_request_success, submitting_float_request])
 
   React.useEffect(()=> {
     const localData = getLocalState("NEW-FLOAT-REQUEST")
@@ -95,99 +126,208 @@ const AddNewRequest = (props) => {
           title="Create New Float Entries"
           onBack={()=> history.goBack()}
         />
+        <Row style={{padding: "10px 0 10px 0"}}>
+          <Col span={24}>
+            <Steps current={current} size='small'>
+              <Step key={0} icon={<ContactsOutlined />} title="Float Basic Info" />
+              <Step key={1} icon={<BookOutlined />} title="Float Item Entries" />
+              <Step key={2} icon={<FileDoneOutlined />} title="Confirm And Submit" />
+            </Steps>
+          </Col>
+        </Row>
         <Card>
-          <Row style={{padding: "10px 0 10px 0"}}>
-            <Col span={24}>
-              <Card title="User Details" size='small'>
-                <Row gutter={12}>
-                  <Col span={12}>
-                    <Form.Item label="Name">
-                      <Input 
-                        type="text"
-                        value={userDetails.name}
-                        onChange={(event) => setUserDetails({...userDetails, name: event.target.value})}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Phone Number">
-                      <Input 
-                        type="text"
-                        value={userDetails.phoneNo}
-                        onChange={(event) => setUserDetails({...userDetails, phoneNo: event.target.value})}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col md={6}>
-              <Card>
-              <Row>
-                <Col md={24}>
-                  <Form
-                    size="middle"
-                    layout="vertical"
-                    form={form}
-                    name="request-entry"
-                    initialValues={{ name: "", purpose: "", quantity: "", unit_price: "" }}
-                    onFinish={addToEntires}
-                  >
-                    <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
-                      <Input.TextArea rows={3} placeholder="Description" />
-                    </Form.Item>
-                    <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
-                      <Input  placeholder="Purpose" />
-                    </Form.Item>
-                    <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
-                      <Input type="number"  placeholder="Quantity" />
-                    </Form.Item>
-                    <Form.Item label={`Estimated Unit Price`} name="unitPrice" rules={[{ required: true, message: 'Unit Price required' }]}>
-                      <Input prefix={CURRENCY_CODE} type="number"  placeholder="Unit Price" />
-                    </Form.Item>
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit" className="bs-form-button">
-                        Add Entry
+          {current === 0 && (
+            <>
+              <Form
+                layout="vertical"
+              >
+                <Form.Item label="Requested By" name="name">
+                  <Input 
+                    placeholder='Name' 
+                    value={floatOrder.name} 
+                    onChange={(e) => setFloatOrder({...floatOrder, name: e.target.value})} 
+                  />
+                </Form.Item>
+                <Form.Item label="User Phone Number" name="phoneNo">
+                  <Input 
+                    placeholder='Name' 
+                    value={floatOrder.phoneNo} 
+                    onChange={e => setFloatOrder({...floatOrder, phoneNo: e.target.value})}
+                  />
+                </Form.Item>
+                <Form.Item label="Float Description" name="description">
+                  <Input 
+                    placeholder='Name' 
+                    value={floatOrder.description} 
+                    onChange={e => setFloatOrder({...floatOrder, description: e.target.value})}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Row>
+                    <Col span={24}>
+                      <Button 
+                        style={{float: "right"}} 
+                        type="primary"
+                        disabled={!floatOrder.name || !floatOrder.description}
+                        onClick={e => {
+                          e.preventDefault()
+                          setCurrent(1)
+                        }}
+                      >
+                        Next (Enter Entries)
+                        <RightOutlined />
                       </Button>
-                    </Form.Item>
-                  </Form>
+                    </Col>
+                  </Row>
+                </Form.Item>
+              </Form>
+            </>
+          )}
+          {current === 1 && (
+            <>
+              <Row gutter={24}>
+                <Col md={6}>
+                  <Card>
+                    <Row>
+                      <Col md={24}>
+                        <Form
+                          size="middle"
+                          layout="vertical"
+                          form={form}
+                          name="request-entry"
+                          initialValues={{ name: "", purpose: "", quantity: "", unit_price: "" }}
+                          onFinish={addToEntires}
+                        >
+                          <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
+                            <Input.TextArea rows={3} placeholder="Description" />
+                          </Form.Item>
+                          <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
+                            <Input  placeholder="Purpose" />
+                          </Form.Item>
+                          <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
+                            <Input type="number"  placeholder="Quantity" />
+                          </Form.Item>
+                          <Form.Item label={`Estimated Unit Price`} name="unitPrice" rules={[{ required: true, message: 'Unit Price required' }]}>
+                            <Input prefix={CURRENCY_CODE} type="number"  placeholder="Unit Price" />
+                          </Form.Item>
+                          <Form.Item>
+                            <Button type="primary" htmlType="submit" className="bs-form-button">
+                              Add Entry
+                            </Button>
+                          </Form.Item>
+                        </Form>
+                      </Col>
+                    </Row>
+                    </Card>
+                  </Col>
+                  <Col md={18}>
+                    <Card>
+                    <Row>
+                      <Col md={24}>
+                        <Table 
+                          columns={columns({
+                            removeEntry: (row)=> {
+                              removeEntry(row)
+                            }
+                          })}
+                          dataSource={requests}
+                          pagination={false}
+                          size="small"
+                          rowKey="id"
+                        />
+                      </Col>  
+                    </Row>
+                    <Row>
+                      <Col md={24} style={{textAlign: 'right', marginTop: 20}}>
+                        <Button type="default" style={{float: "left"}} onClick={e => setCurrent(0)}>
+                          <LeftOutlined />
+                          Enter Float Details
+                        </Button>
+                        <Button type="primary" 
+                          onClick={e => setCurrent(2)}
+                          disabled={submitting_float_request}
+                        >
+                          Confirm And Submit
+                          <RightOutlined />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card>
                 </Col>
               </Row>
-              </Card>
-            </Col>
-            <Col md={18}>
-              <Card>
+            </>
+          )}
+          {current === 2 && (
+            <>
               <Row>
-                <Col md={24}>
-                  <Table 
-                    columns={columns({
-                      removeEntry: (row)=> {
-                        removeEntry(row)
-                      }
-                    })}
-                    dataSource={requests}
-                    pagination={false}
-                    size="small"
-                    rowKey="id"
-                  />
-                </Col>  
+                <Col span={24}>
+                  <Card size='small' title="Float Order Description">
+                    <List>
+                      <List.Item>
+                        <List.Item.Meta title="Float Description:" description={floatOrder?.description} />
+                      </List.Item>
+                      <List.Item>
+                        <List.Item.Meta title="Requested By:" description={floatOrder?.name} />
+                      </List.Item>
+                      <List.Item>
+                        <List.Item.Meta title="Phone Number:" description={floatOrder?.description || "N/A"} />
+                      </List.Item>
+                      <List.Item>
+                        <List.Item.Meta 
+                          title="Float Item Total Amount:"
+                          description={`${CURRENCY_CODE} ${requests.map(it => Number(it.unitPrice) || 0).reduce((ac, a) => ac + a, 0)}`}
+                        />
+                      </List.Item>
+                    </List>
+                  </Card>
+                </Col>
               </Row>
               <Row>
-                <Col md={24} style={{textAlign: 'right', marginTop: 20}}>
-                  <Button type="primary" onClick={handleSubmit} 
-                    loading={submitting_float_request} 
-                    disabled={submitting_float_request || requests.length < 1 || !userDetails.name}
+                <Col span={24}>
+                  <Card size='small' title="Entries">
+                    <Table 
+                      columns={verificationColumns}
+                      size='small'
+                      bordered
+                      dataSource={requests}
+                      rowKey="id"
+                      pagination={false}
+                    />
+                  </Card>
+                </Col>
+              </Row>
+              <Row style={{margin: "10px 0 10px 0", backgroundColor: "#b1e7fa", padding: 10}}>
+                <Col span={24}>
+                  <Form.Item label="Estimated Amount">
+                    <Input 
+                      type="number" 
+                      step="0.1" 
+                      prefix={CURRENCY_CODE} 
+                      onChange={e => setFloatOrder({...floatOrder, amount: e.target.value})}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row style={{padding: "10px 0 10px 0"}}>
+                <Col span={24}>
+                  <Button style={{float: "left"}} type='default' onClick={() => setCurrent(1)}>
+                    <LeftOutlined />
+                    Enter Float Items
+                  </Button>
+                  <Button 
+                    style={{float: "right"}} 
+                    type='primary' onClick={() => setCurrent(1)}
+                    onClick={handleSubmit}
+                    disabled={!floatOrder.amount || !floatOrder.description || !floatOrder.name || submitting_float_request}
+                    loading={submitting_float_request}
                   >
                     <CheckOutlined />
-                    SUBMIT FLOAT REQUEST
+                    Submit
                   </Button>
                 </Col>
               </Row>
-              </Card>
-            </Col>
-          </Row>
+            </>
+          )}
         </Card>
       </AppLayout>
     </>
