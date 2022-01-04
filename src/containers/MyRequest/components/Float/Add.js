@@ -164,17 +164,27 @@ const AddNewRequest = (props) => {
                 </Form.Item>
                 <Form.Item>
                   <Row>
-                    <Col span={24}>
-                      <Button 
-                        style={{float: "right"}} 
-                        type="primary"
+                    <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                      <Button
+                        style={{marginRight: 5}}
                         disabled={!floatOrder.name || !floatOrder.description}
                         onClick={e => {
                           e.preventDefault()
                           setCurrent(1)
                         }}
                       >
-                        Next (Enter Entries)
+                        Add Float Items
+                        <RightOutlined />
+                      </Button>
+                      <Button
+                        type='primary'
+                        disabled={!floatOrder.name || !floatOrder.description}
+                        onClick={e => {
+                          e.preventDefault()
+                          setCurrent(2)
+                        }}
+                      >
+                        Confirm And Submit
                         <RightOutlined />
                       </Button>
                     </Col>
@@ -296,7 +306,7 @@ const AddNewRequest = (props) => {
                   </Card>
                 </Col>
               </Row>
-              <Row style={{margin: "10px 0 10px 0", backgroundColor: "#b1e7fa", padding: 10}}>
+              <Row style={{margin: "10px 0 10px 0", padding: 10}}>
                 <Col span={24}>
                   <Form.Item label="Estimated Amount">
                     <Input 
