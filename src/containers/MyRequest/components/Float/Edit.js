@@ -177,7 +177,7 @@ const EditFloatOrder = (props) => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row style={{padding: "10px 0 10px 0"}}>
             <Col span={24}>
               <Button
                 type="primary"

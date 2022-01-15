@@ -13,10 +13,10 @@ const FloatRetire = props => {
   const {
     float_order,
     fetchFloatOrder,
+    submitting_float_request,
     fetching_float_requests,
-    submitting_float,
     float_submit_success,
-    retireFloat
+    retireFloatOrder
   } = props
   const { id } = useParams()
   const [files, setFiles] = useState([])
@@ -30,14 +30,16 @@ const FloatRetire = props => {
       setLoadingDocument(false)
       if(response.status === RESPONSE_SUCCESS_CODE) {
         const dt = response?.data
-        setFiles(files.concat({
+        const fileDetails = {
           ...dt,
+          status: "done",
           name: dt?.fileName,
           size: dt?.fileSize,
           uid: dt?.id,
-          // url: `${BASE_URL}/requestDocument/download/${dt?.fileName}`
           url: dt?.fileDownloadUri
-        }))
+        }
+        console.log('file details', fileDetails)
+        setFiles(files.concat(fileDetails))
       }
     } catch (error) {
       setLoadingDocument(false)
@@ -46,15 +48,21 @@ const FloatRetire = props => {
 
   const onSubmit = () => {
     console.log('files', files)
-    // const payload = {
-    //   documents: files.map()
-    // }
-    retireFloat(id)
+    const payload = {
+      documents: files
+    }
+    retireFloatOrder(id, payload)
   }
 
   useEffect(() => {
     fetchFloatOrder(id)
   }, [id])
+
+  useEffect(() => {
+    if(!submitting_float_request && float_submit_success) {
+      history.goBack()
+    }
+  }, [submitting_float_request, float_submit_success])
 
   return (
     <>
@@ -64,7 +72,7 @@ const FloatRetire = props => {
           extra={[
             <Button 
               type='primary'
-              loading={submitting_float}
+              loading={submitting_float_request}
               onClick={e => {
                 onSubmit()
               }}

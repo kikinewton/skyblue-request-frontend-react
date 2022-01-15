@@ -15,11 +15,9 @@ const UploadFiles = props => {
       <Row>
         <Col span={24}>
           <Upload
-            defaultFileList={files}
+            fileList={files}
             listType="picture-card"
-            action={false}
             customRequest={onUpload}
-            multiple
             showUploadList={{
               showDownloadIcon: true,
               showRemoveIcon: true,

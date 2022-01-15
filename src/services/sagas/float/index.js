@@ -264,5 +264,5 @@ export function* watchAddItemsToFloatOrder(action) {
 }
 
 export function* watchRetireFloatOrder(action) {
-  yield takeLeading(Types.RETIRE_FLOAT_ORDER, addItemsToFloatOrder)
+  yield takeLeading(Types.RETIRE_FLOAT_ORDER, retireFloatOrder)
 }

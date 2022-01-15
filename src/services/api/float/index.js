@@ -133,9 +133,10 @@ export function updateStatus(id, status) {
 }
 
 export function retireFloatOrder(id, payload) {
+  console.log('api payload', payload)
   return service({
     url: `/floatOrders/${id}/supportingDocument`,
     method: "PUT",
-    data: payload
+    data: payload?.documents
   })
 }
