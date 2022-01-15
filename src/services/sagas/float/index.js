@@ -10,7 +10,9 @@ import {
   allocateFundsToFloat as allocateFundsToFloatApi,
   fetchFloatOrders as fetchFloatOrdersApi,
   fetchFloatOrder as fetchFloatOrderApi,
-  updateStatus as updateFloatOrderStatusApi
+  updateStatus as updateFloatOrderStatusApi,
+  retireFloatOrder as retireFloatOrderApi,
+  addItems as addItemsToFloatOrderApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -178,6 +180,42 @@ export function* allocateFundsToFloatRequest(action) {
   }
 }
 
+export function* retireFloatOrder(action) {
+  const { id, payload } = action
+  try {
+    const response = yield call(retireFloatOrderApi, id, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Retire Float', response?.message)
+      yield put(Creators.retireFloatOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Retire Float', response?.message)
+      yield put(Creators.retireFloatOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    openNotification('error', 'Retire Float', errorText)
+    yield put(Creators.retireFloatOrderFailure(errorText))
+  }
+}
+
+export function* addItemsToFloatOrder(action) {
+  const { id, payload } = action
+  try {
+    const response = yield call(addItemsToFloatOrderApi, id, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Update Float Order', response?.message)
+      yield put(Creators.addItemsToFloatOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Update Float Order', response?.message)
+      yield put(Creators.addItemsToFloatOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    openNotification('error', 'Update Float Order', errorText)
+    yield put(Creators.addItemsToFloatOrderFailure(errorText))
+  }
+}
+
 
 export function* resetFloatRequest(action) {
   yield put(Creators.resetFloatequest())
@@ -219,4 +257,12 @@ export function* watchFetchFloatOrder(action) {
 
 export function* watchUpdateFloatOrderStatus(action) {
   yield takeLatest(Types.UPDATE_FLOAT_ORDER_STATUS, updateFloatOrderStatus)
+}
+
+export function* watchAddItemsToFloatOrder(action) {
+  yield takeLeading(Types.ADD_ITEMS_TO_FLOAT_ORDER, addItemsToFloatOrder)
+}
+
+export function* watchRetireFloatOrder(action) {
+  yield takeLeading(Types.RETIRE_FLOAT_ORDER, addItemsToFloatOrder)
 }

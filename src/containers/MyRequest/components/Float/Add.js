@@ -207,6 +207,7 @@ const AddNewRequest = (props) => {
                           name="request-entry"
                           initialValues={{ name: "", purpose: "", quantity: "", unit_price: "" }}
                           onFinish={addToEntires}
+                          
                         >
                           <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
                             <Input.TextArea rows={3} placeholder="Description" />

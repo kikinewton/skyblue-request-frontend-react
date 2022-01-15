@@ -46,6 +46,14 @@ export const { Types, Creators } = createActions(
     allocateFundsToFloatRequestSuccess: ["responseData"],
     allocateFundsToFloatRequestFailure: ["error"],
 
+    addItemsToFloatOrder: ["id", "payload"],
+    addItemsToFloatOrderSuccess: ["responseData"],
+    addItemsToFloatOrderFailure: ["error"],
+
+    retireFloatOrder: ["id", "payload"],
+    retireFloatOrderSuccess: ["responseData"],
+    retireFloatOrderFailure: ["error"],
+
     setSelectedFloatRequests: ["requests"],
 
     filterFloatRequests: ["filter"],

@@ -70,6 +70,34 @@ export const fetchFloatOrderFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error, order: null};
 };
 
+//add items to float order
+export const addItemsToFloatOrder = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, errors: null, submitting: true };
+};
+
+export const addItemsToFloatOrderSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false};
+};
+
+export const addItemsToFloatOrderFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error };
+};
+
+//retire float order
+export const retireFloatOrder = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, errors: null, submitting: true };
+};
+
+export const retireFloatOrderSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false};
+};
+
+export const retireFloatOrderFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error };
+};
+
 //update float order status
 export const updateFloatOrderStatus = (state = INITIAL_STATE, action) => {
   console.log('lets fetch float')
@@ -218,6 +246,14 @@ export const HANDLERS = {
   [Types.FETCH_FLOAT_ORDER]: fetchFloatOrder,
   [Types.FETCH_FLOAT_ORDER_SUCCESS]: fetchFloatOrderSuccess,
   [Types.FETCH_FLOAT_ORDER_FAILURE]: fetchFloatOrderFailure,
+
+  [Types.ADD_ITEMS_TO_FLOAT_ORDER]: addItemsToFloatOrder,
+  [Types.ADD_ITEMS_TO_FLOAT_ORDER_SUCCESS]: addItemsToFloatOrderSuccess,
+  [Types.ADD_ITEMS_TO_FLOAT_ORDER_FAILURE]: addItemsToFloatOrderFailure,
+
+  [Types.RETIRE_FLOAT_ORDER]: retireFloatOrder,
+  [Types.RETIRE_FLOAT_ORDER_SUCCESS]: retireFloatOrderSuccess,
+  [Types.RETIRE_FLOAT_ORDER_FAILURE]: retireFloatOrderFailure,
 
   [Types.UPDATE_FLOAT_ORDER_STATUS]: updateFloatOrderStatus,
   [Types.UPDATE_FLOAT_ORDER_STATUS_SUCCESS]: upadteFloatOrderStatusSuccess,

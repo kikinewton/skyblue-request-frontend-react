@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Row, Col, Card, Button, Tag, Badge, Drawer } from "antd"
+import { Table, Row, Col, Card, Button, Tag, Badge, Drawer, List } from "antd"
 import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
@@ -8,6 +8,7 @@ import FloatDetails from './Details';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
 import { prettifyDateTime } from '../../../../util/common-helper';
+import { useRouteMatch } from "react-router-dom"
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 
@@ -47,13 +48,25 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
     key: "operations",
     render: (text, row) => (
       <>
-        {!row.ready && (
-          <Button 
+        {!row.comment && (
+          <Button
+            shape="circle"
             size='small' 
             type='default'
-            onClick={() => props.onRetire(row)}
+            style={{marginRight: 5}}
+            onClick={() => props.onEdit(row)}
           >
-            Retire
+            <EditOutlined />
+          </Button>
+        )}
+        {!row.ready && (
+          <Button 
+            shape="circle"
+            size='small' 
+            type='default'
+            onClick={() => props.onShowMore(row)}
+          >
+            <EyeOutlined />
           </Button>
         )}
       </>
@@ -61,7 +74,7 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
   }
 ])
 
-const columns = props => [
+const floatEntriesColumns = [
   {
     title: "Reference",
     dataIndex: "floatRef",
@@ -86,52 +99,21 @@ const columns = props => [
     title: `Unit Price (${CURRENCY_CODE})`,
     dataIndex: "estimatedUnitPrice",
     key: "estimatedUnitPrice",
-  },
-  {
-    title: "Endorsement",
-    dataIndex: "endorsement",
-    key: "endorsement",
-  },
-  {
-    title: "Approval",
-    dataIndex: "approval",
-    key: "approval",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (text) => {
-      let color = "default"
-      if(text === "PENDING") {
-        color = "processing"
-      } else if(text = "APPROVED") {
-        color = "success"
-      }
-      return (<Tag color={color}>{text}</Tag>)
-    }
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    render: (text, row) => (<div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
-      {(row?.status === "COMMENT") && <EditOutlined onClick={() => props.handleEdit(row)}/>}
-      <EyeOutlined onClick={() => props.handleView(row)} />
-    </div>)
   }
 ]
 
-const List = (props) => {
+const FloatList = (props) => {
   const { fetchMyFloatRequests, fetching_float_requests, 
     updateSingleFloatRequest, submiting_float_request, submit_float_request_success, fetchFloatOrders, 
     float_orders, resetFloatRequest } = props
   const history = useHistory()
   const [visible, setVisible] = React.useState(false)
-  const [retireVisible, setRetireVisible] = useState(false)
   const [selectionDetails, setSelectionDetails] = React.useState({type: SELECTION_TYPES.VIEW, row: null})
   const [selectedFloatForRetirement, setSelectedFloatForRetirement] = useState(null)
   const [viewDetailsVisible, setViewDetailsVisible] = useState(false)
+  const { path } = useRouteMatch()
+  const [editVisible, setEditVisible] = useState(false)
+  const [selectedFloatOrder, setSelectedFloatOrder] = useState(null)
 
   const expandedRowRender = (row) => {
     const expandedColumns = [
@@ -183,14 +165,14 @@ const List = (props) => {
                     setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
                     setVisible(true)
                   },
-                  handleEdit: (row) => {
-                    console.log('lets update')
-                    setSelectionDetails({type:SELECTION_TYPES.UPDATE, row})
-                    setVisible(true)
+                  onEdit: (row) => {
+                    //setSelectedFloatOrder(row)
+                    //setEditVisible(true)
+                    history.push(`${path}/${row?.id}/edit`)
                   },
-                  onRetire: (row) => {
+                  onShowMore: (row) => {
                     setSelectedFloatForRetirement(row)
-                    setRetireVisible(true)
+                    setViewDetailsVisible(true)
                   }
                 })}
                 dataSource={float_orders}
@@ -207,44 +189,81 @@ const List = (props) => {
           visible={viewDetailsVisible}
           title="Float Info"
           placement='right'
-          width={600}
-
+          width={800}
+          onClose={() => {
+            setSelectedFloatForRetirement(null)
+            setViewDetailsVisible(false)
+          }}
         >
-
+          <>
+            <Row>
+              <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                <Button type='primary'
+                  onClick={() => {
+                    history.push(`${path}/${selectedFloatForRetirement?.id}/retire`)
+                  }}
+                >
+                  Retire
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <List>
+                  <List.Item>
+                    <List.Item.Meta title="Reference" description={selectedFloatForRetirement?.floatOrderRef} />
+                  </List.Item>
+                  <List.Item>
+                    <List.Item.Meta title="Description" description={selectedFloatForRetirement?.description} />
+                  </List.Item>
+                  <List.Item>
+                    <List.Item.Meta title="Date" description={prettifyDateTime(selectedFloatForRetirement?.createdDate)} />
+                  </List.Item>
+                </List>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Table 
+                  dataSource={selectedFloatForRetirement?.floats}
+                  columns={floatEntriesColumns}
+                  size='small'
+                  bordered
+                  pagination={false}
+                  rowKey="id"
+                />
+              </Col>
+            </Row>
+          </>
         </Drawer>
 
 
         <Drawer
           forceRender
-          visible={visible}
-          title={selectionDetails.type === SELECTION_TYPES.VIEW ? `REQUEST DETAILS` : "UPDATE FLOAT"}
+          visible={editVisible}
+          title={"Edit Float"}
           placement="right"
           width={700}
           maskClosable={false}
           onClose={() => {
-            setSelectionDetails(SELECTION_TYPES.VIEW, null)
-            setVisible(false)
+            setSelectedFloatOrder(null)
+            setEditVisible(false)
           }}
         >
-          {selectionDetails.type === SELECTION_TYPES.UPDATE && (
-            <UpdateFloatForm 
-              onSubmit={(values) => {
-                console.log('values', values)
-                const payload = { description: values.description, quantity: values.quantity, estimatedPrice: values.estimatedUnitPrice }
-                
-                updateSingleFloatRequest(selectionDetails?.row?.id, payload)
-              }}
-              loading={submiting_float_request}
-              float={selectionDetails?.row}
-            />
-          )}
-          {selectionDetails.type === SELECTION_TYPES.VIEW && (
-            <FloatDetails float={selectionDetails.row} />
-          )}
-        </Drawer>
+          <UpdateFloatForm 
+            onSubmit={(values) => {
+              console.log('values', values)
+              const payload = { description: values.description, quantity: values.quantity, estimatedPrice: values.estimatedUnitPrice }
+              
+              updateSingleFloatRequest(selectedFloatOrder?.id, payload)
+            }}
+            loading={submiting_float_request}
+            float={selectedFloatOrder}
+          />
+      </Drawer>
       </AppLayout>
     </>
   )
 } 
 
-export default List
+export default FloatList

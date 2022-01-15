@@ -20,6 +20,7 @@ import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import UploadDocuments from './components/Float/UploadDocuments'
 import FloatsPendingUploadDocument from './components/Float/FloatsPendingUploadDocument'
 import FloatRetire from "./components/Float/FloatRetire"
+import EditFloatOrder from './components/Float/Edit'
 
 const MyRequest = (props)=> {
   const [current, setCurrent] = React.useState("my-lpos")
@@ -75,6 +76,9 @@ const MyRequest = (props)=> {
         </Route>
         <Route path={`${path}/float-requests/:id/retire`}>
           <FloatRetire {...props} />
+        </Route>
+        <Route path={`${path}/float-requests/:id/edit`}>
+          <EditFloatOrder {...props} />
         </Route>
         <Route exact path={`${path}/float-requests`}>
           <ListFloat {...props} />
@@ -146,6 +150,8 @@ const mapActionsToProps = (dispatch) => {
     fetchFloatRequests: (query) => {
       dispatch(FloatCreators.fetchFloatRequests(query))
     },
+    addItemsToFloatOrder: (id, payload) => dispatch(FloatCreators.addItemsToFloatOrder(id, payload)),
+    retireFloatOrder: (id, payload) => dispatch(FloatCreators.retireFloatOrder(id, payload)),
     fetchFloatOrders: query => dispatch(FloatCreators.fetchFloatOrders(query)),
     fetchFloatOrder: id => dispatch(FloatCreators.fetchFloatOrder(id)),
     createFloatRequest: (payload) => {

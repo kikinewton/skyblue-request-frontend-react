@@ -131,3 +131,11 @@ export function updateStatus(id, status) {
     method: "PUT"
   })
 }
+
+export function retireFloatOrder(id, payload) {
+  return service({
+    url: `/floatOrders/${id}/supportingDocument`,
+    method: "PUT",
+    data: payload
+  })
+}
