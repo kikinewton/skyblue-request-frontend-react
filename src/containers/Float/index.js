@@ -138,6 +138,7 @@ const mapActionsToProps = (dispatch) => {
     setSelectedFloatRequests: (requests) => {
       dispatch(FloatCreators.setSelectedFloatRequests(requests))
     },
+    updateFloatOrderStatus: (id, status) => dispatch(FloatCreators.updateFloatOrderStatus(id, status)),
     resetFloatRequest: () => {
       dispatch(FloatCreators.resetFloatRequest())
     },

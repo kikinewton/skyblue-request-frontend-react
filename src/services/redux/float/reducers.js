@@ -6,6 +6,7 @@ export const INITIAL_STATE = {
   requests: [],
   my_requests: [],
   filtered_requests: [],
+  order: null,
   orders: [],
   request: null,
   selected_requests: [],
@@ -53,6 +54,34 @@ export const fetchFloatOrdersSuccess = (state = INITIAL_STATE, action) => {
 
 export const fetchFloatOrdersFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error, orders: []};
+};
+
+//fetch order
+export const fetchFloatOrder = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, loading: true, errors: null, submitting: false };
+};
+
+export const fetchFloatOrderSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, order: action.responseData, loading: false};
+};
+
+export const fetchFloatOrderFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, order: null};
+};
+
+//update float order status
+export const updateFloatOrderStatus = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const upadteFloatOrderStatusSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const updateFloatOrderStatusFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
 //get
@@ -172,7 +201,8 @@ export const resetFloatRequest = (state = INITIAL_STATE, action) => {
     error: null,
     loading: false,
     submitting: false,
-    filtered_requests: []
+    filtered_requests: [],
+    orders: []
   };
 };
 
@@ -184,6 +214,14 @@ export const HANDLERS = {
   [Types.FETCH_FLOAT_ORDERS]: fetchFloatOrders,
   [Types.FETCH_FLOAT_ORDERS_SUCCESS]: fetchFloatOrdersSuccess,
   [Types.FETCH_FLOAT_ORDERS_FAILURE]: fetchFloatOrdersFailure,
+
+  [Types.FETCH_FLOAT_ORDER]: fetchFloatOrder,
+  [Types.FETCH_FLOAT_ORDER_SUCCESS]: fetchFloatOrderSuccess,
+  [Types.FETCH_FLOAT_ORDER_FAILURE]: fetchFloatOrderFailure,
+
+  [Types.UPDATE_FLOAT_ORDER_STATUS]: updateFloatOrderStatus,
+  [Types.UPDATE_FLOAT_ORDER_STATUS_SUCCESS]: upadteFloatOrderStatusSuccess,
+  [Types.UPDATE_FLOAT_ORDER_STATUS_FAILURE]: updateFloatOrderStatusFailure,
 
   [Types.FETCH_MY_FLOAT_REQUESTS]: fetchMyFloatRequests,
   [Types.FETCH_MY_FLOAT_REQUESTS_SUCCESS]: fetchMyFloatRequestsSuccess,

@@ -93,3 +93,41 @@ export function fetchFloatOrders(query) {
     method: "GET"
   })
 }
+
+export function createFloatOrder(payload) {
+  return service({
+    url: `/floatOrders`,
+    method: "POST",
+    data: payload
+  })
+}
+
+export function updateFloatOrder(id, payload) {
+  return service({
+    url: `/floatOrders/${id}`,
+    method: "PUT",
+    data: payload
+  })
+}
+
+export function fetchFloatOrder(id) {
+  return service({
+    url: `/floatOrders/${id}`,
+    method: "GET"
+  })
+}
+
+export function addItems(id, payload) {
+  return service({
+    url: `/floatOrders/${id}/addItems`,
+    method: "PUT",
+    data: payload
+  })
+}
+
+export function updateStatus(id, status) {
+  return service({
+    url: `/floatOrders/${id}?statusChange=${status}`,
+    method: "PUT"
+  })
+}

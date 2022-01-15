@@ -1,10 +1,10 @@
 import { PageHeader } from 'antd'
 import React from 'react'
-
+import PropTypes from "prop-types"
 
 const MyPageHeader = (props) => {
   const {
-    extra,
+    extra = [],
     title,
     onBack,
   } = props
@@ -13,10 +13,16 @@ const MyPageHeader = (props) => {
     <PageHeader 
       style={{padding: 0, color: "#999594"}}
       title={title}
-      extra={extra ? extra : null}
-      onBack={onBack ? onBack : null}
+      extra={extra}
+      onBack={onBack}
     />
   )
+}
+
+MyPageHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  extra: PropTypes.array,
+  onBack: PropTypes.func
 }
 
 export default MyPageHeader

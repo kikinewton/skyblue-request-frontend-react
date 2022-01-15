@@ -19,6 +19,7 @@ import RequestTracker from './components/Lpo/RequestTracker'
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import UploadDocuments from './components/Float/UploadDocuments'
 import FloatsPendingUploadDocument from './components/Float/FloatsPendingUploadDocument'
+import FloatRetire from "./components/Float/FloatRetire"
 
 const MyRequest = (props)=> {
   const [current, setCurrent] = React.useState("my-lpos")
@@ -72,6 +73,9 @@ const MyRequest = (props)=> {
         <Route path={`${path}/float-requests/add-new`}>
           <AddFloat {...props} />
         </Route>
+        <Route path={`${path}/float-requests/:id/retire`}>
+          <FloatRetire {...props} />
+        </Route>
         <Route exact path={`${path}/float-requests`}>
           <ListFloat {...props} />
         </Route>
@@ -105,6 +109,7 @@ const mapStateToProps = (store) => ({
   submitting_float_request: store.float.submitting,
   submit_float_request_success: store.float.submit_success,
   float_orders: store.float.orders,
+  float_order: store.float.order,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -142,13 +147,16 @@ const mapActionsToProps = (dispatch) => {
       dispatch(FloatCreators.fetchFloatRequests(query))
     },
     fetchFloatOrders: query => dispatch(FloatCreators.fetchFloatOrders(query)),
+    fetchFloatOrder: id => dispatch(FloatCreators.fetchFloatOrder(id)),
     createFloatRequest: (payload) => {
       dispatch(FloatCreators.createFloatRequest(payload))
     },
     updateSingleFloatRequest: (id, payload) => {
       dispatch(FloatCreators.updateSingleFloatRequest(id, payload))
     },
-
+    resetFloatRequest: () => {
+      dispatch(FloatCreators.resetFloatRequest())
+    },
     fetchMyPettyCashRequests: (query) => {
       dispatch(PettyCashCreators.fetchMyPettyCashRequests(query))
     },

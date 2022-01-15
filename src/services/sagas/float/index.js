@@ -8,14 +8,14 @@ import {
   updateFloatRequest as updateFloatRequestApi,
   updateSingleFloatRequest as updateSingleFloatRequestApi,
   allocateFundsToFloat as allocateFundsToFloatApi,
-  fetchFloatOrders as fetchFloatOrdersApi
+  fetchFloatOrders as fetchFloatOrdersApi,
+  fetchFloatOrder as fetchFloatOrderApi,
+  updateStatus as updateFloatOrderStatusApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
-
 export function* fetchAllFloatRequests(action) {
-  console.log('=================>FETCH REQUEST', action)
   const { query } = action
   try {
     const response = yield call(fetchFloatRequestsApi, query)
@@ -26,7 +26,7 @@ export function* fetchAllFloatRequests(action) {
       yield put(Creators.fetchAFloatRequestsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchFloatRequestsFailure(errorText))
   }
@@ -44,14 +44,30 @@ export function* fetchFloatOrders(action) {
       yield put(Creators.fetchAFloatOrdersFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchFloatOrdersFailure(errorText))
   }
 }
 
+export function* fetchFloatOrder(action) {
+  const { id } = action
+  try {
+    const response = yield call(fetchFloatOrderApi, id)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchFloatOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Fetch Request', response?.message)
+      yield put(Creators.fetchAFloatOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchFloatOrderFailure(errorText))
+  }
+}
+
 export function* fetchMyFloatRequests(action) {
-  console.log('=================>FETCH REQUEST', action)
   const { query } = action
   try {
     const response = yield call(fetchMyFloatRequestsApi, query)
@@ -62,12 +78,11 @@ export function* fetchMyFloatRequests(action) {
       yield put(Creators.fetchMyFloatRequestsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchMyFloatRequestsFailure(errorText))
   }
 }
-
 
 export function* createFloatRequest(action) {
   const { payload } = action
@@ -81,9 +96,28 @@ export function* createFloatRequest(action) {
       yield put(Creators.createFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    console.log('errors', errorText)
     openNotification('error', 'Create Float', errorText)
     yield put(Creators.createFloatRequestFailure(errorText))
+  }
+}
+
+export function* updateFloatOrderStatus(action) {
+  const { id, status } = action
+  try {
+    const response = yield call(updateFloatOrderStatusApi, id, status)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Update Float', response?.message)
+      yield put(Creators.updateFloatOrderStatusSuccess(response?.data))
+    } else {
+      openNotification('error', 'Update Float Status', response?.message)
+      yield put(Creators.updateFloatOrderStatusFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    openNotification('error', 'Update Float Status',errorText)
+    yield put(Creators.updateFloatOrderStatusFailure(errorText))
   }
 }
 
@@ -100,8 +134,8 @@ export function* updateFloatRequest(action) {
       yield put(Creators.updateFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
-    openNotification('error', 'Update Float', errorText)
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    openNotification('error', 'Update Float',errorText)
     yield put(Creators.updateFloatRequestFailure(errorText))
   }
 }
@@ -119,7 +153,7 @@ export function* updateSingleFloatRequest(action) {
       yield put(Creators.updateSingleFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
     openNotification('error', 'Update Float', errorText)
     yield put(Creators.updateSingleFloatRequestFailure(errorText))
   }
@@ -138,7 +172,7 @@ export function* allocateFundsToFloatRequest(action) {
       yield put(Creators.allocateFundsToFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Allocate Funds To Float'
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
     openNotification('error', 'Allocate Funds To Float', errorText)
     yield put(Creators.allocateFundsToFloatRequestFailure(errorText))
   }
@@ -177,4 +211,12 @@ export function* watchAllocateFundsToFloatRequest(action) {
 
 export function* watchFetchFloatOrders(action) {
   yield takeLeading(Types.FETCH_FLOAT_ORDERS, fetchFloatOrders)
+}
+
+export function* watchFetchFloatOrder(action) {
+  yield takeLeading(Types.FETCH_FLOAT_ORDER, fetchFloatOrder)
+}
+
+export function* watchUpdateFloatOrderStatus(action) {
+  yield takeLatest(Types.UPDATE_FLOAT_ORDER_STATUS, updateFloatOrderStatus)
 }

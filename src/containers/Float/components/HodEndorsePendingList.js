@@ -1,8 +1,30 @@
-import { CheckOutlined, CloseOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message } from 'antd';
+import { CheckOutlined, CloseOutlined, CommentOutlined, DeleteColumnOutlined, DeleteOutlined, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
+import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
+import MyPageHeader from "../../../shared/MyPageHeader"
+
+const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, row) => (
+      <>
+        <Button 
+          size='small' 
+          type="default" 
+          shape="circle"
+          onClick={() => props.onViewDetails(row)}
+        >
+          <EyeOutlined />
+        </Button>
+      </>
+    )
+  }
+])
 
 const columns = props => [
   {
@@ -33,7 +55,7 @@ const columns = props => [
   },
 ]
 
-const selectedRequestsColumns = props => [
+const floatItemsColumns = [
   {
     title: "Reference",
     dataIndex: "floatRef",
@@ -108,14 +130,27 @@ const HodEndorsePendingList = (props) => {
     float_submitting,
     float_requests,
     updateFloatRequest,
+    updateFloatOrderStatus,
     updating_request,
     update_request_success,
   } = props
 
   const [confirmDrawer, setConfirmDrawer] = useState(false)
-  const [actionType, setActionType] = useState(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
+  const [selectedFloatOrder, setSelectedFloatOrder] = useState(null)
+  const [comment, setComment] = useState("")
+  const [commentRequired, setCommentRequired] = useState(false)
+  
 
-  const submit = () => {
+  const expandedRowRender = (row) => {
+    const expandedColumns = [
+      {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
+      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
+    ]
+    return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
+  }
+
+  const submit = (actionType) => {
     if((actionType !== UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE) && ((selected_float_requests.filter(it => !it.comment) || []).length > 0)) {
       return message.error("Entries without comments not acccepted")
     }
@@ -143,10 +178,12 @@ const HodEndorsePendingList = (props) => {
       console.log('payload ----', payload)
       props.createComment("FLOAT", payload)
     } else {
-      updateFloatRequest({
-        updateType: actionType,
-        bulkFloat: selected_float_requests
-      })
+      const payload = {
+        id: selectedFloatOrder?.id,
+        status: 'ENDORSE'
+      }
+      console.log('payload: ', payload)
+      updateFloatOrderStatus(payload.id, payload.status)
     }
   }
 
@@ -180,74 +217,33 @@ const HodEndorsePendingList = (props) => {
 
   return (
     <>
-      <Card title="Requests pending Endorsement" extra={[
-        (
-          <Row style={{marginBottom: 10}} key="list-buttons">
-          <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button
-              disabled={selected_float_requests.length < 1} 
-              type="default"
-              style={{marginRight: 5}}
-              onClick={() => {
-                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT)
-                setConfirmDrawer(true)
-              }}
-            >
-              <WarningOutlined /> Comment
-            </Button>
-            <Button
-              type="default"
-              style={{marginRight: 5}} 
-              disabled={selected_float_requests.length < 1}
-              onClick={() => {
-                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CloseOutlined />
-              Cancel
-            </Button>
-            <Button 
-              disabled={selected_float_requests.length < 1} 
-              type="primary" style={{marginRight: 5}}
-              onClick={() => {
-                setActionType(UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CheckOutlined />
-              Endorse
-            </Button>
-          </Col>
-        </Row>
-        )
-      ]}>
+      <MyPageHeader title={<>
+          <span style={{marginRight: 5}}>Floats awaiting endorsement</span>
+          <SyncOutlined spin={fetching_float_requests} onClick={() => {
+            props.fetchFloatRequests({
+              requestType: FETCH_FLOAT_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+            })
+          }} />
+        </>} 
+      />
+      <Card>
         <Row>
           <Col span={24}>
             <Table
               loading={fetching_float_requests}
               size="small"
-              columns={columns({})}
+              columns={floatOrderColumns({
+                onViewDetails: row => {
+                  setSelectedFloatOrder(row)
+                  setConfirmDrawer(row)
+                }
+              })}
               dataSource={float_requests}
               rowKey="id"
               bordered
+              expandable={{expandedRowRender}}
               pagination={{
                 pageSize: 20
-              }}
-              rowSelection={{
-                // onChange: (selectedRowKeys, selectedRows) => {
-                //   setSelectedFloatRequests(selectedRows.map(item => {
-                //     let dt = item
-                //     if(dt['comment']) {
-                //       dt['comment'] = null
-                //     }
-                //     return dt
-                //   }))
-                // },
-                onChange: (selectedRowKeys, selectedRows) => {
-                  setSelectedFloatRequests(selectedRows.map(it => Object.assign({}, it)))
-                },
-                selectedRowKeys: selected_float_requests?.map(it=> it.id),
               }}
             />
           </Col>
@@ -256,54 +252,117 @@ const HodEndorsePendingList = (props) => {
       <Drawer
         forceRender
         visible={confirmDrawer}
-        title={`${actionType} REQUESTS`}
+        title="Float Details"
         placement="right"
-        width={1000}
+        width={700}
         maskClosable={false}
         onClose={() => {
-          setSelectedFloatRequests([])
+          setSelectedFloatOrder(null)
           setConfirmDrawer(false)
         }}
       >
-        <Row style={{marginBottom: 10}}>
-          <Col span={24}>
-            <Button 
-              type="primary" 
-              style={{float: "right"}}
-              onClick={submit}
-              disabled={float_submitting}
-              loading={float_submitting || props.submitting_comment}
-            >
-              <CheckOutlined /> SUBMIT
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
         <Row>
           <Col span={24}>
-            <Table 
-              columns={actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_ENDORSE ? selectedRequestsColumns({
-                actionType,
-              }) 
-              : selectedRequestsColumnsForReject({
-                  onComment: (event, row) => {
-                    console.log('row', row, 'value', event.target.value)
-                    const data = selected_float_requests.map(it => {
-                      let dt = it
-                      if(dt.id === row.id) {
-                        dt['comment'] = event?.target?.value
-                      }
-                      return dt;
-                    })
-                    setSelectedFloatRequests(data)
-                  },
-              })}
-              dataSource={selected_float_requests}
-              size="small"
-              rowKey="id"
-              bordered
-              pagination={false}
-            />
+            <List>
+              <List.Item>
+                <List.Item.Meta title="Float Description" description={selectedFloatOrder?.description} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Requested By" description={selectedFloatOrder?.requestedBy} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Phone Number" description={selectedFloatOrder?.requestedByPhoneNo} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        {selectedFloatOrder?.floats.length > 0 && (
+          <>
+            <Row style={{marginTop: 10}}>
+              <Col span={24}>
+                <span style={{fontWeight: "bold"}}>Float Items</span>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Table
+                  columns={floatItemsColumns}
+                  dataSource={selectedFloatOrder?.floats}
+                  size='small'
+                  bordered
+                  pagination={false}
+                  rowKey="id"
+                />
+              </Col>
+            </Row>
+          </>
+        )}
+        {commentRequired && (
+          <Card size='small' title="Comment Form" style={{marginTop: 10, marginBottom: 10}}>
+            <Row>
+              <Col span={24}>
+                <Form.Item>
+                  <Input
+                    value={comment}
+                    onChange={e => setComment(e.target.value)}
+                    type="text"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        )}
+        <Row style={{padding: "10px 0 10px 0"}}>
+          <Col span={8} >
+            <Button 
+              type='default'
+              style={{float: "left"}}
+              onClick={e => {
+                if(!comment) {
+                  setComment("")
+                  setCommentRequired(true)
+                } else {
+                  submit(UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL)
+                }
+              }}
+            >
+              <DeleteOutlined />
+              Cancel
+            </Button>
+          </Col>
+          <Col span={8} style={{textAlign: "center"}}>
+            <Button 
+              type='default'
+              onClick={e => {
+                if(!comment) {
+                  setComment("")
+                  setCommentRequired(true)
+                } else {
+                  submit(UPDATE_FLOAT_REQUEST_TYPES.HOD_COMMENT)
+                }
+              }}
+            >
+              <CommentOutlined />
+              Comment
+            </Button>
+          </Col>
+          <Col span={8} >
+            <Button 
+              loading={float_submitting}
+              style={{float: "right"}}
+              type='primary'
+              onClick={e => {
+                if(comment) {
+                  setComment("")
+                  setCommentRequired(false)
+                } else {
+                  submit(UPDATE_FLOAT_REQUEST_TYPES.HOD_APPROVE)
+                }
+              }}
+            >
+              <CheckOutlined />
+              Endorse
+            </Button>
           </Col>
         </Row>
       </Drawer>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Row, Col, Card, Button, Tag, Badge, Drawer } from "antd"
 import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
@@ -11,11 +11,16 @@ import { prettifyDateTime } from '../../../../util/common-helper';
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 
-const FLOAT_ORDERS_COLUMN = props => [
+export const FLOAT_ORDERS_COLUMN = [
   {
     title: "Float Reference",
     dataIndex: "floatOrderRef",
     key: "floatOrderRef"
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+    key: "description"
   },
   {
     title: "Requested By",
@@ -34,6 +39,27 @@ const FLOAT_ORDERS_COLUMN = props => [
     render: (text, row) => prettifyDateTime(text)
   },
 ]
+
+const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
+  {
+    title: "Actions",
+    dataIndex: "operations",
+    key: "operations",
+    render: (text, row) => (
+      <>
+        {!row.ready && (
+          <Button 
+            size='small' 
+            type='default'
+            onClick={() => props.onRetire(row)}
+          >
+            Retire
+          </Button>
+        )}
+      </>
+    )
+  }
+])
 
 const columns = props => [
   {
@@ -97,25 +123,28 @@ const columns = props => [
 ]
 
 const List = (props) => {
-  const { my_float_requests, fetchMyFloatRequests, fetching_float_requests, 
-    updateSingleFloatRequest, submiting_float_request, submit_float_request_success, fetchFloatOrders, float_orders } = props
+  const { fetchMyFloatRequests, fetching_float_requests, 
+    updateSingleFloatRequest, submiting_float_request, submit_float_request_success, fetchFloatOrders, 
+    float_orders, resetFloatRequest } = props
   const history = useHistory()
   const [visible, setVisible] = React.useState(false)
+  const [retireVisible, setRetireVisible] = useState(false)
   const [selectionDetails, setSelectionDetails] = React.useState({type: SELECTION_TYPES.VIEW, row: null})
+  const [selectedFloatForRetirement, setSelectedFloatForRetirement] = useState(null)
+  const [viewDetailsVisible, setViewDetailsVisible] = useState(false)
 
   const expandedRowRender = (row) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
       {title: 'Purpose', dataIndex: 'purpose', key: 'purpose'},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
-      {title: "Endorsement Status", dataIndex: 'endorsement', key: 'endorsement'},
-      {title: "Approval Status", dataIndex: 'approval', key: 'approval'},
     ]
     return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
   }
 
   React.useEffect(() => {
     //fetchMyFloatRequests({})
+    resetFloatRequest()
     fetchFloatOrders({myRequest: true})
   }, [])
 
@@ -148,7 +177,7 @@ const List = (props) => {
             <Col span={24}>
               <Table
                 loading={fetching_float_requests}
-                columns={FLOAT_ORDERS_COLUMN({
+                columns={myColumns({
                   handleView: (row) => {
                     console.log('lets view')
                     setSelectionDetails({type: SELECTION_TYPES.VIEW, row})
@@ -159,6 +188,10 @@ const List = (props) => {
                     setSelectionDetails({type:SELECTION_TYPES.UPDATE, row})
                     setVisible(true)
                   },
+                  onRetire: (row) => {
+                    setSelectedFloatForRetirement(row)
+                    setRetireVisible(true)
+                  }
                 })}
                 dataSource={float_orders}
                 rowKey="id"
@@ -169,6 +202,18 @@ const List = (props) => {
             </Col>
           </Row>
         </Card>
+        <Drawer
+          forceRender
+          visible={viewDetailsVisible}
+          title="Float Info"
+          placement='right'
+          width={600}
+
+        >
+
+        </Drawer>
+
+
         <Drawer
           forceRender
           visible={visible}

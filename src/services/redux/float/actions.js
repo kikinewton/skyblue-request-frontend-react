@@ -10,6 +10,10 @@ export const { Types, Creators } = createActions(
     fetchFloatOrdersSuccess: ["responseData"],
     fetchFloatOrdersFailure: ["error"],
 
+    fetchFloatOrder: ["id"],
+    fetchFloatOrderSuccess: ["responseData"],
+    fetchFloatOrderFailure: ["error"],
+
     fetchMyFloatRequests: ["query"],
     fetchMyFloatRequestsSuccess: ["responseData"],
     fetchMyFloatRequestsFailure: ["error"],
@@ -33,6 +37,10 @@ export const { Types, Creators } = createActions(
     deleteFloatRequest: ["requestId", "payload"],
     deleteFloatRequestSuccess: ["responseData"],
     deleteFloatRequestFailure: ["error"],
+
+    updateFloatOrderStatus: ["id", "status"],
+    updateFloatOrderStatusSuccess: ["responseData"],
+    updateFloatOrderStatusFailure: ["error"],
 
     allocateFundsToFloatRequest: ["payload"],
     allocateFundsToFloatRequestSuccess: ["responseData"],
