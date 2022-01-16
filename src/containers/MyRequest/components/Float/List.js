@@ -43,6 +43,12 @@ export const FLOAT_ORDERS_COLUMN = [
 
 const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
+    title: "Retirement Status",
+    dataIndex: "fundsReceived",
+    key: "fundsRev=ceived",
+    render: (text, row) => (row.fundsReceived ? <Tag color="green">Ready</Tag> : 'Cannot retire')
+  },
+  {
     title: "Actions",
     dataIndex: "operations",
     key: "operations",
