@@ -78,9 +78,9 @@ export function deleteFloatRequest(id) {
   })
 }
 
-export function allocateFundsToFloat(payload) {
+export function allocateFundsToFloat(id, payload) {
   return service({
-    url: `/floats/receiveFunds`,
+    url: `/floatOrders/${id}/receiveFunds`,
     method: 'PUT',
     data: payload
   })

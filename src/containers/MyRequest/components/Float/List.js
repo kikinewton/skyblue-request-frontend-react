@@ -48,25 +48,23 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
     key: "operations",
     render: (text, row) => (
       <>
+        <Button 
+          shape="circle"
+          style={{marginRight: 5}}
+          size='small' 
+          type='default'
+          onClick={() => props.onShowMore(row)}
+        >
+          <EyeOutlined />
+        </Button>
         {!row.comment && (
           <Button
             shape="circle"
             size='small' 
             type='default'
-            style={{marginRight: 5}}
             onClick={() => props.onEdit(row)}
           >
             <EditOutlined />
-          </Button>
-        )}
-        {!row.ready && (
-          <Button 
-            shape="circle"
-            size='small' 
-            type='default'
-            onClick={() => props.onShowMore(row)}
-          >
-            <EyeOutlined />
           </Button>
         )}
       </>
@@ -199,6 +197,7 @@ const FloatList = (props) => {
             <Row>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
                 <Button type='primary'
+                  disabled={!selectedFloatForRetirement?.fundsReceived}
                   onClick={() => {
                     history.push(`${path}/${selectedFloatForRetirement?.id}/retire`)
                   }}

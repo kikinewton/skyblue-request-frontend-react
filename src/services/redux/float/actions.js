@@ -42,7 +42,7 @@ export const { Types, Creators } = createActions(
     updateFloatOrderStatusSuccess: ["responseData"],
     updateFloatOrderStatusFailure: ["error"],
 
-    allocateFundsToFloatRequest: ["payload"],
+    allocateFundsToFloatRequest: ["id","payload"],
     allocateFundsToFloatRequestSuccess: ["responseData"],
     allocateFundsToFloatRequestFailure: ["error"],
 

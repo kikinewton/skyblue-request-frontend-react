@@ -1,4 +1,4 @@
-import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
+import { DollarOutlined, EyeOutlined, MoneyCollectOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, SyncOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Drawer, List, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -7,52 +7,11 @@ import { FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 import DocumentView from "../../../presentation/DocumentView"
+import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List'
+import { CURRENCY_CODE } from '../../../util/constants'
 
-const columns = props => [
-  {
-    title: "Reference",
-    dataIndex: "floatRef",
-    key: "floatRef"
-  },
-  {
-    title: "Description",
-    dataIndex: "itemDescription",
-    key: "itemDescription"
-  },
-  {
-    title: "Unit Price",
-    dataIndex: "estimatedUnitPrice",
-    key: "estimatedUnitPrice",
-    render: (text) => formatCurrency(text)
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity"
-  },
-  {
-    title: "Total Amount",
-    dataIndex: "amountTotal",
-    key: "amountTotal",
-    render: (text, row) => formatCurrency(row?.estimatedUnitPrice * row?.quantity)
-  },
-  {
-    title: "Requested By",
-    dataIndex: "createdBy",
-    key: "createdBy",
-    render: (text, row) => row?.createdBy?.fullName
-  },
-  {
-    title: "Requested On",
-    dataIndex: "createdDate",
-    key: "createdDate",
-    render: (text) => prettifyDateTime(text)
-  },
-  {
-    title: "Approval Status",
-    dataIndex: "approval",
-    key: "approval"
-  },
+
+const columns = props => FLOAT_ORDERS_COLUMN.concat([
   {
     title: "Actions",
     dataIndex: "actions",
@@ -63,8 +22,32 @@ const columns = props => [
       </>
     ) 
   },
-]
+])
 
+const floatEntriesColumns = [
+  {
+    title: "Descrption",
+    dataIndex: "itemDescription",
+    key: "itemDescription",
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
+  },
+  {
+    title: `Unit Price (${CURRENCY_CODE})`,
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: text => formatCurrency(text)
+  },
+  {
+    title: `Total Amount (${CURRENCY_CODE})`,
+    dataIndex: "totalAmount",
+    key: "totalAmount",
+    render: (text, row) => formatCurrency(row?.estimatedUnitPrice*row?.quantity)
+  }
+]
 
 const summaryColumns = [
   {
@@ -129,6 +112,16 @@ const FloatAllocateFunds = (props) => {
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [infoVisible, setInfoVisible] = useState(false)
 
+
+  const expandedRowRender = (row) => {
+    const expandedColumns = [
+      {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
+      {title: 'Purpose', dataIndex: 'purpose', key: 'purpose'},
+      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
+    ]
+    return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
+  }
+
   useEffect(() => {
     resetFloatRequest()
     fetchFloatRequests({
@@ -157,26 +150,15 @@ const FloatAllocateFunds = (props) => {
           title={
             <Row>
               <Col span={24}>
-                <span style={{marginRight: 10}}>Allocate Funds to Petty Cash</span>
+                <span style={{marginRight: 10}}>Allocate Funds to Float</span>
                 <SyncOutlined
                   spin={fetching_float_requests}  
                   size="small" 
                   onClick={() => fetchFloatRequests({requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_FUND_ALLOCATION})}  />
               </Col>
             </Row>
-          } 
-          extra={[
-          <Button
-            disabled={selectedRequests.length < 1} 
-            key="allocate-btn" 
-            type='default' 
-            onClick={() => {
-              setVisible(true)
-            }}
-        >
-          Allocate Funds To Selected Float
-        </Button>
-        ]} />
+          }
+        />
         <Card>
           <Table 
             columns={columns({
@@ -191,12 +173,7 @@ const FloatAllocateFunds = (props) => {
             size='small'
             bordered
             pagination={{pageSize: 30}}
-            rowSelection={{
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRequests(selectedRows.map(it => Object.assign({},it)))
-              },
-              selectedRowKeys: selectedRequests.map(it => it.id)
-            }}
+            expandable={{expandedRowRender}}
           />
         </Card>
         <Drawer
@@ -205,16 +182,17 @@ const FloatAllocateFunds = (props) => {
           onClose={() => {
             setVisible(false)
           }}
+          title="Allocate Funds"
+          forceRender
         >
+
           <Row>
             <Col span={24}>
               <Button
                 loading={submitting_float_request} 
                 type='primary'
                 onClick={() => {
-                  allocateFundsToFloatRequest({
-                    floats: selectedRequests
-                  })
+                  allocateFundsToFloatRequest(selectedRequest?.id, {})
                 }}
               >
                 Allocate Funds To Selected Float Requests 
@@ -237,44 +215,56 @@ const FloatAllocateFunds = (props) => {
           onClose={() => {
             setInfoVisible(false)
           }}
+          forceRender
+          title="Allocate Funds Form"
         >
           <>
             <Row>
               <Col span={24}>
                 <List>
                   <List.Item>
-                    <List.Item.Meta title="Reference" description={selectedRequest?.FloatRef} />
+                    <List.Item.Meta avatar={<NumberOutlined/>} title="Reference" description={selectedRequest?.floatOrderRef} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Description" description={selectedRequest?.itemDescription} />
+                    <List.Item.Meta avatar={<OneToOneOutlined/>} title="Description" description={selectedRequest?.description} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Unit Price" description={formatCurrency(selectedRequest?.estimatedUnitPrice)} />
+                    <List.Item.Meta avatar={<UserOutlined/>} title="Requested By" description={selectedRequest?.requestedBy} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Quantity" description={selectedRequest?.quantity} />
-                  </List.Item>
-                  <List.Item></List.Item>
-                  <List.Item>
-                    <List.Item.Meta title="Total Amount" description={formatCurrency(selectedRequest?.estimatedUnitPrice * selectedRequest?.quantity)} />
+                    <List.Item.Meta avatar={<PhoneOutlined/>} title="Phone Number" description={selectedRequest?.requestedByPhoneNo} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Requested By" description={selectedRequest?.createdBy?.fullName} />
+                    <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Total Amount" description={formatCurrency(selectedRequest?.estimatedUnitPrice * selectedRequest?.quantity)} />
                   </List.Item>
                   <List.Item>
-                    <List.Item.Meta title="Phone Number" description={selectedRequest?.createdBy?.phoneNo} />
+                    <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Amount Sepcified" description={formatCurrency(selectedRequest?.amount)} />
                   </List.Item>
                 </List>
               </Col>
             </Row>
             <Row>
               <Col span={24}>
-                <Card size='small' title="Supporting DOcument">
-                  {/* <DocumentView 
-                    docFormat={}
-                    src={}
-                  /> */}
-                </Card>
+                <Table 
+                  columns={floatEntriesColumns}
+                  dataSource={selectedRequest?.floats}
+                  size='small'
+                  bordered
+                  pagination={false}
+                />
+              </Col>
+            </Row>
+            <Row style={{padding: "10px 0 10px 0"}}>
+              <Col span={24}>
+                <Button
+                  loading={submitting_float_request} 
+                  type='primary'
+                  onClick={() => {
+                    allocateFundsToFloatRequest(selectedRequest?.id, {})
+                  }}
+                >
+                  Allocate Funds To Selected Float Requests 
+                </Button>
               </Col>
             </Row>
           </>

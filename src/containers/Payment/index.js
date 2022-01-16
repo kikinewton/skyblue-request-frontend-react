@@ -130,7 +130,7 @@ const mapActionToProps = dispatch => ({
 
   fetchFloatRequests: query => dispatch(FloatCreators.fetchFloatRequests(query)),
   resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
-  allocateFundsToFloatRequest: (payload) => dispatch(FloatCreators.allocateFundsToFloatRequest(payload)),
+  allocateFundsToFloatRequest: (id, payload) => dispatch(FloatCreators.allocateFundsToFloatRequest(id, payload)),
 
 })
 

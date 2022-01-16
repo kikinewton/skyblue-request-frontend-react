@@ -163,9 +163,10 @@ export function* updateSingleFloatRequest(action) {
 
 
 export function* allocateFundsToFloatRequest(action) {
-  const { payload } = action
+  console.log('payload sga', action)
+  const { id, payload } = action
   try {
-    const response = yield call(allocateFundsToFloatApi, payload)
+    const response = yield call(allocateFundsToFloatApi, id, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Allocate Funds To Float', response?.message)
       yield put(Creators.allocateFundsToFloatRequestSuccess(response?.data))
