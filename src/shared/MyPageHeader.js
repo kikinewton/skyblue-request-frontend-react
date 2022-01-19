@@ -20,7 +20,7 @@ const MyPageHeader = (props) => {
 }
 
 MyPageHeader.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   extra: PropTypes.array,
   onBack: PropTypes.func
 }

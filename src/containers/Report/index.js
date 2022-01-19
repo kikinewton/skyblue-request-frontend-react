@@ -14,13 +14,7 @@ const Report = (props) => {
       <AppLayout>
         <Row>
           <Col span={24}>
-          <iframe
-            src={getMetabaseUri()}
-            frameBorder={0}
-            width="100%"
-            height="600"
-            allowtransparency="true"
-          ></iframe>
+            
           </Col>
         </Row>
       </AppLayout>

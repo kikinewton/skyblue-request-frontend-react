@@ -15,7 +15,7 @@ const FloatRetire = props => {
     fetchFloatOrder,
     submitting_float_request,
     fetching_float_requests,
-    float_submit_success,
+    submit_float_request_success,
     retireFloatOrder
   } = props
   const { id } = useParams()
@@ -59,10 +59,10 @@ const FloatRetire = props => {
   }, [id])
 
   useEffect(() => {
-    if(!submitting_float_request && float_submit_success) {
+    if(!submitting_float_request && submit_float_request_success) {
       history.goBack()
     }
-  }, [submitting_float_request, float_submit_success])
+  }, [submitting_float_request, submit_float_request_success])
 
   return (
     <>
@@ -85,32 +85,34 @@ const FloatRetire = props => {
         />
         {fetching_float_requests ? <Spin/> : (
           <>
-            <Row>
-              <Col span={24}>
-                <List>
-                  <List.Item>
-                    <List.Item.Meta title="Reference" description={float_order?.floatOrderRef} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta title="Description" description={float_order?.description} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta title="Date" description={prettifyDateTime(float_order?.createdDate)} />
-                  </List.Item>
-                </List>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Card title="Upload Supporting Documents" size='small'>
-                  <UploadFiles 
-                    files={files}
-                    onUpload={handleUpload}
-                    loading={loadingDocument}
-                  />
-                </Card>
-              </Col>
-            </Row>
+            <Card>
+              <Row>
+                <Col span={24}>
+                  <List>
+                    <List.Item>
+                      <List.Item.Meta title="Reference" description={float_order?.floatOrderRef} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta title="Description" description={float_order?.description} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta title="Date" description={prettifyDateTime(float_order?.createdDate)} />
+                    </List.Item>
+                  </List>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Card title="Upload Supporting Documents" size='small'>
+                    <UploadFiles 
+                      files={files}
+                      onUpload={handleUpload}
+                      loading={loadingDocument}
+                    />
+                  </Card>
+                </Col>
+              </Row>
+            </Card>
           </>
         )}
       </AppLayout>

@@ -145,7 +145,7 @@ const CollapsibleLayout = (props) => {
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
             <>
               <Menu.Item key="request">
                 <NavLink to="/app/request-items">

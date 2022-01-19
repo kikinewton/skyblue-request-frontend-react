@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Steps, List, Drawer } from 'antd'
+import { Card, Col, Form, Row, Table, Input, Button, Steps, List, Drawer, Spin } from 'antd'
 import { BookOutlined, CalendarOutlined, CheckOutlined, CodeOutlined, ContactsOutlined, FileDoneOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, PlusOutlined, RightOutlined, UserOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { CURRENCY_CODE } from '../../../../util/constants'
@@ -62,7 +62,7 @@ const verificationColumns = [
 const EditFloatOrder = (props) => {
   const [requests, setRequests] = React.useState([])
   const { createFloatRequest, submitting_float_request, 
-    submit_float_request_success, float_order, fetchFloatOrder, fetching_floa0t, addItemsToFloatOrder
+    submit_float_request_success, float_order, fetchFloatOrder, fetching_float_requests, addItemsToFloatOrder
   } = props
   const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: ""})
   const [basicForm] = Form.useForm()
@@ -121,75 +121,79 @@ const EditFloatOrder = (props) => {
           onBack={()=> history.goBack()}
         />
         <Card>
-          <Row>
-            <Col span={24}>
-              <List>
-                <List.Item>
-                  <List.Item.Meta avatar={<NumberOutlined />} title="Reference" description={float_order?.floatOrderRef} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta avatar={<OneToOneOutlined />} title="Description" description={float_order?.description} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta avatar={<UserOutlined />} title="Requested By" description={float_order?.requestedBy} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta avatar={<PhoneOutlined />} title="Phone Number" description={float_order?.requestedByPhoneNo} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta avatar={<CalendarOutlined />} title="Date" description={prettifyDateTime(float_order?.createdDate)} />
-                </List.Item>
-              </List>
-            </Col>
-          </Row>
-          <Row style={{marginTop: 10, marginBottom: 10}}>
-            <Col span={24}>
-              <span style={{fontWeight: "bold", float: "left"}}>Entries</span>
-              <Button
-                style={{float: "right"}}
-                type='primary'
-                shape='circle'
-                size='small'
-                onClick={e => {
-                  setAddVisible(true)
-                }}
-              >
-                <PlusOutlined />
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Table 
-                columns={columns({
-                  onAdd: () => {
+          {fetching_float_requests ? <Spin/> : (
+            <>
+              <Row>
+                <Col span={24}>
+                  <List>
+                    <List.Item>
+                      <List.Item.Meta avatar={<NumberOutlined />} title="Reference" description={float_order?.floatOrderRef} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta avatar={<OneToOneOutlined />} title="Description" description={float_order?.description} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta avatar={<UserOutlined />} title="Requested By" description={float_order?.requestedBy} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta avatar={<PhoneOutlined />} title="Phone Number" description={float_order?.requestedByPhoneNo} />
+                    </List.Item>
+                    <List.Item>
+                      <List.Item.Meta avatar={<CalendarOutlined />} title="Date" description={prettifyDateTime(float_order?.createdDate)} />
+                    </List.Item>
+                  </List>
+                </Col>
+              </Row>
+              <Row style={{marginTop: 10, marginBottom: 10}}>
+                <Col span={24}>
+                  <span style={{fontWeight: "bold", float: "left"}}>Entries</span>
+                  <Button
+                    style={{float: "right"}}
+                    type='primary'
+                    shape='circle'
+                    size='small'
+                    onClick={e => {
+                      setAddVisible(true)
+                    }}
+                  >
+                    <PlusOutlined />
+                  </Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Table 
+                    columns={columns({
+                      onAdd: () => {
 
-                  },
-                  onRemove: row => {
-                    removeEntry(row)
-                  }
-                })}
-                dataSource={floatItems}
-                size="small"
-                bordered
-                rowKey="itemDescription"
-                pagination={false}
-              />
-            </Col>
-          </Row>
-          <Row style={{padding: "10px 0 10px 0"}}>
-            <Col span={24}>
-              <Button
-                type="primary"
-                loading={submitting_float_request}
-                onClick={e => {
-                  submit()
-                }}
-              >
-                SUBMIT
-              </Button>
-            </Col>
-          </Row>
+                      },
+                      onRemove: row => {
+                        removeEntry(row)
+                      }
+                    })}
+                    dataSource={floatItems}
+                    size="small"
+                    bordered
+                    rowKey="itemDescription"
+                    pagination={false}
+                  />
+                </Col>
+              </Row>
+              <Row style={{padding: "10px 0 10px 0"}}>
+                <Col span={24}>
+                  <Button
+                    type="primary"
+                    loading={submitting_float_request}
+                    onClick={e => {
+                      submit()
+                    }}
+                  >
+                    SUBMIT
+                  </Button>
+                </Col>
+              </Row>
+            </>
+          )} 
         </Card>
         <Drawer
           visible={addVisible}

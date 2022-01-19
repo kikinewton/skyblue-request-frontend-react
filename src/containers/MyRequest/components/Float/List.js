@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Row, Col, Card, Button, Tag, Badge, Drawer, List } from "antd"
-import { EditOutlined, EyeOutlined } from "@ant-design/icons"
+import { EditOutlined, EyeOutlined, SyncOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
 import UpdateFloatForm from './UpdateForm';
@@ -9,8 +9,19 @@ import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
 import { prettifyDateTime } from '../../../../util/common-helper';
 import { useRouteMatch } from "react-router-dom"
+import MyPageHeader from '../../../../shared/MyPageHeader';
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
+
+const retirmentStatus = row => {
+  if(row.hasDocument) {
+    return 'Retired'
+  } else if(row.fundsReceived) {
+    return 'Awaiting Retirement'
+  } else {
+    return 'Cannot Retire'
+  }
+}
 
 export const FLOAT_ORDERS_COLUMN = [
   {
@@ -46,7 +57,7 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
     title: "Retirement Status",
     dataIndex: "fundsReceived",
     key: "fundsRev=ceived",
-    render: (text, row) => (row.fundsReceived ? <Tag color="green">Ready</Tag> : 'Cannot retire')
+    render: (text, row) => retirmentStatus(row)
   },
   {
     title: "Actions",
@@ -150,15 +161,25 @@ const FloatList = (props) => {
         title="My Float Requests"
         subNav={<MyRequestMenu />}
       >
-        <Card
-          size="small"
-          title="My Float Requests"
+        <MyPageHeader 
+          title={(
+            <>
+              <span style={{marginRight: 5}}>My Floats</span>
+              <SyncOutlined 
+                spin={fetching_float_requests} 
+                onClick={e => {
+                  fetchFloatOrders({myRequest: true})
+                }}
+              />
+            </>
+          )}
           extra={[
             <Button key="create-new-float-btn" size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
               Create New Float Request
             </Button>
           ]}
-        >
+        />
+        <Card>
           <Row>
             <Col span={24}>
               <Table
@@ -202,13 +223,21 @@ const FloatList = (props) => {
           <>
             <Row>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                <Button type='primary' style={{marginRight: 5}}
+                  disabled={selectedFloatForRetirement?.hasDocument}
+                  onClick={() => {
+                    history.push(`${path}/${selectedFloatForRetirement?.id}/edit`)
+                  }}
+                >
+                  Edit / Add Items To Float
+                </Button>
                 <Button type='primary'
-                  disabled={!selectedFloatForRetirement?.fundsReceived}
+                  disabled={!selectedFloatForRetirement?.fundsReceived || selectedFloatForRetirement.hasDocument}
                   onClick={() => {
                     history.push(`${path}/${selectedFloatForRetirement?.id}/retire`)
                   }}
                 >
-                  Retire
+                  Retire Float
                 </Button>
               </Col>
             </Row>
@@ -265,7 +294,7 @@ const FloatList = (props) => {
             loading={submiting_float_request}
             float={selectedFloatOrder}
           />
-      </Drawer>
+        </Drawer>
       </AppLayout>
     </>
   )

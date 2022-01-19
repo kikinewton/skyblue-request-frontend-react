@@ -91,11 +91,11 @@ export const retireFloatOrder = (state = INITIAL_STATE, action) => {
 };
 
 export const retireFloatOrderSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false};
+  return { ...state, submitting: false, submit_success: true};
 };
 
 export const retireFloatOrderFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, submitting: false, error: action.error };
+  return { ...state, submitting: false, error: action.error, submit_success: false };
 };
 
 //update float order status

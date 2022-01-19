@@ -12,6 +12,8 @@ import ApprovePendingList from './components/ApprovePendingList';
 import { Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 import { userHasAnyRole } from "../../services/api/auth"
+import GmRetireFloat from './components/GmRetireFloat';
+import AuditRetireFloat from './components/AuditRetireFloat';
 
 export const REQUEST_ITEMS = [
   {id: 1, name: "Coca cola", reason: "REPLACE", purpose: "refreshment", createdAt: "2021-12-18 14:00:50", status: "PENDING", quantity: 10},
@@ -38,6 +40,10 @@ const FloatIndex = (props) => {
       setKey("hod-pending-endorse")
     } else if(url.indexOf("/float/approve") !== -1) {
       setKey("/float/approve")
+    } else if(url.indexOf("/gm-pending-retire") !== -1) {
+      setKey("/float/gm-pending-retire")
+    } else if(url.indexOf("/audit-pending-retire") !== -1) {
+      setKey("/audit-pending-retire")
     }
   }, [key])
 
@@ -61,11 +67,27 @@ const FloatIndex = (props) => {
               </Menu.Item>
             )}
             {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
-              <Menu.Item key="/float/approve">
-                <NavLink to="/app/float/approve">
-                  <span>Floats Awaiting Approval</span>
-                </NavLink>
-              </Menu.Item>
+              <>
+                <Menu.Item key="/float/approve">
+                  <NavLink to="/app/float/approve">
+                    <span>Floats Awaiting Approval</span>
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="/float/gm-pending-retire">
+                  <NavLink to="/app/float/gm-pending-retire">
+                    <span>Approve Retirement</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+              <>
+                <Menu.Item key="/audit-pending-retire">
+                  <NavLink to="/app/float/audit-pending-retire">
+                    <span>Approve Retirement</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
             )}
           </Menu>
         )}
@@ -76,15 +98,27 @@ const FloatIndex = (props) => {
             path={`${path}`}
             {...props}
           >
-            {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD ? <Redirect to="/app/float/hod-pending-endorse" /> :
-             <Redirect to="/app/float/approve" />
-             }
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && <Redirect to="/app/float/hod-pending-endorse" />}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && <Redirect to="/app/float/approve" />}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_AUDITOR && <Redirect to="/app/float/audit-pending-retire" />}
           </AuthenticatedRoute>
           <AuthenticatedRoute
             path={`${path}/hod-pending-endorse`}
             component={HodEndorsePendingList}
             {...props}
             roles = {[EMPLOYEE_ROLE.ROLE_HOD]}
+          />
+          <AuthenticatedRoute 
+            path={`${path}/gm-pending-retire`}
+            component={GmRetireFloat}
+            {...props}
+            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
+          />
+          <AuthenticatedRoute 
+            path={`${path}/audit-pending-retire`}
+            component={AuditRetireFloat}
+            {...props}
+            roles={[EMPLOYEE_ROLE.ROLE_AUDITOR]}
           />
           <AuthenticatedRoute 
             path={`${path}/approve`}
@@ -129,12 +163,15 @@ const mapActionsToProps = (dispatch) => {
     updateFloatRequest: (options) => {
       dispatch(FloatCreators.updateFloatRequest(options))
     },
+    retireFloatOrder: payload => dispatch(FloatCreators.retireFloatOrder(payload)),
+    updateFloatOrderStatus: (id, status) => dispatch(FloatCreators.updateFloatOrderStatus(id, status)),
     resetFloatRequests: (payload) => {
       dispatch(FloatCreators.resetRequest(payload))
     },
     fetchSuppliers: (query)=> {
       dispatch(SupplierCreators.fetchSuppliers(query))
     },
+    updateFloatOrderStatus: (id, payload) => dispatch(FloatCreators.updateFloatOrderStatus(id, payload)),
     setSelectedFloatRequests: (requests) => {
       dispatch(FloatCreators.setSelectedFloatRequests(requests))
     },

@@ -66,6 +66,10 @@ export function fetchFloatRequests(query) {
       return service({url: `/floats?awaitingFunds=true`, method: "GET"})
     case FETCH_FLOAT_REQUEST_TYPES.PENDING_DOCUMENT_UPLOAD:
       return service({url: `/floats?receivedFundsAndNotRetired=true`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.GM_PENDING_RETIRE:
+      return service({url: `/floats?gmRetire=true`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.AUDITOR_PENDING_RETIRE:
+      return service({url: `/floats?auditorRetire=true`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }
