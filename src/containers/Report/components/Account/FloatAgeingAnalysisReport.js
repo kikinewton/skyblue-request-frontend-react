@@ -20,7 +20,7 @@ const FloatAgeingAnalysisReport = props => {
     //   periodStart: range[0]?.format("YYYY-MM-DD") || null,
     //   periodEnd: range[1]?.format("YYYY-MM-DD") || null,
     // }
-    await generateFloatAgeingAnalysisReport() 
+    await generateFloatAgeingAnalysisReport({}) 
     setLoading(false)
 
   }
