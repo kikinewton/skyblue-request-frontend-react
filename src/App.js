@@ -47,7 +47,7 @@ function App(props) {
           
           <AuthenticatedRoute path="/app/local-purchase-orders" component={LocalPurchaseOrderModule} />
           <AuthenticatedRoute path="/app/settings" component={Settings} {...props} />
-          <AuthenticatedRoute path="/app/reports" component={Report} {...props} />
+          <Route path="/app/reports" component={Report} {...props} />
           <Route path="/app/quotations" component={QuotationView} {...props} />
           <AuthenticatedRoute path="/app/suppliers" component={SupplierModule} {...props} roles={[EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]} />
 

@@ -1,17 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Menu } from "antd"
 import { Switch, useRouteMatch, NavLink, Redirect } from 'react-router-dom';
-import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
+import { Creators as DepartmentCreators  } from '../../services/redux/department/actions';
 import { Creators as FloatCreators } from '../../services/redux/float/actions';
-import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
+import { Creators as SupplierCreators } from '../../services/redux/supplier/actions';
 import { Creators as CommentCreators } from '../../services/redux/comment/actions';
 import AppLayout from '../AppLayout';
-import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
-import HodEndorsePendingList from "./components/HodEndorsePendingList"
+import AuthenticatedRoute from "../../presentation/AuthenticatedRoute";
+import HodEndorsePendingList from "./components/HodEndorsePendingList";
 import ApprovePendingList from './components/ApprovePendingList';
-import { Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
-import { userHasAnyRole } from "../../services/api/auth"
+import { userHasAnyRole } from "../../services/api/auth";
 import GmRetireFloat from './components/GmRetireFloat';
 import AuditRetireFloat from './components/AuditRetireFloat';
 

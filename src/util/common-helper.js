@@ -32,6 +32,16 @@ export function serializeQueryParams( obj ) {
   }, []).join('&');
 }
 
+export function serializeQueryParamsNotNull( obj ) {
+  return '?' + Object.keys(obj).reduce(function(a, k){
+    if(obj[k]) {
+      a.push(k + '=' + encodeURIComponent(obj[k]));
+    }
+    a.push(k + '=' + encodeURIComponent(obj[k]));
+    return a;
+  }, []).join('&');
+}
+
 export function downloadFile(data, fileName, fileType) {
   if (window.navigator && window.navigator.msSaveOrOpenBlob) { // IE variant
     window.navigator.msSaveOrOpenBlob(new Blob([data], {type: fileType}),

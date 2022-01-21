@@ -24,6 +24,7 @@ import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE } from '../../../util/datas';
+import PropTypes from "prop-types" 
 //const logo = require("../../../assets/logo.png")
 import logo from "../../../assets/logo512.png"
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';
@@ -145,7 +146,7 @@ const CollapsibleLayout = (props) => {
               <span>My Requests</span>
             </NavLink>
           </Menu.Item>
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
             <>
               <Menu.Item key="request">
                 <NavLink to="/app/request-items">
@@ -153,16 +154,20 @@ const CollapsibleLayout = (props) => {
                   <span>Item requests</span>
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="float">
-                <NavLink to="/app/float">
-                  <ReconciliationOutlined />
-                  <span>Float requests</span>
-                </NavLink>
-              </Menu.Item>
               <Menu.Item key="petty-cash">
                 <NavLink to="/app/petty-cash">
                   <ReconciliationOutlined />
                   <span>Petty cash requests</span>
+                </NavLink>
+              </Menu.Item>
+            </>
+          )}
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+            <>
+              <Menu.Item key="float">
+                <NavLink to="/app/float">
+                  <ReconciliationOutlined />
+                  <span>Float requests</span>
                 </NavLink>
               </Menu.Item>
             </>
@@ -435,6 +440,11 @@ const CollapsibleLayout = (props) => {
       </Layout>
     </Layout>
   )
+}
+
+CollapsibleLayout.propTypes = {
+  subNav: PropTypes.node,
+  title: PropTypes.string
 }
 
 export default CollapsibleLayout
