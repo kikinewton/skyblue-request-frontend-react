@@ -209,7 +209,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key="/app/grn">
               <NavLink to="/app/grn">
                 <ShopOutlined />
-                <span>GRN Management</span>
+                <span>Goods Receive Note</span>
               </NavLink>
             </Menu.Item>
           )}
@@ -277,7 +277,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key={`/app/quotations`}>
               <NavLink to={`/app/quotations`}>
                 <ProfileOutlined />
-                <span>Supplier Quotes</span>
+                <span>Quotations</span>
               </NavLink>
             </Menu.Item>
           }
@@ -289,13 +289,13 @@ const CollapsibleLayout = (props) => {
               </NavLink>
             </Menu.Item>
           }
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && 
+          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && 
             <Menu.Item key="/app/store" icon={<ShopOutlined />}>
               <NavLink to="/app/store">
                 Store
               </NavLink>
             </Menu.Item>
-          }
+          } */}
           {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
             <Menu.SubMenu  
               key="/app/account" 

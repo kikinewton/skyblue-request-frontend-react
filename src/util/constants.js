@@ -41,6 +41,16 @@ export const REQUEST_COLUMNS = [
     key: 'quantity'
   },
   {
+    title: 'ENDORSEMENT',
+    dataIndex: 'endorsement',
+    key: 'endorsement'
+  }, 
+  {
+    title: 'APPROVAL',
+    dataIndex: 'approval',
+    key: 'approval'
+  },
+  {
     title: 'STATUS',
     dataIndex: 'status',
     key: 'status'

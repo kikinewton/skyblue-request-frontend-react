@@ -46,7 +46,7 @@ const AssignSuppliersToRequests = (props) => {
     selected_requests,
     updateRequest,
     request_update_success,
-    request_updating
+    updating_request
 
   } = props
   const [current, setCurrent] = useState(0)
@@ -78,7 +78,7 @@ const AssignSuppliersToRequests = (props) => {
   }, [submitting_supplier, supplier_submit_success])
 
   useEffect(() => {
-    if(!request_updating && request_update_success) {
+    if(!updating_request && request_update_success) {
       setSelectedRequests([])
       setSelectedSupplierIds([])
       fetchRequests({
@@ -86,7 +86,7 @@ const AssignSuppliersToRequests = (props) => {
       })
       setCurrent(0)
     }
-  }, [request_update_success, request_updating])
+  }, [request_update_success, updating_request])
 
   return (
     <>
@@ -243,7 +243,7 @@ const AssignSuppliersToRequests = (props) => {
                     Go Back to Select requests
                   </Button>
                   <Button style={{float: "right"}} 
-                    loading={request_updating}
+                    loading={updating_request}
                     type="primary"
                     onClick={() => {
                       updateRequest({
@@ -254,7 +254,7 @@ const AssignSuppliersToRequests = (props) => {
                         }
                       })
                     }}
-                    disabled={selected_requests.length < 1 || selectedSupplierIds.length < 1 || request_updating}
+                    disabled={selected_requests.length < 1 || selectedSupplierIds.length < 1 || updating_request}
                   >
                     SUBMIT
                     <RightOutlined />

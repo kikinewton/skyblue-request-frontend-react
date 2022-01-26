@@ -20,8 +20,6 @@ const PettyCashPaymentReport = props => {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
     }
-
-    console.log('query', query)
     await generateAccountPettyCashPaymentsReport(query) 
     setLoading(false)
 

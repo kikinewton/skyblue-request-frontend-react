@@ -45,9 +45,9 @@ const LocalPurchaseOrderModule = (props) => {
             forceSubMenuRender
             mode="horizontal"
           >
-            <Menu.Item key="/app/local-purchase-orders/add-new">
-              <NavLink to="/app/local-purchase-orders/add-new">
-                <span>Create Local Purchase Order</span>
+            <Menu.Item key="/app/local-purchase-orders">
+              <NavLink to="/app/local-purchase-orders">
+                <span>Local Purchase Orders</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new-draft">
@@ -55,9 +55,9 @@ const LocalPurchaseOrderModule = (props) => {
                 <span>Draft Local Purchase Order</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="/app/local-purchase-orders">
-              <NavLink to="/app/local-purchase-orders">
-                <span>Local Purchase Orders</span>
+            <Menu.Item key="/app/local-purchase-orders/add-new">
+              <NavLink to="/app/local-purchase-orders/add-new">
+                <span>Create Local Purchase Order</span>
               </NavLink>
             </Menu.Item>
           </Menu>

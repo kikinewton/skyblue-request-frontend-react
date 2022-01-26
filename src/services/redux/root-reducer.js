@@ -13,6 +13,7 @@ import LocalPurchaseOrderReducer from "./local-purchase-order/reducers"
 import commentReducer from "./comment/reducers"
 import grnReducer from "./grn/reducers"
 import paymentReducer from "./payment/reducers"
+import dashboardReducer from "./dashboard/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -29,4 +30,5 @@ export default combineReducers({
   comment: commentReducer,
   grn: grnReducer,
   payment: paymentReducer,
+  dashboard: dashboardReducer
 })

@@ -1,4 +1,5 @@
 import service from '../apiRequest'
+import { BASE_URL } from '../urls'
 
 
 const path = "/requestDocument"
@@ -8,6 +9,12 @@ export function getAllDocuments(payload){
     method: 'POST',
     data: payload
   })
+}
+
+export function generateResourceUrl(fileName) {
+  const url = `${BASE_URL}/requestDocument/download/${fileName}`;
+  console.log('url: ', url)
+  return url;
 }
 
 

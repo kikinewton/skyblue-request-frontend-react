@@ -6,6 +6,7 @@ import { prettifyDateTime } from '../../../util/common-helper';
 import { FETCH_REQUEST_TYPES } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
+
 const columns = props => [
   {
     title: "Description",

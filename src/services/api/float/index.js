@@ -70,6 +70,8 @@ export function fetchFloatRequests(query) {
       return service({url: `/floats?gmRetire=true`, method: "GET"})
     case FETCH_FLOAT_REQUEST_TYPES.AUDITOR_PENDING_RETIRE:
       return service({url: `/floats?auditorRetire=true`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.MY_AWAITING_RETIREMENT:
+      return service({url: `/floats?awaitingDocument=true`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }

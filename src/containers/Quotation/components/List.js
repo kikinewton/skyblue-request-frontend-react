@@ -2,6 +2,10 @@ import { EyeFilled } from '@ant-design/icons'
 import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import MyPdfView from '../../../presentation/MyPdfView'
+import { generateResourceUrl } from '../../../services/api/document'
+import { BASE_URL } from '../../../services/api/urls'
+import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { NOT_LINKED_TO_LPO } from '../../../util/quotation-types'
 
@@ -140,52 +144,14 @@ const ListQuotations = (props) => {
         visible={quotationViewVisible}
         title="Quotation Detail"
         placement="right"
-        width={700}
+        width={800}
         maskClosable={false}
         onClose={() => {
           setSelectedQuotation(null)
           setQuotationViewVisible(false)
         }}
       >
-        <Row>
-          <Col span={24}>
-            <List
-              itemLayout="horizontal"
-            >
-              <List.Item>
-                <List.Item.Meta title="Quotation Reference" description={selectedQuotation?.quotation?.quotationRef || "N/A"} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Created Date" description={prettifyDateTime(selectedQuotation?.quotation?.createdAt) || "N/A"} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Supplier" description={selectedQuotation?.quotation?.supplier?.name} />
-              </List.Item>
-            </List>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            {/* {selectedQuotation ? } */}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <span style={{fontWeight: "bold"}}>Request Item Entries</span>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Table 
-              rowKey="id"
-              columns={requestItemColumns({})}
-              dataSource={selectedQuotation?.requestItems || []}
-              size="small"
-              pagination={false}
-              bordered
-            />
-          </Col>
-        </Row>
+        <QuotationDetails quotation={selectedQuotation} />
       </Drawer>
     </>
   )
