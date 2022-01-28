@@ -4,6 +4,8 @@ import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { BASE_URL } from '../../../services/api/urls';
+import MyPdfView from "../../../presentation/MyPdfView"
+import { generateResourceUrl } from "../../../services/api/document"
 
 const columns = props => [
   {
@@ -193,7 +195,8 @@ const HodReviewPendingList = (props) => {
                   />
                 )}
                 {selectedRequest?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
-                  <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
+                  <MyPdfView src={generateResourceUrl(selectedRequest?.quotation?.requestDocument?.fileName)} />
+                  // <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
                 )}
                 {selectedRequest?.quotation?.requestDocument?.documentType.includes("excel/") && (
                   <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>

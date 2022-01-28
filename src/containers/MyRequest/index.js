@@ -74,9 +74,9 @@ const MyRequest = (props)=> {
         <Route path={`${path}/float-requests/add-new`}>
           <AddFloat {...props} />
         </Route>
-        <Route path={`${path}/float-requests/:id/retire`}>
+        <AuthenticatedRoute path={`${path}/float-requests/:id/retire`}>
           <FloatRetire {...props} />
-        </Route>
+        </AuthenticatedRoute>
         <Route path={`${path}/float-requests/:id/edit`}>
           <EditFloatOrder {...props} />
         </Route>

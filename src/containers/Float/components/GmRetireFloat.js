@@ -6,6 +6,7 @@ import MyPageHeader from '../../../shared/MyPageHeader';
 import { FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 import AppLayout from '../../AppLayout';
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
+import FloatDetails from './FloatDetails';
 
 const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
@@ -124,8 +125,8 @@ const GmRetireFloat = props => {
             </Button>
           </Col>
         </Row>
-        <FloatOrderDetails 
-          floatOrder={selectedFloatOrder || {}}
+        <FloatDetails 
+          floatOrder={selectedFloatOrder}
         />
       </Drawer>
     </>

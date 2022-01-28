@@ -2,6 +2,8 @@ import { RightOutlined, LeftOutlined, DownloadOutlined, CheckOutlined } from '@a
 import { Document, Page, PDFViewer } from '@react-pdf/renderer'
 import { Card, Col, Row, Steps, Select, Table, Button, Input, DatePicker, Image } from 'antd'
 import React, { useEffect, useState } from 'react'
+import MyPdfView from '../../../presentation/MyPdfView'
+import { generateResourceUrl } from '../../../services/api/document'
 import { BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import { prettifyDateTime } from '../../../util/common-helper'
@@ -398,7 +400,10 @@ const CreateLPO = (props) => {
                   </div>
                 )}
                 {selectedQuotation?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
-                  <a href={`${BASE_URL}/requestDocument/download/${selectedQuotation?.quotation?.requestDocument?.fileNamee}`}><DownloadOutlined /> Download PDF</a>
+                  <MyPdfView 
+                    src={generateResourceUrl(selectedQuotation?.quotation?.requestDocument?.fileName)}
+                  />
+                  // <a href={`${BASE_URL}/requestDocument/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
                   // <div style={{width: "100%", height: "auto", display: "flex", flexDirection: "row", alignContent: "center", justifyContent: "center"}}>
                   //   <PDFViewer>
                   //     <Document>

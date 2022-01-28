@@ -9,6 +9,7 @@ import PaymentsSubNav from './PaymentsSubNav'
 import DocumentView from "../../../presentation/DocumentView"
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List'
 import { CURRENCY_CODE } from '../../../util/constants'
+import FloatDetails from '../../Float/components/FloatDetails'
 
 
 const columns = props => FLOAT_ORDERS_COLUMN.concat([
@@ -219,30 +220,7 @@ const FloatAllocateFunds = (props) => {
           title="Allocate Funds Form"
         >
           <>
-            <Row>
-              <Col span={24}>
-                <List>
-                  <List.Item>
-                    <List.Item.Meta avatar={<NumberOutlined/>} title="Reference" description={selectedRequest?.floatOrderRef} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<OneToOneOutlined/>} title="Description" description={selectedRequest?.description} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<UserOutlined/>} title="Requested By" description={selectedRequest?.requestedBy} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<PhoneOutlined/>} title="Phone Number" description={selectedRequest?.requestedByPhoneNo} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Total Amount" description={formatCurrency(selectedRequest?.estimatedUnitPrice * selectedRequest?.quantity)} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Amount Sepcified" description={formatCurrency(selectedRequest?.amount)} />
-                  </List.Item>
-                </List>
-              </Col>
-            </Row>
+            <FloatDetails floatOrder={selectedRequest} />
             <Row>
               <Col span={24}>
                 <Table 

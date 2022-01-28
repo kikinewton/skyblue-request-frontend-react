@@ -3,6 +3,8 @@ import { Row, Col, List, Image, Card, Table, Button } from "antd"
 import { BASE_URL } from '../../services/api/urls'
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
 import { DownloadOutlined } from '@ant-design/icons'
+import MyPdfView from '../MyPdfView'
+import { generateResourceUrl } from '../../services/api/document'
 
 const columns = [
   {
@@ -75,7 +77,10 @@ const GrnDocumentReview = (props) => {
                 />
               )}
               {invoiceDocument?.documentFormat.includes("application/pdf") && (
-                <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
+                <MyPdfView 
+                  src={generateResourceUrl(invoiceDocument?.fileName)}
+                />
+                // <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
               )}
               {invoiceDocument?.documentFormat.includes("excel/") && (
                 <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>

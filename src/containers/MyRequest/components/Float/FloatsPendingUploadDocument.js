@@ -69,16 +69,6 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
         >
           <EyeOutlined />
         </Button>
-        {!row.comment && (
-          <Button
-            shape="circle"
-            size='small' 
-            type='default'
-            onClick={() => props.onEdit(row)}
-          >
-            <EditOutlined />
-          </Button>
-        )}
       </>
     )
   }
@@ -230,7 +220,7 @@ const FloatsPendingUploadDocument = (props) => {
                 <Button type='primary'
                   disabled={!selectedFloatForRetirement?.fundsReceived || selectedFloatForRetirement.hasDocument}
                   onClick={() => {
-                    history.push(`${path}/${selectedFloatForRetirement?.id}/retire`)
+                    history.push(`/app/my-requests/float-requests/${selectedFloatForRetirement?.id}/retire`)
                   }}
                 >
                   Retire Float

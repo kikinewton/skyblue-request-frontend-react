@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Row, Col, Image } from "antd"
 import { DownloadOutlined } from "@ant-design/icons"
+import MyPdfView from "../../presentation/MyPdfView"
 
 
 const DocumentView = props => {
@@ -23,7 +24,9 @@ const DocumentView = props => {
             />
           )}
           {docFormat.includes("application/pdf") && (
-            <a href={src}><DownloadOutlined /> Download PDF</a>
+            <MyPdfView 
+              src={src}
+            />
           )}
           {docFormat.includes("excel/") && (
             <a href={src}><DownloadOutlined /> Download PDF</a>

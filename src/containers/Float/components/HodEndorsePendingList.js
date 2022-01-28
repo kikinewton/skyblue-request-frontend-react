@@ -1,10 +1,11 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, DeleteColumnOutlined, DeleteOutlined, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form } from 'antd';
 import React, {useState } from 'react';
-import { prettifyDateTime } from '../../../util/common-helper';
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
 import MyPageHeader from "../../../shared/MyPageHeader"
+import FloatDetails from './FloatDetails';
 
 const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
@@ -261,42 +262,7 @@ const HodEndorsePendingList = (props) => {
           setConfirmDrawer(false)
         }}
       >
-        <Row>
-          <Col span={24}>
-            <List>
-              <List.Item>
-                <List.Item.Meta title="Float Description" description={selectedFloatOrder?.description} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Requested By" description={selectedFloatOrder?.requestedBy} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta title="Phone Number" description={selectedFloatOrder?.requestedByPhoneNo} />
-              </List.Item>
-            </List>
-          </Col>
-        </Row>
-        {selectedFloatOrder?.floats.length > 0 && (
-          <>
-            <Row style={{marginTop: 10}}>
-              <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Float Items</span>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Table
-                  columns={floatItemsColumns}
-                  dataSource={selectedFloatOrder?.floats}
-                  size='small'
-                  bordered
-                  pagination={false}
-                  rowKey="id"
-                />
-              </Col>
-            </Row>
-          </>
-        )}
+        <FloatDetails floatOrder={selectedFloatOrder} />
         {commentRequired && (
           <Card size='small' title="Comment Form" style={{marginTop: 10, marginBottom: 10}}>
             <Row>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from "prop-types"
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack"
+import { Button, Row, Col } from 'antd'
 
 const MyPdfView = props => {
   const {
@@ -12,14 +13,24 @@ const MyPdfView = props => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   }
+  const onPageNext = (pN) => {
+    setPageNumber(pN + 1)
+  } 
+
+  const onPagePrev = (pN) => {
+    setPageNumber(pN - 1)
+  }
 
   return (
-    <div style={{width: "100%"}}>
-      {/* <PDFViewer 
-        document={{
-          url: src,
-        }}
-      /> */}
+    <div style={{width: "100%", border: "1px solid black", padding: 10}}>
+      <Row  style={{padding: "10px 0 10px 0"}}>
+        <Col span={12}>
+          <Button style={{float: "left"}} onClick={() => onPagePrev(pageNumber)} disabled={pageNumber === 1}>Prev</Button>
+        </Col>
+        <Col span={12}>
+          <Button style={{float: "right"}} onClick={() => onPageNext(pageNumber)} disabled={pageNumber === numPages}>Next</Button>
+        </Col>
+      </Row>
       <Document
         width={300}
         file={src}

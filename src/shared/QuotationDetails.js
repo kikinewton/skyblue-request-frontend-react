@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from "prop-types"
 import { REQUEST_COLUMNS } from '../util/constants';
 import MyPdfView from '../presentation/MyPdfView';
-import { Row, Col, Table, List } from 'antd';
+import { Row, Col, Table, List, Image } from 'antd';
 import { prettifyDateTime } from '../util/common-helper';
 import { generateResourceUrl } from '../services/api/document';
 import MyImageView from '../presentation/MyImageView';
-
+import { BASE_URL } from '../services/api/urls';
 const columns = REQUEST_COLUMNS
 
-
 const QuotationDetails = ({quotation}) => {
+  const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
       <Row>
@@ -62,9 +62,15 @@ const QuotationDetails = ({quotation}) => {
             />
           )}
           {quotation?.quotation?.requestDocument?.documentFormat?.includes("image") && (
-            <MyImageView 
+            <Image 
+              onClick={() => setImagePreview(true)}
+              preview={imagePreview}
+              width={200}
               src={generateResourceUrl(quotation?.quotation?.requestDocument?.fileName)}
             />
+            // <MyImageView 
+            //   src={generateResourceUrl(quotation?.quotation?.requestDocument?.fileName)}
+            // />
           )}
         </Col>
       </Row>

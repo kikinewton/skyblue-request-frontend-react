@@ -4,7 +4,7 @@ import { EditOutlined, EyeOutlined, SyncOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
 import UpdateFloatForm from './UpdateForm';
-import FloatDetails from './Details';
+import FloatDetails from '../../../Float/components/FloatDetails';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
 import { prettifyDateTime } from '../../../../util/common-helper';
@@ -54,10 +54,9 @@ export const FLOAT_ORDERS_COLUMN = [
 
 const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
-    title: "Retirement Status",
-    dataIndex: "fundsReceived",
-    key: "fundsRev=ceived",
-    render: (text, row) => retirmentStatus(row)
+    title: "Status",
+    dataIndex: "status",
+    key: "status"
   },
   {
     title: "Actions",
@@ -241,33 +240,9 @@ const FloatList = (props) => {
                 </Button>
               </Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <List>
-                  <List.Item>
-                    <List.Item.Meta title="Reference" description={selectedFloatForRetirement?.floatOrderRef} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta title="Description" description={selectedFloatForRetirement?.description} />
-                  </List.Item>
-                  <List.Item>
-                    <List.Item.Meta title="Date" description={prettifyDateTime(selectedFloatForRetirement?.createdDate)} />
-                  </List.Item>
-                </List>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Table 
-                  dataSource={selectedFloatForRetirement?.floats}
-                  columns={floatEntriesColumns}
-                  size='small'
-                  bordered
-                  pagination={false}
-                  rowKey="id"
-                />
-              </Col>
-            </Row>
+            <FloatDetails 
+              floatOrder={selectedFloatForRetirement}
+            />
           </>
         </Drawer>
 
