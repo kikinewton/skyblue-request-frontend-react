@@ -70,10 +70,9 @@ export function generateAccountPaymentsReport(query) {
 }
 
 export function generateAccountPettyCashPaymentsReport(query) {
-  console.log('query obj: ', query)
   const queryStr = serializeQueryParamsNotNull(query)
   console.log('gene url: ', queryStr)
-  const url = `${BASE_URL}/accounts/pettyCashpaymentReport/download${queryStr}`
+  const url = `${BASE_URL}/accounts/pettyCashPaymentReport/download${queryStr}`
   downloadFile(url)
 }
 

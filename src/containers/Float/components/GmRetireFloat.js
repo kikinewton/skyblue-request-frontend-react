@@ -43,7 +43,7 @@ const GmRetireFloat = props => {
   const expandedRowRender = (row) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
-      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: "Estimated Unit Price", dataIndex: "estimatedUnitPrice", key: "estimatedUnitPrice"},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
     ]
     return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
@@ -93,6 +93,7 @@ const GmRetireFloat = props => {
               rowKey="id"
               columns={floatOrderColumns({
                 onViewDetails: row => {
+                  console.log('open ', row)
                   setSelectedFloatOrder(row)
                   setVisible(true)
                 }
@@ -109,7 +110,7 @@ const GmRetireFloat = props => {
           setSelectedFloatOrder(null)
           setVisible(false)
         }}
-        placement='rigth'
+        placement='right'
         width={700}
         title="Details"
       >

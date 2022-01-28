@@ -54,18 +54,22 @@ const PaymentsSubNav = (props) => {
             </NavLink>
           </Menu.Item>
         )}
-        <Menu.Item key="/app/payments/petty-cash/allocate-funds">
-          <NavLink to="/app/payments/petty-cash/allocate-funds">
-            <WalletOutlined />
-            <span>Allocate Funds to Petty Cash</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="/app/payments/float/allocate-funds">
-          <NavLink to="/app/payments/float/allocate-funds">
-            <WalletOutlined />
-            <span>Allocate Funds to Float</span>
-          </NavLink>
-        </Menu.Item>
+        {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
+          <>
+            <Menu.Item key="/app/payments/petty-cash/allocate-funds">
+              <NavLink to="/app/payments/petty-cash/allocate-funds">
+                <WalletOutlined />
+                <span>Allocate Funds to Petty Cash</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/app/payments/float/allocate-funds">
+              <NavLink to="/app/payments/float/allocate-funds">
+                <WalletOutlined />
+                <span>Allocate Funds to Float</span>
+              </NavLink>
+            </Menu.Item>
+          </>
+        )}
       </Menu>
     </>
   )

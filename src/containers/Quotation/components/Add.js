@@ -223,7 +223,7 @@ const CreateQuotation = (props) => {
                   }}
                   
                 >
-                  <Button loading={quotationSubmitting} icon={<UploadOutlined />}>Click to upload</Button>
+                  <Button disabled={quotationSubmitting} loading={quotationSubmitting} icon={<UploadOutlined />}>Click to upload</Button>
                 </Upload>
               </Col>
             </Row>
@@ -250,11 +250,11 @@ const CreateQuotation = (props) => {
                   <LeftOutlined />
                   Select Request Items
                 </Button>
-                <Button 
+                <Button
                   loading={quotationSubmitting}
-                  type="primary" 
-                  onClick={() => handleSubmit()} 
-                  disabled={selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId || files.length < 1 || quotationSubmitting}
+                  type="primary"
+                  onClick={() => handleSubmit()}
+                  disabled={quotationSubmitting || selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId || files.length < 1}
                 >
                   <CheckOutlined />
                   SUBMIT
