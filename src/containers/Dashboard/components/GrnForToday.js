@@ -7,6 +7,17 @@ import { formatCurrency } from '../../../util/common-helper'
 
 const columns = [
   {
+    title: "Reference",
+    dataIndex: "grnRef",
+    key: "grnRef"
+  },
+  {
+    title: "Invoice Number",
+    dataIndex: "invoice",
+    key: "invoice",
+    render: (text,row) => row?.invoice?.invoiceNumber
+  },
+  {
     title: "Supplier",
     dataIndex: "finalSupplier",
     key: "finalSupplier",
@@ -17,12 +28,6 @@ const columns = [
     dataIndex: "localPurchaseOrderRef",
     key: "localPurchaseOrderRef",
     render: (text, row) => row?.localPurchaseOrder?.lpoRef
-  },
-  {
-    title: "Amount",
-    dataIndex: "invoiceAmountPayable",
-    key: "invoiceAmountPayable",
-    render: (text) => formatCurrency(text)
   },
   {
     title: "Number of items",
