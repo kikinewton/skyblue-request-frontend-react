@@ -76,8 +76,6 @@ const CollapsibleLayout = (props) => {
       setKey("petty-cash")
     } else if(pathname.includes("/app/float")) {
       setKey("float")
-    } else if(pathname.includes("/app/suppliers")) {
-      setKey("/app/")
     } else if(pathname.includes("/app/local-purchase-orders")) {
       setKey("/app/local-purchase-orders")
     } else if(pathname.includes("/app/procurement/create-quotation")) {
@@ -88,6 +86,10 @@ const CollapsibleLayout = (props) => {
       setKey("/app/quotations")
     } else if(pathname.includes("/app/procurement/assign-suppliers")) {
       setKey("assign-suppliers")
+    } else if(pathname.includes("/app/procurement/rfqs")) {
+      setKey("procurement/rfqs")
+    } else if(pathname.includes("/app/procurement/request-categories")) {
+      setKey("procurement/request-categories")
     } else if(pathname.includes("/app/store")) {
       setKey("/app/store")
     } else if(pathname.includes("/app/grn")) {
@@ -98,6 +100,8 @@ const CollapsibleLayout = (props) => {
       setKey("/app/account")
     }  else if(pathname.includes("/app/payments")) {
       setKey("/app/payments")
+    } else if(pathname.includes("/app/reports")) {
+      setKey("/app/reports")
     }
     else {
       setKey("home")
@@ -255,7 +259,7 @@ const CollapsibleLayout = (props) => {
                   Assign Supplier
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key={`${PROCUREMENT_ROUTE}/rfqs`}>
+              <Menu.Item key={`procurement/rfqs`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
                   RFQs
                 </NavLink>
@@ -270,7 +274,7 @@ const CollapsibleLayout = (props) => {
                   Create LPO
                 </NavLink>
               </Menu.Item> */}
-              <Menu.Item key={`${PROCUREMENT_ROUTE}/request-categories`}>
+              <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
                   Request Categories
                 </NavLink>
