@@ -23,7 +23,7 @@ const columns = (props) => [
   //   render: (text, row)=> (<Input size="small" name="replacement" value={row.replacement} onChange={(event) => props.onUpdateSelectedItem(event, row)}/>)
   // },
   {
-    title: 'Unit Price',
+    title: 'Price',
     dataIndex: 'unitPrice',
     key: 'unitPrice'
   },

@@ -3,6 +3,34 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { REQUEST_ITEM_COLUMNS } from '..'
 import { PAYMENT_COLUMNS } from '../../Payment'
+import { prettifyDateTime } from "../../../util/common-helper" 
+
+const columns = [
+  {
+    title: "Payment Date",
+    dataIndex: "paymentDate",
+    key: "paymentDate",
+    render: text => prettifyDateTime(text)
+  },
+  {
+    title: "Supplier",
+    dataIndex: "finalSupplier",
+    key: "finalSupplier",
+    render: (text, row) => row?.finalSupplier?.name
+  },
+  {
+    title: "Local Purchase Order Ref",
+    dataIndex: "localPurchaseOrder",
+    key: "localPurchaseOrder",
+    render: (text, row) => row?.localPurchaseOrder?.lpoRef
+  },
+  {
+    title: "Item Delivery Date",
+    dataIndex: "itemDeliveryDate",
+    key: "itemDeliveryDate",
+    render: (text, row) => prettifyDateTime(row?.localPurchaseOrder?.deliveryDate)
+  },
+]
 
 const PaymentsDueInWeek = props => {
   const {
@@ -18,7 +46,7 @@ const PaymentsDueInWeek = props => {
       <Row>
         <Col span={24}>
           <Table 
-            columns={PAYMENT_COLUMNS}
+            columns={columns}
             dataSource={payments}
             size='small'
             pagination={{pageSize: 30}}

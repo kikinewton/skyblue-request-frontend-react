@@ -55,7 +55,8 @@ const requestColumns = props => [
 ]
 
 const CreateQuotation = (props) => {
-  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, quotationSubmitting } = props
+  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
+    quotationSubmitting } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
   const [current, setCurrent] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);

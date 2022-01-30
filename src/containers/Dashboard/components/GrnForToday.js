@@ -3,6 +3,34 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { REQUEST_ITEM_COLUMNS } from '..'
 import { GRN_COLUMNS } from '../../Grn'
+import { formatCurrency } from '../../../util/common-helper'
+
+const columns = [
+  {
+    title: "Supplier",
+    dataIndex: "finalSupplier",
+    key: "finalSupplier",
+    render: (text, row) => row?.finalSupplier?.name
+  },
+  {
+    title: "Local Purchase Order Ref",
+    dataIndex: "localPurchaseOrderRef",
+    key: "localPurchaseOrderRef",
+    render: (text, row) => row?.localPurchaseOrder?.lpoRef
+  },
+  {
+    title: "Amount",
+    dataIndex: "invoiceAmountPayable",
+    key: "invoiceAmountPayable",
+    render: (text) => formatCurrency(text)
+  },
+  {
+    title: "Number of items",
+    dataIndex: "receivedItems",
+    key: "receivedItems",
+    render: (text, row) => row?.receivedItems.length
+  },
+]
 
 const GrnForToday = props => {
   const {
@@ -18,7 +46,7 @@ const GrnForToday = props => {
       <Row>
         <Col span={24}>
           <Table 
-            columns={GRN_COLUMNS}
+            columns={columns}
             dataSource={grns}
             size='small'
             pagination={{pageSize: 30}}

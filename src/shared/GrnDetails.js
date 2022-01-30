@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Row, Col, List, Image, Card, Table, Button } from "antd"
-import { BASE_URL } from '../../services/api/urls'
-import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
+import { BASE_URL } from '../services/api/urls'
+import { formatCurrency, prettifyDateTime } from '../util/common-helper'
 import { DownloadOutlined } from '@ant-design/icons'
-import MyPdfView from '../MyPdfView'
-import { generateResourceUrl } from '../../services/api/document'
-import QuotationDetails from "../../shared/QuotationDetails"
+import { generateResourceUrl } from '../services/api/document'
+import MyPdfView from '../presentation/MyPdfView'
 
 const columns = [
   {
@@ -27,14 +26,13 @@ const columns = [
 ]
 
 
-const GrnDocumentReview = (props) => {
+const GrnDetails = (props) => {
   const {
     grn,
     invoice,
     invoiceDocument,
     onFinishText,
-    onFinish,
-    quotation
+    onFinish
   } = props
   const [imagePreview, setImagePreview] = useState(false)
   return (
@@ -91,25 +89,6 @@ const GrnDocumentReview = (props) => {
           </Row>
         </Col>
       </Row>
-      {quotation && (
-        <>
-          <Card style={{marginTop: 10, marginBottom: 10}} size='small' title="Quotation Details">
-            <Row style={{padding: "10px 0 2px 0"}}>
-              <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Quotations</span>
-              </Col>
-            </Row>
-            <Row style={{padding: "0 0 10px 0"}}>
-              <Col span={24}>
-                <QuotationDetails 
-                  showItems={false}
-                  quotation={quotation}
-                />
-              </Col>
-            </Row>
-          </Card>
-        </>
-      )}
       <Row>
         <Col span={24}>
           <Table 
@@ -135,4 +114,4 @@ const GrnDocumentReview = (props) => {
   )
 }
 
-export default GrnDocumentReview
+export default GrnDetails

@@ -95,11 +95,6 @@ const ApprovePaymentList = (props) => {
             setVisible(false)
           }}
         >
-          <GrnDocumentReview 
-            grn={selectedDraft?.goodsReceivedNote}
-            invoice={selectedDraft?.goodsReceivedNote?.invoice}
-            invoiceDocument={selectedDraft?.goodsReceivedNote?.invoice?.invoiceDocument}
-          />
           <Row style={{marginTop: 30}}>
             <Col span={24}>
               <Card
@@ -121,6 +116,16 @@ const ApprovePaymentList = (props) => {
                   </List.Item>
                 </List>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <GrnDocumentReview
+                grn={selectedDraft?.goodsReceivedNote}
+                invoice={selectedDraft?.goodsReceivedNote?.invoice}
+                invoiceDocument={selectedDraft?.goodsReceivedNote?.invoice?.invoiceDocument}
+                quotation={selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation}
+              />
             </Col>
           </Row>
           <Row>
