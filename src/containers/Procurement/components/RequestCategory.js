@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { Button, Col, Row, Table, Form, Input, Card } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import React, { useState } from 'react'
+import MyPageHeader from "../../../shared/MyPageHeader"
 
 const columns = (props) => [
   {
@@ -85,14 +86,21 @@ const RequestCategory = (props) => {
 
   return (
     <React.Fragment>
-      <Card
-        size="small"
-        title="Item Category"
+      <MyPageHeader 
+        title={(
+          <>
+            <span style={{marginRight: 5}}>Request categories</span>
+          </>
+        )}
         extra={[
-          <Button size="small" type="primary" style={{float: 'right'}} onClick={()=> setAddModal(true)}>
+          <Button type="default" style={{float: 'right'}} onClick={()=> setAddModal(true)}>
             Add New
           </Button>
         ]}
+      />
+      <Card
+        size="small"
+        
       >
         <Row>
           <Col md={24}>

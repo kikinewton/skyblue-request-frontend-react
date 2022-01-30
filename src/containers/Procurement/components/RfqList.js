@@ -1,7 +1,8 @@
 import { DownloadOutlined, MailOutlined } from '@ant-design/icons'
-import { Button, Col, PageHeader, Row, Table } from 'antd'
+import { Button, Col, Card, Row, Table } from 'antd'
 import React, { useEffect } from 'react'
 import { downloadRfqForSupplier, generateRfqForSupplierAndShare } from "../../../services/api/supplier"
+import MyPageHeader from '../../../shared/MyPageHeader'
 
 const columns = props => [
   {
@@ -49,22 +50,24 @@ const RfqList = (props) => {
   }, [])
   return (
     <>
-      <PageHeader title="RFQs" style={{padding: 0}}/>
-      <Row>
-        <Col span={24}>
-          <Table 
-            columns={columns({
-              generateRfq: (row) => downloadRfqForSupplier({supplierId: row.id}),
-              sendDoc: (row) => generateRfqForSupplierAndShare({supplierId: row.id}),
-            })}
-            dataSource={suppliers}
-            rowKey="id"
-            size="small"
-            bordered
-            loading={fetching_suppliers}
-          />
-        </Col>
-      </Row>
+      <MyPageHeader title="RFQs" />
+      <Card>
+        <Row>
+          <Col span={24}>
+            <Table 
+              columns={columns({
+                generateRfq: (row) => downloadRfqForSupplier({supplierId: row.id}),
+                sendDoc: (row) => generateRfqForSupplierAndShare({supplierId: row.id}),
+              })}
+              dataSource={suppliers}
+              rowKey="id"
+              size="small"
+              bordered
+              loading={fetching_suppliers}
+            />
+          </Col>
+        </Row>
+      </Card>
     </>
   )
 }
