@@ -41,6 +41,12 @@ export const REQUEST_COLUMNS = [
     key: 'quantity'
   },
   {
+    title: 'Date',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    render: text => prettifyDateTime(text)
+  },
+  {
     title: 'ENDORSEMENT',
     dataIndex: 'endorsement',
     key: 'endorsement'

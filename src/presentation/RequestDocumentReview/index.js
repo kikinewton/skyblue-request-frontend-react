@@ -3,6 +3,7 @@ import { Row, Col, List, Image } from "antd"
 import { BASE_URL } from '../../services/api/urls'
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
 import { DownloadOutlined } from '@ant-design/icons'
+import FilesView from '../../shared/FilesView'
 
 
 const RequestDocumentReview = (props) => {
@@ -11,6 +12,7 @@ const RequestDocumentReview = (props) => {
     requestItem
   } = props
   const [imagePreview, setImagePreview] = useState(false)
+  console.log('quotation selected', quotation)
   return (
     <>
       <Row>
@@ -37,7 +39,7 @@ const RequestDocumentReview = (props) => {
           </List>
         </Col>
       </Row>
-      <Row style={{minHeight: 300, border: "#000 1px solid"}}>
+      <Row style={{minHeight: 300, border: "#000 1px solid", padding: 10}}>
         <Col span={24}>
           <Row>
             <Col span={24}>
@@ -46,7 +48,10 @@ const RequestDocumentReview = (props) => {
           </Row>
           <Row>
             <Col span={24}>
-              {quotation?.requestDocument?.documentType.includes("image/") && (
+              <FilesView 
+                files={[quotation?.requestDocument]}
+              />
+              {/* {quotation?.requestDocument?.documentType.includes("image/") && (
                 <Image 
                   onClick={() => setImagePreview(true)}
                   preview={imagePreview}
@@ -59,7 +64,7 @@ const RequestDocumentReview = (props) => {
               )}
               {quotation?.requestDocument?.documentType.includes("excel/") && (
                 <a href={`${BASE_URL}/requestDocument/download/${quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
-              )}
+              )} */}
             </Col>
           </Row>
         </Col>

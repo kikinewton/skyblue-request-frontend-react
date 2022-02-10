@@ -72,7 +72,7 @@ const MyRequestMenu = props => {
           }}
         >
           <NavLink to="/app/my-requests/float-request-pending-document">
-            Floats Awaiting Supporting Document Upload
+            Retire Floats
           </NavLink>
         </Menu.Item>
         <Menu.SubMenu key="create-request-submenu" title="Create Request">

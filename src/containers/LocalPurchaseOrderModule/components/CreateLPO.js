@@ -2,6 +2,7 @@ import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Table, Drawer, List, message, Divider } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
+import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { REQUEST_COLUMNS } from '../../../util/constants'
 
@@ -177,7 +178,7 @@ const CreateLPO = (props) => {
           setSelectedDraft(null)
           setVisible(false)
         }}
-        width={700}
+        width={900}
       >
         <Divider />
         <Row style={{marginTop: 30}}>
@@ -192,7 +193,7 @@ const CreateLPO = (props) => {
             </Button>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col span={24}>
             <List>
               <List.Item>
@@ -218,6 +219,11 @@ const CreateLPO = (props) => {
               size="small"
               bordered
             />
+          </Col>
+        </Row> */}
+        <Row>
+          <Col span={24}>
+            <QuotationDetails quotation={selectedDraft} />
           </Col>
         </Row>
       </Drawer>

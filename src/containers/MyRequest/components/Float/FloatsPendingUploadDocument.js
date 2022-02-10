@@ -212,7 +212,7 @@ const FloatsPendingUploadDocument = (props) => {
                 <Button type='primary' style={{marginRight: 5}}
                   disabled={selectedFloatForRetirement?.hasDocument}
                   onClick={() => {
-                    history.push(`${path}/${selectedFloatForRetirement?.id}/edit`)
+                    history.push(`/app/my-requests/float-requests/${selectedFloatForRetirement?.id}/edit`)
                   }}
                 >
                   Edit / Add Items To Float

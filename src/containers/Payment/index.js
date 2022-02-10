@@ -15,6 +15,7 @@ import ApprovePaymentList from './component/ApprovePaymentsList'
 import { EMPLOYEE_ROLE } from '../../util/datas'
 import PettyCashAllocateFunds from './component/PettyCashAllocateFunds'
 import FloatAllocateFunds from './component/FloatAllocateFunds'
+import CloseFloatPendingList from './component/CloseFloatPendingList'
 
 
 
@@ -74,6 +75,7 @@ const PaymentModule = (props) => {
         <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />
         <AuthenticatedRoute path={`${path}/goods-receive-notes`} component={GrnPendingPaymentList} {...props} />
         <AuthenticatedRoute path={`${path}/petty-cash/allocate-funds`} component={PettyCashAllocateFunds} {...props} />
+        <AuthenticatedRoute path={`${path}/float/close-retire`} component={CloseFloatPendingList} {...props} />
         <AuthenticatedRoute path={`${path}/float/allocate-funds`} component={FloatAllocateFunds} {...props} />
         <AuthenticatedRoute path={`${path}`} component={DefaultPage} exact {...props} />
       </Switch>
@@ -131,6 +133,7 @@ const mapActionToProps = dispatch => ({
   fetchFloatRequests: query => dispatch(FloatCreators.fetchFloatRequests(query)),
   resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
   allocateFundsToFloatRequest: (id, payload) => dispatch(FloatCreators.allocateFundsToFloatRequest(id, payload)),
+  closeFloatOrder: (id, payload) => dispatch(FloatCreators.closeFloatOrder(id, payload)),
 
 })
 

@@ -54,6 +54,16 @@ export const FLOAT_ORDERS_COLUMN = [
 
 const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
+    title: "Endorsement",
+    dataIndex: "endorsement",
+    key: "endorsement"
+  },
+  {
+    title: "Approval",
+    dataIndex: "approval",
+    key: "approval"
+  },
+  {
     title: "Status",
     dataIndex: "status",
     key: "status"
@@ -204,6 +214,7 @@ const FloatList = (props) => {
                 bordered
                 size="small"
                 expandable={{expandedRowRender}}
+                pagination={{pageSize: 20}}
               />
             </Col>
           </Row>

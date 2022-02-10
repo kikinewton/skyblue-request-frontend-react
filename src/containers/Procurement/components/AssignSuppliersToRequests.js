@@ -1,6 +1,7 @@
-import { CheckOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { CheckOutlined, LeftOutlined, RightOutlined, SyncOutlined } from '@ant-design/icons'
 import { Card, Col, Steps, Table, Row, Button, Select, Divider, List, Drawer, Form, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
+import MyPageHeader from '../../../shared/MyPageHeader'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 const { Step } = Steps
 
@@ -90,10 +91,22 @@ const AssignSuppliersToRequests = (props) => {
 
   return (
     <>
-      <Card
-        title="Assign Suppliers To Requests Form"
-        hoverable
-      >
+      <MyPageHeader 
+        title={(
+          <>
+            <span style={{marginRight: 5}}>Assign Suppliers To Requests Form</span>
+            <SyncOutlined
+              spin={requestLoading}
+              onClick={e => {
+                fetchRequests({
+                  requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS
+                })
+              }}
+            />
+          </>
+        )}
+      />
+      <Card>
         <Row style={{marginBottom: 20}}>
           <Col span={24}>
             <Steps current={current} size="small">

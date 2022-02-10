@@ -1,9 +1,11 @@
-import { Button, Card, Col, PageHeader, Row, Steps, Table, Upload } from 'antd'
+import { Button, Card, Col, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
 import React from 'react'
 import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
 import { saveSingleDocument } from "../../../services/api/document"
 import { useHistory } from 'react-router'
+import UploadFiles from '../../../shared/UploadFiles'
+import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 const { Step } = Steps
 
 const supplierColumns = props => [
@@ -58,35 +60,72 @@ const CreateQuotation = (props) => {
   const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
     quotationSubmitting } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
+  const [loadingDocument, setLoadingDocument] = React.useState(false)
   const [current, setCurrent] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
   const [selectedRequestItems, setSelectedRequestItems] = React.useState([])
   const history = useHistory()
 
-  const handleSubmit = async ()=> {
-    console.log('my file pload', files[0])
-    const file = files[0].originFileObj
-    //createQuotation(payload)
-    console.log('SUBMIT', currentUser.id)
+  const handleUploadFile = async(file) => {
+    console.log('file object', file)
+    setLoadingDocument(true)
     try {
-      const response = await saveSingleDocument({file: file, docType: file?.type})
-      if(response.status === 'SUCCESS') {
-        const responseData = response.data
-        const docId = responseData.id
-        console.log('doc id', docId)
-        if(docId) {
-          console.log('oo yeah, lets create quotation')
-          createQuotation({
-            documentId: docId,
-            requestItemIds: selectedRequestItems.map(it => it.id), 
-            supplierId: selectedSupplier.supplierId
-          })
+      const response = await saveSingleDocument({file: file?.file, docType: ""})
+      setLoadingDocument(false)
+      if(response.status === RESPONSE_SUCCESS_CODE) {
+        const dt = response?.data
+        const fileDetails = {
+          ...dt,
+          status: "done",
+          name: dt?.fileName,
+          size: dt?.fileSize,
+          uid: dt?.id,
+          url: dt?.fileDownloadUri
         }
-        await fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
+        console.log('file details', fileDetails)
+        setFiles(files.concat(fileDetails))
       }
-      setFiles([])
-    } catch (e) {
-      console.log('err')
+    } catch (error) {
+      setLoadingDocument(false)
+    }
+  }
+
+  const handleSubmit = async ()=> {
+    // console.log('my file pload', files[0])
+    // const file = files[0].originFileObj
+    // //createQuotation(payload)
+    // console.log('SUBMIT', currentUser.id)
+    // try {
+    //   const response = await saveSingleDocument({file: file, docType: file?.type})
+    //   if(response.status === 'SUCCESS') {
+    //     const responseData = response.data
+    //     const docId = responseData.id
+    //     console.log('doc id', docId)
+    //     if(docId) {
+    //       console.log('oo yeah, lets create quotation')
+    //       createQuotation({
+    //         documentId: docId,
+    //         requestItemIds: selectedRequestItems.map(it => it.id), 
+    //         supplierId: selectedSupplier.supplierId
+    //       })
+    //     }
+    //     await fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
+    //   }
+    //   setFiles([])
+    // } catch (e) {
+    //   console.log('err')
+    // }
+
+    console.log('files', files)
+    if(files.length < 1) {
+      message.error("Please upload supporting document")
+    } else {
+      const docId = files[0]?.id
+      createQuotation({
+        documentId: docId,
+        requestItemIds: selectedRequestItems.map(it => it.id), 
+        supplierId: selectedSupplier.supplierId
+      })
     }
     
   }
@@ -214,7 +253,12 @@ const CreateQuotation = (props) => {
           <>
             <Row>
               <Col span={24}>
-                <Upload
+                <UploadFiles 
+                  files={files}
+                  onUpload={handleUploadFile}
+                  loading={loadingDocument}
+                />
+                {/* <Upload
                   action={false}
                   listType="picture-card"
                   maxCount={1}
@@ -225,7 +269,7 @@ const CreateQuotation = (props) => {
                   
                 >
                   <Button disabled={quotationSubmitting} loading={quotationSubmitting} icon={<UploadOutlined />}>Click to upload</Button>
-                </Upload>
+                </Upload> */}
               </Col>
             </Row>
             <Row>

@@ -98,6 +98,20 @@ export const retireFloatOrderFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submit_success: false };
 };
 
+//close float order
+export const closeFloatOrder = (state = INITIAL_STATE, action) => {
+  console.log('lets fetch float')
+  return { ...state, errors: null, submitting: true };
+};
+
+export const closeFloatOrderSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const closeFloatOrderFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false };
+};
+
 //update float order status
 export const updateFloatOrderStatus = (state = INITIAL_STATE, action) => {
   console.log('lets fetch float')
@@ -254,6 +268,10 @@ export const HANDLERS = {
   [Types.RETIRE_FLOAT_ORDER]: retireFloatOrder,
   [Types.RETIRE_FLOAT_ORDER_SUCCESS]: retireFloatOrderSuccess,
   [Types.RETIRE_FLOAT_ORDER_FAILURE]: retireFloatOrderFailure,
+
+  [Types.CLOSE_FLOAT_ORDER]: closeFloatOrder,
+  [Types.CLOSE_FLOAT_ORDER_SUCCESS]: closeFloatOrderSuccess,
+  [Types.CLOSE_FLOAT_ORDER_FAILURE]: closeFloatOrderFailure,
 
   [Types.UPDATE_FLOAT_ORDER_STATUS]: updateFloatOrderStatus,
   [Types.UPDATE_FLOAT_ORDER_STATUS_SUCCESS]: upadteFloatOrderStatusSuccess,

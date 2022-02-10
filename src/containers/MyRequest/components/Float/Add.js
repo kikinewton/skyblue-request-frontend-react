@@ -64,7 +64,7 @@ const verificationColumns = [
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
   const { createFloatRequest, submitting_float_request, submit_float_request_success } = props
-  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: ""})
+  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: "", email: ""})
   const [basicForm] = Form.useForm()
   const [current, setCurrent] = useState(0)
   const [ form ] = Form.useForm()
@@ -92,6 +92,7 @@ const AddNewRequest = (props) => {
       items: requests,
       requestedBy: floatOrder.name,
       requestedByPhoneNo: floatOrder.phoneNo,
+      requestedByEmail: floatOrder.email,
       description: floatOrder.description,
       amount: floatOrder.amount
     }
@@ -146,6 +147,17 @@ const AddNewRequest = (props) => {
                     placeholder='Name' 
                     value={floatOrder.name} 
                     onChange={(e) => setFloatOrder({...floatOrder, name: e.target.value})} 
+                  />
+                </Form.Item>
+                <Form.Item label="User Email" name="email" 
+                  rules={[
+                    {required: true, message: "Email required"}
+                  ]}
+                >
+                  <Input 
+                    placeholder='example@company.com' 
+                    value={floatOrder.phoneNo} 
+                    onChange={e => setFloatOrder({...floatOrder, email: e.target.value})}
                   />
                 </Form.Item>
                 <Form.Item label="User Phone Number" name="phoneNo">

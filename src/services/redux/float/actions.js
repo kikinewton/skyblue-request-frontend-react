@@ -54,6 +54,10 @@ export const { Types, Creators } = createActions(
     retireFloatOrderSuccess: ["responseData"],
     retireFloatOrderFailure: ["error"],
 
+    closeFloatOrder: ["id", "payload"],
+    closeFloatOrderSuccess: ["responseData"],
+    closeFloatOrderFailure: ["error"],
+
     setSelectedFloatRequests: ["requests"],
 
     filterFloatRequests: ["filter"],

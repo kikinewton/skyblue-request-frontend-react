@@ -137,13 +137,13 @@ const GrnIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
-            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
+            {/* {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
               <Menu.Item key="/app/grn/new-float-grn">
                 <NavLink to="/app/grn/new-float-grn">
                   Create GRN for Float
                 </NavLink>
               </Menu.Item>
-            )}
+            )} */}
           </Menu>
         )}
       >

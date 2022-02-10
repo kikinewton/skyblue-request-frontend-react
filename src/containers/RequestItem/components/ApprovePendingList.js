@@ -342,7 +342,7 @@ const ApprovePendingList = (props) => {
         visible={reviewDrawer}
         title={`${actionType} REQUESTS`}
         placement="right"
-        width={1000}
+        width={900}
         maskClosable={false}
         onClose={() => {
           setSelectedRequest(null)

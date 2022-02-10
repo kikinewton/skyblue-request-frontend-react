@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types"
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { Row, Col, Table, List } from 'antd';
-import { PhoneOutlined, MoneyCollectOutlined, OneToOneOutlined, NumberOutlined, UserOutlined } from '@ant-design/icons';
+import { PhoneOutlined, MoneyCollectOutlined, OneToOneOutlined, NumberOutlined, UserOutlined, CommentOutlined } from '@ant-design/icons';
 import FilesView from '../../../shared/FilesView';
 
 
@@ -50,8 +50,6 @@ const FloatDetails = ({
   floatOrder
 }) => {
 
-  
-
   return (
     <>
       <Row>
@@ -70,10 +68,16 @@ const FloatDetails = ({
               <List.Item.Meta avatar={<PhoneOutlined/>} title="Phone Number" description={floatOrder?.requestedByPhoneNo} />
             </List.Item>
             <List.Item>
+              <List.Item.Meta avatar={<CommentOutlined/>} title="Endorsement Status" description={floatOrder?.endorsement} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<CommentOutlined/>} title="Approval Status" description={floatOrder?.approval} />
+            </List.Item>
+            <List.Item>
               <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Sub Total" description={formatCurrency(sumTotalAmount(floatOrder?.floats || []))} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Amount Sepcified" description={formatCurrency(floatOrder?.amount)} />
+              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Amount Requested" description={formatCurrency(floatOrder?.amount)} />
             </List.Item>
           </List>
         </Col>

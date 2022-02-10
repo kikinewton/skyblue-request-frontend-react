@@ -72,6 +72,8 @@ export function fetchFloatRequests(query) {
       return service({url: `/floats?auditorRetire=true`, method: "GET"})
     case FETCH_FLOAT_REQUEST_TYPES.MY_AWAITING_RETIREMENT:
       return service({url: `/floats?awaitingDocument=true`, method: "GET"})
+    case FETCH_FLOAT_REQUEST_TYPES.CLOSE_RETIREMENT:
+      return service({url: `/floats?closeRetirement=true`, method: "GET"})
     default:
       return fetchAllFloatRequests(query)
   }
@@ -144,5 +146,13 @@ export function retireFloatOrder(id, payload) {
     url: `/floatOrders/${id}/supportingDocument`,
     method: "PUT",
     data: payload?.documents
+  })
+}
+
+export function closeloatOrder(id, payload) {
+  return service({
+    url: `/floatOrders/${id}/close`,
+    method: "PUT",
+    data: payload
   })
 }

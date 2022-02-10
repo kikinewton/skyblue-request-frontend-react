@@ -23,6 +23,11 @@ const MyPdfView = props => {
 
   return (
     <div style={{width: "100%", border: "1px solid black", padding: 10}}>
+      <Row>
+        <Col span={24}>
+          <span style={{fontWeight: "bold"}}>PDF Viewer</span>
+        </Col>
+      </Row>
       <Row  style={{padding: "10px 0 10px 0"}}>
         <Col span={12}>
           <Button style={{float: "left"}} onClick={() => onPagePrev(pageNumber)} disabled={pageNumber === 1}>Prev</Button>

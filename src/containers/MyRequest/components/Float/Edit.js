@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Col, Form, Row, Table, Input, Button, Steps, List, Drawer, Spin } from 'antd'
-import { BookOutlined, CalendarOutlined, CheckOutlined, CodeOutlined, ContactsOutlined, FileDoneOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, PlusOutlined, RightOutlined, UserOutlined } from '@ant-design/icons'
-import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
+import { Card, Col, Form, Row, Table, Input, Button, List, Drawer, Spin } from 'antd'
+import { CalendarOutlined, MinusOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { CURRENCY_CODE } from '../../../../util/constants'
 import AppLayout from '../../../AppLayout'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import { useHistory, useParams } from 'react-router-dom'
 import { prettifyDateTime } from '../../../../util/common-helper'
-
 const columns = (props) => [
   {
     title: 'Description',
@@ -60,13 +58,12 @@ const verificationColumns = [
 ]
 
 const EditFloatOrder = (props) => {
-  const [requests, setRequests] = React.useState([])
-  const { createFloatRequest, submitting_float_request, 
+  const { submitting_float_request, 
     submit_float_request_success, float_order, fetchFloatOrder, fetching_float_requests, addItemsToFloatOrder
   } = props
-  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: ""})
-  const [basicForm] = Form.useForm()
-  const [current, setCurrent] = useState(0)
+  // const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: ""})
+  // const [basicForm] = Form.useForm()
+  // const [current, setCurrent] = useState(0)
   const [addVisible, setAddVisible] = useState(false)
   const [floatItems, setFloatItems] = useState(float_order?.floats || [])
   const [ form ] = Form.useForm()
@@ -144,6 +141,20 @@ const EditFloatOrder = (props) => {
                   </List>
                 </Col>
               </Row>
+              {/* <Row>
+                <Col span={24}>
+                  <Form.Item>
+                    <Input 
+                      prefix={CURRENCY_CODE} 
+                      type="number"
+                      value={float_order?.amount}
+                      onChange={e => {
+                        float_order['amount'] = e.target.value
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row> */}
               <Row style={{marginTop: 10, marginBottom: 10}}>
                 <Col span={24}>
                   <span style={{fontWeight: "bold", float: "left"}}>Entries</span>
@@ -165,7 +176,7 @@ const EditFloatOrder = (props) => {
                   <Table 
                     columns={columns({
                       onAdd: () => {
-
+                        
                       },
                       onRemove: row => {
                         removeEntry(row)

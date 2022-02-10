@@ -6,14 +6,15 @@ import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
 import MyRequestMenu from '../MyRequestMenu'
+import MyPageHeader from '../../../../shared/MyPageHeader'
 
 const columns = props => REQUEST_COLUMNS.concat([
-  {
-    title: "User Department",
-    dataIndex: "userDepartment",
-    key: "userDepartment",
-    render: (text, row) => row.userDepartment?.name
-  },
+  // {
+  //   title: "User Department",
+  //   dataIndex: "userDepartment",
+  //   key: "userDepartment",
+  //   render: (text, row) => row.userDepartment?.name
+  // },
   {
     title: "Actions",
     dataIndex: "operations",
@@ -55,20 +56,21 @@ const LpoList = (props) => {
     }
     fetchMyRequests({})
   }, [updating_request, update_request_success])
+  
   return (
     <React.Fragment>
       <AppLayout
         subNav={<MyRequestMenu />}
       >
-        <Card
-          size="small"
-          title="My request items"
-          extra={[
+        <MyPageHeader 
+           title="My request items"
+           extra={[
             <Button type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               Add New
             </Button>
           ]}
-        >
+        />
+        <Card>
           <Row>
             <Col md={24}>
               <Table
@@ -90,6 +92,7 @@ const LpoList = (props) => {
                 size="small"
                 rowKey="id"
                 bordered
+                pagination={{pageSize: 20}}
               />
             </Col>
           </Row>

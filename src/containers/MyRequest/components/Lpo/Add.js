@@ -33,7 +33,7 @@ const columns = props => [
     title: 'Department',
     dataIndex: 'userDepartment',
     key: "userDepartment.id",
-    render: (text)=> text.name
+    render: (text)=> text?.name
   },
   {
     title: 'Purpose',

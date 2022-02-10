@@ -30,7 +30,7 @@ const FloatIndex = (props) => {
   console.log('path', path)
 
   const handleNavClick = (value) => {
-    console.log('menus', value)
+    setKey(value)
   }
 
   React.useEffect(() => {
@@ -50,7 +50,7 @@ const FloatIndex = (props) => {
   return (
     <>
       <AppLayout
-        title="Float Requests Manegement"
+        title="Float Requests Management"
         subNav={(
           <Menu
             selectedKeys={[key]}
@@ -75,7 +75,7 @@ const FloatIndex = (props) => {
                 </Menu.Item>
                 <Menu.Item key="/float/gm-pending-retire">
                   <NavLink to="/app/float/gm-pending-retire">
-                    <span>Approve Retirement</span>
+                    <span>Approve Float Retirement</span>
                   </NavLink>
                 </Menu.Item>
               </>
@@ -84,7 +84,7 @@ const FloatIndex = (props) => {
               <>
                 <Menu.Item key="/audit-pending-retire">
                   <NavLink to="/app/float/audit-pending-retire">
-                    <span>Approve Retirement</span>
+                    <span>Approve Float Retirement</span>
                   </NavLink>
                 </Menu.Item>
               </>

@@ -60,7 +60,8 @@ import {
 	watchFetchFloatOrder,
 	watchUpdateFloatOrderStatus,
 	watchAddItemsToFloatOrder,
-	watchRetireFloatOrder
+	watchRetireFloatOrder,
+	watchCloseFloatOrder
 } from "./float"
 
 import {
@@ -156,6 +157,7 @@ export default function* rootSaga() {
 		watchUpdateFloatOrderStatus(),
 		watchAddItemsToFloatOrder(),
 		watchRetireFloatOrder(),
+		watchCloseFloatOrder(),
 
 		watchCreatePettyCashRequest(),
 		watchFetchMyPettyCashRequests(),

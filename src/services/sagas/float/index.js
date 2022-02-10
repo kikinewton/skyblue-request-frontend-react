@@ -12,7 +12,8 @@ import {
   fetchFloatOrder as fetchFloatOrderApi,
   updateStatus as updateFloatOrderStatusApi,
   retireFloatOrder as retireFloatOrderApi,
-  addItems as addItemsToFloatOrderApi
+  addItems as addItemsToFloatOrderApi,
+  closeloatOrder as closeFloatOrderApi
 } from '../../api/float'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -199,6 +200,25 @@ export function* retireFloatOrder(action) {
   }
 }
 
+
+export function* closeFloatOrder(action) {
+  const { id, payload } = action
+  try {
+    const response = yield call(closeFloatOrderApi, id, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'Close Float', response?.message)
+      yield put(Creators.closeFloatOrderSuccess(response?.data))
+    } else {
+      openNotification('error', 'Close Float', response?.message)
+      yield put(Creators.closeFloatOrderFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    openNotification('error', 'Close Float', errorText)
+    yield put(Creators.closeFloatOrderFailure(errorText))
+  }
+}
+
 export function* addItemsToFloatOrder(action) {
   const { id, payload } = action
   try {
@@ -266,4 +286,8 @@ export function* watchAddItemsToFloatOrder(action) {
 
 export function* watchRetireFloatOrder(action) {
   yield takeLeading(Types.RETIRE_FLOAT_ORDER, retireFloatOrder)
+}
+
+export function* watchCloseFloatOrder(action) {
+  yield takeLeading(Types.CLOSE_FLOAT_ORDER, closeFloatOrder)
 }
