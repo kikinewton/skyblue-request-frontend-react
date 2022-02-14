@@ -1,9 +1,10 @@
 import { Card, Button, Table, Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { GRN_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import { prettifyDateTime } from '../../../util/common-helper'
 
-const columns = props => [
+const columns = props => GRN_COLUMNS.concat([
   {
     title: "Invoice Number",
     dataIndex: "invoice",
@@ -28,7 +29,7 @@ const columns = props => [
     align: "right",
     render: (text,row) => (<><Button size="small" type="primary" onClick={() => props.onEndorse(row)}>Approve</Button></>)
   },
-]
+])
 
 const GrnPendingEndorsement = (props) => {
   const {
@@ -88,7 +89,8 @@ const GrnPendingEndorsement = (props) => {
           setVisible(false)
         }}
       >
-        <GrnDocumentReview 
+        <GrnDocumentReview
+          loading={submitting_grn} 
           grn={selectedGrn}
           invoice={selectedGrn?.invoice}
           invoiceDocument={selectedGrn?.invoice?.invoiceDocument}

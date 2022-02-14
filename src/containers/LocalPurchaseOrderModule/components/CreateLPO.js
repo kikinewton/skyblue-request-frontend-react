@@ -125,7 +125,7 @@ const CreateLPO = (props) => {
     if(!submitting_local_purchase_order && submit_local_purchase_order_success) {
       setVisible(false)
       setSelectedDraft(null)
-      fetchLocalPurchaseOrderDrafts({q: "pendingApproval"})
+      fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
     }
   }, [submitting_local_purchase_order, submit_local_purchase_order_success])
 
@@ -151,7 +151,7 @@ const CreateLPO = (props) => {
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
           <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
-            fetchLocalPurchaseOrders({withGRN: false})
+            fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
           }} /></span>
         </Col>
       </Row>

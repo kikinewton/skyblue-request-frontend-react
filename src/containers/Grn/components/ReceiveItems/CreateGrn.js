@@ -27,6 +27,11 @@ const columns = (props) => [
     dataIndex: 'unitPrice',
     key: 'unitPrice'
   },
+  {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
   // {
   //   title: 'Invoice unit Price',
   //   dataIndex: 'invoiceUnitPrice',
@@ -88,7 +93,6 @@ const CreateGrn = (props) => {
                     prefix={CURRENCY_CODE}
                     placeholder="Amount" 
                     type="number"
-                    step="0.1"
                     min="0"
                     name="invoiceAmountPayable"
                     value={formData.invoiceAmountPayable}

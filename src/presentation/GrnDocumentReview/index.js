@@ -6,6 +6,7 @@ import { DownloadOutlined } from '@ant-design/icons'
 import MyPdfView from '../MyPdfView'
 import { generateResourceUrl } from '../../services/api/document'
 import QuotationDetails from "../../shared/QuotationDetails"
+import FilesView from "../../shared/FilesView"
 
 const columns = [
   {
@@ -31,6 +32,7 @@ const GrnDocumentReview = (props) => {
   const {
     grn,
     invoice,
+    loading,
     invoiceDocument,
     onFinishText,
     onFinish,
@@ -39,56 +41,37 @@ const GrnDocumentReview = (props) => {
   const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
-      <Card title="Invoice Details" style={{marginBottom: 10}} size="small">
-        <Row>
-          <Col span={24}>
-            <List 
-              itemLayout="horizontal"
-            >
-              <List.Item key="invoiceNumber">
-                <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
-              </List.Item>
-              <List.Item key="createdOn">
-                <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
-              </List.Item>
-              <List.Item key="supplier">
-                <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
-              </List.Item>
-              <List.Item key="amount">
-                <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable)} />
-              </List.Item>
-            </List>
-          </Col>
-        </Row>
-      </Card>
-      <Row style={{minHeight: 200, border: "#000 1px solid"}}>
+      <Row style={{margin: "30px 0 30px 0"}}>
         <Col span={24}>
-          <Row>
-            <Col span={24}>
-
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "100%"}}>
-              {invoiceDocument?.documentFormat.includes("image/") && (
-                <Image 
-                  onClick={() => setImagePreview(true)}
-                  preview={imagePreview}
-                  width={200}
-                  src={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}
+          <Card title="Invoice Details" style={{marginBottom: 10}} size="small">
+            <Row>
+              <Col span={24}>
+                <List 
+                  itemLayout="horizontal"
+                >
+                  <List.Item key="invoiceNumber">
+                    <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
+                  </List.Item>
+                  <List.Item key="createdOn">
+                    <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
+                  </List.Item>
+                  <List.Item key="supplier">
+                    <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
+                  </List.Item>
+                  <List.Item key="amount">
+                    <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable)} />
+                  </List.Item>
+                </List>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "100%"}}>
+                <FilesView 
+                  files={[invoiceDocument]}
                 />
-              )}
-              {invoiceDocument?.documentFormat.includes("application/pdf") && (
-                <MyPdfView 
-                  src={generateResourceUrl(invoiceDocument?.fileName)}
-                />
-                // <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
-              )}
-              {invoiceDocument?.documentFormat.includes("excel/") && (
-                <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
-              )}
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </Card>
         </Col>
       </Row>
       {quotation && (
@@ -125,7 +108,7 @@ const GrnDocumentReview = (props) => {
       {onFinish && onFinishText && (
         <Row style={{marginTop: 10}}>
           <Col span={24}>
-            <Button type="primary" onClick={() => onFinish()}>
+            <Button type="primary" onClick={() => onFinish()} loading={loading}>
               {onFinishText}
             </Button>
           </Col>

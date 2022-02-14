@@ -95,7 +95,7 @@ const ApprovePaymentList = (props) => {
             setVisible(false)
           }}
         >
-          <Row style={{marginTop: 30}}>
+          <Row style={{marginTop: 30, marginBottom: 30}}>
             <Col span={24}>
               <Card
                 title="Payment Details"

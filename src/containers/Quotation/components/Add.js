@@ -150,7 +150,7 @@ const CreateQuotation = (props) => {
       <Row>
         <Col span={24}>
           <PageHeader
-            onBack={() => history.push("/app/quotations")}
+            // onBack={() => history.push("/app/quotations")}
             title="Create Quotation Document"
             style={{padding: 0}}
           />

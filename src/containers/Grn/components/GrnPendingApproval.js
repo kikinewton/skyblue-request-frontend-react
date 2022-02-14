@@ -73,6 +73,7 @@ const GrnPendingApproval = (props) => {
         }}
       >
         <GrnDocumentReview 
+          loading={submitting_grn}
           grn={selectedGrn}
           invoice={selectedGrn?.invoice}
           invoiceDocument={selectedGrn?.invoice?.invoiceDocument}

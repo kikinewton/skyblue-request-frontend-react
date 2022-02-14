@@ -65,21 +65,33 @@ export function downloadGrnLink(query) {
 
 export function generateAccountPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
-  const url = `${BASE_URL}/accounts/paymentReport/download${queryStr}`
-  downloadFile(url)
+  if(query?.download) {
+    const url = `${BASE_URL}/accounts/paymentReport/{queryStr}`
+    downloadFile(url)
+  } else {
+    console.log('api query', query)
+    return service({url: `/accounts/paymentReport/${queryStr}`})
+  }
+  
 }
 
 export function generateAccountPettyCashPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   console.log('gene url: ', queryStr)
-  const url = `${BASE_URL}/accounts/pettyCashPaymentReport/download${queryStr}`
+  const url = `${BASE_URL}/accounts/pettyCashPaymentReport${queryStr}`
   downloadFile(url)
 }
 
 export function generateFloatAgeingAnalysisReport(query) {
+  
   const queryStr = serializeQueryParamsNotNull(query)
-  const url = `${BASE_URL}/accounts/floatAgeingAnalysisReport/download${queryStr}`
-  downloadFile(url)
+  const url = `${BASE_URL}/accounts/floatAgeingAnalysisReport${queryStr}`
+  if(query.download) {
+    downloadFile(url)
+  } else {
+    return service({url: `/accounts/floatAgeingAnalysisReport${queryStr}`, method: "GET"})
+  }
+  
 }
 
 
@@ -98,6 +110,7 @@ export function generateProcureItemsReportReport(query) {
 }
 
 export function downloadFile(url) {
+  console.log('url', url)
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")

@@ -74,18 +74,18 @@ const GrnIndex = (props) => {
   }
 
   React.useEffect(() => {
-    const { pathname } = location
-    if(pathname.includes("/app/grn/lpos-pending-grn")) {
+    const url = window.location.href
+    if(url.includes("/app/grn/lpos-pending-grn")) {
       setKey("/app/grn/lpos-pending-grn")
-    } else if(pathname.includes("/app/grn/pending-endorsement")) {
+    } else if(url.includes("/app/grn/pending-endorsement")) {
       setKey("/app/grn/pending-endorsement")
-    } else if(pathname.includes("/app/grn/pending-approval")) {
+    } else if(url.includes("/app/grn/pending-approval")) {
       setKey("/app/grn/pending-approval")
-    } else if(pathname.includes("/app/grn/list")) {
+    } else if(url.includes("/app/grn/list")) {
       setKey("/app/grn/list")
-    } else if(pathname.includes("/app/grn/pending-payment-advice")) {
+    } else if(url.includes("/app/grn/pending-payment-advice")) {
       setKey("/app/grn/pending-payment-advice")
-    } else if(pathname.includes("/app/grn/new-float-grn")) {
+    } else if(url.includes("/app/grn/new-float-grn")) {
       setKey("/app/grn/new-float-grn")
     }
   }, [key])

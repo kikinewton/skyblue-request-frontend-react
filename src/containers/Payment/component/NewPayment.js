@@ -146,7 +146,7 @@ const NewPayment = (props) => {
                     <Input />
                   </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
-                    <Input prefix={CURRENCY_CODE} type="number" step="0.1" min="0" />
+                    <Input prefix={CURRENCY_CODE} type="number" min="0" />
                   </Form.Item>
                   <Form.Item >
                     <Button 

@@ -27,6 +27,7 @@ const GrnPendingPaymentAdvice = (props) => {
   } = props
   const [visible, setVisible] = useState(false)
   const [selectedGrn, setSelectedGrn] = useState(null)
+  const [form] = Form.useForm()
 
   useEffect(() => {
     fetchGrns({needPaymentAdvice: true})
@@ -37,6 +38,7 @@ const GrnPendingPaymentAdvice = (props) => {
       setVisible(false)
       setSelectedGrn(null)
       fetchGrns({needPaymentAdvice: true})
+      form.setFieldsValue({payment_date: ""})
     }
   }, [submit_grn_success, submitting_grn])
 
@@ -71,6 +73,7 @@ const GrnPendingPaymentAdvice = (props) => {
         onClose={() => {
           setSelectedGrn(null)
           setVisible(false)
+          form.setFieldsValue({payment_date: ""})
         }}
       >
         <GrnDocumentReview 
@@ -81,6 +84,7 @@ const GrnPendingPaymentAdvice = (props) => {
         <Row style={{marginTop: 40}}>
           <Col span={24}>
             <Form
+              form={form}
               layout="vertical"
               initialValues={{
                 payment_date: ""
