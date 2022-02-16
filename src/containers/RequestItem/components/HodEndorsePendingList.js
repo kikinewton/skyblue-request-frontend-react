@@ -126,7 +126,8 @@ const HodEndorsePendingList = (props) => {
     updateRequest,
     updating_request,
     update_request_success,
-    createComment
+    createComment,
+    submitting_comment
   } = props
 
   const [confirmDrawer, setConfirmDrawer] = useState(false)
@@ -282,7 +283,7 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
-              loading={updating_request}
+              loading={submitting_comment}
               disabled={selected_requests.length < 1 || updating_request}
             >
               <CheckOutlined /> SUBMIT

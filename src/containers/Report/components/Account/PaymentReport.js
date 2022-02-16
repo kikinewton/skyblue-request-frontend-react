@@ -1,5 +1,5 @@
 import { FileExcelOutlined, EyeOutlined } from '@ant-design/icons'
-import { Row, Col, Card, DatePicker, Button, message, Table, Pagination } from 'antd'
+import { Row, Col, Card, DatePicker, Button, message, Table, Pagination, Input } from 'antd'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { generateAccountPaymentsReport } from '../../../../services/api/report'
@@ -50,8 +50,9 @@ const columns = [
 
 const PaymentReport = props => {
   const [range, setRange] = useState([null, null])
+  const [supplier, setSupplier] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 2, total: 0, totalPages: 0})
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 20, total: 0, totalPages: 0})
   const [data, setData] = useState([])
 
   const submit = async(type) => {
@@ -62,6 +63,7 @@ const PaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      supplier,
     }
     if(type === 'download') {
       query['download'] = true;
@@ -86,6 +88,7 @@ const PaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      supplier,
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
@@ -94,7 +97,7 @@ const PaymentReport = props => {
       const result = await generateAccountPaymentsReport(query)
 
       const { currentPage, pageSize, total, totalPages } = result?.meta
-      setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {
       
@@ -114,6 +117,13 @@ const PaymentReport = props => {
             onChange={(momentArr, dateStrArr) => {
               setRange(momentArr)
             }} 
+          />,
+          <Input
+            onChange={e => setSupplier(e.target.value)}
+            value={supplier}
+            type="search"
+            style={{width: 200}}
+            placeholder='Supplier'
           />,
           <Button
             key="submit-btn-view"
@@ -145,6 +155,7 @@ const PaymentReport = props => {
             rowKey="id"
             bordered
             size="small"
+            loading={loading}
            />
           </Col>
         </Row>

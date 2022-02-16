@@ -28,8 +28,8 @@ const Home = (props) => {
         </Row>
         <Row>
           <Col md={24} style={{display:'flex', justifyContent: 'flex-end', alignItems: 'center', padding: 5}}>
-            {/* <NavLink to="/app/my-request/lpos">View All</NavLink> */}
-            <a href="/app/my-request/lpos">View all</a>
+            <NavLink to="/app/my-requests/lpos">View All</NavLink>
+            {/* <a href="/app/my-request/lpos">View all</a> */}
           </Col>
         </Row>
 

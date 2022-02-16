@@ -143,7 +143,7 @@ const LpoList = (props) => {
               <Input type="number" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" >Update</Button>
+              <Button type="primary" htmlType="submit" loading={updating_request}>Update</Button>
             </Form.Item>
           </Form>
         </Drawer>

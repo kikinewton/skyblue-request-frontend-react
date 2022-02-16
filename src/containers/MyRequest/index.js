@@ -83,7 +83,7 @@ const MyRequest = (props)=> {
         <Route exact path={`${path}/float-requests`}>
           <ListFloat {...props} />
         </Route>
-        <AuthenticatedRoute path={`${path}/float-request-pending-document`} component={FloatsPendingUploadDocument} {...props} />
+        <Route path={`${path}/float-request-pending-document`} component={FloatsPendingUploadDocument} {...props} />
       </Switch>
     </React.Fragment>
   )

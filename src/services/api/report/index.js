@@ -77,9 +77,15 @@ export function generateAccountPaymentsReport(query) {
 
 export function generateAccountPettyCashPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
-  console.log('gene url: ', queryStr)
-  const url = `${BASE_URL}/accounts/pettyCashPaymentReport${queryStr}`
-  downloadFile(url)
+  if(query.download) {
+    const url = `${BASE_URL}/accounts/pettyCashPaymentReport${queryStr}`
+    downloadFile(url)
+  } else {
+    return service({
+      url: `/accounts/pettyCashPaymentReport${queryStr}`,
+      method: 'GET'
+    })
+  }
 }
 
 export function generateFloatAgeingAnalysisReport(query) {
@@ -98,15 +104,28 @@ export function generateFloatAgeingAnalysisReport(query) {
 //store
 export function generateGoodsReceiveNotesReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
-  const url = `${BASE_URL}/stores/grn/download${queryStr}`
-  downloadFile(url)
+  if(query.download) {
+    const url = `${BASE_URL}/stores/grnReport${queryStr}`
+    downloadFile(url)
+  } else {
+    return service({
+      url: `/stores/grnReport${queryStr}`,
+      method: "GET"
+    })
+  }
 }
 
 //procurement
 export function generateProcureItemsReportReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
-  const url = `${BASE_URL}/procurement/procuredItemsReport/download${queryStr}`
-  downloadFile(url)
+  if(query.download) {
+    const url = `${BASE_URL}/procurement/procuredItemsReport/download${queryStr}`
+    downloadFile(url)
+  } else {
+    return service({
+      url: `/procurement/procuredItemsReport${queryStr}`
+    })
+  }
 }
 
 export function downloadFile(url) {

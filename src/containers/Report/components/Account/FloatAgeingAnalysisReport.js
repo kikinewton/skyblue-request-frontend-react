@@ -1,20 +1,61 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { Row, Col, Card, DatePicker, Button, message, Pagination } from 'antd'
+import { Row, Col, Card, DatePicker, Button, message, Pagination, Table, Input } from 'antd'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { generateAccountPaymentsReport, generateFloatAgeingAnalysisReport } from '../../../../services/api/report'
 import MyPageHeader from "../../../../shared/MyPageHeader"
+import { prettifyDateTime } from '../../../../util/common-helper'
 const { RangePicker } = DatePicker
 
-
+const columns = [
+  {
+    title: 'Float Ref',
+    dataIndex: 'floatRef',
+    key: 'floatRef'
+  },
+  {
+    title: 'Item Description',
+    dataIndex: 'itemDescription',
+    key: 'itemDescription'
+  },
+  {
+    title: 'Ageing Value',
+    dataIndex: 'ageingValue',
+    key: 'ageingValue'
+  },
+  {
+    title: 'Department',
+    dataIndex: 'department',
+    key: 'department'
+  },
+  {
+    title: 'Estimated Amount',
+    dataIndex: 'estimatedAmount',
+    key: 'estimatedAmount'
+  },
+  {
+    title: 'Date',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    render: text => prettifyDateTime(text)
+  },
+  {
+    title: 'Retirement Status',
+    dataIndex: 'retired',
+    key: 'retired',
+    render: text => text ? 'RETIRED' : 'PENDING'
+  },
+]
 
 const FloatAgeingAnalysisReport = props => {
   const [range, setRange] = useState([null, null])
+  const [email, setEmail] = useState(null)
   const [loading, setLoading] = useState(false)
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 2, total: 0, totalPages: 0})
   const [data, setData] = useState([])
 
   const viewReport = async(e) => {
+    // setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
     if(!range[0] || !range[1]) {
       return message.error("Please make sure date range is selected")
     }
@@ -22,8 +63,9 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      requesterEmail: email,
       pageSize: meta?.pageSize,
-      pageNo: meta?.currentPage
+      pageNo: 0
     }
     try {
       const result = await generateFloatAgeingAnalysisReport(query) 
@@ -48,6 +90,7 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      requesterEmail: email,
       download: true
     }
     await generateFloatAgeingAnalysisReport(query) 
@@ -62,15 +105,15 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      requesterEmail: email,
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
 
     try {
-      const result = await generateAccountPaymentsReport(query)
-
+      const result = await generateFloatAgeingAnalysisReport(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
-      setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {
       
@@ -91,6 +134,13 @@ const FloatAgeingAnalysisReport = props => {
               setRange(momentArr)
             }} 
           />,
+          <Input 
+            onChange={e => setEmail(e.target.value)}
+            value={email}
+            type="search"
+            style={{width: 200}}
+            placeholder='Requester Email'
+          />,
           <Button
             key="submit-btn-view"
             loading={loading}
@@ -107,14 +157,22 @@ const FloatAgeingAnalysisReport = props => {
             icon={<FileExcelOutlined/>}
             onClick={downloadReport}
           >
-            Generate And Export Data
+            Export
           </Button>
         ]}
       />
       <Card>
         <Row>
           <Col span={24}>
-           
+           <Table 
+            columns={columns}
+            dataSource={data}
+            bordered
+            size='small'
+            pagination={false}
+            rowKey="id"
+            loading={loading}
+           />
           </Col>
         </Row>
         <Row>

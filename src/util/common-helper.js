@@ -34,10 +34,10 @@ export function serializeQueryParams( obj ) {
 
 export function serializeQueryParamsNotNull( obj ) {
   return '?' + Object.keys(obj).reduce(function(a, k){
-    // if(obj[k]) {
-    //   a.push(k + '=' + encodeURIComponent(obj[k]));
-    // }
-    a.push(k + '=' + encodeURIComponent(obj[k]));
+    if(obj[k]) {
+      a.push(k + '=' + encodeURIComponent(obj[k]));
+    }
+    //a.push(k + '=' + encodeURIComponent(obj[k]));
     return a;
   }, []).join('&');
 }
