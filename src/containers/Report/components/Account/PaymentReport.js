@@ -52,7 +52,7 @@ const PaymentReport = props => {
   const [range, setRange] = useState([null, null])
   const [supplier, setSupplier] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 20, total: 0, totalPages: 0})
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [data, setData] = useState([])
 
   const submit = async(type) => {

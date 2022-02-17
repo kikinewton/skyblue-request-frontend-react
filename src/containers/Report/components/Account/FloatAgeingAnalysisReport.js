@@ -51,7 +51,7 @@ const FloatAgeingAnalysisReport = props => {
   const [range, setRange] = useState([null, null])
   const [email, setEmail] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 2, total: 0, totalPages: 0})
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [data, setData] = useState([])
 
   const viewReport = async(e) => {

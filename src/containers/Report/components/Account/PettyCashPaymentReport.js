@@ -59,7 +59,7 @@ const columns = [
 
 const PettyCashPaymentReport = props => {
   const [range, setRange] = useState([null, null])
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 20, total: 0, totalPages: 0})
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [data, setData] = useState([])
   const [email, setEmail] = useState(null)
   const [loading, setLoading] = useState(false)
