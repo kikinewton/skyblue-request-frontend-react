@@ -2,6 +2,7 @@ import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
 import { Badge, Button, Col, Row, Table, Drawer, List, message, Divider } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
+import MyPageHeader from '../../../shared/MyPageHeader'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { REQUEST_COLUMNS } from '../../../util/constants'
@@ -147,14 +148,22 @@ const CreateLPO = (props) => {
 
   return (
     <React.Fragment>
-      <Row style={{marginBottom: 20}}>
-        <Col>
-          <span className="bs-page-title">Local Purchase Orders</span>
-          <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
-            fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
-          }} /></span>
-        </Col>
-      </Row>
+      <MyPageHeader 
+        title={(
+          <Row style={{marginBottom: 20}}>
+            <Col>
+              <span className="bs-page-title">Local Purchase Orders</span>
+              <span style={{marginLeft: 5}}><SyncOutlined disabled={fetching_local_purchase_orders} spin={fetching_local_purchase_orders} onClick={()=> {
+                fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
+              }} /></span>
+            </Col>
+          </Row>
+        )}
+        extra={[
+          
+        ]}
+      />
+      
       <Row>
         <Col md={24}>
           <Table 
@@ -169,6 +178,7 @@ const CreateLPO = (props) => {
             expandable={{expandedRowRender}}
             bordered
             loading={fetching_local_purchase_orders}
+            pagination={false}
           />
         </Col>
       </Row>

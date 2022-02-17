@@ -348,9 +348,9 @@ const CreateLPO = (props) => {
                     setCurrent(2)
                   }}
                   style={{float: "right"}}
-                  disabled={!selectedQuotation?.quotation?.quotationRef}
+                  disabled={!selectedQuotation?.quotation?.quotationRef || selectedRequests.length < 1}
                 >
-                  Next (Select Request Items)
+                  Next (Update Unit Price And Product Category)
                   <RightOutlined />
                 </Button>
               </Col>

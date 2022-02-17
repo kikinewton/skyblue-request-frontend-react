@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Steps, List } from 'antd'
-import { BookOutlined, CheckOutlined, ContactsOutlined, FileDoneOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightOutlined } from '@ant-design/icons'
+import { BookOutlined, CheckOutlined, ContactsOutlined, FileDoneOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightOutlined, UserOutlined } from '@ant-design/icons'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { CURRENCY_CODE } from '../../../../util/constants'
 import AppLayout from '../../../AppLayout'
@@ -130,7 +130,7 @@ const AddNewRequest = (props) => {
         <Row style={{padding: "10px 0 10px 0"}}>
           <Col span={24}>
             <Steps current={current} size='small'>
-              <Step key={0} icon={<ContactsOutlined />} title="Float Basic Info" />
+              <Step key={0} icon={<UserOutlined />} title="Float Basic Info" />
               <Step key={1} icon={<BookOutlined />} title="Float Item Entries" />
               <Step key={2} icon={<FileDoneOutlined />} title="Confirm And Submit" />
             </Steps>

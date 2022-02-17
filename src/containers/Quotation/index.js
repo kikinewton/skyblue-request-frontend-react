@@ -45,16 +45,16 @@ const Quotation = (props) => {
             onClick={(value) => setKey(value)}
             mode="horizontal"
           >
-            <Menu.Item key="list">
-              <NavLink to="/app/quotations">
-                <SolutionOutlined />
-                <span>Supplier Quotes</span>
-              </NavLink>
-            </Menu.Item>
             <Menu.Item key="add">
               <NavLink to="/app/quotations/add-new">
                 <FileDoneOutlined />
                 <span>Create Quotation</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="list">
+              <NavLink to="/app/quotations">
+                <SolutionOutlined />
+                <span>Supplier Quotes</span>
               </NavLink>
             </Menu.Item>
           </Menu>

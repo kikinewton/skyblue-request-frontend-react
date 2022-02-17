@@ -120,7 +120,6 @@ const ProcuredItemsReport = props => {
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
-
     try {
       const result = await generateProcureItemsReportReport(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
@@ -168,7 +167,7 @@ const ProcuredItemsReport = props => {
             icon={<FileExcelOutlined/>}
             onClick={downloadReport}
           >
-            Generate And Export Data
+            Export Data
           </Button>
         ]}
       />

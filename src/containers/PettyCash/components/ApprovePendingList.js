@@ -1,7 +1,7 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, EyeFilled, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
 import React, {useEffect, useState } from 'react';
-import { prettifyDateTime } from '../../../util/common-helper';
+import { prettifyDateTime, formatCurrency } from '../../../util/common-helper';
 import { CURRENCY_CODE } from '../../../util/constants';
 import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types';
 
@@ -371,15 +371,36 @@ const ApprovePendingList = (props) => {
       >
         <Row>
           <Col span={24}>
-            <List>
+          <List>
               <List.Item>
-                <List.Item.Meta title="Petty Cash Reference" description={selectedRequest?.pettyCashRef} />
+                <List.Item.Meta title="Requested On" description={prettifyDateTime(selectedRequest?.createdDate)} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Reference" description={selectedRequest?.pettyCashRef} />
               </List.Item>
               <List.Item>
                 <List.Item.Meta title="Description" description={selectedRequest?.name} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Date" description={ prettifyDateTime(selectedRequest?.createdDate)} />
+                <List.Item.Meta title="Purpose" description={selectedRequest?.purpose} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Quantity" description={selectedRequest?.quantity} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Unit Price" description={formatCurrency(selectedRequest?.amount)} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Endorsement Status (BY HOD)" description={selectedRequest?.endorsement} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Approval Status (By GM)" description={selectedRequest?.approval} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Status" description={selectedRequest?.status} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Payment Status" description={selectedRequest?.paid ? 'PAID' : "PENDING"} />
               </List.Item>
             </List>
           </Col>

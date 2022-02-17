@@ -7,6 +7,7 @@ import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 import AppLayout from '../../../AppLayout'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import { useHistory } from 'react-router-dom'
+import { CURRENCY_CODE } from '../../../../util/constants'
 
 const columns = (props) => [
   {
@@ -43,7 +44,7 @@ const AddNewRequest = (props) => {
   const [current, setCurrent] = React.useState(0)
   const [files, setFiles] = React.useState([])
   const [uploading, setUploading] = React.useState(false)
-  const [userDetails, setUserDetails] = useState({name: "", phoneNo: ""})
+  const [userDetails, setUserDetails] = useState({name: "", phoneNo: "", email: ""})
   const [document, setDocument] = React.useState(null)
   const { submit_petty_cash_request_success, createPettyCashRequest, submitting_petty_cash_request } = props
   const [ form ] = Form.useForm()
@@ -94,7 +95,8 @@ const AddNewRequest = (props) => {
         return rq
       }),
       requestedBy: userDetails.name,
-      requestedByPhoneNo: userDetails.phoneNo
+      requestedByPhoneNo: userDetails.phoneNo,
+      requestedByEmail: userDetails.email
     }
     console.log("request petty cash", payload)
     createPettyCashRequest(payload)
@@ -105,7 +107,8 @@ const AddNewRequest = (props) => {
       setRequests([])
       setDocument(null)
       clearLocalState("NEW-PETTY-CASH-REQUEST")
-      setCurrent(1)
+      setCurrent(0)
+      history.push("/app/my-requests/petty-cash-requests")
     }
   }, [submit_petty_cash_request_success, submitting_petty_cash_request])
 
@@ -151,11 +154,26 @@ const AddNewRequest = (props) => {
                       <Form 
                         layout="vertical"
                       >
-                        <Form.Item label="Name">
+                        <Form.Item label="Name"
+                          rules={[
+                            {required: true, message: "Employee Name Required!"}
+                          ]}
+                        >
                           <Input 
                             type="text"
                             value={userDetails.name}
                             onChange={(event) => setUserDetails({...userDetails, name: event.target.value})}
+                          />
+                        </Form.Item>
+                        <Form.Item label="Email" 
+                          rules={[
+                            {required: true, message: "Employee Email Required!"}
+                          ]}
+                        >
+                          <Input
+                            type="text"
+                            value={userDetails.email}
+                            onChange={(event) => setUserDetails({...userDetails, email: event.target.value})}
                           />
                         </Form.Item>
                         <Form.Item label="Phone Number">
@@ -175,7 +193,7 @@ const AddNewRequest = (props) => {
                       style={{float: "right"}} 
                       type='primary' 
                       onClick={() => setCurrent(1)}
-                      disabled={!userDetails.name}
+                      disabled={!userDetails.name || !userDetails.email}
                     >
                       Next (Upload Supporting Documents)
                       <RightOutlined />
@@ -194,7 +212,6 @@ const AddNewRequest = (props) => {
                       defaultFileList={[...files]}
                       action={false}
                       customRequest={({file, onSuccess}) => {
-                        console.log('file', file)
                         setTimeout(()=> {
                           onSuccess("ok")
                         }, 0)
@@ -203,6 +220,7 @@ const AddNewRequest = (props) => {
                       defaultFileList={files}
                       multiple={false}
                       maxCount={1}
+                      accept=".pdf,.png,.jpg"
                     >
                       <Button loading={uploading} disabled={uploading} icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
@@ -236,9 +254,6 @@ const AddNewRequest = (props) => {
                         initialValues={{ name: "", purpose: "", quantity: "", departmentId: undefined, unit_price: "", isService: true }}
                         onFinish={addToEntires}
                       >
-                        <Form.Item name="isService" valuePropName="checked" wrapperCol={{ span: 16 }}>
-                          <Checkbox>Is service or Transaport</Checkbox>
-                        </Form.Item>
                         <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
                           <Input.TextArea rows={3} ref={descriptionRef} placeholder="Description" />
                         </Form.Item>
@@ -249,7 +264,7 @@ const AddNewRequest = (props) => {
                           <Input type="number"  placeholder="Quantity" />
                         </Form.Item>
                         <Form.Item label="Unit Price" name="unitPrice" rules={[{ required: true, message: 'Unit Price required' }]}>
-                          <Input type="number"  placeholder="Unit Price" />
+                          <Input prefix={CURRENCY_CODE} type="number"  placeholder="Unit Price" />
                         </Form.Item>
                         <Form.Item>
                         <Button type="primary" htmlType="submit" className="bs-form-button">

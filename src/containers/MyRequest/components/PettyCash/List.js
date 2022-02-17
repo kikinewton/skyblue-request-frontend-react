@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Form, Tag, Button, Card, Drawer, Input } from "antd"
+import { Table, Row, Col, Form, Tag, Button, Card, Drawer, Input, List as AntList } from "antd"
 import { useHistory } from 'react-router';
 import { CURRENCY_CODE } from '../../../../util/constants';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/lib/form/Form';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
+import { formatCurrency, prettifyDateTime } from '../../../../util/common-helper';
 
 const columns = props => [
   {
@@ -57,7 +58,20 @@ const columns = props => [
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (
-      <EditOutlined onClick={() => props.onEdit(row)} />
+      <>
+        <Row>
+          <Col span={12}>
+            {row.status === 'COMMENT' && (
+              <EditOutlined onClick={() => props.onEdit(row)} />
+            )}
+          </Col>
+          <Col span={12}>
+            <EyeOutlined onClick={() => props.onView(row)} />
+          </Col>
+        </Row>
+        
+        
+      </>
     )
   }
 ]
@@ -69,6 +83,7 @@ const List = (props) => {
     submitting_petty_cash_request, submit_petty_cash_request_success
   } = props
   const [updateVisible, setUpdateVisible] = useState(false)
+  const [viewVisible, setViewVisible] = useState(false)
   const [selectedPettyCash, setSelectedPettyCash] = useState(null)
   const [updateForm] = useForm()
 
@@ -83,6 +98,9 @@ const List = (props) => {
     if(!submitting_petty_cash_request && submit_petty_cash_request_success) {
       setSelectedPettyCash(null)
       setUpdateVisible(false)
+      fetchMyPettyCashRequests({
+      
+      })
     }
   }, [submitting_petty_cash_request, submit_petty_cash_request_success])
 
@@ -113,6 +131,11 @@ const List = (props) => {
                     setSelectedPettyCash(data)
                     updateForm.setFieldsValue({name: data?.name, quantity: data?.quantity})
                     setUpdateVisible(true)
+                  },
+                  onView: row => {
+                    const data = Object.assign({}, row)
+                    setSelectedPettyCash(data)
+                    setViewVisible(true)
                   }
                 })}
                 dataSource={my_petty_cash_requests}
@@ -125,6 +148,58 @@ const List = (props) => {
             </Col>
           </Row>
         </Card>
+        <Drawer
+          forceRender
+          visible={viewVisible}
+          title={`Details`}
+          placement="right"
+          width={600}
+          maskClosable={false}
+          onClose={() => {
+            setSelectedPettyCash(null)
+            setViewVisible(false)
+          }}
+        >
+          <>
+            <Row>
+              <Col span={24}>
+                <AntList>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Requested On" description={prettifyDateTime(selectedPettyCash?.createdDate)} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Reference" description={selectedPettyCash?.pettyCashRef} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Description" description={selectedPettyCash?.name} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Purpose" description={selectedPettyCash?.purpose} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Quantity" description={selectedPettyCash?.quantity} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Unit Price" description={formatCurrency(selectedPettyCash?.amount)} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Endorsement Status (BY HOD)" description={selectedPettyCash?.endorsement} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Approval Status (By GM)" description={selectedPettyCash?.approval} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Status" description={selectedPettyCash?.status} />
+                  </AntList.Item>
+                  <AntList.Item>
+                    <AntList.Item.Meta title="Payment Status" description={selectedPettyCash?.paid ? 'PAID' : "PENDING"} />
+                  </AntList.Item>
+                </AntList>
+              </Col>
+            </Row>
+          </>
+        </Drawer>
+
         <Drawer
           forceRender
           visible={updateVisible}
@@ -142,7 +217,7 @@ const List = (props) => {
             layout="vertical"
             onFinish={values => {
               const payload = {
-                name: values?.name,
+                description: values?.name,
                 quantity: values?.quantity
               }
               updatePettyCashRequest(selectedPettyCash?.id, payload)
@@ -159,7 +234,7 @@ const List = (props) => {
               <Input type="number" />
             </Form.Item>
             <Form.Item>
-              <Button loading={submitting_petty_cash_request} type='primary'>Update Petty Cash</Button>
+              <Button htmlType='submit' loading={submitting_petty_cash_request} type='primary'>Update Petty Cash</Button>
             </Form.Item>
           </Form>
         </Drawer>
