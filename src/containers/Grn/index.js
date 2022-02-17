@@ -111,7 +111,7 @@ const GrnIndex = (props) => {
                 </Menu.Item>
                 <Menu.Item key="/app/grn/list">
                   <NavLink to="/app/grn/list">
-                    GRNs
+                    opened GRNs
                   </NavLink>
                 </Menu.Item>
               </>

@@ -106,7 +106,7 @@ const NewPayment = (props) => {
                   </> 
                 )}
                 {current === 1 && (
-                  <Form
+                <Form
                   form={form}
                   onFinish={handleSubmit}
                   layout="vertical"

@@ -16,7 +16,7 @@ const PaymentSuccess = (props) => {
       >
         <Result 
           status="success"
-          title="Payment Successful!"
+          title="Payment Inititated Successful!"
           extra={[
             <Button type="primary" key="lpos" onClick={()=> history.push("/app/payments/goods-receive-notes")}>
               Back to GRNs awaiting payment
