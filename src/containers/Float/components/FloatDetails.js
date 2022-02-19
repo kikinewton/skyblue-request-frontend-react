@@ -68,6 +68,9 @@ const FloatDetails = ({
               <List.Item.Meta avatar={<PhoneOutlined/>} title="Phone Number" description={floatOrder?.requestedByPhoneNo} />
             </List.Item>
             <List.Item>
+              <List.Item.Meta avatar={<NumberOutlined/>} title="Staff ID of Employee" description={floatOrder?.staffId || 'N/A'} />
+            </List.Item>
+            <List.Item>
               <List.Item.Meta avatar={<CommentOutlined/>} title="Endorsement Status" description={floatOrder?.endorsement} />
             </List.Item>
             <List.Item>

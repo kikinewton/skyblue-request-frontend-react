@@ -64,7 +64,7 @@ const verificationColumns = [
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
   const { createFloatRequest, submitting_float_request, submit_float_request_success } = props
-  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: "", email: ""})
+  const [floatOrder, setFloatOrder] = useState({name: "", phoneNo: "", amount: 0, description: "", staffId: ""})
   const [basicForm] = Form.useForm()
   const [current, setCurrent] = useState(0)
   const [ form ] = Form.useForm()
@@ -92,7 +92,7 @@ const AddNewRequest = (props) => {
       items: requests,
       requestedBy: floatOrder.name,
       requestedByPhoneNo: floatOrder.phoneNo,
-      requestedByEmail: floatOrder.email,
+      requestedByStaffId: floatOrder.staffId,
       description: floatOrder.description,
       amount: floatOrder.amount
     }
@@ -141,23 +141,24 @@ const AddNewRequest = (props) => {
             <>
               <Form
                 layout="vertical"
+                requiredMark
               >
-                <Form.Item label="Requested By" name="name">
+                <Form.Item required label="Requested By" name="name">
                   <Input 
                     placeholder='Name' 
                     value={floatOrder.name} 
                     onChange={(e) => setFloatOrder({...floatOrder, name: e.target.value})} 
                   />
                 </Form.Item>
-                <Form.Item label="User Email" name="email" 
+                <Form.Item required label="Employee Staff ID" name="staffId" 
                   rules={[
-                    {required: true, message: "Email required"}
+                    {required: true, message: "Employee Staff ID required"}
                   ]}
                 >
                   <Input 
-                    placeholder='example@company.com' 
-                    value={floatOrder.phoneNo} 
-                    onChange={e => setFloatOrder({...floatOrder, email: e.target.value})}
+                    placeholder='ST44526272' 
+                    value={floatOrder.staffId} 
+                    onChange={e => setFloatOrder({...floatOrder, staffId: e.target.value})}
                   />
                 </Form.Item>
                 <Form.Item label="User Phone Number" name="phoneNo">
@@ -167,7 +168,7 @@ const AddNewRequest = (props) => {
                     onChange={e => setFloatOrder({...floatOrder, phoneNo: e.target.value})}
                   />
                 </Form.Item>
-                <Form.Item label="Float Description" name="description">
+                <Form.Item required label="Float Description" name="description">
                   <Input 
                     placeholder='Name' 
                     value={floatOrder.description} 
@@ -179,7 +180,7 @@ const AddNewRequest = (props) => {
                     <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
                       <Button
                         style={{marginRight: 5}}
-                        disabled={!floatOrder.name || !floatOrder.description}
+                        disabled={!floatOrder.name || !floatOrder.description || !floatOrder?.staffId}
                         onClick={e => {
                           e.preventDefault()
                           setCurrent(1)

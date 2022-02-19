@@ -44,7 +44,7 @@ const AddNewRequest = (props) => {
   const [current, setCurrent] = React.useState(0)
   const [files, setFiles] = React.useState([])
   const [uploading, setUploading] = React.useState(false)
-  const [userDetails, setUserDetails] = useState({name: "", phoneNo: "", email: ""})
+  const [userDetails, setUserDetails] = useState({name: "", phoneNo: "", staffId: ""})
   const [document, setDocument] = React.useState(null)
   const { submit_petty_cash_request_success, createPettyCashRequest, submitting_petty_cash_request } = props
   const [ form ] = Form.useForm()
@@ -96,9 +96,8 @@ const AddNewRequest = (props) => {
       }),
       requestedBy: userDetails.name,
       requestedByPhoneNo: userDetails.phoneNo,
-      requestedByEmail: userDetails.email
+      requestedByStaffId: userDetails.staffId
     }
-    console.log("request petty cash", payload)
     createPettyCashRequest(payload)
   }
 
@@ -153,8 +152,10 @@ const AddNewRequest = (props) => {
                     <Card title="User Details" size='small'>
                       <Form 
                         layout="vertical"
+                        requiredMark
                       >
                         <Form.Item label="Name"
+                          required
                           rules={[
                             {required: true, message: "Employee Name Required!"}
                           ]}
@@ -165,15 +166,16 @@ const AddNewRequest = (props) => {
                             onChange={(event) => setUserDetails({...userDetails, name: event.target.value})}
                           />
                         </Form.Item>
-                        <Form.Item label="Email" 
+                        <Form.Item label="Staff ID" 
+                          required
                           rules={[
-                            {required: true, message: "Employee Email Required!"}
+                            {required: true, message: "Employee Staff ID Required!"}
                           ]}
                         >
                           <Input
                             type="text"
-                            value={userDetails.email}
-                            onChange={(event) => setUserDetails({...userDetails, email: event.target.value})}
+                            value={userDetails.staffId}
+                            onChange={(event) => setUserDetails({...userDetails, staffId: event.target.value})}
                           />
                         </Form.Item>
                         <Form.Item label="Phone Number">
@@ -193,7 +195,7 @@ const AddNewRequest = (props) => {
                       style={{float: "right"}} 
                       type='primary' 
                       onClick={() => setCurrent(1)}
-                      disabled={!userDetails.name || !userDetails.email}
+                      disabled={!userDetails.name || !userDetails.staffId}
                     >
                       Next (Upload Supporting Documents)
                       <RightOutlined />
