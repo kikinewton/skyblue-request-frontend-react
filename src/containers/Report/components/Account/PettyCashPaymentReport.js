@@ -73,7 +73,7 @@ const PettyCashPaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       pageSize: meta?.pageSize,
       pageNo: 0
     }
@@ -100,7 +100,7 @@ const PettyCashPaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       download: true
     }
     await generateAccountPettyCashPaymentsReport(query) 
@@ -114,7 +114,7 @@ const PettyCashPaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
@@ -148,7 +148,7 @@ const PettyCashPaymentReport = props => {
             value={email}
             type="search"
             style={{width: 200}}
-            placeholder='Requester Email'
+            placeholder='Requester Staff ID'
           />,
           <Button
             key="submit-btn-view"

@@ -96,7 +96,7 @@ const AddNewRequest = (props) => {
       }),
       requestedBy: userDetails.name,
       requestedByPhoneNo: userDetails.phoneNo,
-      requestedByStaffId: userDetails.staffId
+      staffId: userDetails.staffId
     }
     createPettyCashRequest(payload)
   }

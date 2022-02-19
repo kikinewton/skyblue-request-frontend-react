@@ -92,7 +92,7 @@ const AddNewRequest = (props) => {
       items: requests,
       requestedBy: floatOrder.name,
       requestedByPhoneNo: floatOrder.phoneNo,
-      requestedByStaffId: floatOrder.staffId,
+      staffId: floatOrder.staffId,
       description: floatOrder.description,
       amount: floatOrder.amount
     }

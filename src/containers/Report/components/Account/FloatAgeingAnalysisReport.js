@@ -63,7 +63,7 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       pageSize: meta?.pageSize,
       pageNo: 0
     }
@@ -90,7 +90,7 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       download: true
     }
     await generateFloatAgeingAnalysisReport(query) 
@@ -105,7 +105,7 @@ const FloatAgeingAnalysisReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      requesterEmail: email,
+      staffId: email,
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
@@ -139,7 +139,7 @@ const FloatAgeingAnalysisReport = props => {
             value={email}
             type="search"
             style={{width: 200}}
-            placeholder='Requester Email'
+            placeholder='Requester Staff ID'
           />,
           <Button
             key="submit-btn-view"
