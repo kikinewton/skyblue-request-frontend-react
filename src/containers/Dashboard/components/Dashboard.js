@@ -107,7 +107,7 @@ const Dashboard = (props) => {
                 </Card>
               </Col>
               <Col md={8}>
-                <Card style={{height: 350}} title="Approved number of requests per department" hoverable>
+                <Card style={{height: 350}} title="Approved requests per department" hoverable>
                   {(approvedNumberRequestItemsAndUserDepartmentToday || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
