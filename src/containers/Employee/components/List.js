@@ -297,7 +297,7 @@ const List = (props)=> {
               disabled={!selectedEmployee?.enabled}
               onClick={e => disableEmployee(selectedEmployee?.id)}
             >
-              Deacivate Employee
+              Deactivate Employee
             </Button>
           </Col>
         </Row>
