@@ -185,7 +185,13 @@ export const EMPLOYEE_COLUMNS = [
       return role?.replaceAll('_', ' ')
       //return roleName.replcae('_', ' ')
     }
-  }
+  },
+  {
+    title: 'Status',
+    dataIndex: 'enabled',
+    key: 'department',
+    render: (text) => text ? "Activated" : "Deactivated"
+  },
 ]
 
 
