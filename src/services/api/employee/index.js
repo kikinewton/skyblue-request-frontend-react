@@ -46,3 +46,19 @@ export function selfChangePassword(userId, data) {
     data
   })
 }
+
+export function disableEmployee(id) {
+  return apiRequest({
+    url: `${EMPLOYEE_ENDPOINT}${id}/disable`,
+    method: "PUT",
+    data: {}
+  })
+}
+
+export function enableEmployee(id) {
+  return apiRequest({
+    url: `${EMPLOYEE_ENDPOINT}${id}/enable`,
+    method: "PUT",
+    data: {}
+  })
+}

@@ -6,7 +6,9 @@ import {
   deleteUser as deleteEmployeeApi,
   updateUser as updateEmployeeApi,
   saveUser as saveEmployeeApi,
-  getUser as getEmployeeApi
+  getUser as getEmployeeApi,
+  enableEmployee as enableEmployeeApi,
+  disableEmployee as disableEmployeeApi
 } from '../../api/employee'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -86,6 +88,44 @@ export function* updateEmployee(action) {
   }
 }
 
+export function* enableEmployee(action) {
+  try {
+    const response = yield call(enableEmployeeApi, action.employeeId)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      openNotification('success', 'Activate Employee', 'SUCCESS')
+      yield put(Creators.enableEmployeeSuccess(responseData))
+      yield put(Creators.fetchEmployees({}))
+    } else {
+      openNotification('error', 'Activate Employee', response.message)
+      yield put(Creators.enableEmployeeFailure(response.message))
+    }
+  } catch (error) {
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to Activate Employee'
+    openNotification('error', 'Activate Employee', message)
+    yield put(Creators.enableEmployeeFailure(message))
+  }
+}
+
+export function* disableEmployee(action) {
+  try {
+    const response = yield call(disableEmployeeApi, action.employeeId)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      openNotification('success', 'Deactivate Employee', 'SUCCESS')
+      yield put(Creators.disableEmployeeSuccess(responseData))
+      yield put(Creators.fetchEmployees({}))
+    } else {
+      openNotification('error', 'Deactivate Employee', response.message)
+      yield put(Creators.disableEmployeeFailure(response.message))
+    }
+  } catch (error) {
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to Deactivate Employee'
+    openNotification('error', 'Deactivate Employee', message)
+    yield put(Creators.disableEmployeeFailure(message))
+  }
+}
+
 export function* deleteEmployee(action) {
   console.log('action', action)
   try {
@@ -115,6 +155,14 @@ export function* watchCreateEmployee(action) {
 
 export function* watchUpdateEmployee(action) {
   yield takeLatest(Types.UPDATE_EMPLOYEE, updateEmployee)
+}
+
+export function* watchEnableEmployee(action) {
+  yield takeLatest(Types.ENABLE_EMPLOYEE, enableEmployee)
+}
+
+export function* watchDisableEmployee(action) {
+  yield takeLatest(Types.DISABLE_EMPLOYEE, disableEmployee)
 }
 
 export function* watchDeleteEmployee(action) {

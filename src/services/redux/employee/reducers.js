@@ -80,6 +80,42 @@ export const updateEmployeeFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submitSuccess: false};
 };
 
+//enable
+export const enableEmployee = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+};
+
+export const enableEmployeeSuccess = (state = INITIAL_STATE, action) => {
+  const { responseData } = action
+  return { 
+    ...state,
+    submitting: false,
+    submitSuccess: true
+  };
+};
+
+export const enableEmployeeFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+};
+
+//disable
+export const disableEmployee = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
+};
+
+export const disableEmployeeSuccess = (state = INITIAL_STATE, action) => {
+  const { responseData } = action
+  return { 
+    ...state,
+    submitting: false,
+    submitSuccess: true
+  };
+};
+
+export const disableEmployeeFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submitSuccess: false};
+};
+
 
 //delete
 export const deleteEmployee = (state = INITIAL_STATE, action) => {
@@ -132,6 +168,14 @@ export const HANDLERS = {
   [Types.UPDATE_EMPLOYEE]: updateEmployee,
   [Types.UPDATE_EMPLOYEE_SUCCESS]: updateEmployeeSuccess,
   [Types.UPDATE_EMPLOYEE_FAILURE]: updateEmployeeFailure,
+
+  [Types.ENABLE_EMPLOYEE]: enableEmployee,
+  [Types.ENABLE_EMPLOYEE_SUCCESS]: enableEmployeeSuccess,
+  [Types.ENABLE_EMPLOYEE_FAILURE]: enableEmployeeFailure,
+
+  [Types.DISABLE_EMPLOYEE]: disableEmployee,
+  [Types.DISABLE_EMPLOYEE_SUCCESS]: disableEmployeeSuccess,
+  [Types.DISABLE_EMPLOYEE_FAILURE]: disableEmployeeFailure,
 
   [Types.DELETE_EMPLOYEE]: deleteEmployee,
   [Types.DELETE_EMPLOYEE_SUCCESS]: deleteEmployeeSuccess,

@@ -18,6 +18,14 @@ export const { Types, Creators } = createActions(
     updateEmployeeSuccess: ["responseData"],
     updateEmployeeFailure: ["error"],
 
+    enableEmployee: ["employeeId"],
+    enableEmployeeSuccess: ["responseData"],
+    enableEmployeeFailure: ["error"],
+
+    disableEmployee: ["employeeId"],
+    disableEmployeeSuccess: ["responseData"],
+    disableEmployeeFailure: ["error"],
+
     deleteEmployee: ["employeeId"],
     deleteEmployeeSuccess: ["responseData"],
     deleteEmployeeFailure: ["error"],

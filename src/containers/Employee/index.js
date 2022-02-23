@@ -67,7 +67,9 @@ const mapActionsToProps = (dispatch) => {
     filterEmployees: (filter) => {
       dispatch(Creators.filterEmployees(filter))
     },
-    resetEmployee: () => dispatch(Creators.resetEmployee())
+    resetEmployee: () => dispatch(Creators.resetEmployee()),
+    enableEmployee: (id) => dispatch(Creators.enableEmployee(id)),
+    disableEmployee: id => dispatch(Creators.disableEmployee(id))
   }
 }
 

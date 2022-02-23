@@ -1,10 +1,11 @@
-import { Button, Col, Row, Table, Form, Input, Select, Spin, PageHeader } from 'antd'
-import React from 'react'
+import { Button, Col, Row, Table, Form, Input, Select, Spin, PageHeader, Drawer, Divider } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
-import { EditOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 import { USER_ROLES } from '../../../util/datas'
+import EmployeeDetails from './EmployeeDetails'
 
 const initUser = {
   id: undefined,
@@ -21,8 +22,11 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
   render: (text, row) => {
     return (
       <Row>
-        <Col md={24} sm={24} style={{textAlign: "center"}}>
+        <Col md={8} sm={24} style={{textAlign: "center"}}>
           <EditOutlined style={{cursor: 'pointer'}} onClick={()=> props.editRow(row)} />
+        </Col>
+        <Col span={8} style={{textAlign: "center"}}>
+          <EyeOutlined onClick={() => props.onView(row)} />
         </Col>
         {/* <Col md={12} sm={12}>
           <DeleteOutlined 
@@ -39,12 +43,14 @@ const List = (props)=> {
   console.log('----------------->my props', props)
   const { employees, createEmployee,loading, fetchEmployees, deleteEmployee, 
     departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee, fetchRoles, 
-    user_roles, fetching_roles, filtered_employees
+    user_roles, fetching_roles, filtered_employees, enableEmployee, disableEmployee
   } = props
 
   const [ openAdd, setOpenAdd ] = React.useState(false)
   const [ openEdit, setOpenEdit ] = React.useState(false)
   const [editData, setEditData] = React.useState(initUser)
+  const [viewDrawer, setViewDrawer] = useState(false)
+  const [selectedEmployee, setSelectedEmployee] = useState(null)
   const [ addForm ] = Form.useForm()
   const [ editForm ] = Form.useForm()
 
@@ -121,15 +127,17 @@ const List = (props)=> {
   }, [])
 
   React.useEffect(()=> {
-    if(submitSuccess) {
+    if(!submitting && submitSuccess) {
       console.log('submit success')
       addForm.resetFields()
       editForm.resetFields()
       setOpenAdd(false)
       setOpenEdit(false)
+      setViewDrawer(false)
+      setSelectedEmployee(null)
     }
     // eslint-disable-next-line
-  }, [submitSuccess])
+  }, [submitSuccess, submitting])
 
   return (
     <>
@@ -146,7 +154,13 @@ const List = (props)=> {
         <Col md={24}>
           <Table 
             loading={loading}
-            columns={columns({ editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row) })}
+            columns={columns({
+               editRow: (row)=> handleEdit(row), deleteRow: (row) => handleDelete(row),
+               onView: row => {
+                 setSelectedEmployee(Object.assign({}, row))
+                 setViewDrawer(true)
+               }
+              })}
             dataSource={filtered_employees}
             rowKey="id"
             bordered
@@ -258,6 +272,42 @@ const List = (props)=> {
           </Form.Item>
         </Form>
       </Modal>
+      <Drawer
+        title="Employee Details"
+        visible={viewDrawer}
+        width={700}
+        placement="right"
+        onClose={() => {
+          setViewDrawer(false)
+          setSelectedEmployee(null)
+        }}
+      >
+        <Row>
+          <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center"}}>
+            <Button 
+              loading={submitting} 
+              type='primary' 
+              disabled={selectedEmployee?.enabled} style={{marginRight: 5}}
+              onClick={e => enableEmployee(selectedEmployee?.id)}
+            >
+              Activate Employee
+            </Button>
+            <Button 
+              loading={submitting} danger 
+              disabled={!selectedEmployee?.enabled}
+              onClick={e => disableEmployee(selectedEmployee?.id)}
+            >
+              Deacivate Employee
+            </Button>
+          </Col>
+        </Row>
+        <Divider />
+        <Row>
+          <Col span={24}>
+            <EmployeeDetails employee={selectedEmployee} />
+          </Col>
+        </Row>
+      </Drawer>
     </>
   )
 }
