@@ -33,8 +33,6 @@ const Settings = (props) => {
         openNotification('success', 'Change password', "Password Chnage Successful")
         setChangePasswordModal(false)
         signOut()
-        //
-        //history.push('/auth/login')
       } else {
         openNotification('error', 'Change password', response.message)
       }
@@ -44,13 +42,7 @@ const Settings = (props) => {
     }
     
   }
-
-  // useEffect(() => {
-  //   if(!changingPassword) {
-  //     setChangePasswordModal(false)
-  //   }
-  // }, [changingPassword])
-
+  
   const myList = [
     {
       title: 'First Name',

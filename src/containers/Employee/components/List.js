@@ -133,7 +133,7 @@ const List = (props)=> {
   return (
     <>
       <PageHeader 
-        title="Employees"
+        title="Users"
         style={{padding: 0}}
         extra={[
           <span>Filter</span>,
@@ -294,7 +294,7 @@ const List = (props)=> {
             <Button 
               type="default"
               loading={resetting_employee_password} 
-              disabled={resetting_employee_password}
+              disabled={resetting_employee_password || !selectedEmployee?.enabled}
               onClick={e => resetEmployeePassword(selectedEmployee?.id)}
             >
               <SyncOutlined />
