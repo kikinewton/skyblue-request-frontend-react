@@ -1,2 +1,0 @@
-(this.webpackJsonpfrontend=this.webpackJsonpfrontend||[]).push([[30],{1674:function(t,e,r){"use strict";r.r(e);var n=r(828),s=r(553),a=(r(1),r(28)),c=r(59),o=r(16);e.default=function(){var t=Object(a.g)();return Object(o.jsx)(n.a,{status:"403",title:"403",subTitle:"Sorry, you are not authorized to access this page.",extra:Object(o.jsx)(s.a,{type:"primary",onClick:function(){return t.push(c.d)},children:"Back Home"})})}}}]);
-//# sourceMappingURL=30.aed81436.chunk.js.map
