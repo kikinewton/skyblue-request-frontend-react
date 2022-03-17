@@ -80,3 +80,12 @@ export const PRIORITY_LEVELS = [
     name: "URGENT"
   }
 ]
+
+export const CURRENCIES = [
+  {name: "US Dollar", code: "USD"},
+  {name: "Ghana Cedi", code: "GHS"},
+  {name: "Euro", code: "EUR"},
+  {name: "Pound Sterling", code: "GBP"},
+  {name: "Rand", code: "ZAR"},
+  {name: "Canadian Dollar", code: "CAD"}
+]

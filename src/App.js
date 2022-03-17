@@ -40,7 +40,7 @@ function App(props) {
           <Route path="/app/payments" component={PaymentsModule} {...props} />
           <AuthenticatedRoute path={`${DASHBOARD_ROUTE}`} component={Dashboard} />
           <Route path={PROCUREMENT_ROUTE} component={Procurement} {...props} />
-          <AuthenticatedRoute path={MY_REQUESTS_ROUTE} component={MyRequest} />
+          <Route path={MY_REQUESTS_ROUTE} component={MyRequest} {...props} />
           <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} />
           <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
           <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />

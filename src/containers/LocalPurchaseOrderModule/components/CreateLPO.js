@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import QuotationDetails from '../../../shared/QuotationDetails'
-import { prettifyDateTime } from '../../../util/common-helper'
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
 import { REQUEST_COLUMNS } from '../../../util/constants'
 
 const columns = (props) => [
@@ -71,6 +71,12 @@ export const requestColumns = [
     key: 'quantity'
   },
   {
+    title: 'UNIT PRICE',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice',
+    render: (text, row) => `${row.currency}${row?.unitPrice}`
+  },
+  {
     title: 'APPROVAL',
     dataIndex: 'approval',
     key: 'approval'
@@ -135,6 +141,7 @@ const CreateLPO = (props) => {
       {title: 'Description', dataIndex: 'name', key: 'name'},
       {title: 'Reason', dataIndex: 'reason', key: 'reason'},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
+      {title: 'Unit Price', dataIndex: 'unitPrice', key: 'unitPrice', render: (text, row) => formatCurrency(row.unitPrice, row.currency)},
       {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
       {title: 'Approval', dataIndex: 'approval', key: 'approval', render: (text) => (
         <span><Badge status={text === 'APPROVED' ? 'success' : 'error'} />{text}</span>

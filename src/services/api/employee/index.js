@@ -42,7 +42,7 @@ export function deleteUser(userId) {
 export function selfChangePassword(userId, data) {
   return apiRequest({
     method: "PUT",
-    url: `${EMPLOYEE_ENDPOINT}${userId}/changePassword`,
+    url: `/selfChangePassword`,
     data
   })
 }
@@ -58,6 +58,14 @@ export function disableEmployee(id) {
 export function enableEmployee(id) {
   return apiRequest({
     url: `${EMPLOYEE_ENDPOINT}${id}/enable`,
+    method: "PUT",
+    data: {}
+  })
+}
+
+export function resetEmployeePassword(id) {
+  return apiRequest({
+    url: `/admin/employees/${id}/resetPassword`,
     method: "PUT",
     data: {}
   })

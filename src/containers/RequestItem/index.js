@@ -12,6 +12,8 @@ import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import ApprovePendingList from './components/ApprovePendingList';
 import { Menu } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
+import ApprovedItemRequest from './components/ApprovedItemRequests';
+import EndorsedItemRequest from './components/EndorsedItemRequest';
 
 
 export const REQUEST_ITEMS = [
@@ -46,6 +48,12 @@ const RequestItemIndex = (props) => {
       setKey("hod-pending-approve")
     } else if(url.indexOf("gm-pending-approve") !== -1) {
       setKey("gm-pending-approve")
+    } else if(url.includes("/hod-all-requests")) {
+      setKey("/hod-all-requests")
+    } else if(url.includes("/app/request-items/all-approved")) {
+      setKey("all-approved-requests")
+    } else if(url.includes("/app/request-items/all-endorsed")) {
+      setKey("all-endorsed-requests")
     }
   }, [key])
 
@@ -85,6 +93,11 @@ const RequestItemIndex = (props) => {
                     <span>Pending Review</span>
                   </NavLink>
                 </Menu.Item>
+                <Menu.Item key="all-endorsed-requests">
+                  <NavLink to="/app/request-items/all-endorsed">
+                    <span> Endorsed Request Items</span>
+                  </NavLink>    
+                </Menu.Item>
               </>
             )}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
@@ -93,6 +106,11 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/gm-pending-approve">
                     <span>Pending Approval</span>
                   </NavLink>
+                </Menu.Item>
+                <Menu.Item key="all-approved-requests">
+                  <NavLink to="/app/request-items/all-approved">
+                    <span> Approved Request Items</span>
+                  </NavLink>    
                 </Menu.Item>
               </>
             )}
@@ -118,6 +136,20 @@ const RequestItemIndex = (props) => {
             exact
             path={`/app/request-items/hod-pending-approve`}
             component={HodReviewPendingList}
+            {...props}
+          />
+          <AuthenticatedRoute 
+            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
+            exact
+            path={`/app/request-items/all-approved`}
+            component={ApprovedItemRequest}
+            {...props}
+          />
+          <AuthenticatedRoute 
+            roles={[EMPLOYEE_ROLE.ROLE_HOD]}
+            exact
+            path={`/app/request-items/all-endorsed`}
+            component={EndorsedItemRequest}
             {...props}
           />
           <AuthenticatedRoute 

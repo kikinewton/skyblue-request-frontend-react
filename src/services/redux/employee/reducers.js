@@ -8,7 +8,9 @@ export const INITIAL_STATE = {
   submitting: false,
   employee: {},
   submitSuccess: false,
-  filtered_employees: []
+  filtered_employees: [],
+  resetting_password: false,
+  reset_password_success: false,
 };
 
 //fetch
@@ -98,6 +100,24 @@ export const enableEmployeeFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submitSuccess: false};
 };
 
+//reset password
+export const resetEmployeePassword = (state = INITIAL_STATE, action) => {
+  return { ...state, resetting_password: true, errors: null, loading: false, reset_password_success: false };
+};
+
+export const resetEmployeePasswordSuccess = (state = INITIAL_STATE, action) => {
+  const { responseData } = action
+  return { 
+    ...state,
+    resetting_password: false,
+    reset_password_success: true
+  };
+};
+
+export const resetEmployeePasswordFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, resetting_password: false, error: action.error, reset_password_success: false};
+};
+
 //disable
 export const disableEmployee = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: true, errors: null, loading: false, submitSuccess: false };
@@ -180,6 +200,10 @@ export const HANDLERS = {
   [Types.DELETE_EMPLOYEE]: deleteEmployee,
   [Types.DELETE_EMPLOYEE_SUCCESS]: deleteEmployeeSuccess,
   [Types.DELETE_EMPLOYEE_FAILURE]: deleteEmployeeFailure,
+
+  [Types.RESET_EMPLOYEE_PASSWORD]: resetEmployeePassword,
+  [Types.RESET_EMPLOYEE_PASSWORD_SUCCESS]: resetEmployeePasswordSuccess,
+  [Types.RESET_EMPLOYEE_PASSWORD_FAILURE]: resetEmployeePasswordFailure,
 
   [Types.FILTER_EMPLOYEES]: filterEmployees,
   

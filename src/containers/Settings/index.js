@@ -1,18 +1,22 @@
 import { Card, Col, Row, List, Button, Form, Input } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import * as employeeService from '../../services/api/employee'
 import openNotification from '../../util/notification'
+import { RESPONSE_SUCCESS_CODE } from '../../services/api/apiRequest'
+import { useHistory } from 'react-router-dom'
+import { signOut } from '../../services/api/auth'
 // import { history } from '../../util/browser-history'
 
 
 const Settings = (props) => {
-  const { currentUser, history } = props
+  const { currentUser } = props
   const [ changePasswordModal, setChangePasswordModal ] = React.useState(false)
   const [changePasswordForm] = Form.useForm()
   const [changingPassword, setChangingPassword] = React.useState(false)
+  const history = useHistory()
 
   const handleCancel = () => {
     setChangePasswordModal(false)
@@ -25,18 +29,27 @@ const Settings = (props) => {
     try {
       const response = await employeeService.selfChangePassword(currentUser.id, {oldPassword, newPassword })
       setChangingPassword(false)
-      if(response.status === 'OK') {
-        openNotification('success', 'password change', response.message || 'SUCCESS')
-        history.push('/auth/login')
+      if(response.status === RESPONSE_SUCCESS_CODE) {
+        openNotification('success', 'Change password', "Password Chnage Successful")
+        setChangePasswordModal(false)
+        signOut()
+        //
+        //history.push('/auth/login')
       } else {
         openNotification('error', 'Change password', response.message)
       }
     } catch (error) {
       setChangingPassword(false)
-      openNotification('error', 'Change password', error?.response?.message || 'Failed!')
+      openNotification('error', 'Change password', error?.response?.data?.message || 'Failed!')
     }
     
   }
+
+  // useEffect(() => {
+  //   if(!changingPassword) {
+  //     setChangePasswordModal(false)
+  //   }
+  // }, [changingPassword])
 
   const myList = [
     {

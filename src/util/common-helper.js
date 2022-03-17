@@ -1,6 +1,4 @@
 import * as dateFormatter from 'dateformat'
-import { CURRENCY_CODE } from './constants'
-//import {jwt} from "jsonwebtoken"
 var jwt = require("jsonwebtoken");
 
 export function prettifyDateTime(date) {
@@ -57,10 +55,10 @@ export function downloadFile(data, fileName, fileType) {
   }
 }
 
-export function formatCurrency(value) {
+export function formatCurrency(value, currency='GHS') {
   let formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: CURRENCY_CODE,
+    currency: currency,
   
     // These options are needed to round to whole numbers if that's what you want.
     //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)

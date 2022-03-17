@@ -22,6 +22,10 @@ export const { Types, Creators } = createActions(
     enableEmployeeSuccess: ["responseData"],
     enableEmployeeFailure: ["error"],
 
+    resetEmployeePassword: ["employeeId"],
+    resetEmployeePasswordSuccess: ["responseData"],
+    resetEmployeePasswordFailure: ["error"],
+
     disableEmployee: ["employeeId"],
     disableEmployeeSuccess: ["responseData"],
     disableEmployeeFailure: ["error"],

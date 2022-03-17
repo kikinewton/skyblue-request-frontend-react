@@ -178,7 +178,6 @@ const CreateQuotation = (props) => {
                 <Table 
                   columns={supplierColumns({
                     onSelect: (row) => {
-                      console.log('selected supplier', row)
                       setSelectedSupplier(row)
                       setCurrent(1)
                     },

@@ -38,7 +38,9 @@ const mapStateToProps = (store) => ({
   departmentLoading: store.department.loading,
   user_roles: store.role.roles,
   fetching_roles: store.role.loading,
-  filtered_employees: store.employee.filtered_employees
+  filtered_employees: store.employee.filtered_employees,
+  resetting_employee_password: store.employee.resetting_password,
+  reset_employee_password_success: store.employee.reset_password_success,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -69,7 +71,8 @@ const mapActionsToProps = (dispatch) => {
     },
     resetEmployee: () => dispatch(Creators.resetEmployee()),
     enableEmployee: (id) => dispatch(Creators.enableEmployee(id)),
-    disableEmployee: id => dispatch(Creators.disableEmployee(id))
+    disableEmployee: id => dispatch(Creators.disableEmployee(id)),
+    resetEmployeePassword: id => dispatch(Creators.resetEmployeePassword(id))
   }
 }
 

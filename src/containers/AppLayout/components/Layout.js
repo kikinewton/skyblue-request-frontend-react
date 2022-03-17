@@ -362,7 +362,9 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           }
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listUserRoles) && 
+          
             <Menu.Item key="employee">
+              
               <NavLink to="/app/employees">
                 <UsergroupAddOutlined />
                 <span>User Management</span>

@@ -1,10 +1,9 @@
-import { Button, Col, Row, Table, Form, Input, Select, Spin, PageHeader, Drawer, Divider } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Col, Row, Table, Form, Input, Select, PageHeader, Drawer, Divider } from 'antd'
+import React, { useState } from 'react'
 import { EMPLOYEE_COLUMNS } from '../../../util/constants'
-import { EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined, SyncOutlined } from '@ant-design/icons'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
-import { USER_ROLES } from '../../../util/datas'
 import EmployeeDetails from './EmployeeDetails'
 
 const initUser = {
@@ -28,22 +27,16 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
         <Col span={8} style={{textAlign: "center"}}>
           <EyeOutlined onClick={() => props.onView(row)} />
         </Col>
-        {/* <Col md={12} sm={12}>
-          <DeleteOutlined 
-            style={{cursor: 'pointer'}}
-            onClick={() => props.deleteRow(row)} 
-          />
-        </Col> */}
       </Row>
     )
   }
 })
 
 const List = (props)=> {
-  console.log('----------------->my props', props)
   const { employees, createEmployee,loading, fetchEmployees, deleteEmployee, 
     departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee, fetchRoles, 
-    user_roles, fetching_roles, filtered_employees, enableEmployee, disableEmployee
+    user_roles, fetching_roles, filtered_employees, enableEmployee, disableEmployee, resetEmployeePassword, resetting_employee_password,
+    reset_employee_password_success,
   } = props
 
   const [ openAdd, setOpenAdd ] = React.useState(false)
@@ -87,7 +80,6 @@ const List = (props)=> {
   }
 
   const handleAddSubmit = async (values) => {
-    console.log('values', values)
     const { firstName, lastName, email, phoneNo, departmentId, role } = values
     const dpt = {id: departmentId, name: ""}
     const empRole = [{id: role}]
@@ -128,7 +120,6 @@ const List = (props)=> {
 
   React.useEffect(()=> {
     if(!submitting && submitSuccess) {
-      console.log('submit success')
       addForm.resetFields()
       editForm.resetFields()
       setOpenAdd(false)
@@ -290,14 +281,24 @@ const List = (props)=> {
               disabled={selectedEmployee?.enabled} style={{marginRight: 5}}
               onClick={e => enableEmployee(selectedEmployee?.id)}
             >
-              Activate Employee
+              Activate User
             </Button>
             <Button 
               loading={submitting} danger 
               disabled={!selectedEmployee?.enabled}
               onClick={e => disableEmployee(selectedEmployee?.id)}
+              style={{marginRight: 5}}
             >
-              Deactivate Employee
+              Deactivate User
+            </Button>
+            <Button 
+              type="default"
+              loading={resetting_employee_password} 
+              disabled={resetting_employee_password}
+              onClick={e => resetEmployeePassword(selectedEmployee?.id)}
+            >
+              <SyncOutlined />
+              Reset User
             </Button>
           </Col>
         </Row>

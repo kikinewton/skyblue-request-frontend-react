@@ -27,6 +27,7 @@ import {
 	watchDeleteEmployee,
 	watchEnableEmployee,
 	watchDisableEmployee,
+	watchResetEmployeePassword,
 } from './employee'
 
 import {
@@ -133,6 +134,7 @@ export default function* rootSaga() {
 		watchDeleteEmployee(),
 		watchEnableEmployee(),
 		watchDisableEmployee(),
+		watchResetEmployeePassword(),
 		
 		watchFetchRequests(),
 		watchCreateRequest(),

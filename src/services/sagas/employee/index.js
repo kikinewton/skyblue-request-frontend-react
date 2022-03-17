@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/employee/actions'
 
 import {
@@ -8,7 +8,8 @@ import {
   saveUser as saveEmployeeApi,
   getUser as getEmployeeApi,
   enableEmployee as enableEmployeeApi,
-  disableEmployee as disableEmployeeApi
+  disableEmployee as disableEmployeeApi,
+  resetEmployeePassword as resetEmployeePasswordApi
 } from '../../api/employee'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -21,13 +22,31 @@ export function* fetchEmployees(action) {
       const responseData = response.data
       yield put(Creators.fetchEmployeesSuccess(responseData))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'Fetch users', response.message)
       yield put(Creators.fetchEmployeesFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Employees'
     openNotification('error', 'Login', message)
     yield put(Creators.fetchEmployeesFailure(message))
+  }
+}
+
+export function* resetEmployeePassword(action) {
+  console.log('lets reset employee password')
+  try {
+    const response = yield call(resetEmployeePasswordApi, action.employeeId)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.resetEmployeePasswordSuccess(response?.data))
+      openNotification("success", "Reset User Password", "Password reset successfully")
+    } else {
+      yield put(Creators.resetEmployeePasswordFailure(response.message || ""))
+      openNotification("error", "Reset User Password", "Failed to reset user password")
+    }
+  } catch (error) {
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to reset user password!'
+    yield put(Creators.resetEmployeePasswordFailure(message))
+    openNotification('error', 'Reset User Password', message)
   }
 }
 
@@ -171,4 +190,8 @@ export function* watchDeleteEmployee(action) {
 
 export function* watchGetEmployee(action) {
   yield takeLatest(Types.GET_EMPLOYEE, getEmployee)
+}
+
+export function* watchResetEmployeePassword(action) {
+  yield takeLeading(Types.RESET_EMPLOYEE_PASSWORD, resetEmployeePassword)
 }

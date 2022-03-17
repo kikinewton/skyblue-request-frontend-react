@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { CURRENCY_CODE } from '../../../util/constants'
+import { CURRENCIES } from '../../../util/datas'
 import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
 // import { Document, Page } from "react-pdf"
 
@@ -90,7 +91,7 @@ const updatePriceColumns = (props)=> [
     render: (text, row) => {
       return (
         <Input 
-          prefix={CURRENCY_CODE}
+          prefix={props.currency}
           size="small"
           type="number" 
           min={1} 
@@ -172,6 +173,7 @@ const CreateLPO = (props) => {
   const [selectedRequests, setSelectedRequests] = useState([])
   const [deliveryDate, setDeliveryDate] = useState(null)
   const [imageVisible, setImageVisible] = useState(false)
+  const [currency, setCurrency] = useState("GHS")
 
   const fetchQuotationsBySupplier = (supplierId) => {
     console.log('supplier ', supplierId)
@@ -191,6 +193,7 @@ const CreateLPO = (props) => {
         let data = rq
         data["requestCategory"] = request_categories.find(it => it.id === rq.requestCategory)
         data["suppliedBy"] = selectedQuotation?.quotation?.supplier?.id
+        data['currency'] = currency
         return data;
       })
     }
@@ -369,7 +372,7 @@ const CreateLPO = (props) => {
                 </Row>
                   <Row>
                     <Col md={6}>Delivery Date:</Col>
-                    <Col md={18}>
+                    <Col md={6}>
                       <DatePicker
                         format="YYYY-MM-DD"
                         style={{width: "100%"}} 
@@ -379,6 +382,19 @@ const CreateLPO = (props) => {
                           setDeliveryDate(date)
                         }} 
                       />
+                    </Col>
+                    <Col md={1}></Col>
+                    <Col md={5}>Currency</Col>
+                    <Col md={6}>
+                        <Select
+                          style={{width: "100%"}} 
+                          disabled={selectedRequests.filter(item => item.unitPrice).length > 0} value={currency} 
+                          onChange={value => setCurrency(value)}
+                        >
+                          {CURRENCIES.map(c => (
+                            <Select.Option key={c?.code} value={c?.code}>{c?.name}</Select.Option>
+                          ))}
+                        </Select>
                     </Col>
                   </Row>
                 </Card>
@@ -425,12 +441,14 @@ const CreateLPO = (props) => {
                   columns={updatePriceColumns({
                     request_categories: props.request_categories,
                     onRequestCategoryChange: (row, value) => handleUpdateRequestCategory(row, value),
-                    onPriceChange: (row, value) => handleUpdateRequestUnitPrice(row, value)
+                    onPriceChange: (row, value) => handleUpdateRequestUnitPrice(row, value),
+                    currency: currency
                   })}
                   dataSource={selectedRequests}
                   pagination={false}
                   size="small"
                   bordered
+                  rowKey="id"
                 />
               </Col>
             </Row>

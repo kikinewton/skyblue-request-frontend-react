@@ -24,7 +24,6 @@ export function signOut() {
   clearLocalState(AUTH_TOKEN_KEY)
   clearLocalState(AUTH_USER_KEY)
   history.push("/login")
-
 }
 
 export function userHasAnyRole(role, roles) {
