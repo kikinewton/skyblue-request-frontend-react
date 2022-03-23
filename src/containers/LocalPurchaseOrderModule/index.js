@@ -13,6 +13,7 @@ import { NavLink } from 'react-router-dom'
 import CreateLPODraft from './components/CreateLPODraft'
 import CreateLPO from './components/CreateLPO'
 import MyBadge from '../../presentation/MyBadge'
+import AllLocalPurchaseOrders from './components/AllLocalPurchaseOrders'
 
 
 const LocalPurchaseOrderModule = (props) => {
@@ -29,7 +30,9 @@ const LocalPurchaseOrderModule = (props) => {
       setKey("/app/local-purchase-orders/add-new-draft")
     } else if(pathname.includes("/app/local-purchase-orders/add-new")) {
       setKey("/app/local-purchase-orders/add-new")
-    }else if(pathname.includes("/app/local-purchase-orders")) {
+    } else if(pathname.includes("/app/local-purchase-orders/all")) {
+      setKey("/app/local-purchase-orders/all")
+    } else if(pathname.includes("/app/local-purchase-orders")) {
       setKey("/app/local-purchase-orders")
     } 
   }, [key])
@@ -44,7 +47,6 @@ const LocalPurchaseOrderModule = (props) => {
             mode="horizontal"
             onClick={handleNavClick}
             forceSubMenuRender
-            mode="horizontal"
           >
             <Menu.Item key="/app/local-purchase-orders">
               <NavLink to="/app/local-purchase-orders">
@@ -62,10 +64,16 @@ const LocalPurchaseOrderModule = (props) => {
                 <span>Create Local Purchase Order</span>
               </NavLink>
             </Menu.Item>
+            <Menu.Item key="/app/local-purchase-orders/all">
+              <NavLink to="/app/local-purchase-orders/all">
+                <span>All Local Purchase Orders</span>
+              </NavLink>
+            </Menu.Item>
           </Menu>
         )}
       >
         <Switch>
+          <AuthenticatedRoute {...props} path="/app/local-purchase-orders/all" component={AllLocalPurchaseOrders} />
           <AuthenticatedRoute {...props} path="/app/local-purchase-orders/add-new-draft" component={CreateLPODraft} />
           <AuthenticatedRoute {...props} path="/app/local-purchase-orders/add-new" component={CreateLPO} />
           <AuthenticatedRoute {...props} path="/app/local-purchase-orders" component={List} />

@@ -72,7 +72,8 @@ export const filterQuotations = (state = INITIAL_STATE, action) => {
   console.log('filter', filter)
   return {...state, 
     filtered_quotations: state.quotations.filter(it => it?.quotation?.quotationRef?.toLowerCase().includes(filter) || 
-    it?.quotation?.supplier?.name?.toLowerCase().includes(filter))
+    it?.quotation?.supplier?.name?.toLowerCase().includes(filter) || it?.quotationRef?.toLowerCase().includes(filter) || 
+    it?.supplier?.name?.toLowerCase().includes(filter))
   }
 }
 

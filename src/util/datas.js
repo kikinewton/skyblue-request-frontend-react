@@ -89,3 +89,9 @@ export const CURRENCIES = [
   {name: "Rand", code: "ZAR"},
   {name: "Canadian Dollar", code: "CAD"}
 ]
+
+export const REQUEST_STATUS = [
+  {name: "All", key: "all"},
+  {name: "Pending Approval", key: "toBeApproved"},
+  {name: "Approved", key:"aprroved"}
+]

@@ -3,6 +3,7 @@ import { LeftOutlined, RightOutlined, UploadOutlined } from '@ant-design/icons'
 import React from 'react'
 import TextArea from 'antd/lib/input/TextArea'
 import { CURRENCY_CODE } from '../../../../util/constants'
+import { formatCurrency } from '../../../../util/common-helper'
 
 const columns = (props) => [
   {
@@ -25,7 +26,8 @@ const columns = (props) => [
   {
     title: 'Price',
     dataIndex: 'unitPrice',
-    key: 'unitPrice'
+    key: 'unitPrice',
+    render: (text, row) => formatCurrency(row?.unitPrice, row?.currency)
   },
   {
     title: 'Quantity',
@@ -41,7 +43,7 @@ const columns = (props) => [
   // },
 ]
 const CreateGrn = (props) => {
-  const { selectedItems, onFormDataChange, formData, file, onFileUpload, onFileRemove } = props
+  const { selectedItems, onFormDataChange, formData, file, onFileUpload, onFileRemove, local_purchase_order } = props
 
   const handleFormInputChange = (event) => {
     onFormDataChange(event)
@@ -90,7 +92,7 @@ const CreateGrn = (props) => {
                 <Col md={4}>Invoice Amount Payable: </Col>
                 <Col md={20}>
                   <Input 
-                    prefix={CURRENCY_CODE}
+                    prefix={local_purchase_order?.requestItems[0]?.currency}
                     placeholder="Amount" 
                     type="number"
                     min="0"

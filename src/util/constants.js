@@ -20,25 +20,31 @@ export const REQUEST_COLUMNS = [
     key: 'requestItemRef'
   },
   {
-    title: 'NAME',
+    title: 'Name',
     dataIndex: 'name',
     key: 'name',
     render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
   },
   {
-    title: 'REASON',
+    title: 'Reason',
     dataIndex: 'reason',
     key: 'reason'
   },
   {
-    title: 'PURPOSE',
+    title: 'Purpose',
     dataIndex: 'purpose',
     key: 'purpose'
   },
   {
-    title: 'QUANTITY',
+    title: 'Quantity',
     dataIndex: 'quantity',
     key: 'quantity'
+  },
+  {
+    title: "Unit Price",
+    dataIndex: "unitPrice",
+    key: "unitPrice",
+    render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"
   },
   {
     title: 'Date',
@@ -47,17 +53,17 @@ export const REQUEST_COLUMNS = [
     render: text => prettifyDateTime(text)
   },
   {
-    title: 'ENDORSEMENT',
+    title: 'Endorsement',
     dataIndex: 'endorsement',
     key: 'endorsement'
   }, 
   {
-    title: 'APPROVAL',
+    title: 'Approval',
     dataIndex: 'approval',
     key: 'approval'
   },
   {
-    title: 'STATUS',
+    title: 'Status',
     dataIndex: 'status',
     key: 'status'
   }, 

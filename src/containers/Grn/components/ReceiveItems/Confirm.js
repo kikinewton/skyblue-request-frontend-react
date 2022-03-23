@@ -3,7 +3,7 @@ import { Button, Card, Col, List, Row, Table } from 'antd'
 import React from 'react'
 import { formatCurrency } from '../../../../util/common-helper'
 
-const columns = [
+const columns = props => [
   {
     title: 'Requested Item',
     dataIndex: 'name',
@@ -13,12 +13,12 @@ const columns = [
     title: 'Unit Price',
     dataIndex: 'unitPrice',
     key: 'unitPrice',
-    render: (text) => formatCurrency(text)
+    render: (text) => formatCurrency(text, props.currency)
   },
 ]
 
 const Confirm = (props) => {
-  const { formData, selectedItems, submitting } = props
+  const { formData, selectedItems, submitting, local_purchase_order } = props
   return (
     <React.Fragment>
       <Row>
@@ -26,7 +26,7 @@ const Confirm = (props) => {
           <Card title="Invoice">
             <List>
               <List.Item.Meta title="Invoice Number" description={formData.invoiceNumber} />
-              <List.Item.Meta title="Amount" description={formData.invoiceAmountPayable} />
+              <List.Item.Meta title="Amount" description={formatCurrency(formData.invoiceAmountPayable, local_purchase_order?.requestItems[0]?.currency)} />
             </List>
           </Card>
         </Col>
@@ -37,7 +37,8 @@ const Confirm = (props) => {
             <List>
               <List.Item.Meta title="Comment" description={formData.comment} />
               <List.Item.Meta title="Invoice Amount Payable" 
-                description={<Table columns={columns} rowKey="id" dataSource={selectedItems} pagination={false} size="small" bordered />} />
+                description={<Table 
+                  columns={columns({currency: local_purchase_order?.requestItems[0]?.currency})} rowKey="id" dataSource={selectedItems} pagination={false} size="small" bordered />} />
             </List>
           </Card>
         </Col>

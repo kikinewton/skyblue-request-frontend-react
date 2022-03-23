@@ -14,6 +14,7 @@ import { Menu } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 import ApprovedItemRequest from './components/ApprovedItemRequests';
 import EndorsedItemRequest from './components/EndorsedItemRequest';
+import RequestItemHistory from './components/RequestItemHistory';
 
 
 export const REQUEST_ITEMS = [
@@ -36,9 +37,6 @@ const RequestItemIndex = (props) => {
     setKey(value)
   }
 
-  React.useEffect(() => {
-    console.log('init')
-  }, [])
 
   React.useEffect(() => {
     const url = window.location.href
@@ -54,6 +52,8 @@ const RequestItemIndex = (props) => {
       setKey("all-approved-requests")
     } else if(url.includes("/app/request-items/all-endorsed")) {
       setKey("all-endorsed-requests")
+    } else if(url.includes("/app/request-items/all")) {
+      setKey("/app/request-items/all")
     }
   }, [key])
 
@@ -65,6 +65,8 @@ const RequestItemIndex = (props) => {
         return <Redirect to="/app/request-items/hod-pending-endorse" />
       case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
         return <Redirect to="/app/request-items/gm-pending-approve" />
+      case EMPLOYEE_ROLE.ROLE_ADMIN:
+        return <Redirect to="/app/request-items/all" />
       default:
         return <Redirect to="/app" />
     }
@@ -114,6 +116,13 @@ const RequestItemIndex = (props) => {
                 </Menu.Item>
               </>
             )}
+            {[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN].includes(currentUser.role) && (
+              <Menu.Item key="/app/request-items/all">
+                <NavLink to="/app/request-items/all">
+                  <span>Request Items</span>
+                </NavLink>    
+              </Menu.Item>
+            )}
           </Menu>
         )}
       >
@@ -136,6 +145,13 @@ const RequestItemIndex = (props) => {
             exact
             path={`/app/request-items/hod-pending-approve`}
             component={HodReviewPendingList}
+            {...props}
+          />
+          <AuthenticatedRoute 
+            roles={[EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_HOD]}
+            exact
+            path="/app/request-items/all"
+            component={RequestItemHistory}
             {...props}
           />
           <AuthenticatedRoute 

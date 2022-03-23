@@ -61,6 +61,13 @@ export function fetchPayments(query) {
   })
 }
 
+export function cancelPayment(id) {
+  return service({
+    url: `/payments/${id}/cancel`,
+    method: "PUT"
+  })
+}
+
 export function fetchPayment(id) {
   return service({
     url: `/payments/${id}`,

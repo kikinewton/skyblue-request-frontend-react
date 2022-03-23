@@ -11,6 +11,7 @@ import ListQuotations from './components/List'
 import CreateQuotation from './components/Add'
 import { Menu } from "antd"
 import { FileDoneOutlined, SolutionOutlined } from '@ant-design/icons'
+import ListAllQuotations from './components/AllQuotations'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -26,6 +27,9 @@ const Quotation = (props) => {
         break
       case "/app/quotations/add-new":
         setKey("add")
+        break
+      case "/app/quotations/all":
+        setKey("list-all")
         break
       default:
         setKey("list")
@@ -57,11 +61,18 @@ const Quotation = (props) => {
                 <span>Supplier Quotes</span>
               </NavLink>
             </Menu.Item>
+            <Menu.Item key="list-all">
+              <NavLink to="/app/quotations/all">
+                <SolutionOutlined />
+                <span>All Quoatations</span>
+              </NavLink>
+            </Menu.Item>
           </Menu>
         )}
       >
         <Switch>
           <AuthenticatedRoute path={`${path}/add-new`} component={CreateQuotation} {...props} />
+          <AuthenticatedRoute path={`${path}/all`} component={ListAllQuotations} {...props} />
           <AuthenticatedRoute path={`${path}`} component={ListQuotations} {...props} />
         </Switch>
       </AppLayout>

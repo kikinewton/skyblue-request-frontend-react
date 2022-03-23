@@ -27,6 +27,8 @@ const PaymentsSubNav = (props) => {
       setKey("/app/payments/float/allocate-funds")
     } else if(pathname.includes("/app/payments/float/close-retire")) {
       setKey("/app/payments/float/close-retire")
+    } else if(pathname.includes("/app/payments/all")) {
+      setKey("/app/payments/all")
     }
   }, [key])
 
@@ -78,6 +80,12 @@ const PaymentsSubNav = (props) => {
             </Menu.Item>
           </>
         )}
+        <Menu.Item key="/app/payments/all">
+          <NavLink to="/app/payments/all">
+            <WalletOutlined />
+            <span>All payments</span>
+          </NavLink>
+        </Menu.Item>
       </Menu>
     </>
   )

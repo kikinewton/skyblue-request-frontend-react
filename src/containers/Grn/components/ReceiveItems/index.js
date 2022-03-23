@@ -33,7 +33,7 @@ const ReceiveItems = (props) => {
     fetching_local_purchase_orders
   } = props
   const [submitting, setSubmitting] = React.useState(false)
-  const [ loading, setLoading ] = React.useState(false)
+  // const [ loading, setLoading ] = React.useState(false)
   const history = useHistory()
 
   const handleSelectedItemUpdate = (event, row) => {
@@ -144,7 +144,7 @@ const ReceiveItems = (props) => {
                     </List.Item>
                     <List.Item>
                       <List.Item.Meta 
-                        title="Supplier" 
+                        title="Supplier"
                         description={((local_purchase_order?.requestItems || [])[0]?.suppliers?.filter(s => s.id === local_purchase_order?.supplierId) || [])[0]?.name} />
                     </List.Item>
                   </List>

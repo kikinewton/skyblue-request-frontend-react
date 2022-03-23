@@ -55,7 +55,10 @@ export function downloadFile(data, fileName, fileType) {
   }
 }
 
-export function formatCurrency(value, currency='GHS') {
+export function formatCurrency(value="", currency='GHS') {
+  if(!value || !currency) {
+    return "N/A"
+  }
   let formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency,

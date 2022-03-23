@@ -16,6 +16,7 @@ import { EMPLOYEE_ROLE } from '../../util/datas'
 import PettyCashAllocateFunds from './component/PettyCashAllocateFunds'
 import FloatAllocateFunds from './component/FloatAllocateFunds'
 import CloseFloatPendingList from './component/CloseFloatPendingList'
+import PaymentHistory from './component/PaymentHistory'
 
 
 
@@ -55,7 +56,6 @@ const PaymentModule = (props) => {
   } = props
 
   const { path } = useRouteMatch()
-  console.log('path', path)
 
   const DefaultPage = () => {
     console.log('hey')
@@ -71,6 +71,7 @@ const PaymentModule = (props) => {
     <>
       <Switch>
         <AuthenticatedRoute path={`${path}/payment-success`} component={PaymentSuccess} {...props} />
+        <AuthenticatedRoute path={`${path}/all`} component={PaymentHistory} {...props} />
         <AuthenticatedRoute path={`${path}/pending-approval`} component={ApprovePaymentList} {...props} />
         <AuthenticatedRoute path={`${path}/goods-receive-notes/:grnId/add-new-payment`} component={NewPayment} {...props} />
         <AuthenticatedRoute path={`${path}/goods-receive-notes`} component={GrnPendingPaymentList} {...props} />

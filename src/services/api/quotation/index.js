@@ -1,6 +1,7 @@
 import service from '../apiRequest'
 import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO }
  from '../../../util/quotation-types'
+import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 
 
 const path = "/quotations"
@@ -51,9 +52,11 @@ export function getQuotationBySupplier(query) {
 export function getAllQuotations(query) {
   console.log('query api', query)
   const { requestType } = query
+  const queryStr = serializeQueryParamsNotNull(query);
+  console.log('quey str', queryStr)
   switch(requestType) {
     case ALL_QUOTATIONS:
-      return service({url: `/quotations`})
+      return service({url: `/quotations${queryStr}`, method: "GET"})
     case QUOTATIONS_WITHOUT_DOCUMENT:
       return getAllQuotationsWithoutDocuments()
     case QUOTATIONS_WITHOUT_DOCUMENT_TEST:

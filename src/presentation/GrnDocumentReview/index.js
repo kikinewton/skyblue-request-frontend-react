@@ -66,7 +66,7 @@ const GrnDocumentReview = (props) => {
             </Row>
             <Row>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "100%"}}>
-                <FilesView 
+                <FilesView
                   files={[invoiceDocument]}
                 />
               </Col>

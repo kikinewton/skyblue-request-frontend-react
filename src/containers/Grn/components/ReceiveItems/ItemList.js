@@ -1,6 +1,7 @@
 import React from 'react'
 import { RightOutlined } from '@ant-design/icons'
 import { Button, Col, Row, Table, Spin } from 'antd'
+import { formatCurrency } from '../../../../util/common-helper'
 
 const columns = [
   {
@@ -11,7 +12,8 @@ const columns = [
   {
     title: 'Unit Price',
     dataIndex: 'unitPrice',
-    key: 'unitPrice'
+    key: 'unitPrice',
+    render: (text, row) => formatCurrency(row.unitPrice, row.currency)
   },
   {
     title: 'Quantity',

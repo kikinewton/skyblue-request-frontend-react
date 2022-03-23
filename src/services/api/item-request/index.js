@@ -48,6 +48,13 @@ export function getAllItemRequests(query) {
     })
 }
 
+export function getRequestItemStatus(id) {
+  return service({
+    url: `/requestItems/${id}/status`,
+    method: 'get'
+  })
+}
+
 export function getAllDepartmentItemRequests() {
   console.log("lets fetch department request")
   return service({
