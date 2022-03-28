@@ -61,12 +61,12 @@ const QuotationDetails = ({quotation, showItems=true}) => {
       <Row>
         <Col span={24}>
           {(quotation?.quotation?.requestDocument?.documentFormat?.includes("application/pdf") || quotation?.requestDocument?.documentFormat?.includes("application/pdf")) && (
-            <MyPdfView 
+            <MyPdfView
               src={generateResourceUrl(quotation?.quotation?.requestDocument?.fileName || quotation?.requestDocument?.fileName)}
             />
           )}
           {(quotation?.quotation?.requestDocument?.documentFormat?.includes("image") || quotation?.requestDocument?.documentFormat?.includes("image")) && (
-            <Image 
+            <Image
               onClick={() => setImagePreview(true)}
               preview={imagePreview}
               width={200}

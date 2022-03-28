@@ -1,9 +1,10 @@
-import { RightOutlined } from '@ant-design/icons'
+import { CheckOutlined, RightOutlined } from '@ant-design/icons'
 import { Card, Row, Col, Button, Table, Drawer, Form, DatePicker } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
+import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
 
 const columns = props => GRN_COLUMNS.concat([
   {
@@ -81,6 +82,10 @@ const GrnPendingPaymentAdvice = (props) => {
           invoice={selectedGrn?.invoice}
           invoiceDocument={selectedGrn?.invoice?.invoiceDocument}
         />
+        <LocalPurchaseOrderDetails 
+          lpo={selectedGrn?.localPurchaseOrder}
+          showRequestItems={false}
+        />
         <Row style={{marginTop: 40}}>
           <Col span={24}>
             <Form
@@ -107,7 +112,10 @@ const GrnPendingPaymentAdvice = (props) => {
                 />
               </Form.Item>
               <Form.Item>
-                <Button loading={submitting_grn} type="primary" htmlType="submit">SUBMIT</Button>
+                <Button loading={submitting_grn} type="primary" htmlType="submit">
+                  <CheckOutlined />
+                  Advice Payment
+                </Button>
               </Form.Item>
             </Form>
           </Col>

@@ -1,10 +1,11 @@
 import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Pagination, Drawer, Input, Button, Form } from 'antd'
+import { Table , Card, Row, Col, Select, Pagination, Drawer, Spin, Input, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
-import { fetchPayments, cancelPayment } from '../../../services/api/payment-draft'
+import { fetchPayments, cancelPayment, fetchPaymentDrafts } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
+import { REQUEST_STATUS } from '../../../util/datas'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
@@ -18,12 +19,12 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
   }
 ])
 
-const PaymentHistory = (props) => {
+const AllPaymentDrafts = (props) => {
   const {
     current_user
   } = props
 
-  const [requests, setRequests] = useState([])
+  const [drafts, setDrafts] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState("all")
@@ -32,7 +33,6 @@ const PaymentHistory = (props) => {
   const [grnRef, setGrnRef] = useState("")
   const [paymentRef, setPaymentRef] = useState("")
   const [cancelling, setCancelling] = useState(false)
-  const [cancelVisible, setCancelVisible] = useState(false)
 
   const resetPagination = () => {
     setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
@@ -40,11 +40,11 @@ const PaymentHistory = (props) => {
 
   const handleChange = () => {
     resetPagination()
-    fetchPaymentHistory()
+    fetchPaymentDraftHistory()
   }
 
   
-  const fetchPaymentHistory = async () => {
+  const fetchPaymentDraftHistory = async () => {
     setLoading(true)
     const query = {
       pageSize: 5,
@@ -54,14 +54,12 @@ const PaymentHistory = (props) => {
         grnRef: grnRef ? grnRef : null
     }
     try {
-      const result = await fetchPayments({})
-      console.log('result', result.data)
+      const result = await fetchPaymentDrafts(query)
       if(result?.meta) {
         const { currentPage, pageSize, total, totalPages } = result?.meta
         setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
       }
-      
-      setRequests(result?.data)
+      setDrafts(result?.data)
     } catch (error) {
       
     } finally {
@@ -81,7 +79,7 @@ const PaymentHistory = (props) => {
       const result = await fetchPayments(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
-      setRequests(result?.data)
+      setDrafts(result?.data)
     } catch (error) {
       
     } finally {
@@ -105,7 +103,7 @@ const PaymentHistory = (props) => {
   }
 
   useEffect(() => {
-    fetchPaymentHistory()
+    fetchPaymentDraftHistory()
   }, [])
 
   return (
@@ -155,7 +153,7 @@ const PaymentHistory = (props) => {
           </Row>
           <Row>
             <Col span={24}>
-              <Pagination
+              <Pagination 
                 showSizeChanger={false}
                 defaultCurrent={meta.currentPage + 1}
                 total={meta.total}
@@ -183,51 +181,10 @@ const PaymentHistory = (props) => {
               </Col>
             </Row>
           </Drawer>
-          <Drawer
-            visible={cancelVisible}
-            title="Payment Details"
-            width={800}
-            placement="right"
-            onClose={() => {
-              setSelectedPayment(null)
-              setVisible(false)
-            }}
-          >
-            <Row>
-              <Col span={24}>
-                <Form
-                  onFinish={values => {
-                    console.log('finish', values)
-                    const paylaod = {
-                      comment: values.comment,
-                      paymentId: selectedPayment?.id
-                    }
-                  }}
-                  initialValues={{comment: ""}}
-                  layout="vertical"
-                >
-                  <Form.Item 
-                    label="Comment" 
-                    name="comment"
-                    rules={[
-                      {required: true, message: "Comment required"}
-                    ]}
-                  >
-                    <Input.TextArea placeholder='Comment...' rows={6} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type='primary' htmlType='submit'>
-                      Cancel Payment
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Col>
-            </Row>
-          </Drawer>
         </Card>
       </AppLayout>
     </>
   )
 }
 
-export default PaymentHistory
+export default AllPaymentDrafts

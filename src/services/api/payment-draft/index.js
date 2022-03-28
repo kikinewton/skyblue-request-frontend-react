@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { serializeQueryParams } from '../../../util/common-helper'
+import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 
 
 const path = "/paymentDraft"
@@ -54,7 +54,7 @@ export function approvePaymentDraft(paymentDraftId, payload) {
 }
 
 export function fetchPayments(query) {
-  const queryString = serializeQueryParams(query)
+  const queryString = serializeQueryParamsNotNull(query)
   return service({
     url: `/payments${queryString}`,
     method: 'GET'

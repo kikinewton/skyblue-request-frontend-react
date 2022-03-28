@@ -17,7 +17,8 @@ const columns = [
   {
     title: "Unit Price",
     dataIndex: "unitPrice",
-    key: "unitPrice"
+    key: "unitPrice",
+    render: (text, row) => formatCurrency(row?.unitPrice, row?.currency)
   },
   {
     title: "Quantity",
@@ -36,24 +37,31 @@ const GrnDocumentReview = (props) => {
     invoiceDocument,
     onFinishText,
     onFinish,
-    quotation
+    quotation,
+    showRequestItems=true,
   } = props
   const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
       <Row style={{margin: "30px 0 30px 0"}}>
         <Col span={24}>
-          <Card title="Invoice Details" style={{marginBottom: 10}} size="small">
+          <Card title="Goods Received Note" style={{marginBottom: 10}} size="small">
             <Row>
               <Col span={24}>
                 <List 
                   itemLayout="horizontal"
                 >
+                  <List.Item key="GRN Reference">
+                    <List.Item.Meta title="GRN Reference" description={grn?.grnRef} />
+                  </List.Item>
                   <List.Item key="invoiceNumber">
                     <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
                   </List.Item>
                   <List.Item key="createdOn">
                     <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
+                  </List.Item>
+                  <List.Item key="cretedBy">
+                    <List.Item.Meta title="GRN Created By" description={grn?.createdBy?.fullName} />
                   </List.Item>
                   <List.Item key="supplier">
                     <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
@@ -93,18 +101,20 @@ const GrnDocumentReview = (props) => {
           </Card>
         </>
       )}
-      <Row>
-        <Col span={24}>
-          <Table 
-            columns={columns}
-            dataSource={grn?.receivedItems}
-            bordered
-            size="small"
-            pagination={false}
-            rowKey="id"
-          />
-        </Col>
-      </Row>
+      {showRequestItems && (
+        <Row>
+          <Col span={24}>
+            <Table 
+              columns={columns}
+              dataSource={grn?.receivedItems}
+              bordered
+              size="small"
+              pagination={false}
+              rowKey="id"
+            />
+          </Col>
+        </Row>
+      )}
       {onFinish && onFinishText && (
         <Row style={{marginTop: 10}}>
           <Col span={24}>

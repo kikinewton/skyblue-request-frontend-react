@@ -3,6 +3,8 @@ import { Button, Card, Col, Drawer, Row, Table, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
+import { userHasAnyRole } from '../../../services/api/auth'
+import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
 import { formatCurrency } from '../../../util/common-helper'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import AppLayout from '../../AppLayout'
@@ -36,6 +38,17 @@ const ApprovePaymentList = (props) => {
   const [visible, setVisible] = useState(false)
   const [ selectedDraft, setSelectedDraft] = useState(null)
 
+  const buttonLabel = () => {
+    switch(current_user.role) {
+      case EMPLOYEE_ROLE.ROLE_AUDITOR:
+        return "Check Payment"
+      case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
+        return "Authorise Payment"
+      default:
+        return "Approve Payment"
+    }
+  }
+
   useEffect(() => {
     resetPayment()
     resetPaymentDraft()
@@ -49,6 +62,7 @@ const ApprovePaymentList = (props) => {
       fetchPaymentDrafts({})
     }
   }, [submitting_payment, submit_payment_success])
+
 
   return (
     <>
@@ -88,7 +102,7 @@ const ApprovePaymentList = (props) => {
           visible={visible}
           title="Review and endorse"
           placement="right"
-          width={800}
+          width={900}
           maskClosable={false}
           onClose={() => {
             setSelectedDraft(null)
@@ -125,19 +139,30 @@ const ApprovePaymentList = (props) => {
                 invoice={selectedDraft?.goodsReceivedNote?.invoice}
                 invoiceDocument={selectedDraft?.goodsReceivedNote?.invoice?.invoiceDocument}
                 quotation={selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation}
+                showRequestItems={false}
               />
             </Col>
           </Row>
-          <Row>
+          <Row style={{marginTop: 10}}>
             <Col span={24}>
-              <Button 
+              <LocalPurchaseOrderDetails 
+                lpo={selectedDraft?.goodsReceivedNote?.localPurchaseOrder}
+                showRequestItems={true}
+              />
+            </Col>
+          </Row>
+          <Row style={{marginTop: 10}}>
+            <Col span={24}>
+              <Button
                 loading={submitting_payment}
                 type="primary" onClick={() => {
                 const payload = {
                   approval: true
                 }
                 updatePaymentDraft(selectedDraft?.id, payload)
-              }}><CheckOutlined /> APPROVE PAYMENT</Button>
+              }}><CheckOutlined />
+                {buttonLabel()}
+              </Button>
             </Col>
           </Row>
         </Drawer>

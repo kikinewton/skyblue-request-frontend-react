@@ -4,6 +4,7 @@ import { BASE_URL } from '../urls'
 const path = "/goodsReceivedNotes"
 
 export function getAllGoodsReceiveNotes(query) {
+  console.log()
   const qs = serializeQueryParams(query)
   return service({
     url: `${path}${qs}`,

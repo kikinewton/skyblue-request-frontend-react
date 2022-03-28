@@ -1,4 +1,4 @@
-import { Tag } from "antd"
+import { Badge, Table, Tag } from "antd"
 import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
 
@@ -67,6 +67,31 @@ export const REQUEST_COLUMNS = [
     dataIndex: 'status',
     key: 'status'
   }, 
+]
+
+export const MINI_REQUEST_COLUMNS = [
+  {
+    title: 'Reference',
+    dataIndex: 'requestItemRef',
+    key: 'requestItemRef'
+  },
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
+  },
+  {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: "Unit Price",
+    dataIndex: "unitPrice",
+    key: "unitPrice",
+    render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"
+  },
 ]
 
 
@@ -305,3 +330,18 @@ export const CURRENCY_CODE="GHS"
 export const MAX_FILE_SIZE_IN_MB = 5;
 
 export const MAX_FILE_SIZE= MAX_FILE_SIZE_IN_MB * 1024 * 1024;
+
+
+export const EXPANDED_PRODUCT_COLUMNS = (row) => {
+  const expandedColumns = [
+    {title: 'Description', dataIndex: 'name', key: 'name'},
+    {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+    {title: 'Qauntity', dataIndex: 'quantity', key: 'quantity'},
+    {title: "Unit Price", dataIndex: "unitPrice", key: "unitPrice", render: (text, row)=>`${formatCurrency(row?.unitPrice, row?.currency)}`},
+    {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
+    {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
+      <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
+    )},
+  ]
+  return <Table columns={expandedColumns} dataSource={row.requestItems} pagination={false} rowKey="id" />
+}

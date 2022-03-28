@@ -8,6 +8,7 @@ import openNotification from '../../../../util/notification'
 import CreateGrn from './CreateGrn'
 import Confirm from './Confirm'
 import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
+import { formatCurrency } from "../../../../util/common-helper"
 const { Step } = Steps
 
 const initForm = { 
@@ -47,6 +48,13 @@ const ReceiveItems = (props) => {
       }
       return data
     }))
+  }
+
+  const subTotal = () => {
+    return local_purchase_order?.requestItems?.map(item => (item?.unitPrice || 0) * item.quantity)
+      .reduce((prev, price) => {
+        return prev + price
+      }, 0)
   }
 
   const handleItemSelect = (keys, rows) => {
@@ -136,20 +144,24 @@ const ReceiveItems = (props) => {
                   </Steps>
                 </Col>
               </Row>
-              <Row style={{borderRadius: 10, backgroundColor: "#b4ccfa", padding: 10, margin: "5px 0px 5px 0px"}}>
-                <Col span={24}>
-                  <List>
-                    <List.Item>
-                      <List.Item.Meta title="Local Purchase Order Reference" description={local_purchase_order?.lpoRef} />
-                    </List.Item>
-                    <List.Item>
-                      <List.Item.Meta 
-                        title="Supplier"
-                        description={((local_purchase_order?.requestItems || [])[0]?.suppliers?.filter(s => s.id === local_purchase_order?.supplierId) || [])[0]?.name} />
-                    </List.Item>
-                  </List>
-                </Col>
-              </Row>
+              <Card style={{margin: "5px 0px 5px 0px"}}>
+                <List>
+                  <List.Item>
+                    <List.Item.Meta title="Local Purchase Order Reference" description={local_purchase_order?.lpoRef} />
+                  </List.Item>
+                  <List.Item>
+                    <List.Item.Meta 
+                      title="Supplier"
+                      description={((local_purchase_order?.requestItems || [])[0]?.suppliers?.filter(s => s.id === local_purchase_order?.supplierId) || [])[0]?.name} />
+                  </List.Item>
+                  <List.Item>
+                    <List.Item.Meta 
+                      title="Sub total"
+                      description={ formatCurrency(subTotal(), local_purchase_order?.requestItems[0]?.curency) }
+                    />
+                  </List.Item>
+                </List>
+              </Card>
               <Row style={{marginTop: 20}}>
                 <Col md={24}>
                   {current === 0 && (<ItemList loading={fetching_local_purchase_orders} {...props} items={local_purchase_order?.requestItems} selectedItems={selectedItems} onItemSelect={handleItemSelect} onStep={(value)=>handleOnStep(value)} />)}

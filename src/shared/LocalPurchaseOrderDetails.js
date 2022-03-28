@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { Card, List, Table } from 'antd'
 import { prettifyDateTime } from '../util/common-helper'
-import { REQUEST_COLUMNS } from '../util/constants'
+import { MINI_REQUEST_COLUMNS, REQUEST_COLUMNS } from '../util/constants'
 
-const columns = REQUEST_COLUMNS.concat([])
+const columns = MINI_REQUEST_COLUMNS.concat([])
 
 const LocalPurchaseOrderDetails = (props) => {
   const { lpo, showRequestItems=true } = props
   return (
     <>
-      <Card title="Local Purchase Order">
+      <Card title="Local Purchase Order" size="small">
         <Card title="Details" size='small'>
           <List>
           <List.Item>

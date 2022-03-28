@@ -1,7 +1,7 @@
 import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
-import { PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
+import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
 // import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
@@ -12,6 +12,7 @@ import { formatCurrency } from "../../../util/common-helper"
 import { CURRENCY_CODE } from '../../../util/constants'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
+import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
 
 const { Option } = Select
 
@@ -28,11 +29,12 @@ const NewPayment = (props) => {
   const [ form ] = Form.useForm()
   const [submitting, setSubmitting] = React.useState(false)
   const [current, setCurrent] = useState(0)
+  const [selectedCurrency, setSelectedCurrency] = useState("GHS")
   const { grnId } = useParams()
 
   const handleSubmit = async (values) => {
     setSubmitting(true)
-    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus } = values
+    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency } = values
     const payload = {
       goodsReceivedNote: grn,
       chequeNumber,
@@ -40,7 +42,8 @@ const NewPayment = (props) => {
       purchaseNumber,
       bank,
       paymentAmount: parseInt(paymentAmount),
-      paymentStatus
+      paymentStatus,
+      currency
     }
     createPaymentDraft(payload)
   }
@@ -82,10 +85,18 @@ const NewPayment = (props) => {
                   <>
                     <Row>
                       <Col span={24}>
-                        <GrnDocumentReview 
+                        <GrnDocumentReview
                           grn={grn}
                           invoice={grn?.invoice}
                           invoiceDocument={grn?.invoice?.invoiceDocument}
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={24}>
+                        <LocalPurchaseOrderDetails 
+                          lpo={grn?.localPurchaseOrder}
+                          showRequestItems={false}
                         />
                       </Col>
                     </Row>
@@ -117,10 +128,11 @@ const NewPayment = (props) => {
                     paymentMethod: "CHEQUE",
                     purchaseNumber: "",
                     paymentStatus: "COMPLETED",
+                    currency: "GHS"
                   }}
                 >
                   <Form.Item label="Total Amount">
-                    <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable)} />
+                    <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </Form.Item>
                   <Form.Item label="Payment Channel" name="paymentMethod" rules={[{required: true, message: 'Payment channel required!'}]}>
                     <Select>
@@ -145,8 +157,13 @@ const NewPayment = (props) => {
                   <Form.Item label="Cheque Number/Mobile Number" name="chequeNumber" rules={[{required: true, message: "Account Number / Phone Number / Cheque Number required!"}]}> 
                     <Input />
                   </Form.Item>
+                  <Form.Item label="Currency" name="currency">
+                    <Select onChange={e => setSelectedCurrency(e)}>
+                      {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
+                    </Select>
+                  </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
-                    <Input prefix={CURRENCY_CODE} type="number" min="0" />
+                    <Input prefix={selectedCurrency} type="number" min="0" />
                   </Form.Item>
                   <Form.Item >
                     <Button 

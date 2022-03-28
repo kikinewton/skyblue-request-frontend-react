@@ -112,21 +112,29 @@ const RequestItemHistory = (props) => {
             <span style={{marginRight: 5}}>Recent Request Items</span>
           </>
         )}
-        extra={[
-          <span key="filter" style={{marginRight: 5}}>Filter:</span>,
-          <Input type="search" value={searchTerm} onChange={value => {
-            setSearchTerm(value)
-            handleChange()
-          }}  />,
-          <Select key="filter-select" style={{width: 200}} 
-            value={status} onChange={value => {
-                setStatus(value)
-                handleChange()
-              }}>
-            {REQUEST_STATUS.map(it => <Select.Option value={it.key} key={it.key}>{it.name}</Select.Option>)}
-          </Select>
-        ]}
       />
+      <Card>
+        <Row>
+          <Col span={6} offset={11}>
+            <Input type="search" value={searchTerm} 
+              onChange={value => {
+                setSearchTerm(value.target.value)
+                handleChange()
+              }}  
+              placeholder="Search"
+            />
+          </Col>
+          <Col span={6} offset={1}>
+            <Select key="filter-select" style={{width: "100%"}}
+              value={status} onChange={value => {
+                  setStatus(value)
+                  handleChange()
+                }}>
+              {REQUEST_STATUS.map(it => <Select.Option value={it.key} key={it.key}>{it.name}</Select.Option>)}
+            </Select>
+          </Col>
+        </Row>
+      </Card>
       <Card>
         <Row>
           <Col span={24}>

@@ -1,5 +1,5 @@
 import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, Spin } from 'antd'
+import { Badge, Button, Col, Row, Table, Spin, Drawer } from 'antd'
 import React from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import { prettifyDateTime } from '../../../util/common-helper'
@@ -94,7 +94,7 @@ const List = (props) => {
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
           <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
-            fetchLocalPurchaseOrders({withGRN: false})
+            fetchLocalPurchaseOrders({})
           }} /></span>
         </Col>
       </Row>

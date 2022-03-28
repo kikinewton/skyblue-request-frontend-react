@@ -3,7 +3,7 @@ import { Table , Card, Row, Col, Pagination, Drawer, Input, Button, Form } from 
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
-import { fetchPayments, cancelPayment } from '../../../services/api/payment-draft'
+import { fetchPaymentDrafts, cancelPayment } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
@@ -18,7 +18,7 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
   }
 ])
 
-const PaymentHistory = (props) => {
+const PaymentDraftHistory = (props) => {
   const {
     current_user
   } = props
@@ -54,7 +54,7 @@ const PaymentHistory = (props) => {
         grnRef: grnRef ? grnRef : null
     }
     try {
-      const result = await fetchPayments({})
+      const result = await fetchPaymentDrafts({})
       console.log('result', result.data)
       if(result?.meta) {
         const { currentPage, pageSize, total, totalPages } = result?.meta
@@ -78,7 +78,7 @@ const PaymentHistory = (props) => {
     }
 
     try {
-      const result = await fetchPayments(query)
+      const result = await fetchPaymentDrafts(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setRequests(result?.data)
@@ -230,4 +230,4 @@ const PaymentHistory = (props) => {
   )
 }
 
-export default PaymentHistory
+export default PaymentDraftHistory

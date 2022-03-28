@@ -18,6 +18,7 @@ import {Menu} from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas'
 import { formatCurrency } from '../../util/common-helper'
 import CreateFloatGrn from './components/CreateFloatGrn'
+import AllGrns from './components/AllGrns'
 
 export const GRN_COLUMNS = [
   {
@@ -81,8 +82,8 @@ const GrnIndex = (props) => {
       setKey("/app/grn/pending-endorsement")
     } else if(url.includes("/app/grn/pending-approval")) {
       setKey("/app/grn/pending-approval")
-    } else if(url.includes("/app/grn/list")) {
-      setKey("/app/grn/list")
+    } else if(url.includes("/app/grn/all")) {
+      setKey("/app/grn/all")
     } else if(url.includes("/app/grn/pending-payment-advice")) {
       setKey("/app/grn/pending-payment-advice")
     } else if(url.includes("/app/grn/new-float-grn")) {
@@ -100,7 +101,6 @@ const GrnIndex = (props) => {
             mode="horizontal"
             onClick={value => setKey(value)}
             forceSubMenuRender
-            mode="horizontal"
           >
             {currentUser.role === EMPLOYEE_ROLE.ROLE_STORE_OFFICER && (
               <>
@@ -109,9 +109,9 @@ const GrnIndex = (props) => {
                     Local Purchase Orders Awaiting GRN
                   </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/app/grn/list">
-                  <NavLink to="/app/grn/list">
-                    opened GRNs
+                <Menu.Item key="/app/grn/all">
+                  <NavLink to="/app/grn/all">
+                    All Goods Receive Notes
                   </NavLink>
                 </Menu.Item>
               </>
@@ -159,6 +159,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/lpos-pending-grn`} component={LocalPurchaseOrders} {...props} />
           <AuthenticatedRoute path={`${path}/new-float-grn`} component={CreateFloatGrn} {...props} />
           <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
+          <AuthenticatedRoute path={`${path}/all`} component={AllGrns} {...props}  />
         </Switch>
       </AppLayout>
     </React.Fragment>

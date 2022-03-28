@@ -166,7 +166,7 @@ export function* createPaymentDraft(action) {
       yield put(Creators.createPaymentDraftFailure(response.message))
     }
   } catch (error) {
-    console.log('err: ', error)
+    console.log('err: ', error?.response)
     const errors = error?.response?.data?.errors
     message.error("Failed!")
     yield put(Creators.createPaymentDraftFailure(errors[0]))

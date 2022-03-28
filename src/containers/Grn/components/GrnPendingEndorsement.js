@@ -94,7 +94,7 @@ const GrnPendingEndorsement = (props) => {
           grn={selectedGrn}
           invoice={selectedGrn?.invoice}
           invoiceDocument={selectedGrn?.invoice?.invoiceDocument}
-          onFinishText="Approve"
+          onFinishText="Approve Goods Receive Note"
           onFinish={() => {
             updateGrn(selectedGrn?.id, {updateType: "approve"})
           }}

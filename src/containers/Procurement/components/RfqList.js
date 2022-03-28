@@ -17,7 +17,7 @@ const columns = props => [
     align: "right",
     render: (text, row) => (
         <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", height: "100%"}}>
-          <Button 
+          {/* <Button 
             style={{marginRight: 5}}
             size="small" 
             onClick={() => props.sendDoc(row)} type="default"
@@ -25,7 +25,7 @@ const columns = props => [
           >
             <MailOutlined /> 
             Share RFQ With Supplier
-          </Button>
+          </Button> */}
           <Button size="small" onClick={() => props.generateRfq(row)} type="default"><DownloadOutlined /> Generate RFQ</Button>
         </div>
       )
@@ -64,6 +64,7 @@ const RfqList = (props) => {
               size="small"
               bordered
               loading={fetching_suppliers}
+              
             />
           </Col>
         </Row>
