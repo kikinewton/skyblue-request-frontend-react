@@ -1,5 +1,5 @@
 import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Pagination, Drawer, Input, Button, Form } from 'antd'
+import { Table , Card, Row, Col, Pagination, Modal, Input, Button, Form, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
@@ -14,7 +14,13 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
     title: "actions",
     dataIndex: "actions",
     key: "actions",
-    render: (text, row) => <EyeOutlined onClick={e =>  props.onView(row)} />
+    render: (text, row) =>  (
+      <>
+        <Button disabled={row.deleted} size="small" type="default" danger onClick={() => props.onCancel(row)}>
+          Cancel
+        </Button>
+      </>
+    )
   }
 ])
 
@@ -33,10 +39,10 @@ const PaymentHistory = (props) => {
   const [paymentRef, setPaymentRef] = useState("")
   const [cancelling, setCancelling] = useState(false)
   const [cancelVisible, setCancelVisible] = useState(false)
-
   const resetPagination = () => {
     setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   }
+  const [cancelForm] = Form.useForm();
 
   const handleChange = () => {
     resetPagination()
@@ -89,13 +95,20 @@ const PaymentHistory = (props) => {
     }
   }
 
-  const handleCancelPayment = async () => {
+  const handleCancelPayment = async (values) => {
     setCancelling(true)
     try {
-      const result = await cancelPayment(selectedPayment?.id)
+      const payload = {
+        comment: values.comment,
+        chequeNumber: selectedPayment?.chequeNumber
+      }
+      const result = await cancelPayment(selectedPayment?.id, payload)
       if(result.status === RESPONSE_SUCCESS_CODE) {
         openNotification("success", "Cancel Payment", result?.message)
-        setVisible(false)
+        setCancelVisible(false)
+        setSelectedPayment(null)
+        cancelForm.resetFields()
+        fetchPaymentHistory()
       }
     } catch (error) {
       openNotification("success", "Cancel Payment", "Failed")
@@ -144,12 +157,17 @@ const PaymentHistory = (props) => {
                   onView: row =>  {
                     setSelectedPayment(row)
                     setVisible(true)
+                  },
+                  onCancel: row => {
+                    setSelectedPayment(row)
+                    setCancelVisible(true)
                   }
                 })}
                 dataSource={requests}
                 pagination={false}
                 rowKey="id"
                 size='small'
+                bordered
               />
             </Col>
           </Row>
@@ -167,64 +185,47 @@ const PaymentHistory = (props) => {
               />
             </Col>
           </Row>
-          <Drawer
-            title="Payment Details"
-            visible={visible}
-            width={800}
-            placement="right"
-            onClose={() => {
-              setSelectedPayment(null)
-              setVisible(false)
-            }}
-          >
-            <Row>
-              <Col span={24}>
-                <Button loading={cancelling} type="danger" onClick={e => handleCancelPayment()}>Cancel Payment</Button>
-              </Col>
-            </Row>
-          </Drawer>
-          <Drawer
-            visible={cancelVisible}
-            title="Payment Details"
-            width={800}
-            placement="right"
-            onClose={() => {
-              setSelectedPayment(null)
-              setVisible(false)
-            }}
-          >
-            <Row>
-              <Col span={24}>
-                <Form
-                  onFinish={values => {
-                    console.log('finish', values)
-                    const paylaod = {
-                      comment: values.comment,
-                      paymentId: selectedPayment?.id
-                    }
-                  }}
-                  initialValues={{comment: ""}}
-                  layout="vertical"
-                >
-                  <Form.Item 
-                    label="Comment" 
-                    name="comment"
-                    rules={[
-                      {required: true, message: "Comment required"}
-                    ]}
-                  >
-                    <Input.TextArea placeholder='Comment...' rows={6} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type='primary' htmlType='submit'>
-                      Cancel Payment
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Col>
-            </Row>
-          </Drawer>
         </Card>
+        <Modal
+          visible={cancelVisible}
+          footer={false}
+          title="Cancel Payment"
+          onCancel={() => {
+            setCancelVisible(false)
+            setSelectedPayment(null)
+          }}
+        >
+          <Form
+            form={cancelForm}
+            initialValues={{comment: ""}}
+            onFinish={values => {
+              handleCancelPayment(values)
+            }}
+            layout="vertical"
+          >
+            <Form.Item>
+              <List>
+                <List.Item>
+                  <List.Item.Meta title="Payment Status" description={selectedPayment?.paymentStatus} />
+                </List.Item>
+                <List.Item>
+                  <List.Item.Meta title="Payment Purchase Number" description={selectedPayment?.purchaseNumber} />
+                </List.Item>
+                <List.Item>
+                  <List.Item.Meta title="Cheque Number" description={selectedPayment?.chequeNumber} />
+                </List.Item>
+              </List>
+            </Form.Item>
+            <Form.Item name="comment" label="Comment" rules={[{required: true, message: "Comment required"}]}>
+              <Input.TextArea rows={4} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" danger htmlType="submit" loading={cancelling}>
+                Cancel Payment
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </AppLayout>
     </>
   )

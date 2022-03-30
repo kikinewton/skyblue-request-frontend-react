@@ -3,7 +3,7 @@ import { Table , Card, Row, Col, Pagination, Drawer, Input, Button, Form } from 
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
-import { fetchPaymentDrafts, cancelPayment } from '../../../services/api/payment-draft'
+import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
@@ -54,7 +54,7 @@ const PaymentDraftHistory = (props) => {
         grnRef: grnRef ? grnRef : null
     }
     try {
-      const result = await fetchPaymentDrafts({})
+      const result = await fetchPaymentDraftsHistory({})
       console.log('result', result.data)
       if(result?.meta) {
         const { currentPage, pageSize, total, totalPages } = result?.meta
@@ -78,7 +78,7 @@ const PaymentDraftHistory = (props) => {
     }
 
     try {
-      const result = await fetchPaymentDrafts(query)
+      const result = await fetchPaymentDraftsHistory(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setRequests(result?.data)
@@ -206,7 +206,7 @@ const PaymentDraftHistory = (props) => {
                   initialValues={{comment: ""}}
                   layout="vertical"
                 >
-                  <Form.Item 
+                  <Form.Item
                     label="Comment" 
                     name="comment"
                     rules={[

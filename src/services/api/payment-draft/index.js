@@ -44,6 +44,14 @@ export function fetchPaymentDrafts(query) {
   })
 }
 
+export function fetchPaymentDraftsHistory(query) {
+  const queryString = serializeQueryParams(query)
+  return service({
+    url: `/paymentDrafts/history${queryString}`,
+    method: 'GET'
+  })
+}
+
 
 export function approvePaymentDraft(paymentDraftId, payload) {
   const queryStr = serializeQueryParams(payload)
@@ -61,10 +69,11 @@ export function fetchPayments(query) {
   })
 }
 
-export function cancelPayment(id) {
+export function cancelPayment(id, payload) {
   return service({
-    url: `/payments/${id}/cancel`,
-    method: "PUT"
+    url: `/payments/${id}/cancelCheque`,
+    method: "PUT",
+    data: payload
   })
 }
 

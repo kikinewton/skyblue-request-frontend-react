@@ -3,6 +3,7 @@ import {Creators as PaymentCreators} from "../../services/redux/payment/actions"
 import { Creators as GrnCreators } from '../../services/redux/grn/actions'
 import { Creators as PettyCashCreators } from '../../services/redux/petty-cash/actions'
 import { Creators as FloatCreators } from '../../services/redux/float/actions'
+import { Creators as SupplierCreators } from "../../services/redux/supplier/actions"
 import { Redirect} from "react-router-dom"
 import { connect } from 'react-redux'
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
@@ -26,6 +27,12 @@ export const PAYMENT_COLUMNS = [
     title: "Purchase Number",
     dataIndex: "purchaseNumber",
     key: "purchaseNumber"
+  },
+  {
+    title: "Supplier",
+    dataIndex: "supplier",
+    key: "supplier",
+    render: (text, record) => record?.goodsReceivedNote?.finalSupplier?.name
   },
   {
     title: "Payment Channel",
@@ -109,7 +116,8 @@ const mapStateToProps = store => ({
   float_requests: store.float.requests,
   fetching_float_requests: store.float.loading,
   submit_float_request_success: store.float.submit_success,
-  submitting_float_request: store.float.submitting
+  submitting_float_request: store.float.submitting,
+  suppliers: store.supplier.filtered_suppliers
 })
 
 const mapActionToProps = dispatch => ({
@@ -137,6 +145,9 @@ const mapActionToProps = dispatch => ({
   resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
   allocateFundsToFloatRequest: (id, payload) => dispatch(FloatCreators.allocateFundsToFloatRequest(id, payload)),
   closeFloatOrder: (id, payload) => dispatch(FloatCreators.closeFloatOrder(id, payload)),
+
+  fetchSuppliers: () => dispatch(SupplierCreators.fetchSuppliers()),
+  filterSuppliers: (query) => dispatch(SupplierCreators.filterSuppliers(query)),
 
 })
 
