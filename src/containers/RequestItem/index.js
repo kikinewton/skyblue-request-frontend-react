@@ -10,11 +10,12 @@ import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import ApprovePendingList from './components/ApprovePendingList';
-import { Menu } from "antd"
+import { Badge, Menu, notification } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 import ApprovedItemRequest from './components/ApprovedItemRequests';
 import EndorsedItemRequest from './components/EndorsedItemRequest';
 import RequestItemHistory from './components/RequestItemHistory';
+import NotificationBadge from '../../shared/NotificationBadge';
 
 
 export const REQUEST_ITEMS = [
@@ -24,9 +25,10 @@ export const REQUEST_ITEMS = [
 
 const RequestItemIndex = (props) => {
   const {
-    currentUser
+    currentUser,
+    notifications,
   } = props
-  console.log('curentUser', currentUser)
+  console.log('request item props', props)
 
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
@@ -87,12 +89,20 @@ const RequestItemIndex = (props) => {
               <>
                 <Menu.Item key="hod-pending-endorse">
                   <NavLink to="/app/request-items/hod-pending-endorse">
-                    <span>Pending Endorsement</span>
+                    {notifications.requestPendingEndorsementHOD ? (
+                      <NotificationBadge count={notifications.requestPendingEndorsementHOD}>
+                        <span>Requests Awaiting Endorsement</span>
+                      </NotificationBadge>
+                    ) : (<span>Requests Awaiting Endorsement</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="hod-pending-approve">
                   <NavLink to="/app/request-items/hod-pending-approve">
-                    <span>Pending Review</span>
+                    {notifications.quotationPendingReviewHOD ? (
+                      <NotificationBadge count={notifications.quotationPendingReviewHOD}>
+                        <span>Requests Awaiting Review</span>
+                      </NotificationBadge>
+                    ) : (<span>Requests Awaiting Review</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-endorsed-requests">
@@ -106,7 +116,11 @@ const RequestItemIndex = (props) => {
               <>
                 <Menu.Item key="gm-pending-approve">
                   <NavLink to="/app/request-items/gm-pending-approve">
-                    <span>Pending Approval</span>
+                    {notifications.requestPendingApprovalGM ? (
+                      <NotificationBadge count={notifications.requestPendingApprovalGM}>
+                        <span>Requests Awaiting Approval</span>
+                      </NotificationBadge>
+                    ) : (<span>Requests Awaiting Approval</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-approved-requests">
@@ -120,8 +134,8 @@ const RequestItemIndex = (props) => {
               <Menu.Item key="/app/request-items/all">
                 <NavLink to="/app/request-items/all">
                   <span>Request Items</span>
-                </NavLink>    
-              </Menu.Item>
+                </NavLink>
+              </Menu.Item> 
             )}
           </Menu>
         )}
@@ -198,7 +212,8 @@ const mapStateToProps = (store) => ({
   authUser: store.auth,
 
   submitting_comment: store.comment.submitting,
-  submit_comment_success: store.comment.submit_success
+  submit_comment_success: store.comment.submit_success,
+  notifications: store.notification.notifications || {}
 })
 
 const mapActionsToProps = (dispatch) => {

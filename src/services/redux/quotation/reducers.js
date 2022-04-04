@@ -69,11 +69,12 @@ export const createQuotationFailure = (state = INITIAL_STATE, action) => {
 
 export const filterQuotations = (state = INITIAL_STATE, action) => {
   const {filter} = action
-  console.log('filter', filter)
+  const lowerFiter = filter.toLowerCase()
   return {...state, 
-    filtered_quotations: state.quotations.filter(it => it?.quotation?.quotationRef?.toLowerCase().includes(filter) || 
-    it?.quotation?.supplier?.name?.toLowerCase().includes(filter) || it?.quotationRef?.toLowerCase().includes(filter) || 
-    it?.supplier?.name?.toLowerCase().includes(filter))
+    filtered_quotations: state.quotations.filter(it => it?.quotation?.quotationRef?.toLowerCase().includes(lowerFiter) || 
+    it?.quotation?.supplier?.name?.toLowerCase().includes(filter) || it?.quotationRef?.toLowerCase().includes(lowerFiter) || 
+    it?.supplier?.name?.toLowerCase().includes(lowerFiter) || 
+    it?.supplierName?.toLowerCase().includes(lowerFiter))
   }
 }
 

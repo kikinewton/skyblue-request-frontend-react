@@ -1,13 +1,14 @@
 import "antd/dist/antd.less";
 //import "./App.less"
 import { Switch, Route, Redirect } from 'react-router-dom'
-import React from "react";
+import React, { useEffect } from "react";
 import { Spin } from "antd";
 import { DEPARTMENTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, EMPLOYEE_ROUTE, MY_REQUESTS_ROUTE, PROCUREMENT_ROUTE, DASHBOARD_ROUTE } from "./util/routes";
 import './styles/app.less'
 import AuthenticatedRoute from './presentation/AuthenticatedRoute'
 import { connect } from 'react-redux'
 import { EMPLOYEE_ROLE } from "./util/datas";
+import { Creators as NotificationCreators } from "./services/redux/notification/actions";
 const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))
 const Department = React.lazy(()=> import('./containers/Department'))
@@ -29,7 +30,13 @@ const SupplierModule = React.lazy(() => import("./containers/SupplierModule"))
 const LocalPurchaseOrderModule = React.lazy(() => import("./containers/LocalPurchaseOrderModule"))
 const GrnIndex = React.lazy(() => import("./containers/Grn"))
 const PaymentsModule = React.lazy(() => import("./containers/Payment"))
+
+
 function App(props) {
+  const { authUser, fetchNotifications } = props
+  useEffect(() => {
+    fetchNotifications();
+  }, [])
   return (
     <>
       <React.Suspense fallback={<Spin />}>
@@ -57,7 +64,7 @@ function App(props) {
 
           <Route path="/app/audit" component={Audit} {...props} />
           <Route path={LOGIN_ROUTE} component={Login} />
-          <Route path="/not-authorized" component={NotAuthorized} />
+          <Route path="/not-authorized" component={NotAuthorized} {...props}/>
           <AuthenticatedRoute path="/" ><Redirect to={HOME_ROUTE}/></AuthenticatedRoute>
         </Switch>
       </React.Suspense>
@@ -65,8 +72,14 @@ function App(props) {
   );
 }
 
-const mapStateToProps = (store) => ({
-  authUser: store.auth.user
+const mapActionToProps = dispatch => ({
+  fetchNotifications: () => dispatch(NotificationCreators.fetchNotifications())
 })
 
-export default connect(mapStateToProps, null)(App);
+const mapStateToProps = (store) => ({
+  authUser: store.auth.user,
+  notifications: store.notification.notifications,
+  notification_loading: store.notification.loading,
+})
+
+export default connect(mapStateToProps, mapActionToProps)(App);

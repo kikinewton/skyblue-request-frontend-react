@@ -14,6 +14,7 @@ import commentReducer from "./comment/reducers"
 import grnReducer from "./grn/reducers"
 import paymentReducer from "./payment/reducers"
 import dashboardReducer from "./dashboard/reducers"
+import notificationReducer from "./notification/reducers"
 
 export default combineReducers({
   auth: authReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   comment: commentReducer,
   grn: grnReducer,
   payment: paymentReducer,
-  dashboard: dashboardReducer
+  dashboard: dashboardReducer,
+  notification: notificationReducer,
 })

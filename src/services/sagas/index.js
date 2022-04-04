@@ -111,6 +111,7 @@ import {
 	watchUpdatePaymentDraft,
 } from "./payment"
 import { watchfetchDashboardData } from "./dashboard";
+import { watchFetchNotifications } from "./notification";
 
 export default function* rootSaga() {
 	yield all([
@@ -198,5 +199,7 @@ export default function* rootSaga() {
 		watchUpdatePaymentDraft(),
 
 		watchfetchDashboardData(),
+
+		watchFetchNotifications(),
 	]);
 }

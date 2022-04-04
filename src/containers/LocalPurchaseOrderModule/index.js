@@ -50,7 +50,7 @@ const LocalPurchaseOrderModule = (props) => {
           >
             <Menu.Item key="/app/local-purchase-orders">
               <NavLink to="/app/local-purchase-orders">
-                <span>Local Purchase Orders</span> 
+                <span>Local Purchase Orders</span>
                 {/* <span><MyBadge count={5} /></span> */}
               </NavLink>
             </Menu.Item>

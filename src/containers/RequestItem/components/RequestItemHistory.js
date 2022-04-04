@@ -120,7 +120,7 @@ const RequestItemHistory = (props) => {
               onChange={value => {
                 setSearchTerm(value.target.value)
                 handleChange()
-              }}  
+              }}
               placeholder="Search"
             />
           </Col>

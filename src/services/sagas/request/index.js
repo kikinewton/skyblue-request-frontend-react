@@ -1,5 +1,6 @@
 import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/request/actions'
+import { Creators as NotificationCreators } from "../../redux/notification/actions"
 
 import {
   fetchRequests as fetchRequestsApi,
@@ -97,6 +98,7 @@ export function* updateRequest(action) {
       console.log('API RESPONSE DAYA', responseData)
       openNotification('success', 'Update Request', response.message)
       yield put(Creators.updateRequestSuccess(responseData || {}))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Update Request', response.message)
       yield put(Creators.updateRequestFailure(response.message))

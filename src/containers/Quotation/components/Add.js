@@ -1,5 +1,5 @@
-import { Button, Card, Col, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
-import React from 'react'
+import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
+import React, { useState } from 'react'
 import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
 import { saveSingleDocument } from "../../../services/api/document"
@@ -26,7 +26,6 @@ const supplierColumns = props => [
     key: "actions",
     align: "right",
     render: (text, row) => {
-      //console.log('row supplier id', row.supp)
       const buttonType = props.selectedSupplier?.supplierId === row?.supplierId ? "primary" : "default"
       return (
         <>
@@ -57,17 +56,17 @@ const requestColumns = props => [
 ]
 
 const CreateQuotation = (props) => {
-  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
-    quotationSubmitting } = props
+  const { quotations, filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
+    quotationSubmitting, filterQuotations } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
   const [loadingDocument, setLoadingDocument] = React.useState(false)
   const [current, setCurrent] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
   const [selectedRequestItems, setSelectedRequestItems] = React.useState([])
+  const [supplierSearch, setSupplierSearch] = useState("")
   const history = useHistory()
 
   const handleUploadFile = async(file) => {
-    console.log('file object', file)
     setLoadingDocument(true)
     try {
       const response = await saveSingleDocument({file: file?.file, docType: ""})
@@ -91,32 +90,6 @@ const CreateQuotation = (props) => {
   }
 
   const handleSubmit = async ()=> {
-    // console.log('my file pload', files[0])
-    // const file = files[0].originFileObj
-    // //createQuotation(payload)
-    // console.log('SUBMIT', currentUser.id)
-    // try {
-    //   const response = await saveSingleDocument({file: file, docType: file?.type})
-    //   if(response.status === 'SUCCESS') {
-    //     const responseData = response.data
-    //     const docId = responseData.id
-    //     console.log('doc id', docId)
-    //     if(docId) {
-    //       console.log('oo yeah, lets create quotation')
-    //       createQuotation({
-    //         documentId: docId,
-    //         requestItemIds: selectedRequestItems.map(it => it.id), 
-    //         supplierId: selectedSupplier.supplierId
-    //       })
-    //     }
-    //     await fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST })
-    //   }
-    //   setFiles([])
-    // } catch (e) {
-    //   console.log('err')
-    // }
-
-    console.log('files', files)
     if(files.length < 1) {
       message.error("Please upload supporting document")
     } else {
@@ -145,6 +118,10 @@ const CreateQuotation = (props) => {
     fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST }) // eslint-disable-next-line
   }, [])
 
+  React.useEffect(() => {
+    filterQuotations(supplierSearch)
+  }, [supplierSearch])
+
   return (
     <React.Fragment>
       <Row>
@@ -168,6 +145,18 @@ const CreateQuotation = (props) => {
       <Card>
         {current === 0 && (
           <>
+            <Card>
+              <Row>
+                <Col span={2} offset={16}>
+                  Filter:
+                </Col>
+                <Col span={6}>
+                  <Input placeholder='search by supplier' 
+                    type="search" value={supplierSearch} 
+                    onChange={e => setSupplierSearch(e.target.value)}/>
+                </Col>
+              </Row>
+            </Card>
             <Row>
               <Col span={24}>
                 <span style={{fontWeight: "bold"}}>Selected Supplier: {selectedSupplier?.supplierName || "No supplier selected"}</span>
@@ -183,7 +172,7 @@ const CreateQuotation = (props) => {
                     },
                     selectedSupplier: selectedSupplier
                   })}
-                  dataSource={quotations}
+                  dataSource={filtered_quotations}
                   rowKey="supplierId"
                   size="small"
                   bordered
@@ -192,24 +181,11 @@ const CreateQuotation = (props) => {
                 />
               </Col>
             </Row>
-            {/* <Row style={{padding: "10px 0px 10px 0px"}}>
-              <Col span={24}>
-                <Button 
-                  onClick={() => {
-                    setCurrent(1)
-                  }}
-                  style="default" 
-                  style={{float: "right"}} disabled={!selectedSupplier?.supplierId}>
-                  Continue to select request items
-                  <RightOutlined />
-                </Button>
-              </Col>
-            </Row> */}
           </>
         )}
         {current === 1 && (
           <>
-            <Row>
+            <Row style={{paddingTop: 10, paddingBottom: 10}}>
               <Col span={24} style={{padding: "10px 0px 10px 0px"}}>
                 <span style={{fontWeight: "bold"}}>
                   selected Supplier: {selectedSupplier?.supplierName}
@@ -301,7 +277,7 @@ const CreateQuotation = (props) => {
                   disabled={quotationSubmitting || selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId || files.length < 1}
                 >
                   <CheckOutlined />
-                  SUBMIT
+                  Create Quotation for Supplier ({selectedSupplier?.supplierName})
                 </Button>
               </Col>
             </Row>

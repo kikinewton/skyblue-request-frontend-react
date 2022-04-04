@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Layout, Dropdown, Col, Row } from 'antd'
+import { Menu, Layout, Dropdown, Col, Row, notification } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
 import {
@@ -27,6 +27,7 @@ import { EMPLOYEE_ROLE } from '../../../util/datas';
 import PropTypes from "prop-types" 
 //const logo = require("../../../assets/logo.png")
 import logo from "../../../assets/logo512.png"
+import NotificationBadge from '../../../shared/NotificationBadge';
 //import { HOME_ROUTE, LOGIN_ROUTE } from '../../../util/routes';
 
 const CollapsibleLayout = (props) => {
@@ -34,7 +35,7 @@ const CollapsibleLayout = (props) => {
   const { Header, Sider, Content, Footer } = Layout
   const [key, setKey] = React.useState("home")
   const location = useLocation()
-  const { currentUser } = props
+  const { currentUser, notifications } = props
   const { path } = useRouteMatch()
 
   const toggle = () => {
@@ -189,28 +190,6 @@ const CollapsibleLayout = (props) => {
                   <span>Payments</span>
                 </NavLink>
               </Menu.Item>
-            //  <Menu.SubMenu
-            //   key="/app/payments"
-            //   icon={<ReconciliationOutlined />} 
-            //   title="Payments"
-            //  >
-            //   {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && (
-            //     <Menu.Item
-            //       key="/app/payments/goods-receive-notes"
-            //     >
-            //       <NavLink to="/app/payments/goods-receive-notes">
-            //         <span>GRNs Make Payment</span>
-            //       </NavLink>
-            //     </Menu.Item>
-            //     )}
-            //   <Menu.Item
-            //     key="/app/payments/pending-approval"
-            //     >
-            //     <NavLink to="/app/payments/pending-approval">
-            //       <span>Approve Payments</span>
-            //     </NavLink>
-            //   </Menu.Item>
-            //  </Menu.SubMenu>
            )}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, 
             EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && (
@@ -221,32 +200,6 @@ const CollapsibleLayout = (props) => {
               </NavLink>
             </Menu.Item>
           )}
-          {/* {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.requestMenu) && 
-            <Menu.SubMenu key="/app/requests" icon={<DesktopOutlined/>} title="Request Mgmt">
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && 
-                <Menu.Item key="/app/requests/endorse">
-                  <NavLink to="/app/requests/endorse">
-                    <span>Endorse</span>
-                  </NavLink>
-                </Menu.Item>
-              }
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && 
-                <Menu.Item key="/app/requests/approve">
-                  <NavLink to="/app/requests/approve">
-                    <span>Approve</span>
-                  </NavLink>
-                </Menu.Item>
-              }
-            </Menu.SubMenu>
-          } */}
-          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) &&   
-            <Menu.Item key="/app/quoatations">
-              <NavLink to="/app/quotations">
-                <SnippetsOutlined />
-                <span>Quotations</span>
-              </NavLink>
-            </Menu.Item>
-          } */}
           {authService.userHasAnyRole(currentUser.role, 
             [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
             <Menu.SubMenu
@@ -256,7 +209,12 @@ const CollapsibleLayout = (props) => {
             >
               <Menu.Item key="assign-suppliers">
                 <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
-                  Assign Supplier
+                  {notifications.assignSupplierProcurement ? (
+                    <NotificationBadge count={notifications.assignSupplierProcurement}>
+                      Assign Supplier
+                    </NotificationBadge>
+                  ) : (<span>Assign Supplier</span>)}
+                  
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={`procurement/rfqs`}>
@@ -264,16 +222,6 @@ const CollapsibleLayout = (props) => {
                   RFQs
                 </NavLink>
               </Menu.Item>
-              {/* <Menu.Item key="/app/procurement/create-quotation">
-                <NavLink to={`${PROCUREMENT_ROUTE}/create-quotation`}>
-                  Create Quotation
-                </NavLink>
-              </Menu.Item> */}
-              {/* <Menu.Item key={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
-                <NavLink to={`${PROCUREMENT_ROUTE}/add-local-purchase-order`}>
-                  Create LPO
-                </NavLink>
-              </Menu.Item> */}
               <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
                   Request Categories

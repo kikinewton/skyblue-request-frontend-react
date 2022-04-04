@@ -10,12 +10,7 @@ import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => PAYMENT_COLUMNS.concat([
-  {
-    title: "actions",
-    dataIndex: "actions",
-    key: "actions",
-    render: (text, row) => <EyeOutlined onClick={e =>  props.onView(row)} />
-  }
+  
 ])
 
 const PaymentDraftHistory = (props) => {

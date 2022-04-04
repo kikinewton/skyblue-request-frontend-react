@@ -156,30 +156,46 @@ const AssignSuppliersToRequests = (props) => {
         {current === 1 && (
           <Row>
             <Col span={24}>
+              <Row style={{paddingTop: 15, paddingBottom: 15}}>
+                <Col span={24}>
+                  <Card size='small' title="All Selected Requests">
+                    <Table 
+                      columns={requestColumns({})}
+                      dataSource={selected_requests}
+                      bordered
+                      size='small'
+                      rowKey="id"
+                      pagination={false}
+                    />
+                  </Card>
+                </Col>
+              </Row>
               <Row>
                 <Col span={24}>
-                  <Row gutter={24}>
-                    <Col span={16}>
-                      <Select 
-                        showSearch
-                        mode="multiple"
-                        allowClear
-                        style={{width: "100%"}}
-                        placeholder="Please select suppliers..."
-                        onChange={handleSelectSupplierChange}
-                        value={selectedSupplierIds}
-                        filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                      >
-                        <Select.Option value={undefined} onClick={() => console.log('lets create anonim')}>Select a supplier</Select.Option>
-                        {suppliers.map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
-                      </Select>
-                    </Col>
-                    <Col span={8}>
-                      <Button style={{width: "100%"}} type="link" onClick={() => setSupplierDrawer(true)}>
-                          Supplier not registered?
-                      </Button>
-                    </Col>
-                  </Row>
+                  <Card size='small' title="Assign Supplier">
+                    <Row gutter={24}>
+                      <Col span={16}>
+                        <Select 
+                          showSearch
+                          mode="multiple"
+                          allowClear
+                          style={{width: "100%"}}
+                          placeholder="Please select suppliers..."
+                          onChange={handleSelectSupplierChange}
+                          value={selectedSupplierIds}
+                          filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                          <Select.Option value={undefined} onClick={() => console.log('lets create anonim')}>Select a supplier</Select.Option>
+                          {suppliers.map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
+                        </Select>
+                      </Col>
+                      <Col span={8}>
+                        <Button style={{width: "100%"}} type="link" onClick={() => setSupplierDrawer(true)}>
+                            Supplier not registered?
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card>
                 </Col>
               </Row>
               <Divider />
@@ -303,21 +319,21 @@ const AssignSuppliersToRequests = (props) => {
             createSupplier(payload)
           }}
         >
-          <Form.Item name="name" label="Name"
+          <Form.Item name="name" label="Supplier Name"
             rules={[
               {required: true, message: "Name is required"}
             ]}
           >
             <Input type="text" />
           </Form.Item>
-          <Form.Item name="phone_number" label="Phone"
+          <Form.Item name="phone_number" label="Supplier Phone"
             rules={[
               {required: true, message: "Phone is required"}
             ]}
           >
             <Input type="text" />
           </Form.Item>
-          <Form.Item name="description" label="Description"
+          <Form.Item name="description" label="Supplier Description"
             rules={[
               {required: true, message: "Description is required"}
             ]}

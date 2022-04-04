@@ -181,6 +181,19 @@ const ApprovePendingList = (props) => {
     }
   }
 
+  const submitBtnText = () => {
+    switch(actionType) {
+      case UPDATE_REQUEST_TYPES.GM_APPROVE:
+        return "Approve Selected Requests"
+      case UPDATE_REQUEST_TYPES.GM_CANCEL:
+        return "Cancel Selected Requests"
+      case UPDATE_REQUEST_TYPES.GM_COMMENT:
+        return "Comment Selected Requests"
+      default:
+        return "SUBMIT"
+    }
+  }
+
   React.useEffect(()=> {
     resetRequest()
     props.fetchRequests({
@@ -287,7 +300,7 @@ const ApprovePendingList = (props) => {
       <Drawer
         forceRender
         visible={confirmDrawer}
-        title={`${actionType} REQUESTS`}
+        title={submitBtnText()}
         placement="right"
         width={1000}
         maskClosable={false}
@@ -304,7 +317,7 @@ const ApprovePendingList = (props) => {
               onClick={submit}
               loading={updating_request || submitting_comment}
             >
-              <CheckOutlined /> SUBMIT
+              <CheckOutlined /> {submitBtnText()}
             </Button>
           </Col>
         </Row>

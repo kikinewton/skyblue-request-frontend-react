@@ -166,6 +166,30 @@ const HodEndorsePendingList = (props) => {
     }
   }
 
+  const submitBtnText = () => {
+    if(actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE) {
+      return "Endorse Selected Requests"
+    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
+      return "Cancel Selected Requests"
+    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
+      return "Comment Selected Requests"
+    } else {
+      return "Submit"
+    }
+  }
+
+  const drawerTitleText = () => {
+    if(actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE) {
+      return "Endorse Selected Requests"
+    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
+      return "Cancel Selected Requests"
+    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
+      return "Comment Selected Requests"
+    } else {
+      return actionType
+    }
+  }
+
   React.useEffect(()=> {
     resetRequest()
     props.fetchRequests({
@@ -268,7 +292,7 @@ const HodEndorsePendingList = (props) => {
       <Drawer
         forceRender
         visible={confirmDrawer}
-        title={`${actionType} REQUESTS`}
+        title={drawerTitleText()}
         placement="right"
         width={900}
         maskClosable={false}
@@ -283,10 +307,10 @@ const HodEndorsePendingList = (props) => {
               type="primary" 
               style={{float: "right"}}
               onClick={submit}
-              loading={submitting_comment}
+              loading={submitting_comment || updating_request}
               disabled={selected_requests.length < 1 || updating_request}
             >
-              <CheckOutlined /> SUBMIT
+              <CheckOutlined /> {submitBtnText()}
             </Button>
           </Col>
         </Row>
