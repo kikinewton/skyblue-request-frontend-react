@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Menu, Layout, Dropdown, Col, Row, notification } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
@@ -35,7 +35,7 @@ const CollapsibleLayout = (props) => {
   const { Header, Sider, Content, Footer } = Layout
   const [key, setKey] = React.useState("home")
   const location = useLocation()
-  const { currentUser, notifications } = props
+  const { currentUser, notifications, fetchNotifications } = props
   const { path } = useRouteMatch()
 
   const toggle = () => {
@@ -57,6 +57,10 @@ const CollapsibleLayout = (props) => {
   const handleMenuChange = (value) => {
     setKey(value)
   }
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [])
 
   React.useEffect(()=> {
     console.log("pathname", location.pathname)

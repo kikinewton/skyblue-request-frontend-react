@@ -8,7 +8,7 @@ const NotificationBadge = ({
   children
 }) => {
   return (
-    <Badge count={count} status={status}>
+    <Badge offset="5px" count={count} status={status}>
       {children}
     </Badge>
   )
