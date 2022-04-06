@@ -12,6 +12,7 @@ import CreateQuotation from './components/Add'
 import { Menu } from "antd"
 import { FileDoneOutlined, SolutionOutlined } from '@ant-design/icons'
 import ListAllQuotations from './components/AllQuotations'
+import AddQuotationFOrUnregisteredSupplier from './components/AddQuotationForUnregisteredSupplier'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -30,6 +31,9 @@ const Quotation = (props) => {
         break
       case "/app/quotations/all":
         setKey("list-all")
+        break
+      case "/app/quotations/add-new-to-unregistered":
+        setKey("add-new-to-unregistered")
         break
       default:
         setKey("list")
@@ -67,10 +71,17 @@ const Quotation = (props) => {
                 <span>All Quoatations</span>
               </NavLink>
             </Menu.Item>
+            <Menu.Item key="add-new-to-unregistered">
+              <NavLink to="/app/quotations/add-new-to-unregistered">
+                <SolutionOutlined />
+                <span>Create Quotation for Unregistered Supplier</span>
+              </NavLink>
+            </Menu.Item>
           </Menu>
         )}
       >
         <Switch>
+          <AuthenticatedRoute path={`${path}/add-new-to-unregistered`} component={AddQuotationFOrUnregisteredSupplier} {...props} />
           <AuthenticatedRoute path={`${path}/add-new`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/all`} component={ListAllQuotations} {...props} />
           <AuthenticatedRoute path={`${path}`} component={ListQuotations} {...props} />
@@ -100,6 +111,7 @@ const mapStateToProps = (store) => ({
   fetching_suppliers: store.supplier.loading,
   supplier_submit_success: store.supplier.submit_success,
   submitting_supplier: store.supplier.submitting,
+  supplier: store.supplier.supplier,
 
   request_categories: store.requestCategory.request_categories,
   request_category_loading: store.requestCategory.loading,

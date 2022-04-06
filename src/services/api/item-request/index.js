@@ -266,6 +266,8 @@ export function fetchRequests(query) {
       return service({ url: `/requestItems/departmentHistory`, method: "GET" })
     case FETCH_REQUEST_TYPES.ALL_APPROVED_REQUESTS:
       return service({ url: `/requestItems?approved=true`, method: "GET" })
+    case FETCH_REQUEST_TYPES.PENDING_QUOTATION:
+      return service({url: `/requestItems?`, method: "GET"})
     default: {
       console.log('In default api call')
       return getAllItemRequests(query);

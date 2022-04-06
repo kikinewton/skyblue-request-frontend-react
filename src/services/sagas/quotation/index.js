@@ -61,7 +61,7 @@ export function* createQuotation(action) {
       message.success("Quotation Document Addedd Successfully")
     } else {
       message.error("Upload failed!")
-      yield put(Creators.createQuotationFailure(response.message))
+      yield put(Creators.createQuotationFailure(response?.message))
     }
   } catch (error) {
     console.log('err: ', error)

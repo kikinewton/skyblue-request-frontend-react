@@ -47,7 +47,7 @@ export const createSupplier = (state = INITIAL_STATE, action) => {
 
 export const createSupplierSuccess = (state = INITIAL_STATE, action) => {
   console.log('ADD SUPPLIER REDUCER', action)
-  return { ...state, submitting: false, error: action.error, submit_success: true};
+  return { ...state, submitting: false, error: action.error, submit_success: true, supplier: action.responsedata};
 };
 
 export const createSupplierFailure = (state = INITIAL_STATE, action) => {
