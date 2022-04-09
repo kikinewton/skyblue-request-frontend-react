@@ -1,3 +1,4 @@
+import { CheckCircleTwoTone } from "@ant-design/icons"
 import { Badge, Table, Tag } from "antd"
 import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
@@ -150,7 +151,15 @@ export const SUPPLIER_COLUMNS = [
   {
     title: 'Name',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    render: (text, row) => (
+      <>
+        {row.registered && (
+          <span style={{marginRight: 5}}><CheckCircleTwoTone/></span>
+        )}
+        <span>{text}</span>
+      </>
+    )
   },
   {
     title: 'Email',
@@ -161,6 +170,12 @@ export const SUPPLIER_COLUMNS = [
     title: 'Phone Number',
     dataIndex: 'phone_no',
     key: 'phone_no'
+  },
+  {
+    title: 'Registration',
+    dataSource: 'registered',
+    key: 'registered',
+    render: (text, row) => row.registered ? "Registered" : "Not Registered"
   },
   {
     title: 'Location',
@@ -178,7 +193,7 @@ export const SUPPLIER_COLUMNS = [
     key: 'accountNumber'
   },
   {
-    title: 'DESCRIPTION',
+    title: 'Description',
     dataIndex: 'description',
     key: 'description'
   }

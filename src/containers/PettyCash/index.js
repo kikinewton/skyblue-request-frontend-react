@@ -13,6 +13,7 @@ import { Menu } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 import ApprovePendingList from './components/ApprovePendingList';
 import { userHasAnyRole } from "../../services/api/auth"
+import NotificationBadge from '../../shared/NotificationBadge';
 
 
 export const REQUEST_ITEMS = [
@@ -23,7 +24,8 @@ export const REQUEST_ITEMS = [
 const PettyCashIndex = (props) => {
   console.log('petty cash index')
   const {
-    authUser
+    authUser,
+    notifications
   } = props
 
   const [key, setKey] = React.useState([])
@@ -70,19 +72,26 @@ const PettyCashIndex = (props) => {
             mode="horizontal"
             onClick={handleNavClick}
             forceSubMenuRender
-            mode="horizontal"
           >
             {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && (
               <Menu.Item key="hod-pending-endorse">
                 <NavLink to="/app/petty-cash/hod-pending-endorse">
-                  <span>Pending Endorsement</span>
+                  {notifications.pettyCashPendingEndorsement ? (
+                    <NotificationBadge count={notifications?.pettyCashPendingEndorsement}>
+                       <span>Awaiting Endorsement</span>
+                    </NotificationBadge>
+                  ) : (<span>Awaiting Endorsement</span>)}
                 </NavLink>
               </Menu.Item>
             )}
             {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]) && (
               <Menu.Item key="/petty-cash/gm-approve-list">
                 <NavLink to="/app/petty-cash/gm-approve-list">
-                  <span>Awaiting Approval</span>
+                {notifications.pettyCashPendingApproval ? (
+                    <NotificationBadge count={notifications?.pettyCashPendingApproval}>
+                       <span>Awaiting Endorsement</span>
+                    </NotificationBadge>
+                  ) : (<span>Awaiting Endorsement</span>)}
                 </NavLink>
               </Menu.Item>
             )}
@@ -129,7 +138,8 @@ const mapStateToProps = (store) => ({
   selected_petty_cash_requests: store.petty_cash.selected_requests,
   authUser: store.auth.user,
   submitting_comment: store.comment.submitting,
-  submit_comment_success: store.comment.submit_success
+  submit_comment_success: store.comment.submit_success,
+  notifications: store?.notification?.notifications || {}
 })
 
 const mapActionsToProps = (dispatch) => {

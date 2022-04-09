@@ -218,7 +218,6 @@ const CollapsibleLayout = (props) => {
                       Assign Supplier
                     </NotificationBadge>
                   ) : (<span>Assign Supplier</span>)}
-                  
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={`procurement/rfqs`}>

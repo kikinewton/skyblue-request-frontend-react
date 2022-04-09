@@ -123,7 +123,7 @@ const PaymentHistory = (props) => {
 
   return (
     <>
-      <AppLayout subNav={<PaymentsSubNav currentUser={current_user} />}>
+      <AppLayout subNav={<PaymentsSubNav currentUser={current_user} {...props} />}>
         <MyPageHeader
           title={(
             <>

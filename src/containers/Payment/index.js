@@ -117,7 +117,9 @@ const mapStateToProps = store => ({
   fetching_float_requests: store.float.loading,
   submit_float_request_success: store.float.submit_success,
   submitting_float_request: store.float.submitting,
-  suppliers: store.supplier.filtered_suppliers
+  suppliers: store.supplier.filtered_suppliers,
+
+  notifications: store.notification.notifications || {}
 })
 
 const mapActionToProps = dispatch => ({

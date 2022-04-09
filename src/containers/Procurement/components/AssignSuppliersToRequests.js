@@ -52,12 +52,18 @@ const AssignSuppliersToRequests = (props) => {
   } = props
   const [current, setCurrent] = useState(0)
   const [selectedSupplierIds, setSelectedSupplierIds] = useState([])
+  const [selectedUnregistredSupplierIds, setSelectedUnregisteredSupplierIds] = useState([])
   const [supplierDrawer, setSupplierDrawer] = useState(false)
   const [supplierForm] = Form.useForm()
 
   const handleSelectSupplierChange = (event) => {
     console.log("change sppluer event", event)
     setSelectedSupplierIds(event)
+  }
+
+  const handleSelectUnregisteredSupplierChange = (event) => {
+    console.log("change sppluer event", event)
+    setSelectedUnregisteredSupplierIds(event)
   }
 
   useEffect(() => {
@@ -127,7 +133,10 @@ const AssignSuppliersToRequests = (props) => {
                     size="small" 
                     bordered
                     columns={requestColumns({})}
-                    pagination={false}
+                    pagination={{
+                      pageSize: 30,
+                      showSizeChanger: false,
+                    }}
                     dataSource={requests}
                     rowSelection={{
                       onChange: (selectedRowKeys, selectedRows) => {
@@ -143,7 +152,7 @@ const AssignSuppliersToRequests = (props) => {
                   <Button style={{float: "right"}} 
                     type="primary"
                     onClick={() => setCurrent(1)}
-                    disabled={selected_requests.length > 10}
+                    disabled={selected_requests.length < 1}
                   >
                     Proceed to select suppliers
                     <RightOutlined />
@@ -156,25 +165,12 @@ const AssignSuppliersToRequests = (props) => {
         {current === 1 && (
           <Row>
             <Col span={24}>
-              <Row style={{paddingTop: 15, paddingBottom: 15}}>
-                <Col span={24}>
-                  <Card size='small' title="All Selected Requests">
-                    <Table 
-                      columns={requestColumns({})}
-                      dataSource={selected_requests}
-                      bordered
-                      size='small'
-                      rowKey="id"
-                      pagination={false}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              <Row>
+            <Row>
                 <Col span={24}>
                   <Card size='small' title="Assign Supplier">
                     <Row gutter={24}>
-                      <Col span={16}>
+                      <Col span={12}>
+                        Registered Suppliers:
                         <Select 
                           showSearch
                           mode="multiple"
@@ -186,15 +182,52 @@ const AssignSuppliersToRequests = (props) => {
                           filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           <Select.Option value={undefined} onClick={() => console.log('lets create anonim')}>Select a supplier</Select.Option>
-                          {suppliers.map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
+                          {suppliers.filter(it => it.registered).map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
+                        </Select>
+                      </Col>
+                      <Col span={12}>
+                        <Row>
+                          <Col span={10}>
+                            Unregistered Suppliers:
+                          </Col>
+                          <Col span={14}>
+                            <span style={{width: "100%", cursor: "pointer", color: "#1da57a"}} type="link" onClick={() => setSupplierDrawer(true)}>
+                              Supplier not registered?
+                            </span>
+                          </Col>
+                        </Row>
+                        <Select 
+                          showSearch
+                          mode="multiple"
+                          allowClear
+                          style={{width: "100%"}}
+                          placeholder="Please select suppliers..."
+                          onChange={handleSelectUnregisteredSupplierChange}
+                          value={selectedUnregistredSupplierIds}
+                          filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                          <Select.Option value={undefined} onClick={() => console.log('lets create anonim')}>Select a supplier</Select.Option>
+                          {suppliers.filter(it => !it.registered).map(it => (<Select.Option key={it.id} value={it.id}>{it?.name}</Select.Option>))}
                         </Select>
                       </Col>
                       <Col span={8}>
-                        <Button style={{width: "100%"}} type="link" onClick={() => setSupplierDrawer(true)}>
-                            Supplier not registered?
-                        </Button>
+                        
                       </Col>
                     </Row>
+                  </Card>
+                </Col>
+              </Row>
+              <Row style={{paddingTop: 15, paddingBottom: 15}}>
+                <Col span={24}>
+                  <Card size='small' title="All Selected Requests">
+                    <Table 
+                      columns={requestColumns({})}
+                      dataSource={selected_requests}
+                      bordered
+                      size='small'
+                      rowKey="id"
+                      pagination={false}
+                    />
                   </Card>
                 </Col>
               </Row>
@@ -275,13 +308,15 @@ const AssignSuppliersToRequests = (props) => {
                     loading={updating_request}
                     type="primary"
                     onClick={() => {
-                      updateRequest({
-                        updateType: UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS,
-                        payload: {
-                          requestItems: selected_requests,
-                          suppliers: selectedSupplierIds.map(id => suppliers.find(it => it.id === id))
-                        }
-                      })
+                      const payload = {
+                        requestItems: selected_requests,
+                        suppliers: selectedSupplierIds.map(id => suppliers.find(it => it.id === id)).concat(selectedUnregistredSupplierIds.map(id => suppliers.find(it => it.id === id)))
+                      }
+                      console.log('payload', payload)
+                      // updateRequest({
+                      //   updateType: UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS,
+                      //   payload
+                      // })
                     }}
                     disabled={selected_requests.length < 1 || selectedSupplierIds.length < 1 || updating_request}
                   >

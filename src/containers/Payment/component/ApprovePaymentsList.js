@@ -68,7 +68,7 @@ const ApprovePaymentList = (props) => {
     <>
       <AppLayout
         title="Payments"
-        subNav={<PaymentsSubNav currentUser={current_user} />}
+        subNav={<PaymentsSubNav currentUser={current_user} {...props} />}
       >
         <Row>
           <Col span={24}>
@@ -155,12 +155,14 @@ const ApprovePaymentList = (props) => {
             <Col span={24}>
               <Button
                 loading={submitting_payment}
-                type="primary" onClick={() => {
-                const payload = {
-                  approval: true
-                }
-                updatePaymentDraft(selectedDraft?.id, payload)
-              }}><CheckOutlined />
+                type="primary" 
+                onClick={() => {
+                  const payload = {
+                    approval: true
+                  }
+                  updatePaymentDraft(selectedDraft?.id, payload)
+                }}
+              ><CheckOutlined />
                 {buttonLabel()}
               </Button>
             </Col>

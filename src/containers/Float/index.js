@@ -14,6 +14,7 @@ import { EMPLOYEE_ROLE } from '../../util/datas';
 import { userHasAnyRole } from "../../services/api/auth";
 import GmRetireFloat from './components/GmRetireFloat';
 import AuditRetireFloat from './components/AuditRetireFloat';
+import NotificationBadge from '../../shared/NotificationBadge';
 
 export const REQUEST_ITEMS = [
   {id: 1, name: "Coca cola", reason: "REPLACE", purpose: "refreshment", createdAt: "2021-12-18 14:00:50", status: "PENDING", quantity: 10},
@@ -22,7 +23,8 @@ export const REQUEST_ITEMS = [
 
 const FloatIndex = (props) => {
   const {
-    currentUser
+    currentUser,
+    notifications
   } = props
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
@@ -57,12 +59,15 @@ const FloatIndex = (props) => {
             mode="horizontal"
             onClick={handleNavClick}
             forceSubMenuRender
-            mode="horizontal"
           >
             {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD]) && (
               <Menu.Item key="hod-pending-endorse">
                 <NavLink to="/app/float/hod-pending-endorse">
-                  <span>Floats Awaiting Endorsement</span>
+                  {notifications.floatPendingEndorsement ? (
+                    <NotificationBadge count={notifications?.floatPendingEndorsement}>
+                      <span>Floats Awaiting Endorsement</span>
+                    </NotificationBadge>
+                  ) : (<span>Floats Awaiting Endorsement</span>)}
                 </NavLink>
               </Menu.Item>
             )}
@@ -70,12 +75,20 @@ const FloatIndex = (props) => {
               <>
                 <Menu.Item key="/float/approve">
                   <NavLink to="/app/float/approve">
-                    <span>Floats Awaiting Approval</span>
+                  {notifications.floatPendingApprovalGM ? (
+                    <NotificationBadge count={notifications?.floatPendingApprovalGM}>
+                      <span>Floats Awaiting Approval</span>
+                    </NotificationBadge>
+                  ) : (<span>Floats Awaiting Approval</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="/float/gm-pending-retire">
                   <NavLink to="/app/float/gm-pending-retire">
-                    <span>Approve Float Retirement</span>
+                    {notifications?.retireFloatPendingApprovalGM ? (
+                      <NotificationBadge count={notifications?.retireFloatPendingApprovalGM}>
+                        <span>Approve Floats Awaiting Retirement</span>
+                      </NotificationBadge>
+                    ): (<span>Approve Floats Awaiting Retirement</span>)}
                   </NavLink>
                 </Menu.Item>
               </>
@@ -84,7 +97,11 @@ const FloatIndex = (props) => {
               <>
                 <Menu.Item key="/audit-pending-retire">
                   <NavLink to="/app/float/audit-pending-retire">
-                    <span>Approve Float Retirement</span>
+                    {notifications?.retireFloatPendingAuditorCheck ? (
+                      <NotificationBadge count={notifications?.retireFloatPendingAuditorCheck}>
+                        <span>Approve Float Retirement</span>
+                      </NotificationBadge>
+                    ) : (<span>Approve Float Retirement</span>)}
                   </NavLink>
                 </Menu.Item>
               </>
@@ -149,7 +166,8 @@ const mapStateToProps = (store) => ({
   authUser: store.auth,
 
   submitting_comment: store.comment.submitting,
-  submit_comment_success: store.comment.submit_success
+  submit_comment_success: store.comment.submit_success,
+  notifications: store.notification.notifications || {}
 })
 
 const mapActionsToProps = (dispatch) => {

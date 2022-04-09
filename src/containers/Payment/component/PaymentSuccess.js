@@ -12,7 +12,7 @@ const PaymentSuccess = (props) => {
   return (
     <React.Fragment>
       <AppLayout
-        subNav={<PaymentsSubNav currentUser={current_user} />}
+        subNav={<PaymentsSubNav currentUser={current_user} {...props} />}
       >
         <Result 
           status="success"

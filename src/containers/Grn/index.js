@@ -19,6 +19,7 @@ import { EMPLOYEE_ROLE } from '../../util/datas'
 import { formatCurrency } from '../../util/common-helper'
 import CreateFloatGrn from './components/CreateFloatGrn'
 import AllGrns from './components/AllGrns'
+import NotificationBadge from '../../shared/NotificationBadge'
 
 export const GRN_COLUMNS = [
   {
@@ -56,7 +57,8 @@ export const GRN_COLUMNS = [
 const GrnIndex = (props) => {
   const [key, setKey] = useState("/app/store/lpo")
   const {
-    currentUser
+    currentUser,
+    notifications
   } = props
   const { path } = useRouteMatch()
   const location = useLocation()
@@ -106,7 +108,11 @@ const GrnIndex = (props) => {
               <>
                 <Menu.Item key="/app/grn/lpos-pending-grn">
                   <NavLink to="/app/grn/lpos-pending-grn">
-                    Local Purchase Orders Awaiting GRN
+                    {notifications.lpoWithoutGRN ? (
+                      <NotificationBadge count={notifications.lpoWithoutGRN}>
+                        <span>Local Purchase Orders Awaiting GRN</span>
+                      </NotificationBadge>
+                    ) : (<span>Local Purchase Orders Awaiting GRN</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="/app/grn/all">
@@ -119,31 +125,37 @@ const GrnIndex = (props) => {
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
             <Menu.Item key="/app/grn/pending-endorsement">
               <NavLink to="/app/grn/pending-endorsement">
-                GRNs Awaiting Endorsement
+                {notifications.grnPendingEndorsement ? (
+                  <NotificationBadge count={notifications.grnsPendingEndorsement || 0}>
+                    GRNs Awaiting Endorsement
+                  </NotificationBadge>
+                ) : (<span>GRNs Awaiting Endorsement</span>)}
               </NavLink>
             </Menu.Item>
             )}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
               <Menu.Item key="/app/grn/pending-approval">
                 <NavLink to="/app/grn/pending-approval">
-                  GRNs Awaiting Approval
+                  {notifications.grnPendingApprovalGM ? (
+                    <NotificationBadge count={notifications.grnPendingApproval}>
+                      <span>GRNs Awaiting Approval</span>
+                    </NotificationBadge>
+                  ) : <span>GRNs Awaiting Approval</span>}
+                  
                 </NavLink>
               </Menu.Item>
             )}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER && (
               <Menu.Item key="/app/grn/pending-payment-advice">
                 <NavLink to="/app/grn/pending-payment-advice">
-                  GRNs Awaiting Payment Advice
+                  {notifications.grnAwaitingPaymentAdvice ? (
+                    <NotificationBadge count={notifications?.grnAwaitingPaymentAdvice}>
+                      <span>GRNs Awaiting Payment Advice</span>
+                    </NotificationBadge>
+                  ) : (<span>GRNs Awaiting Payment Advice</span>)}
                 </NavLink>
               </Menu.Item>
             )}
-            {/* {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
-              <Menu.Item key="/app/grn/new-float-grn">
-                <NavLink to="/app/grn/new-float-grn">
-                  Create GRN for Float
-                </NavLink>
-              </Menu.Item>
-            )} */}
           </Menu>
         )}
       >
@@ -185,7 +197,8 @@ const mapStateToProps = (store) => ({
   filtered_float_requests: store.float.filtered_requests,
 
   employees: store.employee.employees,
-  fetching_employees: store.employee.loading
+  fetching_employees: store.employee.loading,
+  notifications: store.notification.notifications || {}
 
 })
 

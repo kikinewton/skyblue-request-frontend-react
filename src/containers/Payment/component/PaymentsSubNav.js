@@ -4,16 +4,50 @@ import { CheckOutlined, FileFilled, WalletFilled, WalletOutlined } from "@ant-de
 import { NavLink, useLocation } from 'react-router-dom'
 import { userHasAnyRole } from "../../../services/api/auth"
 import { EMPLOYEE_ROLE } from '../../../util/datas'
+import NotificationBadge from '../../../shared/NotificationBadge'
 
 
 const PaymentsSubNav = (props) => {
   const [key, setKey] = useState("/app/payments")
   const location = useLocation()
   const {
-    currentUser
+    currentUser,
+    notifications
   } = props
 
   console.log('current user', currentUser)
+
+  const paymentApprovalNav = () => {
+    if(currentUser.role === EMPLOYEE_ROLE.ROLE_AUDITOR) {
+      if(notifications.paymentDraftPendingAuditorCheck) {
+        return (
+          <NotificationBadge count={notifications.paymentDraftPendingAuditorCheck}>
+            <span>Approve Payments</span>
+          </NotificationBadge>
+        )
+      } else {
+        return <span>Approve Payments</span>
+      }
+    } else if(currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
+      if(notifications.paymentDraftPendingApproval) {
+        return <NotificationBadge count={notifications.paymentDraftPendingApproval}>
+          <span>Approve Payments</span>
+        </NotificationBadge>
+      } else {
+        <span>Approve Payments</span>
+      }
+    } else if(currentUser.role === EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER) {
+      if(notifications.paymentDraftPendingAuthorizationFM) {
+        return <NotificationBadge count={notifications.paymentDraftPendingAuthorizationFM}>
+          <span>Authorize Payments</span>
+        </NotificationBadge>
+      } else {
+        return <span>Authorize Payments</span>
+      }
+    } else {
+      return <span>Approve Payments</span>
+    }
+  }
 
   useEffect(() => {
     const { pathname } = location
@@ -46,7 +80,11 @@ const PaymentsSubNav = (props) => {
           >
             <NavLink to="/app/payments/goods-receive-notes">
               <FileFilled />
-              <span>Create Payment Entry</span>
+              {notifications.grnReadyForPaymentAccount ? (
+                <NotificationBadge count={notifications.grnReadyForPaymentAccount}>
+                  <span>Create Payment Entry</span>
+                </NotificationBadge>
+              ) : <span>Create Payment Entry</span>}
             </NavLink>
           </Menu.Item>
         )}
@@ -56,7 +94,7 @@ const PaymentsSubNav = (props) => {
           >
             <NavLink to="/app/payments/pending-approval">
               <CheckOutlined />
-              <span>Approve Payments</span>
+              {paymentApprovalNav()}
             </NavLink>
           </Menu.Item>
         )}
@@ -65,19 +103,31 @@ const PaymentsSubNav = (props) => {
             <Menu.Item key="/app/payments/petty-cash/allocate-funds">
               <NavLink to="/app/payments/petty-cash/allocate-funds">
                 <WalletOutlined />
-                <span>Allocate Funds to Petty Cash</span>
+                {notifications?.pettyCashToAllocateFundsAccount ? (
+                  <NotificationBadge count={notifications?.pettyCashToAllocateFundsAccount}>
+                    <span>Allocate Funds to Petty Cash</span>
+                  </NotificationBadge>
+                ) : (<span>Allocate Funds to Petty Cash</span>)}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/payments/float/allocate-funds">
               <NavLink to="/app/payments/float/allocate-funds">
                 <WalletOutlined />
-                <span>Allocate Funds to Float</span>
+                {notifications?.floatToAllocateFundsAccount ? (
+                  <NotificationBadge count={notifications?.floatToAllocateFundsAccount}>
+                    <span>Allocate Funds to Float</span>
+                  </NotificationBadge>
+                ) : (<span>Allocate Funds to Float</span>)}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/payments/float/close-retire">
               <NavLink to="/app/payments/float/close-retire">
                 <WalletOutlined />
-                <span>Close Float Retirement</span>
+                {notifications?.floatToCloseAccount ? (
+                  <NotificationBadge count={notifications?.floatToCloseAccount}>
+                    <span>Close Float Retirement</span>
+                  </NotificationBadge>
+                ): (<span>Close Float Retirement</span>)}
               </NavLink>
             </Menu.Item>
           </>

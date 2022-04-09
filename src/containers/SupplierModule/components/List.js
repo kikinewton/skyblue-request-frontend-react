@@ -14,7 +14,7 @@ const columns = (props)=> SUPPLIER_COLUMNS.concat({
           <EditOutlined style={{cursor: 'pointer'}} onClick={()=> props.editRow(row)} />  
         </Col>
         <Col md={12} sm={12}>
-          <DeleteOutlined 
+          <DeleteOutlined
             style={{cursor: 'pointer'}} 
             onClick={() => props.deleteRow(row)} 
           />

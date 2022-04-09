@@ -14,11 +14,13 @@ import CreateLPODraft from './components/CreateLPODraft'
 import CreateLPO from './components/CreateLPO'
 import MyBadge from '../../presentation/MyBadge'
 import AllLocalPurchaseOrders from './components/AllLocalPurchaseOrders'
+import NotificationBadge from '../../shared/NotificationBadge'
 
 
 const LocalPurchaseOrderModule = (props) => {
   const [key, setKey] = useState()
   const location = useLocation()
+  const { notifications } = props
 
   const handleNavClick = (value) => {
     setKey(value)
@@ -61,7 +63,11 @@ const LocalPurchaseOrderModule = (props) => {
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new">
               <NavLink to="/app/local-purchase-orders/add-new">
-                <span>Create Local Purchase Order</span>
+                {notifications?.lpoDraftAwaitingApproval ? (
+                  <NotificationBadge count={notifications?.lpoDraftAwaitingApproval}>
+                    <span>Create Local Purchase Order</span>
+                  </NotificationBadge>
+                ) : (<span>Create Local Purchase Order</span>)}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/all">
@@ -103,6 +109,8 @@ const mapStateToProps = store => ({
   local_purchase_orders: store.local_purchase_order.local_purchase_orders,
   submitting_local_purchase_order: store.local_purchase_order.submitting,
   submit_local_purchase_order_success: store.local_purchase_order.submit_success,
+
+  notifications: store?.notification?.notifications || {}
 })
 
 const mapActionsToState = dispatch => ({
