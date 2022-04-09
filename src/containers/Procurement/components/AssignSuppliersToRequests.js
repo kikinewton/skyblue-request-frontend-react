@@ -40,6 +40,7 @@ const AssignSuppliersToRequests = (props) => {
     supplier_submit_success,
 
     requests,
+    supplier,
     requestLoading,
     resetRequest,
     fetchRequests,
@@ -81,8 +82,21 @@ const AssignSuppliersToRequests = (props) => {
     if(!submitting_supplier && supplier_submit_success) {
       supplierForm.resetFields()
       setSupplierDrawer(false)
+      console.log('supplierId', supplier?.id)
+      console.log('supplier registered', supplier?.registered)
+      if(!supplier?.registered && supplier?.id ) {
+        console.log('lets add to unregistreerd list')
+        const unrgisteredExists = selectedUnregistredSupplierIds.filter(id => id === supplier?.id)
+        console.log('exists supplier', unrgisteredExists)
+        if(unrgisteredExists.length === 0) {
+          console.log('supplier doesnt exist please lets add to list')
+          setSelectedUnregisteredSupplierIds(selectedUnregistredSupplierIds.concat(supplier?.id))
+        }  
+      }
     }
   }, [submitting_supplier, supplier_submit_success])
+
+
 
   useEffect(() => {
     if(!updating_request && request_update_success) {

@@ -52,6 +52,7 @@ const mapStateToProps = (store) => ({
   fetching_suppliers: store.supplier.loading,
   supplier_submit_success: store.supplier.submit_success,
   submitting_supplier: store.supplier.submitting,
+  supplier: store.supplier.supplier,
 
   request_categories: store.requestCategory.request_categories,
   request_category_loading: store.requestCategory.loading,
