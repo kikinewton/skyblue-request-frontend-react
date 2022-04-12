@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO }
+import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED }
  from '../../../util/quotation-types'
 import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 
@@ -30,7 +30,15 @@ export function getAllQuotationsWithoutDocuments(query) {
 
 export function getAllQuotationsWithoutDocumentsTest(query) {
   return service({
-    url: `${path}/supplierRequest`,
+    url: `${path}/supplierRequest?registered=true`,
+    method: 'GET'
+  })
+}
+
+export function getAllQuotationsWithoutDocumentsTestForUnregistered(query) {
+  console.log("Lets fetch for unregistered api----------------->")
+  return service({
+    url: `${path}/supplierRequest?registered=false`,
     method: 'GET'
   })
 }
@@ -61,6 +69,8 @@ export function getAllQuotations(query) {
       return getAllQuotationsWithoutDocuments()
     case QUOTATIONS_WITHOUT_DOCUMENT_TEST:
       return getAllQuotationsWithoutDocumentsTest()
+    case QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED:
+      return getAllQuotationsWithoutDocumentsTestForUnregistered()
     case QUOTATIONS_BY_SUPPLIER:
       return getQuotationBySupplier(query)
     case NOT_LINKED_TO_LPO:
@@ -75,6 +85,14 @@ export function updateQuotation(quotationId, payload) {
   return service({
     url: `${path}/${quotationId}/assignRequestDocument/${payload.documentId}`,
     method: 'PUT',
+    data: payload
+  })
+}
+
+export function generateQuotationForUnregisteredSupplier(payload) {
+  return service({
+    url: `/quotations/generateQuoteForSupplier`,
+    method: 'POST',
     data: payload
   })
 }

@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/payment/actions'
+import { Creators as NotificationCreators } from '../../redux/notification/actions'
 
 import {
   fetchPayments as fetchPaymentsApi,
@@ -62,6 +63,7 @@ export function* updatePayment(action) {
       const responseData = response.data
       yield put(Creators.updatePaymentSuccess(responseData))
       openNotification('success', 'Payment', response.message)
+      yield put(NotificationCreators.fetchNotifications())
       //yield put(Creators.fetchQuotations({}))
     } else {
       openNotification('error', 'Update Payment', response.message)
@@ -142,6 +144,7 @@ export function* updatePaymentDraft(action) {
       const responseData = response.data
       yield put(Creators.updatePaymentDraftSuccess(responseData))
       openNotification('success', 'Payment', response.message)
+      yield put()
       //yield put(Creators.fetchQuotations({}))
     } else {
       openNotification('error', 'Update Payment', response.message)

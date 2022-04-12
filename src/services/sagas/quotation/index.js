@@ -5,6 +5,7 @@ import {
   getAllQuotations as getAllQuotationsApi,
   updateQuotation as updateQuotationApi,
   createQuotation as createQuotationApi,
+  generateQuotationForUnregisteredSupplier,
 } from '../../api/quotation'
 import openNotification from '../../../util/notification'
 import { message } from 'antd'
@@ -20,12 +21,12 @@ export function* fetchQuotations(action) {
       console.log('response data', responseData)
       yield put(Creators.fetchQuotationsSuccess(responseData))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'FETCH QUOTATIONS', response.message)
       yield put(Creators.fetchQuotationsFailure(response.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Employees'
-    openNotification('error', 'Login', message)
+    const errorMsg = error?.response?.data?.message || error?.response?.data  || "Failed to fetch Quotations"
+    openNotification('error', 'FETCH QUOTATIONS', errorMsg)
     yield put(Creators.fetchQuotationsFailure(message))
   }
 }
@@ -71,6 +72,26 @@ export function* createQuotation(action) {
   }
 }
 
+export function* generateQuotation(action) {
+  console.log('generate quotation saga', action)
+  const { payload } = action
+  try {
+    const response = yield call(generateQuotationForUnregisteredSupplier, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.generateQuotationSuccess(response.data))
+      message.success("Quotation Document Addedd Successfully")
+    } else {
+      message.error("Upload failed!")
+      yield put(Creators.generateQuotationFailure(response?.message))
+    }
+  } catch (error) {
+    console.log('err: ', error)
+    const errors = error?.response?.data?.errors
+    message.error("Failed!")
+    yield put(Creators.generateQuotationFailure(errors[0]))
+  }
+}
+
 
 export function* watchFetchQuotations(action) {
   yield takeLatest(Types.FETCH_QUOTATIONS, fetchQuotations)
@@ -82,4 +103,8 @@ export function* watchUpdateQuotation(action) {
 
 export function* watchCreateQuotation(action) {
   yield takeLatest(Types.CREATE_QUOTATION, createQuotation)
+}
+
+export function* watchGenerateQuotation(action) {
+  yield takeLatest(Types.GENERATE_QUOTATION, generateQuotation)
 }

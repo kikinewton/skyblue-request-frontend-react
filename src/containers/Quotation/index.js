@@ -152,6 +152,10 @@ const mapActionsToState = (dispatch) => {
   updateQuotation: (quotationId, payload) => {
     dispatch(QuotationCreators.updateQuotation(quotationId, payload))
   },
+  generateQuotation: (payload) => {
+    console.log('in idndex generate quot', payload)
+    dispatch(QuotationCreators.generateQuotation(payload))
+  },
   filterQuotations: (filter) => {
     dispatch(QuotationCreators.filterQuotations(filter))
   },

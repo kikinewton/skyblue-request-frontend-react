@@ -67,6 +67,19 @@ export const createQuotationFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, submitSuccess: false };
 };
 
+
+export const generateQuotation = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, submitSuccess: false };
+};
+
+export const generateQuotationSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submitSuccess: true };
+};
+
+export const generateQuotationFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submitSuccess: false };
+};
+
 export const filterQuotations = (state = INITIAL_STATE, action) => {
   const {filter} = action
   const lowerFiter = filter.toLowerCase()
@@ -100,6 +113,10 @@ export const HANDLERS = {
   [Types.CREATE_QUOTATION]: createQuotation,
   [Types.CREATE_QUOTATION_SUCCESS]: createQuotationSuccess,
   [Types.CREATE_QUOTATION_FAILURE]: createQuotationFailure,
+
+  [Types.GENERATE_QUOTATION]: generateQuotation,
+  [Types.GENERATE_QUOTATION_SUCCESS]: generateQuotationSuccess,
+  [Types.GENERATE_QUOTATION_FAILURE]: generateQuotationFailure,
 
   [Types.FILTER_QUOTATIONS]: filterQuotations,
   

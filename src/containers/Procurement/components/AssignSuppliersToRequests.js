@@ -58,12 +58,10 @@ const AssignSuppliersToRequests = (props) => {
   const [supplierForm] = Form.useForm()
 
   const handleSelectSupplierChange = (event) => {
-    console.log("change sppluer event", event)
     setSelectedSupplierIds(event)
   }
 
   const handleSelectUnregisteredSupplierChange = (event) => {
-    console.log("change sppluer event", event)
     setSelectedUnregisteredSupplierIds(event)
   }
 
@@ -89,9 +87,8 @@ const AssignSuppliersToRequests = (props) => {
         const unrgisteredExists = selectedUnregistredSupplierIds.filter(id => id === supplier?.id)
         console.log('exists supplier', unrgisteredExists)
         if(unrgisteredExists.length === 0) {
-          console.log('supplier doesnt exist please lets add to list')
           setSelectedUnregisteredSupplierIds(selectedUnregistredSupplierIds.concat(supplier?.id))
-        }  
+        }
       }
     }
   }, [submitting_supplier, supplier_submit_success])
@@ -210,9 +207,9 @@ const AssignSuppliersToRequests = (props) => {
                             </span>
                           </Col>
                         </Row>
-                        <Select 
+                        <Select
                           showSearch
-                          mode="multiple"
+                          mode='multiple'
                           allowClear
                           style={{width: "100%"}}
                           placeholder="Please select suppliers..."
@@ -258,7 +255,7 @@ const AssignSuppliersToRequests = (props) => {
                   <Button style={{float: "right"}} 
                     type="primary"
                     onClick={() => setCurrent(2)}
-                    disabled={selected_requests.length < 1 || selectedSupplierIds.length < 1}
+                    disabled={selected_requests.length < 1 && selectedSupplierIds.length < 1 && selectedUnregistredSupplierIds.length < 1 }
                   >
                     Proceed to Confirm and submit
                     <RightOutlined />
@@ -272,14 +269,33 @@ const AssignSuppliersToRequests = (props) => {
           <Row>
             <Col span={24}>
               <Row>
-                <Col span={24}>
+                <Col span={11}>
                   <Card
                     size="small"
-                    title="Selected suppliers"
+                    title="Selected suppliers (Registered)"
                   >
-                    <List 
+                    <List
                       itemLayout="horizontal"
                       dataSource={selectedSupplierIds.map(id => suppliers.find(it => it.id === id))}
+                      renderItem={item => (
+                        <List.Item>
+                          <List.Item.Meta 
+                            title={item?.name}
+                            description={item?.description}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  </Card>
+                </Col>
+                <Col span={11} offset={2}>
+                  <Card
+                    size="small"
+                    title="Selected suppliers (Unregistered)"
+                  >
+                    <List
+                      itemLayout="horizontal"
+                      dataSource={selectedUnregistredSupplierIds?.map(id => suppliers.find(it => it.id === id))}
                       renderItem={item => (
                         <List.Item>
                           <List.Item.Meta 
@@ -327,12 +343,12 @@ const AssignSuppliersToRequests = (props) => {
                         suppliers: selectedSupplierIds.map(id => suppliers.find(it => it.id === id)).concat(selectedUnregistredSupplierIds.map(id => suppliers.find(it => it.id === id)))
                       }
                       console.log('payload', payload)
-                      // updateRequest({
-                      //   updateType: UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS,
-                      //   payload
-                      // })
+                      updateRequest({
+                        updateType: UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS,
+                        payload
+                      })
                     }}
-                    disabled={selected_requests.length < 1 || selectedSupplierIds.length < 1 || updating_request}
+                    disabled={selected_requests.length < 1 || updating_request}
                   >
                     SUBMIT
                     <RightOutlined />

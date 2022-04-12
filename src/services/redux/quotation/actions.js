@@ -16,6 +16,8 @@ export const { Types, Creators } = createActions(
 
     filterQuotations: ["filter"],
 
+    generateQuotation: ["payload"],
+
     resetQuotation: null
   }
 )

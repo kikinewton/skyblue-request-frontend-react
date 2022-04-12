@@ -42,6 +42,12 @@ export const REQUEST_COLUMNS = [
     key: 'quantity'
   },
   {
+    title: 'Department',
+    dataIndex: 'userDepartment',
+    key: 'userDepartment',
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
     title: "Unit Price",
     dataIndex: "unitPrice",
     key: "unitPrice",

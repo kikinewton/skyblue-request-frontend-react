@@ -76,7 +76,6 @@ const AddNewRequest = (props) => {
     departmentFieldRef.current.focus()
   }
 
-
   const handleSubmit = async ()=> {
     const payload = {
       multipleRequestItem: requests.map(it=> {
@@ -128,9 +127,6 @@ const AddNewRequest = (props) => {
         </Row>
         <Card 
           title="Create New Request Form"
-          extra={[
-            <Button type="link" onClick={() => history.push("/app/my-requests/petty-cash-requests/add-new")}>Create Petty Cash</Button>
-          ]}
         >
           <Row gutter={24}>
             <Col md={6}>

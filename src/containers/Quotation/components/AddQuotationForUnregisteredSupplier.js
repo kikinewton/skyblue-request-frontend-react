@@ -1,179 +1,358 @@
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Card, Row, Col, Steps, Table, Form, Input, Button, List } from 'antd'
-import React, { useState, useEffect } from 'react'
-import MyPageHeader from "../../../shared/MyPageHeader"
-import { REQUEST_COLUMNS } from '../../../util/constants'
-import { FETCH_REQUEST_TYPES } from '../../../util/request-types'
+import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
+import React, { useState } from 'react'
+import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED } from '../../../util/quotation-types'
+import { saveSingleDocument } from "../../../services/api/document"
+import { useHistory } from 'react-router'
+import UploadFiles from '../../../shared/UploadFiles'
+import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
+import FilesView from "../../../shared/FilesView"
+import { generateQuotationForUnregisteredSupplier } from '../../../services/api/quotation'
+import openNotification from '../../../util/notification'
+const { Step } = Steps
+
+const supplierColumns = props => [
+  {
+    title: "Supplier",
+    dataIndex: "supplierName",
+    key: "supplierName"
+  },
+  {
+    title: "Number of Items Assigned",
+    dataIndex: "requests",
+    key: "requests",
+    render: (text, row) => row?.requests?.length || "0"
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    align: "right",
+    render: (text, row) => {
+      const buttonType = props.selectedSupplier?.supplierId === row?.supplierId ? "primary" : "default"
+      return (
+        <>
+            <Button 
+              onClick={() => props.onSelect(row)} 
+              size="small" 
+              type={buttonType}
+            >
+              <RightOutlined />
+            </Button>
+        </>
+      )
+    }
+  }
+]
+
+const requestColumns = props => [
+  {
+    title: "Description",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity"
+  },
+]
+
+const requestUpdatePriceColumns = props => [
+  {
+    title: "Description",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity"
+  },
+  {
+    title: "Unit Price",
+    dataIndex: "unitPrice",
+    key: "unitPrice",
+    render: (text, row) => (
+      <>
+        <Input 
+          type="number" 
+          value={row?.unitPrice} 
+          onChange={e => {
+            props.onPriceChange(row,e.target.value)
+          }}
+        />
+      </>
+    )
+  },
+]
 
 const AddQuotationFOrUnregisteredSupplier = (props) => {
-  const {
-    requests,
-    requestLoading,
-    fetchRequests,
-    selected_requests,
-    setSelectedRequests,
-    supplier_submit_success,
-    createSupplier,
-    supplier,
-    submitting_supplier,
-    createQuotation,
-    quotationSubmitSuccess,
-    quotationSubmitting,
-    resetSupplier,
-  } = props
-  const [current, setCurrent] = useState(0)
-  const [form] = Form.useForm();
+  const { quotations, filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
+    quotationSubmitting, filterQuotations, generateQuotation } = props
+  const [files, setFiles] = React.useState([]) // eslint-disable-next-line
+  const [loadingDocument, setLoadingDocument] = React.useState(false)
+  const [document, setDocument] = React.useState(null)
+  const [current, setCurrent] = React.useState(0)
+  const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
+  const [selectedRequestItems, setSelectedRequestItems] = React.useState([])
+  const [supplierSearch, setSupplierSearch] = useState("")
 
-  useEffect(() => {
-    props.resetSupplier()
-    fetchRequests({
-      requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS
+  const handleGenerateQuot = async () => {
+    setLoadingDocument(true)
+    const payload = {
+      supplier: {
+        id: selectedSupplier?.supplierId,
+        name: selectedSupplier?.supplierName,
+        phone_no: "0242688682",
+      },
+      deliveryDate: "",
+      location: "",
+      phoneNo: "0242688682",
+      productDescription: selectedRequestItems.map(it => `${it.name} (GHS ${it.unitPrice})`).join(", "),
+    }
+    try {
+      const response = await generateQuotationForUnregisteredSupplier(payload)
+      if(response.status === RESPONSE_SUCCESS_CODE) {
+        openNotification('success', "Generate Quoatation Document", "Successfully Generated Quotation Document")
+        const doc = response?.data
+        console.log("supporting doc created!", doc)
+        setDocument(doc)
+        setFiles([doc])
+        setCurrent(3)
+      } else {
+        openNotification('error', "Generate Quoatation Document", response?.message || "Failed To Generated Quotation Document")
+      }
+    } catch (error) {
+      openNotification('error', "Generate Quoatation Document", "Failed To Generated Quotation Document")
+    } finally {
+      setLoadingDocument(false)
+    }
+  }
+
+  const handleSubmit = async ()=> {
+    if(!document) {
+      return message.error("Supporting document not available!")
+    }
+    const payload = {
+      supplier: selectedSupplier,
+      productDescription: selectedRequestItems.map(it => `${it.name} (GHS ${it.unitPrice})`).join(", "),
+    }
+    console.log('payload', payload)
+    createQuotation({
+      documentId: document?.id,
+      requestItemIds: selectedRequestItems.map(it => it.id), 
+      supplierId: selectedSupplier.supplierId
     })
+    
+    
+  }
+
+  React.useEffect(()=> {
+    if(!quotationSubmitting && quotationSubmitSuccess) {
+      setFiles([])
+      fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED })
+      setSelectedRequestItems([])
+      setCurrent(0)
+      setSelectedSupplier(null)
+    } 
+    // eslint-disable-next-line
+  }, [quotationSubmitSuccess, quotationSubmitting])
+
+  React.useEffect(()=> {
+    props.resetQuotation()
+    fetchQuotations({ requestType: QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED }) // eslint-disable-next-line
   }, [])
 
-  useEffect(()=> {
-    if(!submitting_supplier && supplier_submit_success) {
-      setCurrent(2)
-    }
-  }, [submitting_supplier, supplier_submit_success])
-
-  useEffect(()=> {
-    if(!quotationSubmitting && quotationSubmitSuccess) {
-      resetSupplier()
-      fetchRequests({
-        requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS
-      })
-      setCurrent(0)
-    }
-  }, [quotationSubmitting, quotationSubmitSuccess])
+  React.useEffect(() => {
+    filterQuotations(supplierSearch)
+  }, [supplierSearch])
 
   return (
-    <>
-      <MyPageHeader title="Create Quotation for Unregistered Supplier" />
-      <Row style={{marginTop: 10, marginBottom: 10}}>
+    <React.Fragment>
+      <Row>
         <Col span={24}>
-          <Steps current={0} size="small">
-            <Steps.Step title="Select Requests"  />
-            <Steps.Step title="Create Unregistered Supplier" />
-            <Steps.Step title="Confirm and submit" />
-          </Steps>
+          <PageHeader
+            // onBack={() => history.push("/app/quotations")}
+            title="Create Quotation Document For Unregistered Supplier"
+            style={{padding: 0}}
+          />
+        </Col>
+      </Row>
+      <Row style={{padding: 10}}>
+        <Col span={24}>
+          <Steps current={current} size="small">
+            <Step title="Select Supplier" icon={<UserSwitchOutlined />} />
+            <Step title="Select Request Items" icon={<DiffOutlined />} />
+            <Step title="Generate Supporting Document" icon={<UploadOutlined />} />
+            <Step title="Create Quotation" icon={<UploadOutlined />} />
+          </Steps>  
         </Col>
       </Row>
       <Card>
         {current === 0 && (
           <>
-            <Table 
-              loading={requestLoading}
-              columns={REQUEST_COLUMNS}
-              dataSource={requests}
-              size="small"
-              bordered
-              rowKey="id"
-              rowSelection={{
-                selectedRowKeys: selected_requests?.map(it => it.id),
-                onChange: (selectedRowKeys, selectedRows) => {
-                  setSelectedRequests(selectedRows)
-                },
-              }}
-            />
-            <Row style={{marginTop: 10, marginBottom: 10}}>
-              <Col span={12} style={{textAlign: "left"}}>
-                <Button type="default" disabled>
-                  Back
-                </Button>
+            <Card>
+              <Row>
+                <Col span={2} offset={16}>
+                  Filter:
+                </Col>
+                <Col span={6}>
+                  <Input placeholder='search by supplier'
+                    type="search" value={supplierSearch} 
+                    onChange={e => setSupplierSearch(e.target.value)}/>
+                </Col>
+              </Row>
+            </Card>
+            <Row>
+              <Col span={24}>
+                <span style={{fontWeight: "bold"}}>Selected Supplier: {selectedSupplier?.supplierName || "No supplier selected"}</span>
               </Col>
-              <Col span={12} style={{textAlign: "right"}}>
-                <Button type="primary" disabled={selected_requests.length == 0} onClick={() => setCurrent(1)}>
-                  Proceed to Create Supplier
-                  <RightOutlined />
-                </Button>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Table
+                  columns={supplierColumns({
+                    onSelect: (row) => {
+                      setSelectedSupplier(row)
+                      setCurrent(1)
+                    },
+                    selectedSupplier: selectedSupplier
+                  })}
+                  dataSource={filtered_quotations}
+                  rowKey="supplierId"
+                  size="small"
+                  bordered
+                  loading={props.quotationLoading}
+                  pagination={false}
+                />
               </Col>
             </Row>
           </>
         )}
         {current === 1 && (
           <>
-            <Form
-              form={form}
-              onFinish={values => {
-                console.log(values)
-                const payload = {
-                  name: values.name,
-                  phone_no: values.phone,
-                  description: values.description,
-                  registered: false,
-                }
-                createSupplier(payload)
-              }}
-              layout="vertical"
-            >
-              <Form.Item name="name" label="Supplier Name" rules={[{required: true, text: "Name required"}]}>
-                <Input  />
-              </Form.Item>
-              <Form.Item name="phone" label="Supplier Phone" rules={[{required: true, text: "Phone required"}]}>
-                <Input  />
-              </Form.Item>
-              <Form.Item name="description" label="Description">
-                <Input.TextArea rows={4} />
-              </Form.Item>
-              <Form.Item>
-                <Row>
-                  <Col span={12}>
-                    <Button onClick={e => setCurrent(0)}>
-                      <LeftOutlined />
-                      Selecte items
-                    </Button>
-                  </Col>
-                  <Col span={12} style={{textAlign: "right"}}>
-                    <Button type="primary" htmlType="submit" loading={submitting_supplier}>
-                      Create Supplier
-                    </Button>
-                  </Col>
-                </Row>
-              </Form.Item>
-            </Form>
+            <Row style={{paddingTop: 10, paddingBottom: 10}}>
+              <Col span={24} style={{padding: "10px 0px 10px 0px"}}>
+                <span style={{fontWeight: "bold"}}>
+                  selected Supplier: {selectedSupplier?.supplierName}
+                </span>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Table
+                  columns={requestColumns({})}
+                  dataSource={selectedSupplier?.requests || []}
+                  size="small"
+                  rowKey="id"
+                  bordered
+                  pagination={false}
+                  rowSelection={{
+                    onChange: (selectedRowKeys, selectedRows) => {
+                      setSelectedRequestItems(selectedRows)
+                    },
+                    selectedRowKeys: selectedRequestItems?.map(it=> it.id),
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row style={{padding: "10px 0px 10px 0px"}}>
+              <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                <Button type="default" onClick={()=> setCurrent(0)}>
+                  <LeftOutlined />
+                  Select Supplier
+                </Button>
+                <Button type="primary" onClick={() => setCurrent(2)} disabled={selectedRequestItems?.length < 1}>
+                  Price Items And Generate Quotation
+                  <RightOutlined />
+                </Button>
+              </Col>
+            </Row>
           </>
         )}
         {current === 2 && (
           <>
-            <Card size='small' title="Supplier Details">
-              <Row>
-                <Col span={24}>
-                  <Button 
-                    loading={quotationSubmitting}
-                    disabled={!supplier.id || selected_requests.length < 1}
-                    onClick={e => {
-                      createQuotation({ 
-                        requestItemIds: selected_requests.map(it => it.id), 
-                        supplierId: supplier.id
-                      })
-                    }}
-                    type="primary">Create Quotation</Button>
-                </Col>
-              </Row>
-              <List>
-                <List.Item>
-                  <List.Item.Meta title="Supplier Name" description={supplier?.name} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta title="Supplier Phone" description={supplier?.phone} />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta title="Description" description={supplier?.namdescriptione} />
-                </List.Item>
-              </List>
-              <Table 
-                columns={REQUEST_COLUMNS}
-                dataSource={requests}
-                size="small"
-                bordered
-                rowKey="id"
-              />
-            </Card>
+            <Row>
+              <Col span={24}>
+                <span style={{fontWeight: "bold"}}>Selected Supplier: {selectedSupplier?.supplierName}</span>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                {/* <UploadFiles 
+                  files={files}
+                  onUpload={handleUploadFile}
+                  loading={loadingDocument}
+                /> */}
+                <Table 
+                  columns={requestUpdatePriceColumns({
+                    onPriceChange: (row, value) => {
+                      console.log("lets update price", row, value)
+                      setSelectedRequestItems(selectedRequestItems.map(it => {
+                        if(it.id === row?.id) {
+                          return {...it, unitPrice: value}
+                        } else {
+                          return it
+                        }
+                      }))
+                    }
+                  })}
+                  dataSource={selectedRequestItems}
+                  size="small"
+                  bordered
+                  rowKey="id"
+                  pagination={false}
+                />
+              </Col>
+            </Row>
+            <Row style={{padding: "10px 0px 10px 0px"}}>
+              <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                <Button type="default" onClick={()=> setCurrent(1)}>
+                  <LeftOutlined />
+                  Select Request Items
+                </Button>
+                <Button
+                  loading={quotationSubmitting}
+                  type="primary"
+                  onClick={() => handleGenerateQuot()}
+                  disabled={quotationSubmitting || selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId}
+                >
+                  <CheckOutlined />
+                  Generate Quotation ({selectedSupplier?.supplierName})
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
+        {current === 3 && (
+          <>
+            <Row>
+              <Col span={24}>
+                <FilesView files={files} />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+              <Button type="default" onClick={()=> setCurrent(2)}>
+                  <LeftOutlined />
+                  Generate Supporting Document
+                </Button>
+                <Button
+                  loading={quotationSubmitting}
+                  type="primary"
+                  onClick={() => handleSubmit()}
+                  disabled={quotationSubmitting || selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId}
+                >
+                  <CheckOutlined />
+                  Create Quotation ({selectedSupplier?.supplierName})
+                </Button>
+              </Col>
+            </Row>
           </>
         )}
       </Card>
-    </>
+    </React.Fragment>
   )
 }
 
