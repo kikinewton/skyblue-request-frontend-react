@@ -22,7 +22,7 @@ const PaymentsSubNav = (props) => {
       if(notifications.paymentDraftPendingAuditorCheck) {
         return (
           <NotificationBadge count={notifications.paymentDraftPendingAuditorCheck}>
-            <span>Approve Payments</span>
+            <span>Check Payments</span>
           </NotificationBadge>
         )
       } else {
