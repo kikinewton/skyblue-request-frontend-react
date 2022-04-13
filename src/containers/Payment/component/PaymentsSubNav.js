@@ -26,7 +26,7 @@ const PaymentsSubNav = (props) => {
           </NotificationBadge>
         )
       } else {
-        return <span>Approve Payments</span>
+        return <span>Check Payments</span>
       }
     } else if(currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
       if(notifications.paymentDraftPendingApproval) {
