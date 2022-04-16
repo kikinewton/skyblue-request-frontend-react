@@ -68,7 +68,7 @@ const Quotation = (props) => {
             <Menu.Item key="list-all">
               <NavLink to="/app/quotations/all">
                 <SolutionOutlined />
-                <span>All Quoatations</span>
+                <span>All Quotations</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="add-new-to-unregistered">

@@ -5,7 +5,7 @@ import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas
 // import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
-import { CheckCircleTwoTone, DollarTwoTone, FileExcelFilled, PercentageOutlined, RightOutlined } from '@ant-design/icons'
+import { CheckCircleTwoTone, CheckOutlined, DollarTwoTone, FileExcelFilled, LeftOutlined, PercentageOutlined, RightOutlined } from '@ant-design/icons'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import MyPageHeader from "../../../shared/MyPageHeader"
 import { formatCurrency } from "../../../util/common-helper"
@@ -34,7 +34,7 @@ const NewPayment = (props) => {
   const handleSubmit = async (values) => {
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
     const payload = {
-      goodsReceivedNote: grn,
+      goodsReceivedNote: {id: grn?.id},
       chequeNumber,
       paymentMethod,
       purchaseNumber,
@@ -72,7 +72,7 @@ const NewPayment = (props) => {
           <Col span={24}>
             <Steps current={current} size="small">
               <Steps.Step icon={<FileExcelFilled />} title="Review Documents" key={0} />
-              <Steps.Step icon={<DollarTwoTone />} title="Make Payment" key={1} />
+              <Steps.Step icon={<CheckOutlined />} title="Make Payment" key={1} />
             </Steps>
           </Col>
         </Row>
@@ -102,7 +102,7 @@ const NewPayment = (props) => {
                     <Row style={{margin: "10px 0 10px 0"}}>
                       <Col span={24}>
                         <Button 
-                          type="primary" 
+                          type="default" 
                           style={{float: "right"}}
                           onClick={() => {
                             setCurrent(1)
@@ -169,14 +169,29 @@ const NewPayment = (props) => {
                     <Input prefix={selectedCurrency} type="number" min="0" />
                   </Form.Item>
                   <Form.Item >
-                    <Button
-                      type="primary" 
-                      htmlType="submit" 
-                      className="bs-form-button"
-                      loading={submitting_payment}
-                    >
-                      Submit
-                    </Button>
+                    <Row>
+                      <Col span={12} style={{textAlign: "left"}}>
+                          <Button
+                            type="default"
+                            loading={submitting_payment}
+                            onClick={e => setCurrent(0)}
+                          >
+                            <LeftOutlined />
+                            Review GRN
+                          </Button>
+                      </Col>
+                      <Col span={12} style={{textAlign: "left"}}>
+                        <Button
+                          type="primary" 
+                          htmlType="submit"
+                          block
+                          loading={submitting_payment}
+                        >
+                          <CheckOutlined />
+                          Draft Payment
+                        </Button>
+                      </Col>
+                    </Row>
                   </Form.Item>
                 </Form>
                 )}
