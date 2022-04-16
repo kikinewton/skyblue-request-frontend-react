@@ -5,7 +5,7 @@ import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas
 // import * as paymentDraftService from '../../../services/api/payment-draft'
 import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
-import { CheckCircleTwoTone, DollarTwoTone, FileExcelFilled, RightOutlined } from '@ant-design/icons'
+import { CheckCircleTwoTone, DollarTwoTone, FileExcelFilled, PercentageOutlined, RightOutlined } from '@ant-design/icons'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import MyPageHeader from "../../../shared/MyPageHeader"
 import { formatCurrency } from "../../../util/common-helper"
@@ -34,7 +34,7 @@ const NewPayment = (props) => {
 
   const handleSubmit = async (values) => {
     setSubmitting(true)
-    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency } = values
+    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
     const payload = {
       goodsReceivedNote: grn,
       chequeNumber,
@@ -43,7 +43,8 @@ const NewPayment = (props) => {
       bank,
       paymentAmount: parseInt(paymentAmount),
       paymentStatus,
-      currency
+      currency,
+      withholdingTaxPercentage,
     }
     createPaymentDraft(payload)
   }
@@ -114,7 +115,7 @@ const NewPayment = (props) => {
                         </Button>
                       </Col>
                     </Row>
-                  </> 
+                  </>
                 )}
                 {current === 1 && (
                 <Form
@@ -128,7 +129,8 @@ const NewPayment = (props) => {
                     paymentMethod: "CHEQUE",
                     purchaseNumber: "",
                     paymentStatus: "COMPLETED",
-                    currency: "GHS"
+                    currency: "GHS",
+                    withholdingTaxPercentage: 0
                   }}
                 >
                   <Form.Item label="Total Amount">
@@ -162,11 +164,14 @@ const NewPayment = (props) => {
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
+                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage">
+                    <Input  prefix={<PercentageOutlined/>} type="number" />
+                  </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
                     <Input prefix={selectedCurrency} type="number" min="0" />
                   </Form.Item>
                   <Form.Item >
-                    <Button 
+                    <Button
                       type="primary" 
                       htmlType="submit" 
                       className="bs-form-button"
