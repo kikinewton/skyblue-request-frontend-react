@@ -27,13 +27,11 @@ const NewPayment = (props) => {
     submit_payment_success,
   } = props
   const [ form ] = Form.useForm()
-  const [submitting, setSubmitting] = React.useState(false)
   const [current, setCurrent] = useState(0)
   const [selectedCurrency, setSelectedCurrency] = useState("GHS")
   const { grnId } = useParams()
 
   const handleSubmit = async (values) => {
-    setSubmitting(true)
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
     const payload = {
       goodsReceivedNote: grn,
@@ -175,8 +173,7 @@ const NewPayment = (props) => {
                       type="primary" 
                       htmlType="submit" 
                       className="bs-form-button"
-                      loading={submitting}
-                      disabled={submitting}
+                      loading={submitting_payment}
                     >
                       Submit
                     </Button>

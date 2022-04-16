@@ -165,14 +165,15 @@ export function* createPaymentDraft(action) {
       yield put(Creators.createPaymentDraftSuccess(response.data))
       message.success("Payment created successfully")
     } else {
+
       message.error(response?.message)
       yield put(Creators.createPaymentDraftFailure(response.message))
     }
   } catch (error) {
     console.log('err: ', error?.response)
-    const errors = error?.response?.data?.errors
-    message.error("Failed!")
-    yield put(Creators.createPaymentDraftFailure(errors[0]))
+    const errors = error?.response?.data?.message || "Payment Fialed"
+    message.error(errors)
+    yield put(Creators.createPaymentDraftFailure(errors))
   }
 }
 
