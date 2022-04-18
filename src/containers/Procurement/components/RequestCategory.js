@@ -22,7 +22,7 @@ const columns = (props) => [
     key: 'description'
   },
   {
-    title: "Acions",
+    title: "Actions",
     dataIndex: "operation",
     key: "operation",
     align: "right",
