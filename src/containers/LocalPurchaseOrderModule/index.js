@@ -52,27 +52,27 @@ const LocalPurchaseOrderModule = (props) => {
           >
             <Menu.Item key="/app/local-purchase-orders">
               <NavLink to="/app/local-purchase-orders">
-                <span>Local Purchase Orders</span>
+                <span>LPOs For Suppliers</span>
                 {/* <span><MyBadge count={5} /></span> */}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new-draft">
               <NavLink to="/app/local-purchase-orders/add-new-draft">
-                <span>Draft Local Purchase Order</span>
+                <span>Draft LPO</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new">
               <NavLink to="/app/local-purchase-orders/add-new">
                 {notifications?.lpoDraftAwaitingApproval ? (
                   <NotificationBadge count={notifications?.lpoDraftAwaitingApproval}>
-                    <span>Create Local Purchase Order</span>
+                    <span>Create LPO</span>
                   </NotificationBadge>
-                ) : (<span>Create Local Purchase Order</span>)}
+                ) : (<span>Create LPO</span>)}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/all">
               <NavLink to="/app/local-purchase-orders/all">
-                <span>All Local Purchase Orders</span>
+                <span>All LPOs</span>
               </NavLink>
             </Menu.Item>
           </Menu>

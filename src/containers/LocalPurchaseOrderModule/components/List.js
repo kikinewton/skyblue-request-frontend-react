@@ -94,7 +94,7 @@ const List = (props) => {
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
           <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
-            fetchLocalPurchaseOrders({})
+            fetchLocalPurchaseOrders({lpoWithoutGRN: true})
           }} /></span>
         </Col>
       </Row>
