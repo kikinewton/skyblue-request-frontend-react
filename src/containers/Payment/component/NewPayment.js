@@ -30,12 +30,8 @@ const NewPayment = (props) => {
   const [current, setCurrent] = useState(0)
   const [selectedCurrency, setSelectedCurrency] = useState("GHS")
   const { grnId } = useParams()
-
-  const getDefaultCurrency = () => {
-    const requestItems = grn?.receivedItems || []
-    const currencyCode = requestItems[0]?.currency || "GHS";
-    return currencyCode;
-  }
+  const [percentage, setPercenatage] = useState(0)
+  const [amount, setAmount] = useState(0)
 
   const handleSubmit = async (values) => {
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
@@ -53,6 +49,15 @@ const NewPayment = (props) => {
       withholdingTaxPercentage,
     }
     createPaymentDraft(payload)
+  }
+
+  const getWithholdingTaxPercentageAmount = (amnt, perc) => {
+    const amount = Number(amnt)
+    const percentage = Number(perc)
+    if(!amount || !percentage) return 0
+    const ratio = percentage / 100;
+    const withholdingTaxAmount = (amount * ratio).toFixed(2);
+    return (amount - withholdingTaxAmount).toFixed(2);
   }
 
   React.useEffect(()=> {
@@ -170,11 +175,15 @@ const NewPayment = (props) => {
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage">
+                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
                     <Input  prefix={<PercentageOutlined/>} type="number" />
                   </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
-                    <Input prefix={selectedCurrency} type="number" min="0" />
+                    <Input prefix={selectedCurrency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                  </Form.Item>
+                  <Form.Item label="Amount After Withholding Tax">
+                    <Input disabled prefix={selectedCurrency}
+                      value={getWithholdingTaxPercentageAmount(amount, percentage)}  />
                   </Form.Item>
                   <Form.Item >
                     <Row>
