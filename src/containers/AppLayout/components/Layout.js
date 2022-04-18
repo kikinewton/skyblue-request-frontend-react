@@ -396,7 +396,7 @@ const CollapsibleLayout = (props) => {
           </Row>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Blueskies Procurement System ©2021 Created by Tech-Bridge
+          {`Blueskies Procurement System ©${new Date().getFullYear()} Created by Tech-Bridge`}
         </Footer>
       </Layout>
     </Layout>
