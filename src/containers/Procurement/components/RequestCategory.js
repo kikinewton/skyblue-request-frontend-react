@@ -163,7 +163,7 @@ const RequestCategory = (props) => {
         }}
         title="Edit Request Category"
       >
-        <Form form={updateForm} onFinish={handleUpdate} layout="vertical" form={editForm} requiredMark={false}
+        <Form form={updateForm} onFinish={handleUpdate} layout="vertical" requiredMark={false}
           initialValues={{ name: request_category?.name, description: request_category?.description }}
         >
           <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Name required' }]}>
