@@ -2,44 +2,59 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types"
 import { REQUEST_COLUMNS } from '../util/constants';
 import MyPdfView from '../presentation/MyPdfView';
-import { Row, Col, Table, List, Image } from 'antd';
+import { Row, Col, Table, List, Image, Card } from 'antd';
 import { prettifyDateTime } from '../util/common-helper';
 import { generateResourceUrl } from '../services/api/document';
 import MyImageView from '../presentation/MyImageView';
 import { BASE_URL } from '../services/api/urls';
+import FilesView from './FilesView';
 const columns = REQUEST_COLUMNS
 
-const QuotationDetails = ({quotation, showItems=true}) => {
+const QuotationDetails = ({quotation, showItems=false, files}) => {
   const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <List
-            itemLayout="horizontal"
-          >
-            <List.Item>
-              <List.Item.Meta title="Quotation Reference" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title="Created Date" description={prettifyDateTime(quotation?.quotation?.createdAt || quotation?.createdAt) || "N/A"} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title="Supplier" description={quotation?.quotation?.supplier?.name || quotation?.supplier?.name} />
-            </List.Item>
-          </List>
-        </Col>
-      </Row>
+      <Card size='small' title="Quotation Details" style={{marginBottom: 20}}>
+        <Row>
+          <Col span={24}>
+            <List
+              itemLayout="horizontal"
+            >
+              <List.Item>
+                <List.Item.Meta title="Quotation Reference" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Created Date" description={prettifyDateTime(quotation?.quotation?.createdAt || quotation?.createdAt) || "N/A"} />
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta title="Supplier" description={quotation?.quotation?.supplier?.name || quotation?.supplier?.name} />
+              </List.Item>
+            </List>
+          </Col>
+        </Row>
+        <Row style={{marginTop: 20}}>
+          <Col span={24}>
+            <span style={{fontWeight: "bold"}}>Quotation Supporting Document</span>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <FilesView 
+              files={files || [quotation?.quotation?.requestDocument || quotation?.requestDocument]}
+            />
+          </Col>
+        </Row>
+      </Card>
       {showItems && (
         <>
-          <Row>
+          <Row style={{marginTop: 20}}>
             <Col span={24}>
-              <span style={{fontWeight: "bold"}}>Request Item Entries</span>
+              <span style={{fontWeight: "bold"}}>Quotation Supporting Document</span>
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              <Table 
+              <Table
                 rowKey="id"
                 columns={columns}
                 dataSource={quotation?.requestItems || []}
@@ -51,36 +66,14 @@ const QuotationDetails = ({quotation, showItems=true}) => {
           </Row>
         </>
       )}
-      <Row style={{padding: "10px 0 10px 0"}}>
-        <Col span={24}>
-          <span style={{fontWeight: "bold"}}>
-            Supporting Documents
-          </span>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          {(quotation?.quotation?.requestDocument?.documentFormat?.includes("application/pdf") || quotation?.requestDocument?.documentFormat?.includes("application/pdf")) && (
-            <MyPdfView
-              src={generateResourceUrl(quotation?.quotation?.requestDocument?.fileName || quotation?.requestDocument?.fileName)}
-            />
-          )}
-          {(quotation?.quotation?.requestDocument?.documentFormat?.includes("image") || quotation?.requestDocument?.documentFormat?.includes("image")) && (
-            <Image
-              onClick={() => setImagePreview(true)}
-              preview={imagePreview}
-              width={200}
-              src={generateResourceUrl(quotation?.quotation?.requestDocument?.fileName || quotation?.requestDocument?.fileName)}
-            />
-          )}
-        </Col>
-      </Row>
     </>
   )
 }
 
 QuotationDetails.propTypes = {
-  quotation: PropTypes.object.isRequired
+  quotation: PropTypes.object,
+  files: PropTypes.array,
+  showItems: PropTypes.bool
 }
 
 export default QuotationDetails

@@ -340,13 +340,13 @@ const AddNewRequest = (props) => {
                   </Button>
                   <Button 
                     style={{float: "right"}} 
-                    type='primary' onClick={() => setCurrent(1)}
+                    type='primary'
                     onClick={handleSubmit}
                     disabled={!floatOrder.amount || !floatOrder.description || !floatOrder.name || submitting_float_request}
                     loading={submitting_float_request}
                   >
                     <CheckOutlined />
-                    Submit
+                    Submit Float Order
                   </Button>
                 </Col>
               </Row>

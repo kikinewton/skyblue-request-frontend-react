@@ -1,7 +1,7 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, DeleteColumnOutlined, DeleteOutlined, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form } from 'antd';
 import React, {useState } from 'react';
-import { prettifyDateTime } from '../../../util/common-helper';
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
 import MyPageHeader from "../../../shared/MyPageHeader"
@@ -145,7 +145,7 @@ const ApprovePendingList = (props) => {
   const expandedRowRender = (row) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
-      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: 'Estimate Unit Price', dataIndex: 'estimatedUnitPrice', key: 'estimatedUnitPrice', render: text => formatCurrency(text)},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
     ]
     return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />

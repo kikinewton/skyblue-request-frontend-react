@@ -4,7 +4,10 @@ import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import { userHasAnyRole } from '../../../services/api/auth'
+import GoodsReceivedNoteDetails from '../../../shared/GoodsReceivedNoteDetails'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
+import PaymentDetails from '../../../shared/PaymentDetails'
+import QuotationDetails from '../../../shared/QuotationDetails'
 import { formatCurrency } from '../../../util/common-helper'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import AppLayout from '../../AppLayout'
@@ -18,7 +21,9 @@ const columns = props => PAYMENT_COLUMNS.concat([
     title: "Actions",
     dataIndex: "actions",
     key: "actions",
-    render: (text, row) => (<Button onClick={() => props.onApprove(row)} size="small" shape="round"><CheckOutlined /></Button>)
+    render: (text, row) => (<Button onClick={() => props.onApprove(row)} size="small" type="default">
+      <CheckOutlined />{props.buttonLabel}
+    </Button>)
   }
 ])
 
@@ -86,7 +91,8 @@ const ApprovePaymentList = (props) => {
                   onApprove: (row) => {
                     setSelectedDraft(row)
                     setVisible(true)
-                  }
+                  },
+                  buttonLabel: buttonLabel()
                 })}
                 dataSource={payment_drafts}
                 loading={fetching_payments}
@@ -100,7 +106,7 @@ const ApprovePaymentList = (props) => {
         <Drawer
           forceRender
           visible={visible}
-          title="Review and endorse"
+          title="Approve Payment"
           placement="right"
           width={900}
           maskClosable={false}
@@ -109,50 +115,8 @@ const ApprovePaymentList = (props) => {
             setVisible(false)
           }}
         >
-          <Row style={{marginTop: 30, marginBottom: 30}}>
-            <Col span={24}>
-              <Card
-                title="Payment Details"
-                size="small"
-              >
-                <List>
-                  <List.Item key="amount">
-                    <List.Item.Meta title="Amount Paid" description={formatCurrency(selectedDraft?.amount)} />
-                  </List.Item>
-                  <List.Item key="method">
-                    <List.Item.Meta title="Payment channel" description={selectedDraft?.paymentMethod} />
-                  </List.Item>
-                  <List.Item key="cheque">
-                    <List.Item.Meta title="Cheque No" description={selectedDraft?.chequeNumber} />
-                  </List.Item>
-                  <List.Item key="status">
-                    <List.Item.Meta title="Payment type" description={selectedDraft?.paymentStatus} />
-                  </List.Item>
-                </List>
-              </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <GrnDocumentReview
-                grn={selectedDraft?.goodsReceivedNote}
-                invoice={selectedDraft?.goodsReceivedNote?.invoice}
-                invoiceDocument={selectedDraft?.goodsReceivedNote?.invoice?.invoiceDocument}
-                quotation={selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation}
-                showRequestItems={false}
-              />
-            </Col>
-          </Row>
           <Row style={{marginTop: 10}}>
-            <Col span={24}>
-              <LocalPurchaseOrderDetails 
-                lpo={selectedDraft?.goodsReceivedNote?.localPurchaseOrder}
-                showRequestItems={true}
-              />
-            </Col>
-          </Row>
-          <Row style={{marginTop: 10}}>
-            <Col span={24}>
+            <Col span={24} style={{textAlign: "right"}}>
               <Button
                 loading={submitting_payment}
                 type="primary" 
@@ -165,6 +129,38 @@ const ApprovePaymentList = (props) => {
               ><CheckOutlined />
                 {buttonLabel()}
               </Button>
+            </Col>
+          </Row>
+          <Row style={{marginTop: 30, marginBottom: 30}}>
+            <Col span={24}>
+              <PaymentDetails payment={selectedDraft} />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <GoodsReceivedNoteDetails
+                grn={selectedDraft?.goodsReceivedNote}
+                invoice={selectedDraft?.goodsReceivedNote?.invoice}
+                invoiceDocument={selectedDraft?.goodsReceivedNote?.invoice?.invoiceDocument}
+                requestItems={selectedDraft?.goodsReceivedNote?.receivedItems}
+              />
+            </Col>
+          </Row>
+          <Row style={{marginTop: 10}}>
+            <Col span={24}>
+              <LocalPurchaseOrderDetails 
+                lpo={selectedDraft?.goodsReceivedNote?.localPurchaseOrder}
+                showRequestItems={false}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <QuotationDetails 
+                quotation={selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation}
+                files={[selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation?.requestDocument]}
+                showItems={false}
+              />
             </Col>
           </Row>
         </Drawer>

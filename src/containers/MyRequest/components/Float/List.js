@@ -85,6 +85,7 @@ const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
         </Button>
         {!row.comment && (
           <Button
+            disabled={row?.retired}
             shape="circle"
             size='small' 
             type='default'
@@ -241,14 +242,14 @@ const FloatList = (props) => {
                 >
                   Edit / Add Items To Float
                 </Button>
-                <Button type='primary'
+                {/* <Button type='primary'
                   disabled={!selectedFloatForRetirement?.fundsReceived || selectedFloatForRetirement.hasDocument}
                   onClick={() => {
                     history.push(`${path}/${selectedFloatForRetirement?.id}/retire`)
                   }}
                 >
                   Retire Float
-                </Button>
+                </Button> */}
               </Col>
             </Row>
             <FloatDetails 

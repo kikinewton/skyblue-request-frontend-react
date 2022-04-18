@@ -1,4 +1,4 @@
-import { DollarOutlined, EyeOutlined, MoneyCollectOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, SyncOutlined, UserOutlined } from '@ant-design/icons'
+import { CheckOutlined, DollarOutlined, EyeOutlined, MoneyCollectOutlined, NumberOutlined, OneToOneOutlined, PhoneOutlined, SyncOutlined, UserOutlined, WalletOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Drawer, List, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -19,7 +19,13 @@ const columns = props => FLOAT_ORDERS_COLUMN.concat([
     key: "actions",
     render: (text, row) => (
       <>
-        <EyeOutlined onClick={() => props.onOpenDetails(row)} />
+        <Button
+          type="default"
+          onClick={() => props.onOpenDetails(row)}
+        >
+          <WalletOutlined />
+          Allocate Funds
+        </Button>
       </>
     ) 
   },
@@ -117,7 +123,7 @@ const FloatAllocateFunds = (props) => {
   const expandedRowRender = (row) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
-      {title: 'Purpose', dataIndex: 'purpose', key: 'purpose'},
+      {title: 'Estimate Unit Price', dataIndex: 'estimatedUnitPrice', key: 'estimatedUnitPrice', render: text => formatCurrency(text)},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
     ]
     return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />
@@ -241,7 +247,8 @@ const FloatAllocateFunds = (props) => {
                     allocateFundsToFloatRequest(selectedRequest?.id, {})
                   }}
                 >
-                  Allocate Funds To Selected Float Requests 
+                  <CheckOutlined/>
+                  Allocate Funds
                 </Button>
               </Col>
             </Row>

@@ -115,23 +115,8 @@ export const updatePaymentDraft = (state = INITIAL_STATE, action) => {
 };
 
 export const updatePaymentDraftSuccess = (state = INITIAL_STATE, action) => {
-  const { paymentId, responseData } = action
   return {
-    ...state, 
-    payment_drafts: state.payments.map(item=> {
-      if(item.id === paymentId) {
-        return responseData
-      } else {
-        return item
-      }
-    }),
-    filtered_payment_drafts: state.payments.map(item=> {
-      if(item.id === paymentId) {
-        return responseData
-      } else {
-        return item
-      }
-    }),
+    ...state,
     submitting: false,
     submit_success: true
   };

@@ -145,7 +145,7 @@ const HodEndorsePendingList = (props) => {
   const expandedRowRender = (row) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'itemDescription', key: 'itemDescription'},
-      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: 'Estimate Unit Price', dataIndex: 'estimatedUnitPrice', key: 'estimatedUnitPrice', render: text => formatCurrency(text)},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
     ]
     return <Table columns={expandedColumns} dataSource={row.floats} pagination={false} rowKey="id" />

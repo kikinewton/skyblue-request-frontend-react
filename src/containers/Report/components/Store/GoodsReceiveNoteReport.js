@@ -133,41 +133,91 @@ const GoodsReceiveNoteReport = props => {
     <>
       <MyPageHeader 
         title="Goods Receive Notes Report" 
-        extra={[
-          <RangePicker 
-            key="range"
-            value={range} 
-            onChange={(momentArr, dateStrArr) => {
-              setRange(momentArr)
-            }} 
-          />,
-          <Input 
-            onChange={e => setSupplier(e.target.value)}
-            value={supplier}
-            type="search"
-            style={{width: 200}}
-            placeholder='Supplier'
-          />,
-          <Button
-            key="submit-btn-view"
-            loading={loading}
-            type="primary" 
-            icon={<EyeOutlined/>}
-            onClick={viewReport}
-          >
-            View
-          </Button>,
-          <Button
-            key="submit-btn"
-            loading={loading}
-            type="primary" 
-            icon={<FileExcelOutlined/>}
-            onClick={downloadReport}
-          >
-            Generate And Export Data
-          </Button>
-        ]}
+        // extra={[
+        //   <RangePicker 
+        //     key="range"
+        //     value={range} 
+        //     onChange={(momentArr, dateStrArr) => {
+        //       setRange(momentArr)
+        //     }} 
+        //   />,
+        //   <Input 
+        //     onChange={e => setSupplier(e.target.value)}
+        //     value={supplier}
+        //     type="search"
+        //     style={{width: 200}}
+        //     placeholder='Supplier'
+        //   />,
+        //   <Button
+        //     key="submit-btn-view"
+        //     loading={loading}
+        //     type="primary" 
+        //     icon={<EyeOutlined/>}
+        //     onClick={viewReport}
+        //   >
+        //     View
+        //   </Button>,
+        //   <Button
+        //     key="submit-btn"
+        //     loading={loading}
+        //     type="primary" 
+        //     icon={<FileExcelOutlined/>}
+        //     onClick={downloadReport}
+        //   >
+        //     Generate And Export Data
+        //   </Button>
+        // ]}
       />
+      <Card>
+        <Row>
+          <Col span={4}>
+            Filter:
+          </Col>
+          <Col span={5}>
+            <RangePicker 
+              key="range"
+              value={range} 
+              onChange={(momentArr, dateStrArr) => {
+                setRange(momentArr)
+              }} 
+            />
+          </Col>
+          <Col span={4} offset={1}>
+            <Input 
+              onChange={e => setSupplier(e.target.value)}
+              value={supplier}
+              allowClear
+              type="search"
+              style={{width: "100%"}}
+              placeholder='Supplier'
+            />
+          </Col>
+          <Col span={3} offset={1}>
+            <Button
+              key="submit-btn-view"
+              loading={loading}
+              type="primary" 
+              icon={<EyeOutlined/>}
+              onClick={viewReport}
+              style={{width: "100%"}}
+            >
+              View
+            </Button>
+          </Col>
+          <Col span={4} offset={1}>
+            <Button
+              key="submit-btn"
+              loading={loading}
+              type="primary" 
+              icon={<FileExcelOutlined/>}
+              onClick={downloadReport}
+              style={{width: "100%"}}
+            >
+              Generate And Export Data
+            </Button>
+          </Col>
+        </Row>
+      </Card>
       <Card>
         <Row>
           <Col span={24}>

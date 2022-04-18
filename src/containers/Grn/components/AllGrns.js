@@ -1,20 +1,29 @@
-import { Badge, Card, Col, Row, Table } from 'antd'
+import { EyeOutlined } from '@ant-design/icons'
+import { Badge, Card, Col, Drawer, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { getAllGoodsReceiveNotes } from '../../../services/api/goods-receive-note'
+import GoodsReceivedNoteDetails from '../../../shared/GoodsReceivedNoteDetails'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { EXPANDED_PRODUCT_COLUMNS } from '../../../util/constants'
 
 const columns = (props) => GRN_COLUMNS.concat([
-
+  {
+    title: "Actions",
+    dataIndex: "actions", 
+    key: "actions",
+    render: (text, row) => (<EyeOutlined onClick={e => props.onShow(row)} />)
+  }
 ])
 
 
 const AllGrns = (props) => {
   const [grns, setGrns] = useState([])
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [selectedGrn, setSelectedGrn] = useState(null)
 
   const handleFetch = async() => {
     setLoading(true)
@@ -52,26 +61,44 @@ const AllGrns = (props) => {
       <MyPageHeader 
         title="All Goods Receive Notes"
       />
-      {/* <Card>
-        <Input />
-      </Card> */}
       <Row>
         <Col span={24}>
           <Card >
             <Table 
               bordered
               size='small'
-              columns={columns()}
+              columns={columns({
+                onShow: row => {
+                  setSelectedGrn(row)
+                  setVisible(true)
+                }
+              })}
               dataSource={grns}
               loading={loading}
               rowKey="id"
               pagination={{pageSize: 30}}
               expandable={{EXPANDED_PRODUCT_COLUMNS}}
-              // expandable={{EXPANDED_PRODUCT_COLUMNS}}
             />
           </Card>
         </Col>
       </Row>
+      <Drawer
+        visible={visible}
+        title="Goods Received Note Details"
+        onClose={() => {
+          setSelectedGrn(null)
+          setVisible(false)
+        }}
+        placement="right"
+        width={800}
+      >
+        <GoodsReceivedNoteDetails 
+          grn={selectedGrn}
+          invoice={selectedGrn?.invoice}
+          invoiceDocument={selectedGrn?.invoice?.invoiceDocument}
+          requestItems={selectedGrn?.localPurchaseOrder?.requestItems}
+        />
+      </Drawer>
     </>
   )
 }

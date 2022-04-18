@@ -136,23 +136,21 @@ export function* fetchPaymentDraft(action) {
 
 
 export function* updatePaymentDraft(action) {
-  console.log('action update draft', action)
   const {id, payload} = action
   try {
     const response = yield call(updatePaymentDraftApi, id, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      const responseData = response.data
+      console.log("UPDATE PAYMENT DRAFT RESPONSE", response)
+      const responseData = response?.data
+      openNotification('success', 'Update Payment Draft', response?.message)
       yield put(Creators.updatePaymentDraftSuccess(responseData))
-      openNotification('success', 'Payment', response.message)
-      yield put()
-      //yield put(Creators.fetchQuotations({}))
     } else {
-      openNotification('error', 'Update Payment', response.message)
-      yield put(Creators.updatePaymentDraftFailure(response.message))
+      openNotification('error', 'Update Payment Draft', response?.message)
+      yield put(Creators.updatePaymentDraftFailure(response?.message))
     }
   } catch (error) {
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to update payment'
-    openNotification('error', 'Update Payment', message)
+    const message = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to update payment'
+    openNotification('error', 'Update Payment Draft', message)
     yield put(Creators.updatePaymentDraftFailure(message))
   }
 }

@@ -13,26 +13,28 @@ const floatItemsColumns = [
     key: "floatRef"
   },
   {
+    title: "Request Date",
+    dataIndex: "createdDate",
+    key: "createdDate",
+    render: (text) => prettifyDateTime(text)
+  },
+  {
     title: "Description",
     dataIndex: "itemDescription",
     key: "itemDescription"
   },
   {
-    title: "purpose",
-    dataIndex: "purpose",
-    key: "purpose"
+    title: "Estimated Unit Price",
+    dataIndex: "estimatedUnitPrice",
+    key: "estimatedUnitPrice",
+    render: text => formatCurrency(text)
   },
   {
     title: "Quantity",
     dataIndex: "quantity",
     key: "quantity"
   },
-  {
-    title: "Request Date",
-    dataIndex: "createdDate",
-    key: "createdDate",
-    render: (text) => prettifyDateTime(text)
-  },
+
 ]
 
 
@@ -81,6 +83,9 @@ const FloatDetails = ({
             </List.Item>
             <List.Item>
               <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Amount Requested" description={formatCurrency(floatOrder?.amount)} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="Fund Allocation Status" description={floatOrder?.fundsReceived ? "FUNDS ALLOCATED" : "FUNDS NOT ALLOCATED"} />
             </List.Item>
           </List>
         </Col>

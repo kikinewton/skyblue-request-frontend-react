@@ -31,6 +31,12 @@ const NewPayment = (props) => {
   const [selectedCurrency, setSelectedCurrency] = useState("GHS")
   const { grnId } = useParams()
 
+  const getDefaultCurrency = () => {
+    const requestItems = grn?.receivedItems || []
+    const currencyCode = requestItems[0]?.currency || "GHS";
+    return currencyCode;
+  }
+
   const handleSubmit = async (values) => {
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
     const payload = {

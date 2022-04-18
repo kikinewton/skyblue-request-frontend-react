@@ -34,7 +34,7 @@ const PaymentsSubNav = (props) => {
           <span>Approve Payments</span>
         </NotificationBadge>
       } else {
-        <span>Approve Payments</span>
+        return <span>Approve Payments</span>
       }
     } else if(currentUser.role === EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER) {
       if(notifications.paymentDraftPendingAuthorizationFM) {
