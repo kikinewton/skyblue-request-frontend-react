@@ -119,7 +119,7 @@ export function generateGoodsReceiveNotesReport(query) {
 export function generateProcureItemsReportReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query.download) {
-    const url = `${BASE_URL}/procurement/procuredItemsReport/download${queryStr}`
+    const url = `${BASE_URL}/procurement/procuredItemsReport${queryStr}`
     downloadFile(url)
   } else {
     return service({
