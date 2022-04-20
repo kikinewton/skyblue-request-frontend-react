@@ -18,6 +18,7 @@ const PaymentDraftHistory = (props) => {
   } = props
 
   const [requests, setRequests] = useState([])
+  const [filteredData, setFilteredData] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState(null)
@@ -39,22 +40,15 @@ const PaymentDraftHistory = (props) => {
   
   const fetchPaymentHistory = async () => {
     setLoading(true)
-    const query = {
-      pageSize: 5,
-        pageNo: 0,
-        reference: grnRef ? grnRef : null,
-        paymentRef: paymentRef ? paymentRef : null,
-        grnRef: grnRef ? grnRef : null
-    }
+    const query = {}
     try {
       const result = await fetchPaymentDraftsHistory({})
-      console.log('result', result.data)
-      if(result?.meta) {
-        const { currentPage, pageSize, total, totalPages } = result?.meta
-        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-      }
-      
+      // if(result?.meta) {
+      //   const { currentPage, pageSize, total, totalPages } = result?.meta
+      //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      // }
       setRequests(result?.data)
+      setFilteredData(result?.data)
     } catch (error) {
       
     } finally {
@@ -62,24 +56,27 @@ const PaymentDraftHistory = (props) => {
     }
   }
 
-  const handlePageChange = async(page, pageSize) => {
-    setLoading(true)
-    setMeta({...meta, currentPage: page})
-    const query = {
-      pageNo: page - 1,
-      pageSize: meta?.pageSize
-    }
-
-    try {
-      const result = await fetchPaymentDraftsHistory(query)
-      const { currentPage, pageSize, total, totalPages } = result?.meta
-      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
-      setRequests(result?.data)
-    } catch (error) {
+  // const handlePageChange = async(page, pageSize) => {
+  //   setLoading(true)
+  //   const query = {}
+  //   try {
+  //     const result = await fetchPaymentDraftsHistory(query)
+  //     const { currentPage, pageSize, total, totalPages } = result?.meta
+  //     setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
+  //     setRequests(result?.data)
+  //   } catch (error) {
       
-    } finally {
-      setLoading(false)
-    }
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  const onFilter = (value) => {
+    setFilteredData(requests.filter(request => {
+      const goodsReceivedNote = request?.goodsReceivedNote || []
+      const supplier = goodsReceivedNote?.finalSupplier || {}
+      return supplier?.name?.toLowerCase().includes(value.toLowerCase())
+    }))
   }
 
   const handleCancelPayment = async () => {
@@ -107,24 +104,22 @@ const PaymentDraftHistory = (props) => {
         <MyPageHeader
           title={(
             <>
-              <span style={{marginRight: 5}}>All Payments</span>
+              <span style={{marginRight: 5}}>Recent payment drafts</span>
             </>
           )}
         />
         <Card>
           <Row>
-            <Col span={2}>Filter: </Col>
-            <Col md={4} sm={24} xs={24}>
-              <Input placeholder='search by grn' type="search" value={grnRef} onChange={value => {
-                setGrnRef(value)
-                handleChange()
-              }}  />
-            </Col>
-            <Col md={4} sm={24} xs={24} offset={1}>
-              <Input placeholder='search by payment ref' type="search" value={paymentRef} onChange={value => {
-                setPaymentRef(value)
-                handleChange()
-              }}  />
+            <Col span={4}>Filter: </Col>
+            <Col span={20}>
+              <Input 
+                placeholder='search by grn' 
+                type="search" value={grnRef} 
+                onChange={e => {
+                  setGrnRef(e.target.value)
+                  onFilter(e.target.value)
+                }}  
+              />
             </Col>
           </Row>
         </Card>
@@ -139,14 +134,16 @@ const PaymentDraftHistory = (props) => {
                     setVisible(true)
                   }
                 })}
-                dataSource={requests}
-                pagination={false}
+                dataSource={filteredData}
+                pagination={{
+                  pageSize: 10
+                }}
                 rowKey="id"
                 size='small'
               />
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col span={24}>
               <Pagination
                 showSizeChanger={false}
@@ -159,7 +156,7 @@ const PaymentDraftHistory = (props) => {
                 size='small'
               />
             </Col>
-          </Row>
+          </Row> */}
           <Drawer
             title="Payment Details"
             visible={visible}

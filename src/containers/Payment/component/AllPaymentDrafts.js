@@ -151,7 +151,7 @@ const AllPaymentDrafts = (props) => {
               />
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col span={24}>
               <Pagination 
                 showSizeChanger={false}
@@ -164,7 +164,7 @@ const AllPaymentDrafts = (props) => {
                 size='small'
               />
             </Col>
-          </Row>
+          </Row> */}
           <Drawer
             title="Payment Details"
             visible={visible}

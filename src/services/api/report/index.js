@@ -66,7 +66,7 @@ export function downloadGrnLink(query) {
 export function generateAccountPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query?.download) {
-    const url = `${BASE_URL}/accounts/paymentReport{queryStr}`
+    const url = `${BASE_URL}/accounts/paymentReport${queryStr}`
     downloadFile(url)
   } else {
     console.log('api query', query)

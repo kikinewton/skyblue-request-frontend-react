@@ -155,8 +155,7 @@ const AddNewRequest = (props) => {
                     {required: true, message: "Employee Staff ID required"}
                   ]}
                 >
-                  <Input 
-                    placeholder='ST44526272' 
+                  <Input
                     value={floatOrder.staffId} 
                     onChange={e => setFloatOrder({...floatOrder, staffId: e.target.value})}
                   />
