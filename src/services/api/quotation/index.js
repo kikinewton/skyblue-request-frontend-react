@@ -1,7 +1,7 @@
 import service from '../apiRequest'
 import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED }
  from '../../../util/quotation-types'
-import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
+import { serializeQueryParamsNotNull } from '../../../util/common-helper'
 
 
 const path = "/quotations"

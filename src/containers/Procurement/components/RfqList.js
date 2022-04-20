@@ -1,5 +1,5 @@
-import { DownloadOutlined, MailOutlined } from '@ant-design/icons'
-import { Button, Col, Card, Row, Table, Input } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
+import { Button, Col, Card, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { downloadRfqForSupplier, generateRfqForSupplierAndShare } from "../../../services/api/supplier"
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -41,8 +41,6 @@ const RfqList = (props) => {
     fetching_suppliers,
   } = props
 
-  const [supplierSearch, setSupplierSearch] = useState("")
-
   useEffect(() => {
     resetSupplier()
     fetchSuppliers({
@@ -53,16 +51,6 @@ const RfqList = (props) => {
   return (
     <>
       <MyPageHeader title="RFQs" />
-      {/* <Card>
-        <Row>
-          <Col span={2}>
-            Filter:
-          </Col>
-          <Col span={6}>
-            <Input placeholder='search by supplier' type="search" value={supplierSearch} onChange={e => setSupplierSearch(e.target.value)} />
-          </Col>
-        </Row>
-      </Card> */}
       <Card>
         <Row>
           <Col span={24}>

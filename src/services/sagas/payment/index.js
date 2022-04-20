@@ -144,6 +144,7 @@ export function* updatePaymentDraft(action) {
       const responseData = response?.data
       openNotification('success', 'Update Payment Draft', response?.message)
       yield put(Creators.updatePaymentDraftSuccess(responseData))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Update Payment Draft', response?.message)
       yield put(Creators.updatePaymentDraftFailure(response?.message))

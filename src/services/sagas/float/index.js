@@ -29,7 +29,7 @@ export function* fetchAllFloatRequests(action) {
       yield put(Creators.fetchAFloatRequestsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchFloatRequestsFailure(errorText))
   }
@@ -47,7 +47,7 @@ export function* fetchFloatOrders(action) {
       yield put(Creators.fetchAFloatOrdersFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchFloatOrdersFailure(errorText))
   }
@@ -81,7 +81,7 @@ export function* fetchMyFloatRequests(action) {
       yield put(Creators.fetchMyFloatRequestsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchMyFloatRequestsFailure(errorText))
   }
@@ -99,7 +99,7 @@ export function* createFloatRequest(action) {
       yield put(Creators.createFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     console.log('errors', errorText)
     openNotification('error', 'Create Float', errorText)
     yield put(Creators.createFloatRequestFailure(errorText))
@@ -118,7 +118,7 @@ export function* updateFloatOrderStatus(action) {
       yield put(Creators.updateFloatOrderStatusFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Update Float Status',errorText)
     yield put(Creators.updateFloatOrderStatusFailure(errorText))
   }
@@ -137,7 +137,7 @@ export function* updateFloatRequest(action) {
       yield put(Creators.updateFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Update Float',errorText)
     yield put(Creators.updateFloatRequestFailure(errorText))
   }
@@ -156,7 +156,7 @@ export function* updateSingleFloatRequest(action) {
       yield put(Creators.updateSingleFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Update Float', errorText)
     yield put(Creators.updateSingleFloatRequestFailure(errorText))
   }
@@ -176,7 +176,7 @@ export function* allocateFundsToFloatRequest(action) {
       yield put(Creators.allocateFundsToFloatRequestFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Allocate Funds To Float', errorText)
     yield put(Creators.allocateFundsToFloatRequestFailure(errorText))
   }
@@ -194,7 +194,7 @@ export function* retireFloatOrder(action) {
       yield put(Creators.retireFloatOrderFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Retire Float', errorText)
     yield put(Creators.retireFloatOrderFailure(errorText))
   }
@@ -213,7 +213,7 @@ export function* closeFloatOrder(action) {
       yield put(Creators.closeFloatOrderFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Close Float', errorText)
     yield put(Creators.closeFloatOrderFailure(errorText))
   }
@@ -231,7 +231,7 @@ export function* addItemsToFloatOrder(action) {
       yield put(Creators.addItemsToFloatOrderFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Update Float Order', errorText)
     yield put(Creators.addItemsToFloatOrderFailure(errorText))
   }

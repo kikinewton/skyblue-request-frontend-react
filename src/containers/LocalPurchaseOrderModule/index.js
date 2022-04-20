@@ -8,11 +8,10 @@ import { Creators as QuotationCreators } from "../../services/redux/quotation/ac
 import { Switch, useLocation } from 'react-router'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import List from "./components/List"
-import { Badge, Menu } from 'antd'
+import { Menu } from 'antd'
 import { NavLink } from 'react-router-dom'
 import CreateLPODraft from './components/CreateLPODraft'
 import CreateLPO from './components/CreateLPO'
-import MyBadge from '../../presentation/MyBadge'
 import AllLocalPurchaseOrders from './components/AllLocalPurchaseOrders'
 import NotificationBadge from '../../shared/NotificationBadge'
 
@@ -53,7 +52,6 @@ const LocalPurchaseOrderModule = (props) => {
             <Menu.Item key="/app/local-purchase-orders">
               <NavLink to="/app/local-purchase-orders">
                 <span>LPOs For Suppliers</span>
-                {/* <span><MyBadge count={5} /></span> */}
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/app/local-purchase-orders/add-new-draft">

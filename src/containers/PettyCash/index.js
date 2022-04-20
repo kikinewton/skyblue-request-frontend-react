@@ -32,10 +32,6 @@ const PettyCashIndex = (props) => {
   const { path } = useRouteMatch()
   const location = useLocation()
 
-  const displayPage = (props) => {
-
-  }
-
   const handleNavClick = (value) => {
     setKey(value)
   }

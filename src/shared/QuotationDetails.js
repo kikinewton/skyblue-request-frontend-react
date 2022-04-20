@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from "prop-types"
 import { REQUEST_COLUMNS } from '../util/constants';
-import MyPdfView from '../presentation/MyPdfView';
-import { Row, Col, Table, List, Image, Card } from 'antd';
+import { Row, Col, Table, List, Card } from 'antd';
 import { prettifyDateTime } from '../util/common-helper';
-import { generateResourceUrl } from '../services/api/document';
-import MyImageView from '../presentation/MyImageView';
-import { BASE_URL } from '../services/api/urls';
 import FilesView from './FilesView';
 const columns = REQUEST_COLUMNS
 
 const QuotationDetails = ({quotation, showItems=false, files}) => {
-  const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
       <Card size='small' title="Quotation Details" style={{marginBottom: 20}}>

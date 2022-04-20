@@ -88,7 +88,6 @@ export const enableEmployee = (state = INITIAL_STATE, action) => {
 };
 
 export const enableEmployeeSuccess = (state = INITIAL_STATE, action) => {
-  const { responseData } = action
   return { 
     ...state,
     submitting: false,
@@ -106,7 +105,6 @@ export const resetEmployeePassword = (state = INITIAL_STATE, action) => {
 };
 
 export const resetEmployeePasswordSuccess = (state = INITIAL_STATE, action) => {
-  const { responseData } = action
   return { 
     ...state,
     resetting_password: false,
@@ -124,7 +122,6 @@ export const disableEmployee = (state = INITIAL_STATE, action) => {
 };
 
 export const disableEmployeeSuccess = (state = INITIAL_STATE, action) => {
-  const { responseData } = action
   return { 
     ...state,
     submitting: false,

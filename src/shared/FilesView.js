@@ -1,4 +1,3 @@
-import { Field } from 'formik';
 import React from 'react';
 import MyPdfView from "../presentation/MyPdfView"
 import MyImageView from "../presentation/MyImageView"

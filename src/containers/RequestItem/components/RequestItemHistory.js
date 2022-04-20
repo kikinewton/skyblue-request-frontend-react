@@ -17,8 +17,8 @@ const columns = (props) => REQUEST_COLUMNS.concat([
 ])
 
 const RequestItemHistory = (props) => {
-
   const [requests, setRequests] = useState([])
+  const [filteredRequests, setFilteredRequests] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState("all")
@@ -28,12 +28,12 @@ const RequestItemHistory = (props) => {
   const [visible, setVisible] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
-  const resetPagination = () => {
-    setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
-  }
+  // const resetPagination = () => {
+  //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
+  // }
 
   const handleChange = () => {
-    resetPagination()
+    //resetPagination()
     fetchRequestItemHistory()
   }
 
@@ -42,7 +42,6 @@ const RequestItemHistory = (props) => {
     setLoadingStatus(true)
     try {
       const result = await getRequestItemStatus(id)
-      console.log('status', result)
       setRequestStatus(result?.data)
     } catch (error) {
       message.error("Error fetching Request Status")
@@ -50,54 +49,79 @@ const RequestItemHistory = (props) => {
       setLoadingStatus(false)
     }
   }
-  
+
   const fetchRequestItemHistory = async () => {
     setLoading(true)
     const query = {
-      pageSize: 5,
-        pageNo: 0,
-        toBeApproved: status === "toBeApproved",
-        approved: status === "approved",
-        reference: searchTerm ? searchTerm : null
+      // toBeApproved: status === "toBeApproved",
+      // approved: status === "approved",
+      // reference: searchTerm ? searchTerm : null
     }
-    
     try {
       const result = await getAllItemRequests(query)
-      console.log('result', result.data)
-      if(result?.meta) {
-        const { currentPage, pageSize, total, totalPages } = result?.meta
-        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-      }
-      
-     
+      // if(result?.meta) {
+      //   const { currentPage, pageSize, total, totalPages } = result?.meta
+      //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      // }
       setRequests(result?.data)
+      setFilteredRequests(result?.data)
     } catch (error) {
       
     } finally {
       setLoading(false)
     }
   }
-
-  const handlePageChange = async(page, pageSize) => {
-    setLoading(true)
-    setMeta({...meta, currentPage: page})
-    const query = {
-      toBeApproved: status === "toBeApproved",
-      approved: status === "approved",
-      pageNo: page - 1,
-      pageSize: meta?.pageSize
-    }
-
-    try {
-      const result = await getAllItemRequests(query)
-      const { currentPage, pageSize, total, totalPages } = result?.meta
-      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
-      setRequests(result?.data)
-    } catch (error) {
+  
+  // const fetchRequestItemHistory = async () => {
+  //   setLoading(true)
+  //   const query = {
+  //     pageSize: 400,
+  //       pageNo: 0,
+  //       toBeApproved: status === "toBeApproved",
+  //       approved: status === "approved",
+  //       reference: searchTerm ? searchTerm : null
+  //   }
+    
+  //   try {
+  //     const result = await getAllItemRequests(query)
+  //     if(result?.meta) {
+  //       const { currentPage, pageSize, total, totalPages } = result?.meta
+  //       setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+  //     }
       
-    } finally {
-      setLoading(false)
-    }
+     
+  //     setRequests(result?.data)
+  //   } catch (error) {
+      
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  // const handlePageChange = async(page, pageSize) => {
+  //   setLoading(true)
+  //   setMeta({...meta, currentPage: page})
+  //   const query = {
+  //     toBeApproved: status === "toBeApproved",
+  //     approved: status === "approved",
+  //     pageNo: page - 1,
+  //     pageSize: meta?.pageSize
+  //   }
+
+  //   try {
+  //     const result = await getAllItemRequests(query)
+  //     const { currentPage, pageSize, total, totalPages } = result?.meta
+  //     setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
+  //     setRequests(result?.data)
+  //   } catch (error) {
+      
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  const onFilterBySearch = (value) => {
+    setFilteredRequests(requests.filter(rq => rq?.requestItemRef.includes(value) || rq?.name?.toLowerCase().includes(value?.toLowerCase())))
   }
 
   useEffect(() => {
@@ -115,23 +139,17 @@ const RequestItemHistory = (props) => {
       />
       <Card>
         <Row>
-          <Col span={6} offset={11}>
-            <Input type="search" value={searchTerm} 
+          <Col span={12} offset={12}>
+            <Input 
+              type="search" 
+              value={searchTerm} 
               onChange={value => {
                 setSearchTerm(value.target.value)
-                handleChange()
+                onFilterBySearch(value.target.value)
               }}
               placeholder="Search"
+              allowClear
             />
-          </Col>
-          <Col span={6} offset={1}>
-            <Select key="filter-select" style={{width: "100%"}}
-              value={status} onChange={value => {
-                  setStatus(value)
-                  handleChange()
-                }}>
-              {REQUEST_STATUS.map(it => <Select.Option value={it.key} key={it.key}>{it.name}</Select.Option>)}
-            </Select>
           </Col>
         </Row>
       </Card>
@@ -148,14 +166,16 @@ const RequestItemHistory = (props) => {
                   fetchRequestItemStatus(row?.id)
                 }
               })}
-              dataSource={requests}
-              pagination={false}
+              dataSource={filteredRequests}
+              pagination={{
+                pageSize: 30
+              }}
               rowKey="id"
               size='small'
             />
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col span={24}>
             <Pagination 
               showSizeChanger={false}
@@ -168,7 +188,7 @@ const RequestItemHistory = (props) => {
               size='small'
             />
           </Col>
-        </Row>
+        </Row> */}
         <Drawer
           title="Request Item Status"
           visible={visible}

@@ -29,7 +29,6 @@ const GrnPendingPaymentList = (props) => {
     resetGrn,
     current_user
   } = props
-  const [ loading, setLoading ] = React.useState(false)
 
   const handleGoToNewPayment = (row) => {
     history.push(`/app/payments/goods-receive-notes/${row.id}/add-new-payment`)

@@ -1,9 +1,6 @@
-import { Row, Col, Table, Tag } from 'antd'
+import { Row, Col, Table } from 'antd'
 import React from 'react'
 import PropTypes from "prop-types"
-import { REQUEST_ITEM_COLUMNS } from '..'
-import { GRN_COLUMNS } from '../../Grn'
-import { formatCurrency } from '../../../util/common-helper'
 
 const columns = [
   {

@@ -1,7 +1,5 @@
 import { Button, Col, Row, Spin, Table } from 'antd'
 import React from 'react'
-import * as grnService from '../../../services/api/goods-receive-note'
-import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
 import { GRN_COLUMNS } from '../../Grn'
 
@@ -25,7 +23,6 @@ const GrnList = (props) => {
   const {
     grns,
     fetchGrns,
-    fetching_grns,
   } = props
   const [ loading, setLoading ] = React.useState(false)
 

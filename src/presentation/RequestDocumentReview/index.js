@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import { Row, Col, List, Image } from "antd"
-import { BASE_URL } from '../../services/api/urls'
+import { Row, Col, List } from "antd"
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
-import { DownloadOutlined } from '@ant-design/icons'
 import FilesView from '../../shared/FilesView'
 
 
@@ -11,8 +9,6 @@ const RequestDocumentReview = (props) => {
     quotation,
     requestItem
   } = props
-  const [imagePreview, setImagePreview] = useState(false)
-  console.log('quotation selected', quotation)
   return (
     <>
       <Row>

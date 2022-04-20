@@ -1,10 +1,7 @@
-import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
+import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table } from 'antd'
 import React, { useState } from 'react'
 import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED } from '../../../util/quotation-types'
-import { saveSingleDocument } from "../../../services/api/document"
-import { useHistory } from 'react-router'
-import UploadFiles from '../../../shared/UploadFiles'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import FilesView from "../../../shared/FilesView"
 import { generateQuotationForUnregisteredSupplier } from '../../../services/api/quotation'
@@ -88,9 +85,9 @@ const requestUpdatePriceColumns = props => [
 ]
 
 const AddQuotationFOrUnregisteredSupplier = (props) => {
-  const { quotations, filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
-    quotationSubmitting, filterQuotations, generateQuotation } = props
-  const [files, setFiles] = React.useState([]) // eslint-disable-next-line
+  const { filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
+    quotationSubmitting, filterQuotations } = props
+  const [files, setFiles] = React.useState([])
   const [loadingDocument, setLoadingDocument] = React.useState(false)
   const [document, setDocument] = React.useState(null)
   const [current, setCurrent] = React.useState(0)

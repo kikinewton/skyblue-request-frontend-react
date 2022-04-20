@@ -1,12 +1,9 @@
-import { FilePdfOutlined } from '@ant-design/icons'
-import { Button, Card, Col, DatePicker, List, message, Row } from 'antd'
+import { Col, Row } from 'antd'
 import React from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
-import * as reportApi from '../../services/api/report'
-import { getMetabaseUri } from '../../util/common-helper'
 import ReportMenuItems from './components/ReportMenuItems'
-import { Switch, Route } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import PaymentReport from './components/Account/PaymentReport'
 import FloatAgeingAnalysisReport from './components/Account/FloatAgeingAnalysisReport'
 import PettyCashPaymentReport from './components/Account/PettyCashPaymentReport'
@@ -15,8 +12,6 @@ import GoodsReceiveNoteReport from './components/Store/GoodsReceiveNoteReport'
 import ProcuredItemsReport from './components/Procurement/ProcuredItemsReport'
 
 const Report = (props) => {
-  
-
   return (
     <React.Fragment>
       <AppLayout

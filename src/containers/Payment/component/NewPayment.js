@@ -54,7 +54,7 @@ const NewPayment = (props) => {
   const getWithholdingTaxPercentageAmount = (amnt, perc) => {
     const amount = Number(amnt)
     const percentage = Number(perc)
-    if(!amount || !percentage) return 0
+    if(!amount) return 0
     const ratio = percentage / 100;
     const withholdingTaxAmount = (amount * ratio).toFixed(2);
     return (amount - withholdingTaxAmount).toFixed(2);
@@ -144,7 +144,7 @@ const NewPayment = (props) => {
                     withholdingTaxPercentage: 0
                   }}
                 >
-                  <Form.Item label="Total Amount">
+                  <Form.Item label="Invoice Amount Payable">
                     <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </Form.Item>
                   <Form.Item label="Payment Channel" name="paymentMethod" rules={[{required: true, message: 'Payment channel required!'}]}>
@@ -175,11 +175,11 @@ const NewPayment = (props) => {
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
-                    <Input  prefix={<PercentageOutlined/>} type="number" />
-                  </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
                     <Input prefix={selectedCurrency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                  </Form.Item>
+                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
+                    <Input  prefix={<PercentageOutlined/>} type="number" />
                   </Form.Item>
                   <Form.Item label="Amount After Withholding Tax">
                     <Input disabled prefix={selectedCurrency}

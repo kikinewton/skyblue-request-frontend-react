@@ -1,8 +1,6 @@
-import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
+import { Col, Table, Row, Drawer, Card } from 'antd';
 import React, {useState } from 'react';
 import MyPageHeader from '../../../shared/MyPageHeader';
-import { prettifyDateTime } from '../../../util/common-helper';
 import { REQUEST_COLUMNS } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES, FETCH_REQUEST_TYPES } from '../../../util/request-types';
 

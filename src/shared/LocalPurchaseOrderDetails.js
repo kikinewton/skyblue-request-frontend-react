@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { Card, List, Table, Row, Col } from 'antd'
 import { prettifyDateTime } from '../util/common-helper'
-import { MINI_REQUEST_COLUMNS, REQUEST_COLUMNS } from '../util/constants'
+import { MINI_REQUEST_COLUMNS } from '../util/constants'
 
 const columns = MINI_REQUEST_COLUMNS.concat([])
 

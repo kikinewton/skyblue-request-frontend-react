@@ -1,7 +1,6 @@
-import { Button, Card, Col, PageHeader, Row, Spin, Steps, Table, Upload } from 'antd'
+import { Button, Card, Col, PageHeader, Row, Steps, Table, Upload } from 'antd'
 import React from 'react'
 import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
-import Modal from 'antd/lib/modal/Modal'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { saveSingleDocument } from "../../../services/api/document"
@@ -25,7 +24,6 @@ const supplierColumns = props => [
     key: "actions",
     align: "right",
     render: (text, row) => {
-      //console.log('row supplier id', row.supp)
       const buttonType = props.selectedSupplier?.supplierId === row?.supplierId ? "primary" : "default"
       return (
         <>
@@ -55,25 +53,6 @@ const requestColumns = props => [
   },
 ]
 
-const itemColumns = [
-  {
-    title: 'Description',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity',
-  },
-  {
-    title: 'Request Date',
-    dataIndex: 'requestDate',
-    key: 'requestDate',
-    render: (text) => prettifyDateTime(text)
-  },
-]
-
 const columns = (props) => [
   {
     title: 'SUPPLIER',
@@ -95,12 +74,8 @@ const columns = (props) => [
 ]
 
 const CreateQuotation = (props) => {
-  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, quotationLoading, createQuotation, quotationSubmitting } = props
+  const { currentUser, quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, quotationSubmitting } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
-  const [ quotation, setQuotation ] = React.useState({}) 
-  const [modalOpen, setModalOpen] = React.useState(false)
-  const [selectedRow, setSelectedRow] = React.useState({supplierId: null, requests: []})
-  const [ items, setItems ] = React.useState([])
   const [current, setCurrent] = React.useState(0)
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
   const [selectedRequestItems, setSelectedRequestItems] = React.useState([])

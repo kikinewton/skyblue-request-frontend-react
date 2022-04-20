@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table, Upload } from 'antd'
+import { Button, Card, Col, Input, message, PageHeader, Row, Steps, Table } from 'antd'
 import React, { useState } from 'react'
 import { CheckOutlined, DiffOutlined, LeftOutlined, RightOutlined, UploadOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { QUOTATIONS_WITHOUT_DOCUMENT_TEST } from '../../../util/quotation-types'
@@ -56,7 +56,7 @@ const requestColumns = props => [
 ]
 
 const CreateQuotation = (props) => {
-  const { quotations, filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
+  const { filtered_quotations, fetchQuotations, quotationSubmitSuccess, createQuotation, 
     quotationSubmitting, filterQuotations } = props
   const [files, setFiles] = React.useState([]) // eslint-disable-next-line
   const [loadingDocument, setLoadingDocument] = React.useState(false)
@@ -64,7 +64,6 @@ const CreateQuotation = (props) => {
   const [selectedSupplier, setSelectedSupplier] = React.useState(undefined);
   const [selectedRequestItems, setSelectedRequestItems] = React.useState([])
   const [supplierSearch, setSupplierSearch] = useState("")
-  const history = useHistory()
 
   const handleUploadFile = async(file) => {
     setLoadingDocument(true)
@@ -233,18 +232,6 @@ const CreateQuotation = (props) => {
                   onUpload={handleUploadFile}
                   loading={loadingDocument}
                 />
-                {/* <Upload
-                  action={false}
-                  listType="picture-card"
-                  maxCount={1}
-                  defaultFileList={files}
-                  onChange={(values)=> {
-                    setFiles([values.file])
-                  }}
-                  
-                >
-                  <Button disabled={quotationSubmitting} loading={quotationSubmitting} icon={<UploadOutlined />}>Click to upload</Button>
-                </Upload> */}
               </Col>
             </Row>
             <Row>

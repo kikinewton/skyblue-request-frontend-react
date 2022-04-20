@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
-import { Row, Col, List, Image, Card, Table, Button } from "antd"
-import { BASE_URL } from '../services/api/urls'
+import React from 'react'
+import { Row, Col, List, Card, Table } from "antd"
 import { formatCurrency, prettifyDateTime } from '../util/common-helper'
-import { DownloadOutlined } from '@ant-design/icons'
-import { generateResourceUrl } from '../services/api/document'
-import MyPdfView from '../presentation/MyPdfView'
 import Proptypes from "prop-types"
 import FilesView from './FilesView'
 
@@ -35,7 +31,6 @@ const GoodsReceivedNoteDetails = (props) => {
     invoiceDocument,
     requestItems
   } = props
-  const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
       <Card title="Goods Received Note" style={{marginBottom: 10}} size="small">

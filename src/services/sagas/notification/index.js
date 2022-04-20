@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/notification/actions'
 
 import {
@@ -18,7 +18,7 @@ export function* fetchNotifications(action) {
       yield put(Creators.fetchNotificationsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error?.response?.data?.errors || []) [0] || error?.response?.data?.message
+    const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     openNotification('error', 'Get Notifications', errorText)
     yield put(Creators.fetchNotificationsFailure(errorText))
   }

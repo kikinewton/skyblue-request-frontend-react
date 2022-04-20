@@ -56,7 +56,8 @@ export function downloadFile(data, fileName, fileType) {
 }
 
 export function formatCurrency(value="", currency='GHS') {
-  if(!value || !currency) {
+  if(!currency && value) return `GHS ${value}`
+  if(!value) {
     return "N/A"
   }
   let formatter = new Intl.NumberFormat('en-US', {

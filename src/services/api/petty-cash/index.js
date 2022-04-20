@@ -19,7 +19,6 @@ export function fetchMyPettyCashRequests(query) {
 }
 
 export function fetchAllPettyCashRequests(query) {
-  const queryStr = serializeQueryParams(query)
   switch(query.requestType) {
     case FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS:
       return service({url: `/pettyCashByDepartment`, method: "GET"})

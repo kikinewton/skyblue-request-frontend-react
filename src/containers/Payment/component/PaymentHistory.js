@@ -1,4 +1,3 @@
-import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
 import { Table , Card, Row, Col, Pagination, Modal, Input, Button, Form, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
@@ -32,7 +31,6 @@ const PaymentHistory = (props) => {
   const [requests, setRequests] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState("all")
   const [selectedPayment, setSelectedPayment] = useState(null)
   const [visible, setVisible] = useState(false)
   const [grnRef, setGrnRef] = useState("")

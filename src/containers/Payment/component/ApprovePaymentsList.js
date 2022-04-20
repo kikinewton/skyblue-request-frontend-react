@@ -6,6 +6,7 @@ import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import { userHasAnyRole } from '../../../services/api/auth'
 import GoodsReceivedNoteDetails from '../../../shared/GoodsReceivedNoteDetails'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
+import MyPageHeader from '../../../shared/MyPageHeader'
 import PaymentDetails from '../../../shared/PaymentDetails'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { formatCurrency } from '../../../util/common-helper'
@@ -54,6 +55,28 @@ const ApprovePaymentList = (props) => {
     }
   }
 
+  const pageTitle = () => {
+    switch(current_user.role) {
+      case EMPLOYEE_ROLE.ROLE_AUDITOR:
+        return "check"
+      case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
+        return "authorisation"
+      default:
+        return "approval"
+    }
+  }
+
+  const drawerTitle = () => {
+    switch(current_user.role) {
+      case EMPLOYEE_ROLE.ROLE_AUDITOR:
+        return "Check payment"
+      case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
+        return "Authorise payment"
+      default:
+        return "Approve payment"
+    }
+  }
+
   useEffect(() => {
     resetPayment()
     resetPaymentDraft()
@@ -75,17 +98,12 @@ const ApprovePaymentList = (props) => {
         title="Payments"
         subNav={<PaymentsSubNav currentUser={current_user} {...props} />}
       >
+        <MyPageHeader
+          title={`Payments awaiting ${pageTitle()}`}
+        />
         <Row>
           <Col span={24}>
-
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Card
-              size="small"
-              title="Payments awaiting approval"
-            >
+            <Card>
               <Table 
                 columns={columns({
                   onApprove: (row) => {
@@ -106,7 +124,7 @@ const ApprovePaymentList = (props) => {
         <Drawer
           forceRender
           visible={visible}
-          title="Approve Payment"
+          title={drawerTitle()}
           placement="right"
           width={900}
           maskClosable={false}
