@@ -39,7 +39,7 @@ const PaymentDetails = (props) => {
               <List.Item.Meta title="Payment Date" description={prettifyDateTime(payment?.createdDate)} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Withholding Tax(%)" description={payment?.withholdingTaxPercentage} />
+              <List.Item.Meta title="Payment Withholding Tax(%)" description={payment?.withholdingTaxAmount ? `${payment?.withholdingTaxPercentage * 100}%` : '0%'} />
             </List.Item>
             <List.Item>
               <List.Item.Meta title="Amount Paid" description={formatCurrency(payment?.paymentAmount)} />
