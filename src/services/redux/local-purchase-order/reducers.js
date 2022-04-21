@@ -82,8 +82,10 @@ export const createLocalPurchaseOrderDraftFailure = (state = INITIAL_STATE, acti
 
 export const filterLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
   const {filter} = action
-  const filteredResult = state.local_purchase_orders.filter(lpo => 
-      lpo.referenceNumber === filter
+  const filteredResult = state.local_purchase_orders.filter(lpo => {
+    const supplier = lpo?.quotation?.supplier?.name.toLowerCase()
+      return lpo?.referenceNumber?.toLowerCase().includes(filter.toLowerCase()) || supplier.includes(filter.toLowerCase()) 
+    }
     ) || []
   return { ...state, filtered_local_purchase_orders:  filteredResult}
 }

@@ -7,51 +7,16 @@ import { BASE_URL } from '../../../services/api/urls';
 import MyPdfView from "../../../presentation/MyPdfView"
 import { generateResourceUrl } from "../../../services/api/document"
 import FilesView from "../../../shared/FilesView"
+import { REQUEST_COLUMNS } from '../../../util/constants';
 
-const columns = props => [
-  {
-    title: "Description",
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
-  },
-  {
-    title: "purpose",
-    dataIndex: "purpose",
-    key: "purpose"
-  },
-  {
-    title: "Priority",
-    dataIndex: "priorityLevel",
-    key: "priorityLevel"
-  },
-  {
-    title: "Unit Price",
-    dataIndex: "unitPrice",
-    key: "unitPrice",
-    render: (text) => formatCurrency(text)
-  },
-  {
-    title: "Date",
-    dataIndex: "createdDate",
-    key: "createdDate"
-  },
-  {
-    title: "Reviewed",
-    dataIndex: "requestReview",
-    key: "requestReview"
-  },
+const columns = props => REQUEST_COLUMNS.concat([
   {
     title: "Actions",
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (<Button type="primary" onClick={() => props.onReview(row)}>Review</Button>)
   }
-]
+])
 
 const HodReviewPendingList = (props) => {
   const {
@@ -174,7 +139,7 @@ const HodReviewPendingList = (props) => {
                 <List.Item.Meta title="Description" description={selectedRequest?.name} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Price" description={formatCurrency(selectedRequest?.unitPrice)} />
+                <List.Item.Meta title="Price" description={formatCurrency(selectedRequest?.unitPrice, selectedRequest?.currency)} />
               </List.Item>
             </List>
           </Col>
@@ -188,26 +153,9 @@ const HodReviewPendingList = (props) => {
             </Row>
             <Row>
               <Col span={24}>
-                {
                   <FilesView 
                     files={[selectedRequest?.quotation?.requestDocument]}
                   />
-                // selectedRequest?.quotation?.requestDocument?.documentType.includes("image/") && (
-                //   <Image 
-                //     onClick={() => setImagePreview(true)}
-                //     preview={imagePreview}
-                //     width={200}
-                //     src={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}
-                //   />
-                // )}
-                // {selectedRequest?.quotation?.requestDocument?.documentType.includes("application/pdf") && (
-                //   <MyPdfView src={generateResourceUrl(selectedRequest?.quotation?.requestDocument?.fileName)} />
-                //   // <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
-                // )}
-                // {selectedRequest?.quotation?.requestDocument?.documentType.includes("excel/") && (
-                //   <a href={`${BASE_URL}/requestDocument/download/${selectedRequest?.quotation?.requestDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
-                // )
-                }
               </Col>
             </Row>
           </Col>

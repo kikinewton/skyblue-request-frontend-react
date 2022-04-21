@@ -10,6 +10,11 @@ const columns = props => [
     key: 'name'
   },
   {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
     title: 'Unit Price',
     dataIndex: 'unitPrice',
     key: 'unitPrice',

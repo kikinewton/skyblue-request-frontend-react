@@ -110,14 +110,14 @@ const GrnIndex = (props) => {
                   <NavLink to="/app/grn/lpos-pending-grn">
                     {notifications.lpoWithoutGRN ? (
                       <NotificationBadge count={notifications.lpoWithoutGRN}>
-                        <span>Local Purchase Orders Awaiting GRN</span>
+                        <span>lpos awaiting grn</span>
                       </NotificationBadge>
-                    ) : (<span>Local Purchase Orders Awaiting GRN</span>)}
+                    ) : (<span>lpos awaiting grn</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="/app/grn/all">
                   <NavLink to="/app/grn/all">
-                    All Goods Receive Notes
+                    All grns
                   </NavLink>
                 </Menu.Item>
               </>

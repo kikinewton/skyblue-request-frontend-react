@@ -67,7 +67,7 @@ const GrnDocumentReview = (props) => {
                     <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
                   </List.Item>
                   <List.Item key="amount">
-                    <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable)} />
+                    <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </List.Item>
                 </List>
               </Col>

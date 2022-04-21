@@ -2,43 +2,47 @@ import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
 import React, {useState } from 'react';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES } from '../../../util/constants';
+import { FETCH_REQUEST_TYPES, REQUEST_COLUMNS } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
-const columns = props => [
-  {
-    title: "Description",
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: "Reason",
-    dataIndex: "reason",
-    key: "reason"
-  },
-  {
-    title: "purpose",
-    dataIndex: "purpose",
-    key: "purpose"
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity"
-  },
-  {
-    title: "Priority",
-    dataIndex: "priorityLevel",
-    key: "priorityLevel",
-    render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
-  },
-  {
-    title: "Request Date",
-    dataIndex: "requestDate",
-    key: "requestDate",
-    render: (text) => prettifyDateTime(text)
-  },
-]
+// const columns = props => [
+//   {
+//     title: "Description",
+//     dataIndex: "name",
+//     key: "name"
+//   },
+//   {
+//     title: "Reason",
+//     dataIndex: "reason",
+//     key: "reason"
+//   },
+//   {
+//     title: "purpose",
+//     dataIndex: "purpose",
+//     key: "purpose"
+//   },
+//   {
+//     title: "Quantity",
+//     dataIndex: "quantity",
+//     key: "quantity"
+//   },
+//   {
+//     title: "Priority",
+//     dataIndex: "priorityLevel",
+//     key: "priorityLevel",
+//     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
+//   },
+//   {
+//     title: "Request Date",
+//     dataIndex: "requestDate",
+//     key: "requestDate",
+//     render: (text) => prettifyDateTime(text)
+//   },
+// ]
+
+const columns = props => REQUEST_COLUMNS.concat([
+  
+])
 
 const selectedRequestsColumns = props => [
   {

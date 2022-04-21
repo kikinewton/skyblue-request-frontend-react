@@ -3,15 +3,12 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
 // import * as paymentDraftService from '../../../services/api/payment-draft'
-import openNotification from '../../../util/notification'
 import { history } from '../../../util/browser-history'
-import { CheckCircleTwoTone, CheckOutlined, DollarTwoTone, FileExcelFilled, LeftOutlined, PercentageOutlined, RightOutlined } from '@ant-design/icons'
+import { CheckOutlined, FileExcelFilled, LeftOutlined, PercentageOutlined, RightOutlined } from '@ant-design/icons'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
 import MyPageHeader from "../../../shared/MyPageHeader"
 import { formatCurrency } from "../../../util/common-helper"
-import { CURRENCY_CODE } from '../../../util/constants'
 import AppLayout from '../../AppLayout'
-import PaymentsSubNav from './PaymentsSubNav'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
 
 const { Option } = Select
@@ -45,7 +42,7 @@ const NewPayment = (props) => {
       bank,
       paymentAmount: parseInt(paymentAmount),
       paymentStatus,
-      currency,
+      currency: grn?.receivedItems[0]?.currency,
       withholdingTaxPercentage,
     }
     createPaymentDraft(payload)
@@ -140,7 +137,7 @@ const NewPayment = (props) => {
                     paymentMethod: "CHEQUE",
                     purchaseNumber: "",
                     paymentStatus: "COMPLETED",
-                    currency: "GHS",
+                    currency: grn?.receivedItems[0]?.currency,
                     withholdingTaxPercentage: 0
                   }}
                 >
@@ -171,18 +168,22 @@ const NewPayment = (props) => {
                     <Input />
                   </Form.Item>
                   <Form.Item label="Currency" name="currency">
-                    <Select onChange={e => setSelectedCurrency(e)}>
+                    <Select
+                      value={grn?.receivedItems[0]?.currency}
+                      disabled
+                      // onChange={e => setSelectedCurrency(e)}
+                    >
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
                   <Form.Item label="Payment Amount" name="paymentAmount">
-                    <Input prefix={selectedCurrency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                    <Input prefix={grn?.receivedItems[0]?.currency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
                   </Form.Item>
                   <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
                     <Input  prefix={<PercentageOutlined/>} type="number" />
                   </Form.Item>
                   <Form.Item label="Amount After Withholding Tax">
-                    <Input disabled prefix={selectedCurrency}
+                    <Input disabled prefix={grn?.receivedItems[0]?.currency}
                       value={getWithholdingTaxPercentageAmount(amount, percentage)}  />
                   </Form.Item>
                   <Form.Item >

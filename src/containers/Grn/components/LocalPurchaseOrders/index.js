@@ -1,8 +1,9 @@
 import { FileOutlined, ShoppingOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Spin, Table } from 'antd'
+import { Badge, Button, Col, Input, Row, Spin, Table } from 'antd'
 import React from 'react'
 import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 import * as grnService from '../../../../services/api/goods-receive-note'
+import MyPageHeader from '../../../../shared/MyPageHeader'
 import { prettifyDateTime } from '../../../../util/common-helper'
 
 const columns = (props) => [
@@ -44,12 +45,15 @@ const columns = (props) => [
 
 const LocalPurchaseOrders = (props) => {
   const [loading, setLoading] = React.useState(false)
+  const [searchTerm, setSearchTerm] = React.useState("")
   const { 
     history,
     local_purchase_orders,
     fetchLocalPurchaseOrders,
     fetching_local_purchase_orders,
-    resetLocalPurchaseOrder
+    resetLocalPurchaseOrder,
+    filtered_local_purchase_orders,
+    filterLocalPurchaseOrders
   } = props
 
   const handleCreateGrn = (row) => {
@@ -82,18 +86,39 @@ const LocalPurchaseOrders = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
+      {/* <Row>
         <Col>
           <span className="bs-page-title">Local Purchase Orders</span>
           <span style={{marginLeft: 10}}><SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLocalPurchaseOrders({})} /></span>
         </Col>
-      </Row>
+      </Row> */}
+      <MyPageHeader 
+        title={(
+          <>
+            <span style={{marginRight: 5}}>Local Purchase Orders </span>
+            <SyncOutlined spin={loading} disabled={loading} onClick={()=> fetchLocalPurchaseOrders({})} />
+          </>
+        )}
+        extra={[
+          <span key="filter">Filter:</span>,
+          <Input
+            key="search"
+            style={{width: 300}}
+            type="search"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value)
+              filterLocalPurchaseOrders(e.target.value)
+            }}
+          />
+        ]}
+      />
       <Row>
         <Col md={24}>
           {loading ? (<Spin />) : 
             <Table
               columns={columns({ onDownloadPdfClick: handleDownloadPdf, onCreateGrnClick: (row) => handleCreateGrn(row) })}
-              dataSource={local_purchase_orders}
+              dataSource={filtered_local_purchase_orders}
               size="small"
               rowKey="id"
               expandable={{ expandedRowRender }}

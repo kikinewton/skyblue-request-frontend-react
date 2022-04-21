@@ -27,6 +27,16 @@ const columns = (props) => [
     render: (text) => text ? prettifyDateTime(text) : 'N/A'
   },
   {
+    title: 'Message',
+    dataIndex: 'message',
+    key: 'message',
+    render: (text, row) => {
+      return (row?.requestItems.filter(rq => rq?.approval !== 'APPROVED').length > 0) ? 
+        'Some items are not approved' : 
+        'All items are approved'
+    }
+  },
+  {
     title: 'Action',
     dataIndex: 'action',
     key: 'operation',
@@ -34,7 +44,11 @@ const columns = (props) => [
     render: (text, row) => (
       <Row>
         <Col md={24}>
-          <Button onClick={() => props.onCreate(row)} size="small">
+          <Button 
+            onClick={() => props.onCreate(row)} 
+            size="small"
+            disabled={row?.requestItems.filter(rq => rq?.approval !== 'APPROVED').length > 0}
+          >
             Create Local Purchase Order
           </Button>
         </Col>
@@ -159,7 +173,7 @@ const CreateLPO = (props) => {
         title={(
           <Row style={{marginBottom: 20}}>
             <Col>
-              <span className="bs-page-title">Local Purchase Orders</span>
+              <span className="bs-page-title">Local Purchase Order Drafts</span>
               <span style={{marginLeft: 5}}><SyncOutlined disabled={fetching_local_purchase_orders} spin={fetching_local_purchase_orders} onClick={()=> {
                 fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
               }} /></span>
@@ -240,7 +254,7 @@ const CreateLPO = (props) => {
         </Row> */}
         <Row>
           <Col span={24}>
-            <QuotationDetails quotation={selectedDraft} />
+            <QuotationDetails quotation={selectedDraft} showItems={true} />
           </Col>
         </Row>
       </Drawer>

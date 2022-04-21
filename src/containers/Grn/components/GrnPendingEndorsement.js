@@ -27,7 +27,7 @@ const columns = props => GRN_COLUMNS.concat([
     dataIndex: "actions",
     key: "actions",
     align: "right",
-    render: (text,row) => (<><Button size="small" type="primary" onClick={() => props.onEndorse(row)}>Approve</Button></>)
+    render: (text,row) => (<><Button size="small" type="primary" onClick={() => props.onEndorse(row)}>Endorse GRN</Button></>)
   },
 ])
 
@@ -94,7 +94,7 @@ const GrnPendingEndorsement = (props) => {
           grn={selectedGrn}
           invoice={selectedGrn?.invoice}
           invoiceDocument={selectedGrn?.invoice?.invoiceDocument}
-          onFinishText="Approve Goods Receive Note"
+          onFinishText="Endorse Goods Received Note"
           onFinish={() => {
             updateGrn(selectedGrn?.id, {updateType: "approve"})
           }}

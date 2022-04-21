@@ -61,6 +61,7 @@ const CreateGrn = (props) => {
               <div style={{marginBottom: 20, height: 200, display: 'flex', 
                 flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <Upload
+                  accept="image/*, application/pdf"
                   {...props} 
                   multiple={false} 
                   onRemove={handleFileRemove} 

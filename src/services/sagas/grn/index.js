@@ -1,5 +1,6 @@
 import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/grn/actions'
+import {Creators as NotificationCreators} from "../../redux/notification/actions"
 
 import {
   getAllGoodsReceiveNotes as getAllGoodsReceiveNotesApi,
@@ -55,6 +56,7 @@ export function* createGrn(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Supplier Goods Received Note', response?.message)
       yield put(Creators.createGrnSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Create Supplier Goods Received Note', response?.message)
       yield put(Creators.createGrnFailure(response?.message))
@@ -74,6 +76,7 @@ export function* updateGrn(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Update Supplier Goods Received Note', response?.message)
       yield put(Creators.updateGrnSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Update Supplier Goods Received Note', response?.message)
       yield put(Creators.updateGrnFailure(response?.message))

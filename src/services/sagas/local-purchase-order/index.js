@@ -1,5 +1,6 @@
 import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/local-purchase-order/actions'
+import { Creators as NotificationCreators } from '../../redux/notification/actions'
 
 import {
   fetchLocalPurchaseOrders as fetchLocalPurchaseOrdersApi,
@@ -74,6 +75,7 @@ export function* createLocalPurchaseOrder(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderFailure(response?.message))
@@ -93,6 +95,7 @@ export function* createLocalPurchaseOrderDraft(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderDraftSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
     } else {
       openNotification('error', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderDraftFailure(response?.message))

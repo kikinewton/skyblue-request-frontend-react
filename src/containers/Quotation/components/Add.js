@@ -68,6 +68,8 @@ const CreateQuotation = (props) => {
   const handleUploadFile = async(file) => {
     setLoadingDocument(true)
     try {
+      const docType = file?.file?.type
+      console.log("file object", docType)
       const response = await saveSingleDocument({file: file?.file, docType: ""})
       setLoadingDocument(false)
       if(response.status === RESPONSE_SUCCESS_CODE) {
@@ -215,7 +217,7 @@ const CreateQuotation = (props) => {
                   <LeftOutlined />
                   Select Supplier
                 </Button>
-                <Button type="primary" onClick={() => setCurrent(2)} disabled={selectedRequestItems?.length < 1}>
+                <Button type="default" onClick={() => setCurrent(2)} disabled={selectedRequestItems?.length < 1}>
                   Upload Quotation Document
                   <RightOutlined />
                 </Button>
@@ -231,6 +233,11 @@ const CreateQuotation = (props) => {
                   files={files}
                   onUpload={handleUploadFile}
                   loading={loadingDocument}
+                  onRemove={(file) => {
+                    console.log("selcted file", file)
+                    console.log('files', files)
+                    setFiles(files.filter(it => it.uid !== file.uid))
+                  }}
                 />
               </Col>
             </Row>

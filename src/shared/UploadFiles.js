@@ -9,6 +9,7 @@ const UploadFiles = props => {
   const {
     onUpload,
     files,
+    onRemove,
     loading,
     accept=".pdf,.png,.jpg"
   } = props
@@ -17,6 +18,11 @@ const UploadFiles = props => {
       <Row>
         <Col span={24}>
           <Upload
+            onRemove={(file) => {
+              if(onRemove) {
+                onRemove(file)
+              }
+            }}
             fileList={files}
             listType="picture-card"
             customRequest={file=> {

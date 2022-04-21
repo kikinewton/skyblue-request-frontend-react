@@ -157,7 +157,7 @@ const ReceiveItems = (props) => {
                   <List.Item>
                     <List.Item.Meta 
                       title="Sub total"
-                      description={ formatCurrency(subTotal(), local_purchase_order?.requestItems[0]?.curency) }
+                      description={ formatCurrency(subTotal(), local_purchase_order?.requestItems[0]?.currency) }
                     />
                   </List.Item>
                 </List>

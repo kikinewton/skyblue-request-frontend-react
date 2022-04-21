@@ -13,7 +13,7 @@ const RequestItemStatus = (props) => {
   return (
     <>
       <Row>
-        <Col span={24}>
+        <Col span={12}>
           <List>
             <List.Item>
               <List.Item.Meta title="Reference" 
@@ -22,6 +22,22 @@ const RequestItemStatus = (props) => {
             <List.Item>
               <List.Item.Meta title="Description"
                 description={requestItem?.name} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta title="Quantity"
+                description={requestItem?.quantity} />
+            </List.Item>
+          </List>
+        </Col>
+        <Col span={12}>
+          <List>
+            <List.Item>
+              <List.Item.Meta title="Date Created" 
+                description={prettifyDateTime(requestItem?.createdDate)} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta title="Department"
+                description={requestItem?.userDepartment?.name} />
             </List.Item>
             <List.Item>
               <List.Item.Meta title="Quantity"

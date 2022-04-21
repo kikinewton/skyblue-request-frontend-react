@@ -1,5 +1,5 @@
 import { EyeOutlined } from '@ant-design/icons'
-import { Badge, Card, Col, Drawer, Row, Table } from 'antd'
+import { Badge, Card, Col, Drawer, Input, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
@@ -21,9 +21,11 @@ const columns = (props) => GRN_COLUMNS.concat([
 
 const AllGrns = (props) => {
   const [grns, setGrns] = useState([])
+  const [filteredData, setFilteredData] = useState([])
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const [selectedGrn, setSelectedGrn] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   const handleFetch = async() => {
     setLoading(true)
@@ -31,12 +33,20 @@ const AllGrns = (props) => {
       const result = await getAllGoodsReceiveNotes({})
       if(result.status === RESPONSE_SUCCESS_CODE) {
         setGrns(result?.data)
+        setFilteredData(result?.data)
       }
     } catch (error) {
       
     } finally {
       setLoading(false)
     }
+  }
+
+  const onFilter = (value) => {
+    setFilteredData(grns.filter(grn => {
+      const supplier = grn?.invoice?.supplier?.name?.toLowerCase() || {};
+      return supplier.includes(value?.toLowerCase()) || grn?.grnRef?.toLowerCase().includes(value?.toLowerCase())
+    }) || [])
   }
 
   const expandedRowRender = (row) => {
@@ -60,6 +70,18 @@ const AllGrns = (props) => {
     <>
       <MyPageHeader 
         title="All Goods Receive Notes"
+        extra={[
+          <span key="filter">Filter:</span>,
+          <Input 
+            style={{width: 200}}
+            key="search" 
+            value={searchTerm}
+            onChange={e => {
+              setSearchTerm(e.target.value)
+              onFilter(e.target.value)
+            }} 
+          />
+        ]}
       />
       <Row>
         <Col span={24}>
@@ -73,7 +95,7 @@ const AllGrns = (props) => {
                   setVisible(true)
                 }
               })}
-              dataSource={grns}
+              dataSource={filteredData}
               loading={loading}
               rowKey="id"
               pagination={{pageSize: 30}}
