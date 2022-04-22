@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Table } from 'antd'
+import { Badge, Button, Card, Col, Row, Table } from 'antd'
 import React from 'react'
 import { history } from '../../../util/browser-history'
 import { GRN_COLUMNS } from '../../Grn'
@@ -6,6 +6,22 @@ import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => GRN_COLUMNS.concat([
+  {
+    title: "Payment History",
+    dataIndex: "hasPendingPaymentDraft",
+    key: "hasPendingPaymentDraft",
+    render: (text, row) => row?.hasPendingPaymentDraft ? (
+      <>
+        <Badge status="success" />
+        Has payment history
+      </>
+    ) : (
+      <>
+        <Badge status="warning" />
+        No payment history
+      </>
+    )
+  },
   {
     title: "Actions",
     dataIndex: "operation",

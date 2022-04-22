@@ -65,7 +65,7 @@ const GoodsReceivedNoteDetails = (props) => {
           </Col>
         </Row>
         <Row style={{marginTop: 20}}>
-          <Col><span style={{fontWeight: "bold"}}>Supporting Docuemnt(Goods Received Note)</span></Col>
+          <Col><span style={{fontWeight: "bold"}}>Supporting Document (Goods Received Note)</span></Col>
         </Row>
         <Row style={{minHeight: 200, border: "#000 1px solid"}}>
           <Col span={24}>

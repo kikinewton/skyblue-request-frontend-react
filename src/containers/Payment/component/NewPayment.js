@@ -2,7 +2,6 @@ import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
-// import * as paymentDraftService from '../../../services/api/payment-draft'
 import { history } from '../../../util/browser-history'
 import { CheckOutlined, FileExcelFilled, LeftOutlined, PercentageOutlined, RightOutlined } from '@ant-design/icons'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
@@ -25,15 +24,13 @@ const NewPayment = (props) => {
   } = props
   const [ form ] = Form.useForm()
   const [current, setCurrent] = useState(0)
-  const [selectedCurrency, setSelectedCurrency] = useState("GHS")
   const { grnId } = useParams()
   const [percentage, setPercenatage] = useState(0)
   const [amount, setAmount] = useState(0)
 
   const handleSubmit = async (values) => {
-    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, currency, withholdingTaxPercentage } = values
+    const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, withholdingTaxPercentage } = values
     const withHoldingTaxAmountDecimal = Number(withholdingTaxPercentage).toFixed(2)
-    console.log("percentage", withHoldingTaxAmountDecimal)
     const payload = {
       goodsReceivedNote: {id: grn?.id},
       chequeNumber,

@@ -1,9 +1,11 @@
-import { Table , Card, Row, Col, Pagination, Modal, Input, Button, Form, List } from 'antd'
+import { EyeOutlined } from '@ant-design/icons'
+import { Table , Card, Row, Col, Pagination, Modal, Input, Button, Form, List, Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { fetchPayments, cancelPayment } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
+import PaymentDetails from '../../../shared/PaymentDetails'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
@@ -15,7 +17,10 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
     key: "actions",
     render: (text, row) =>  (
       <>
-        <Button disabled={row.deleted} size="small" type="default" danger onClick={() => props.onCancel(row)}>
+        <Button size="small" type="default" onClick={() => props.onView(row)}>
+          <EyeOutlined /> View
+        </Button>
+        <Button style={{marginLeft: 5}} disabled={row.deleted} size="small" type="default" danger onClick={() => props.onCancel(row)}>
           Cancel
         </Button>
       </>
@@ -29,7 +34,9 @@ const PaymentHistory = (props) => {
   } = props
 
   const [requests, setRequests] = useState([])
+  const [filteredData, setFilteredData] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
+  const [purchaseNumber, setPurchaseNumber] = useState("")
   const [loading, setLoading] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState(null)
   const [visible, setVisible] = useState(false)
@@ -54,8 +61,7 @@ const PaymentHistory = (props) => {
       pageSize: 5,
         pageNo: 0,
         reference: grnRef ? grnRef : null,
-        paymentRef: paymentRef ? paymentRef : null,
-        grnRef: grnRef ? grnRef : null
+        purchaseNumber: paymentRef ? paymentRef : null,
     }
     try {
       const result = await fetchPayments({})
@@ -66,11 +72,18 @@ const PaymentHistory = (props) => {
       }
       
       setRequests(result?.data)
+      setFilteredData(result?.data)
     } catch (error) {
       
     } finally {
       setLoading(false)
     }
+  }
+
+  const onFilter = (value) => {
+    setFilteredData(requests.filter(request => {
+      return request?.purchaseNumber?.toLowerCase().includes(value?.toLowerCase())
+    }) || [])
   }
 
   const handlePageChange = async(page, pageSize) => {
@@ -131,18 +144,15 @@ const PaymentHistory = (props) => {
         />
         <Card>
           <Row>
-            <Col span={2}>Filter: </Col>
-            <Col md={4} sm={24} xs={24}>
-              <Input placeholder='search by grn' type="search" value={grnRef} onChange={value => {
-                setGrnRef(value)
-                handleChange()
-              }}  />
-            </Col>
-            <Col md={4} sm={24} xs={24} offset={1}>
-              <Input placeholder='search by payment ref' type="search" value={paymentRef} onChange={value => {
-                setPaymentRef(value)
-                handleChange()
-              }}  />
+            <Col span={4}>Filter: </Col>
+            <Col span={20}>
+              <Input placeholder='purchase number' type="search" 
+                value={purchaseNumber}
+                onChange={e => {
+                  setPurchaseNumber(e.target.value)
+                  onFilter(e.target.value)
+                }}  
+              />
             </Col>
           </Row>
         </Card>
@@ -154,15 +164,19 @@ const PaymentHistory = (props) => {
                 columns={columns({
                   onView: row =>  {
                     setSelectedPayment(row)
+                    setCancelVisible(false)
                     setVisible(true)
                   },
                   onCancel: row => {
                     setSelectedPayment(row)
+                    setVisible(false)
                     setCancelVisible(true)
                   }
                 })}
-                dataSource={requests}
-                pagination={false}
+                dataSource={filteredData}
+                pagination={{
+                  pageSize: 30,
+                }}
                 rowKey="id"
                 size='small'
                 bordered
@@ -184,6 +198,20 @@ const PaymentHistory = (props) => {
             </Col>
           </Row>
         </Card>
+        <Drawer
+          visible={visible}
+          title="Payment Details"
+          width={720}
+          placement="right"
+          onClose={() => {
+            setSelectedPayment(null)
+            setVisible(false)
+          }}
+        >
+          <PaymentDetails 
+            payment={selectedPayment}
+          />
+        </Drawer>
         <Modal
           visible={cancelVisible}
           footer={false}

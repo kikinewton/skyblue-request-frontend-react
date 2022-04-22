@@ -1,15 +1,22 @@
-import { Table , Card, Row, Col, Pagination, Drawer, Input, Button, Form } from 'antd'
+import { EyeOutlined } from '@ant-design/icons'
+import { Table , Card, Row, Col, Drawer, Input, Button, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
+import PaymentDraftDetails from '../../../shared/PaymentDraftDetails'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => PAYMENT_COLUMNS.concat([
-  
+  {
+    title: "actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, row) => <EyeOutlined onClick={e =>  props.onView(row)} />
+  }
 ])
 
 const PaymentDraftHistory = (props) => {
@@ -23,8 +30,7 @@ const PaymentDraftHistory = (props) => {
   const [loading, setLoading] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState(null)
   const [visible, setVisible] = useState(false)
-  const [grnRef, setGrnRef] = useState("")
-  const [paymentRef, setPaymentRef] = useState("")
+  const [purchaseNumber, setPurchaseNumber] = useState("")
   const [cancelling, setCancelling] = useState(false)
   const [cancelVisible, setCancelVisible] = useState(false)
 
@@ -73,9 +79,7 @@ const PaymentDraftHistory = (props) => {
 
   const onFilter = (value) => {
     setFilteredData(requests.filter(request => {
-      const goodsReceivedNote = request?.goodsReceivedNote || []
-      const supplier = goodsReceivedNote?.finalSupplier || {}
-      return supplier?.name?.toLowerCase().includes(value.toLowerCase())
+      return request?.purchaseNumber?.toLowerCase().includes(value.toLowerCase())
     }))
   }
 
@@ -113,10 +117,10 @@ const PaymentDraftHistory = (props) => {
             <Col span={4}>Filter: </Col>
             <Col span={20}>
               <Input 
-                placeholder='search by grn' 
-                type="search" value={grnRef} 
+                placeholder='Purchase number' 
+                type="search" value={purchaseNumber} 
                 onChange={e => {
-                  setGrnRef(e.target.value)
+                  setPurchaseNumber(e.target.value)
                   onFilter(e.target.value)
                 }}  
               />
@@ -158,7 +162,7 @@ const PaymentDraftHistory = (props) => {
             </Col>
           </Row> */}
           <Drawer
-            title="Payment Details"
+            title="Payment Draft Details"
             visible={visible}
             width={800}
             placement="right"
@@ -169,7 +173,9 @@ const PaymentDraftHistory = (props) => {
           >
             <Row>
               <Col span={24}>
-                <Button loading={cancelling} type="danger" onClick={e => handleCancelPayment()}>Cancel Payment</Button>
+                <PaymentDraftDetails 
+                  payment={selectedPayment}
+                />
               </Col>
             </Row>
           </Drawer>

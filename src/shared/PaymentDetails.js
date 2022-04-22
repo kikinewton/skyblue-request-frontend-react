@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { Card, List, Row, Col } from 'antd'
 import { formatCurrency, prettifyDateTime } from '../util/common-helper'
+import GoodsReceivedNoteDetails from './GoodsReceivedNoteDetails'
 
 const PaymentDetails = (props) => {
   const {
@@ -48,6 +49,13 @@ const PaymentDetails = (props) => {
               <List.Item.Meta title="WithHolding Amount" description={formatCurrency(payment?.withholdingTaxAmount)} />
             </List.Item>
           </List>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <GoodsReceivedNoteDetails 
+            grn={payment?.grn}
+          />
         </Col>
       </Row>
     </Card>
