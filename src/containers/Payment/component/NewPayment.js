@@ -43,8 +43,7 @@ const NewPayment = (props) => {
       currency: grn?.receivedItems[0]?.currency,
       withholdingTaxPercentage,
     }
-    console.log("payment payload", )
-    //createPaymentDraft(payload)
+    createPaymentDraft(payload)
   }
 
   const getWithholdingTaxPercentageAmount = (amnt, perc) => {
