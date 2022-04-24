@@ -99,6 +99,7 @@ const mapStateToProps = (store) => ({
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
   my_requests: store.request.my_requests,
+  filtered_my_requests: store.request.filtered_my_requests,
   submitSuccess: store.request.submitSuccess,
   update_request_success: store.request.update_success,
   updating_request: store.request.updating,
@@ -129,6 +130,10 @@ const mapActionsToProps = (dispatch) => {
     },
     fetchRequests: (query) => {
       dispatch(RequestCreators.fetchRequests(query))
+    },
+    filterMyRequests: (query) => {
+      console.log('lets filter', query)
+      dispatch(RequestCreators.filterMyRequests(query))
     },
     getRequest: (id) => {
       dispatch(RequestCreators.getRequest(id))

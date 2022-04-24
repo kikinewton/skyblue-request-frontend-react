@@ -6,7 +6,7 @@ import MyPdfView from '../../../presentation/MyPdfView'
 import { generateResourceUrl } from '../../../services/api/document'
 import { BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
-import { prettifyDateTime } from '../../../util/common-helper'
+import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
 import { CURRENCY_CODE } from '../../../util/constants'
 import { CURRENCIES } from '../../../util/datas'
 import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
@@ -73,16 +73,6 @@ const updatePriceColumns = (props)=> [
         ))}
       </Select>
     )
-    // render: (text, row) => {
-    //   return (
-    //     <Select style={{width: '100%'}} defaultValue={row?.requestCategory} onChange={(value)=> props.onRequestCategoryChange(row, value)}>
-    //       <Select.Option value={undefined}>Select Request Category</Select.Option>
-    //       {props.request_categories.map(item=> (
-    //         <Select.Option key={`rqc-${item?.id}`} value={item?.id}>{item?.name}</Select.Option>
-    //       ))}
-    //     </Select>
-    //   )
-    // }
   },
   {
     title: 'Unit price',
@@ -114,6 +104,11 @@ const requestColumns = props => [
     key: "name",
   },
   {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
+  },
+  {
     title: "Requisition Date",
     dataIndex: "createdDate",
     key: "createdDate",
@@ -142,6 +137,7 @@ const confirmColumns = props => [
     title: "Unit Price",
     dataIndex: "unitPrice",
     key: "unitPrice",
+    render: (text) => `${formatCurrency(text,props.currency)}`
   },
 ]
 
@@ -475,7 +471,8 @@ const CreateLPO = (props) => {
               <Col span={24}>
                 <Table 
                   columns={confirmColumns({
-                    request_categories
+                    request_categories,
+                    currency: currency
                   })}
                   dataSource={selectedRequests}
                   rowKey="id"

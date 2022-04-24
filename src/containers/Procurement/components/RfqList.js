@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, MailOutlined, SendOutlined } from '@ant-design/icons'
 import { Button, Col, Card, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { downloadRfqForSupplier, generateRfqForSupplierAndShare } from "../../../services/api/supplier"
@@ -26,6 +26,9 @@ const columns = props => [
             <MailOutlined /> 
             Share RFQ With Supplier
           </Button> */}
+          {/* {row?.email && (
+            <Button style={{marginRight: 5}} size="small" onClick={() => props.generateRfq(row)} type="default"><MailOutlined /> Send</Button>
+          )} */}
           <Button size="small" onClick={() => props.generateRfq(row)} type="default"><DownloadOutlined /> Generate RFQ</Button>
         </div>
       )

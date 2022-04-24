@@ -7,6 +7,7 @@ import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
 import MyRequestMenu from '../MyRequestMenu'
 import MyPageHeader from '../../../../shared/MyPageHeader'
+import { debounce } from 'lodash'
 
 const columns = props => REQUEST_COLUMNS.concat([
   // {
@@ -30,13 +31,21 @@ const columns = props => REQUEST_COLUMNS.concat([
 ])
 
 const LpoList = (props) => {
-  const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success } = props
+  const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success, 
+    filtered_my_requests, filterMyRequests } = props
   const [page, setPage] = React.useState(0)
   const history = useHistory()
   const { path } = useRouteMatch()
   const [updateDrawer, setUpdateDrawer] = React.useState(false)
   const [selectedRequest, setSelectedRequest] = React.useState(null)
   const [updatePriceForm] = Form.useForm()
+
+  const [searchTerm, setSearchTerm] = React.useState("");
+
+  const onFilter = debounce((value) => {
+    filterMyRequests(value)
+  } , 1000)
+
   React.useEffect(()=> {
 
     fetchMyRequests({
@@ -65,11 +74,27 @@ const LpoList = (props) => {
         <MyPageHeader 
            title="My request items"
            extra={[
-            <Button type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
+            <Button key="add-btn" type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               Add New
             </Button>
           ]}
         />
+        <Card>
+          <Row>
+            <Col offset={16} span={8}>
+              <Input
+                allowClear
+                placeholder='reference/description...'
+                style={{width: "100%"}}
+                value={searchTerm} 
+                onChange={e => {
+                  setSearchTerm(e.target.value)
+                  onFilter(e.target.value)
+                }} 
+              />
+            </Col>
+          </Row>
+        </Card>
         <Card>
           <Row>
             <Col md={24}>
@@ -88,7 +113,7 @@ const LpoList = (props) => {
                     setUpdateDrawer(true)
                   }
                 })}
-                dataSource={my_requests}
+                dataSource={filtered_my_requests}
                 size="small"
                 rowKey="id"
                 bordered

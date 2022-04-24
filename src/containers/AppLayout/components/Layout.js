@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Menu, Layout, Dropdown, Col, Row, notification } from 'antd'
+import { Menu, Layout, Dropdown, Col, Row, notification, Modal } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
 import {
@@ -114,6 +114,7 @@ const CollapsibleLayout = (props) => {
   }, [key])
 
   return (
+    <>
     <Layout className="bs-layout">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         {/* <div className="bs-logo" /> */}
@@ -400,6 +401,14 @@ const CollapsibleLayout = (props) => {
         </Footer>
       </Layout>
     </Layout>
+    {/* <Modal
+      visible={!currentUser?.}
+      maskClosable={false}
+      title="Change Password"
+    >
+
+    </Modal> */}
+    </>
   )
 }
 

@@ -5,6 +5,7 @@ export const INITIAL_STATE = {
   errors: null,
   requests: [],
   my_requests: [],
+  filtered_my_requests: [],
   selected_requests: [],
   request: null,
   loading: false,
@@ -34,11 +35,11 @@ export const fetchMyRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_requests: action.responseData, loading: false};
+  return { ...state, my_requests: action.responseData, filtered_my_requests: action.responseData,loading: false};
 };
 
 export const fetchMyRequestsFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error, my_requests: []};
+  return { ...state, loading: false, error: action.error, my_requests: [], filtered_my_requests: []};
 };
 
 //get
@@ -129,6 +130,15 @@ export const setSelectedRequests = (state = INITIAL_STATE, action) => {
 }
 
 
+export const filterMyRequests = (state = INITIAL_STATE, action) => {
+  const {filter} = action
+  const filtered = state.my_requests.filter(item => {
+    return item.name.toLowerCase().includes(filter.toLowerCase()) || 
+      item.requestItemRef.toLowerCase().includes(filter.toLowerCase())
+  })
+  return { ...state, filtered_my_requests: filtered }
+}
+
 export const resetRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -154,6 +164,7 @@ export const HANDLERS = {
   [Types.FETCH_MY_REQUESTS]: fetchMyRequests,
   [Types.FETCH_MY_REQUESTS_SUCCESS]: fetchMyRequestsSuccess,
   [Types.FETCH_MY_REQUESTS_FAILURE]: fetchMyRequestsFailure,
+  [Types.FILTER_MY_REQUESTS]: filterMyRequests,
 
   [Types.CREATE_REQUEST]: createRequest,
   [Types.CREATE_REQUEST_SUCCESS]: createRequestSuccess,
@@ -173,6 +184,8 @@ export const HANDLERS = {
 
   [Types.SET_REQUEST]: setRequest,
   [Types.SET_SELECTED_REQUESTS]: setSelectedRequests,
+
+
   
   [Types.RESET_REQUEST]: resetRequest
 };

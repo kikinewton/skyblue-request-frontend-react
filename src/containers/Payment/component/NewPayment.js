@@ -31,7 +31,7 @@ const NewPayment = (props) => {
   const handleSubmit = async (values) => {
     const { paymentAmount, paymentMethod, purchaseNumber, chequeNumber, bank, paymentStatus, withholdingTaxPercentage } = values
     
-    const withHoldingTaxAmountDecimal = Number(withholdingTaxPercentage).toFixed(2)
+    //const withHoldingTaxAmountDecimal = Number(withholdingTaxPercentage).toFixed(2)
     const payload = {
       goodsReceivedNote: {id: grn?.id},
       chequeNumber,

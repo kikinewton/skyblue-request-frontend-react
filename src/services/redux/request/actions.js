@@ -34,6 +34,8 @@ export const { Types, Creators } = createActions(
 
     setSelectedRequests: ["requests"],
 
+    filterMyRequests: ["filter"],
+
     resetRequest: null
   }
 )

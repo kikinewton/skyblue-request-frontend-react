@@ -1,4 +1,4 @@
-import { CheckCircleTwoTone } from "@ant-design/icons"
+import { CheckCircleTwoTone, WarningTwoTone } from "@ant-design/icons"
 import { Badge, Table, Tag } from "antd"
 import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
@@ -18,7 +18,13 @@ export const REQUEST_COLUMNS = [
   {
     title: 'Reference',
     dataIndex: 'requestItemRef',
-    key: 'requestItemRef'
+    key: 'requestItemRef',
+    render: (text, row) => (
+      <>
+        <span>{text}</span>
+        {row?.status === "COMMENT" && (<WarningTwoTone style={{marginLeft: 5}} twoToneColor="#eb2f96" />)}
+      </>
+    )
   },
   {
     title: 'Name',

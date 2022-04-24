@@ -33,15 +33,15 @@ export function* createComment(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       console.log('data', responseData)
-      openNotification('success', 'CREATE Comment', response.message)
+      openNotification('success', 'Create comment', response.message)
       yield put(Creators.createCommentSuccess(responseData))
     } else {
-      openNotification('error', 'Create Comment', response.message)
+      openNotification('error', 'Create comment', response.message)
       yield put(Creators.createCommentFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to create Comments'
-    openNotification('error', 'Create Comment', message)
+    openNotification('error', 'Create comment', message)
     yield put(Creators.createCommentFailure(message))
   }
 }

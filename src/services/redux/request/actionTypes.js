@@ -33,6 +33,8 @@ export default createTypes(
   SET_REQUEST
   SET_SELECTED_REQUESTS
 
+  FILTER_MY_REQUESTS
+
   RESET_REQUEST
 
 `,
