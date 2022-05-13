@@ -1,6 +1,6 @@
 import { Card, Col, Row, List, Button, Form, Input } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import * as employeeService from '../../services/api/employee'
@@ -16,7 +16,6 @@ const Settings = (props) => {
   const [ changePasswordModal, setChangePasswordModal ] = React.useState(false)
   const [changePasswordForm] = Form.useForm()
   const [changingPassword, setChangingPassword] = React.useState(false)
-  const history = useHistory()
 
   const handleCancel = () => {
     setChangePasswordModal(false)

@@ -43,7 +43,7 @@ const PaymentDetails = (props) => {
               <List.Item.Meta title="Payment Withholding Tax(%)" description={payment?.withholdingTaxAmount ? `${payment?.withholdingTaxPercentage * 100}%` : '0%'} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Amount Paid" description={formatCurrency(payment?.paymentAmount)} />
+              <List.Item.Meta title="Amount Payable" description={formatCurrency(payment?.paymentAmount)} />
             </List.Item>
             <List.Item>
               <List.Item.Meta title="WithHolding Amount" description={formatCurrency(payment?.withholdingTaxAmount)} />

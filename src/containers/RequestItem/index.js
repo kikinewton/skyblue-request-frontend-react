@@ -10,7 +10,7 @@ import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import ApprovePendingList from './components/ApprovePendingList';
-import { Badge, Menu, notification } from "antd"
+import { Menu } from "antd"
 import { EMPLOYEE_ROLE } from '../../util/datas';
 import ApprovedItemRequest from './components/ApprovedItemRequests';
 import EndorsedItemRequest from './components/EndorsedItemRequest';

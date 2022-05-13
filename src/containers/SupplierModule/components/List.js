@@ -62,7 +62,6 @@ const List = (props)=> {
   }
 
   const handleAddSubmit = async (values) => {
-    console.log('values', values)
     const { name, description, email, phoneNo, bank, location, accountNumber } = values
     const payload = {
       name,
@@ -71,8 +70,10 @@ const List = (props)=> {
       phone_no: phoneNo,
       bank,
       location,
-      accountNumber
+      accountNumber,
+      registered: true
     }
+    console.log('payload create registered supplier', payload)
     await createSupplier(payload)
   }
 
@@ -173,7 +174,7 @@ const List = (props)=> {
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting_supplier}>
-            Submit
+            Register Supplier
           </Button>
           </Form.Item>
         </Form>

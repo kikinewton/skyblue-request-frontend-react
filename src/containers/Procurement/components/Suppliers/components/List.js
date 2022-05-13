@@ -71,7 +71,8 @@ const List = (props)=> {
       phone_no: phoneNo,
       bank,
       location,
-      accountNumber
+      accountNumber,
+      registered: true
     }
     await createSupplier(payload)
   }
