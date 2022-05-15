@@ -6,7 +6,6 @@ import AppLayout from '../AppLayout'
 import * as employeeService from '../../services/api/employee'
 import openNotification from '../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../services/api/apiRequest'
-import { useHistory } from 'react-router-dom'
 import { signOut } from '../../services/api/auth'
 // import { history } from '../../util/browser-history'
 

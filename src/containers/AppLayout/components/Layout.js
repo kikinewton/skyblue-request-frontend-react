@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Menu, Layout, Dropdown, Col, Row, notification, Modal } from 'antd'
+import { Menu, Layout, Dropdown, Col, Row, notification, Modal, Badge } from 'antd'
 import "../../../styles/layout.less"
 import * as authService from '../../../services/api/auth'
 import {
@@ -164,14 +164,17 @@ const CollapsibleLayout = (props) => {
             <>
               <Menu.Item key="request">
                 <NavLink to="/app/request-items">
-                  <ReconciliationOutlined />
-                  <span>Item requests</span>
+                    <ReconciliationOutlined />
+                    <span>Item requests</span>
+                    {notifications?.requestPendingEndorsementHOD || notifications.requestPendingApprovalGM || 
+                     notifications.requestEndorsedByHOD ? <NotificationBadge /> : null} 
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="petty-cash">
                 <NavLink to="/app/petty-cash">
                   <ReconciliationOutlined />
                   <span>Petty cash requests</span>
+                  {notifications?.pettyCashPendingEndorsement || notifications?.pettyCashPendingApprovalGM ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item>
             </>
@@ -182,6 +185,7 @@ const CollapsibleLayout = (props) => {
                 <NavLink to="/app/float">
                   <ReconciliationOutlined />
                   <span>Float requests</span>
+                  {notifications?.floatPendingEndorsement || notifications?.floatPendingApprovalGM ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item>
             </>
@@ -193,6 +197,9 @@ const CollapsibleLayout = (props) => {
                 <NavLink to="/app/payments">
                   <WalletOutlined />
                   <span>Payments</span>
+                  {notifications?.paymentDraftPendingAuthorizationFM || notifications?.grnAwaitingPaymentAdvice || 
+                  notifications?.grnReadyForPaymentAccount || notifications?.paymentDraftPendingAuditorCheck || 
+                  notifications?.paymentDraftPendingApproval ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item>
            )}
@@ -202,6 +209,8 @@ const CollapsibleLayout = (props) => {
               <NavLink to="/app/grn">
                 <ShopOutlined />
                 <span>Goods Receive Note</span>
+                {notifications.grnPendingApprovalGM || notifications?.grnPendingApproval || 
+                  notifications.lpoWithoutGRN ? <NotificationBadge/> : null}
               </NavLink>
             </Menu.Item>
           )}
@@ -246,57 +255,10 @@ const CollapsibleLayout = (props) => {
               <NavLink to={`/app/local-purchase-orders`}>
                 <ShoppingCartOutlined />
                 <span>Local Purchase Orders</span>
+                {notifications?.lpoDraftAwaitingApproval ? <NotificationBadge/> : null}
               </NavLink>
             </Menu.Item>
           }
-          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER]) && 
-            <Menu.Item key="/app/store" icon={<ShopOutlined />}>
-              <NavLink to="/app/store">
-                Store
-              </NavLink>
-            </Menu.Item>
-          } */}
-          {/* {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_CHIEF_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && 
-            <Menu.SubMenu  
-              key="/app/account" 
-              title="Accounts" 
-              icon={<AccountBookOutlined />}
-            >
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER]) && 
-              <Menu.Item key="/app/account/goods-receive-notes">
-                <NavLink to="/app/account/goods-receive-notes">
-                  Make Payment
-                </NavLink>
-              </Menu.Item>
-              }
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_AUDITOR]) &&
-              <Menu.Item key="/app/account/payments">
-                <NavLink to="/app/account/payments">
-                  Payments
-                </NavLink>
-              </Menu.Item>
-              }
-              {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_AUDITOR]) &&
-                <Menu.Item key="/app/audit/approve-payment">
-                  <NavLink to="/app/audit/approve-payment">
-                    Aprove Payments
-                  </NavLink>
-                </Menu.Item>
-              }
-            </Menu.SubMenu>
-          } */}
-          {/* <Menu.SubMenu key="/app/audit" title="Audit" icon={<AccountBookOutlined />}>
-            <Menu.Item key="/app/audit/approve-payment">
-              <NavLink to="/app/audit/approve-payment">
-                Approve Payments
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="/app/audit/payments">
-              <NavLink to="/app/audit/payments">
-                Payments
-              </NavLink>
-            </Menu.Item>
-          </Menu.SubMenu> */}
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listDepartmentsRoles) && 
             <Menu.Item key="department">
               <NavLink to="/app/departments">

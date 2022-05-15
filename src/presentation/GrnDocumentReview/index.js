@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
-import { Row, Col, List, Image, Card, Table, Button } from "antd"
-import { BASE_URL } from '../../services/api/urls'
+import React from 'react'
+import { Row, Col, List, Card, Table, Button } from "antd"
 import { formatCurrency, prettifyDateTime } from '../../util/common-helper'
-import { DownloadOutlined } from '@ant-design/icons'
-import MyPdfView from '../MyPdfView'
-import { generateResourceUrl } from '../../services/api/document'
 import QuotationDetails from "../../shared/QuotationDetails"
 import FilesView from "../../shared/FilesView"
 
@@ -40,7 +36,6 @@ const GrnDocumentReview = (props) => {
     quotation,
     showRequestItems=true,
   } = props
-  const [imagePreview, setImagePreview] = useState(false)
   return (
     <>
       <Row style={{margin: "30px 0 30px 0"}}>

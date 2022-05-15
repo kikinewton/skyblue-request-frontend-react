@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 const MyImageView = ({src}) => {
   return (
     <>
-      <img src={src} alt="image" width={400} />
+      <img src={src} alt="supporting-doc" width={400} />
     </>
   )
 }
