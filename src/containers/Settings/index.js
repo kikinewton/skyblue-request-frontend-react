@@ -43,27 +43,27 @@ const Settings = (props) => {
   
   const myList = [
     {
-      title: 'First Name',
+      title: 'FIRST NAME',
       desription: currentUser.firstName
     },
     {
-      title: 'Last Name',
+      title: 'LAST NAME',
       desription: currentUser.lastName
     },
     {
-      title: 'Email',
+      title: 'EMAIL',
       desription: currentUser.email
     },
     {
-      title: 'Phone Number',
+      title: 'PHONE NUMBER',
       desription: currentUser.phoneNo
     },
     {
-      title: 'Department',
+      title: 'DEPARTMENT',
       desription: currentUser.department?.name
     },
     {
-      title: 'Role',
+      title: 'USER ROLE',
       desription: currentUser?.role
     },
   ]
@@ -73,7 +73,7 @@ const Settings = (props) => {
       <AppLayout>
         <Row>
           <Col md={12}>
-            <span className="bs-page-title">Settings</span>
+            <span className="bs-page-title">SETTINGS</span>
           </Col>
         </Row>
         <Row>
@@ -83,7 +83,7 @@ const Settings = (props) => {
                 <Col md={12}>
                   <Row>
                     <Col md={24}>
-                      <span>Basic info</span>
+                      <span>BASIC INFO</span>
                     </Col>
                   </Row>
                   <Row>
@@ -106,15 +106,15 @@ const Settings = (props) => {
                 <Col md={12}>
                   <Row>
                     <Col md={12}>
-                      <span>Basic Settings</span>
+                      <span>BASIC SETTINGS</span>
                     </Col>
                   </Row>
                   <Row>
                     <Col md={24}>
                       <List.Item>
                         <List.Item.Meta 
-                          title="Change password"
-                          description={<Button onClick={()=> setChangePasswordModal(true)}>Change password</Button>}
+                          title="CHANGE PASSWORD"
+                          description={<Button onClick={()=> setChangePasswordModal(true)}>CHANGE PASSWORD</Button>}
                         />
                       </List.Item>
                     </Col>
@@ -130,7 +130,7 @@ const Settings = (props) => {
         visible={changePasswordModal} 
         onOk={changePasswordForm.submit} 
         onCancel={handleCancel}
-        title="Change Pasword"
+        title="CHANGE PASSWORD FORM"
       >
         <Form form={changePasswordForm} onFinish={handleChangePasswordSubmit} layout="vertical" initialValues={{
           oldPassword: '',
@@ -138,21 +138,21 @@ const Settings = (props) => {
           confirmPassword: ''
         }}>
           <Form.Item 
-            label="Old Password" 
+            label="OLD PASSWORD" 
             name="oldPassword" 
             rules={[{required: true, message: 'Old password required'}]}
           >
             <Input type="password" />
           </Form.Item>
           <Form.Item 
-            label="New Password" 
+            label="NEW PASSWORD" 
             name="newPassword" 
             rules={[{required: true, message: 'New password required'}]}
           >
             <Input type="password" />
           </Form.Item>
           <Form.Item 
-            label="Confirm Password" 
+            label="CONFIRM NEW PASSWORD" 
             name="confirmPassword" 
             dependencies={['newPassword']}
             hasFeedback
@@ -177,7 +177,7 @@ const Settings = (props) => {
               htmlType="submit" 
               className="bs-form-button"
             >
-              Submit
+              SUBMIT
             </Button>
           </Form.Item>
         </Form>

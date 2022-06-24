@@ -16,7 +16,7 @@ export const USER_ROLES = {
 
 export const REQUEST_COLUMNS = [
   {
-    title: 'Reference',
+    title: 'REF',
     dataIndex: 'requestItemRef',
     key: 'requestItemRef',
     render: (text, row) => (
@@ -27,59 +27,54 @@ export const REQUEST_COLUMNS = [
     )
   },
   {
-    title: 'Name',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: 'name',
     render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
   },
   {
-    title: 'Reason',
+    title: 'REASON',
     dataIndex: 'reason',
     key: 'reason'
   },
   {
-    title: 'Purpose',
+    title: 'PURPOSE',
     dataIndex: 'purpose',
     key: 'purpose'
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: 'quantity'
   },
   {
-    title: 'Department',
+    title: 'DEPARTMENT',
     dataIndex: 'userDepartment',
     key: 'userDepartment',
     render: (text, row) => row?.userDepartment?.name
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "unitPrice",
     key: "unitPrice",
     render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"
   },
   {
-    title: 'Date',
+    title: 'REQUESTED ON',
     dataIndex: 'createdDate',
     key: 'createdDate',
     render: text => prettifyDateTime(text)
   },
   {
-    title: 'Endorsement',
+    title: 'ENDORSEMENT',
     dataIndex: 'endorsement',
     key: 'endorsement'
   }, 
   {
-    title: 'Approval',
+    title: 'APPROVAL',
     dataIndex: 'approval',
     key: 'approval'
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status'
-  }, 
+  }
 ]
 
 export const MINI_REQUEST_COLUMNS = [
@@ -214,41 +209,41 @@ export const SUPPLIER_COLUMNS = [
 
 export const EMPLOYEE_COLUMNS = [
   {
-    title: 'Name',
+    title: 'NAME',
     dataIndex: 'fullName',
     key: 'name'
   },
   {
-    title: 'Email',
+    title: 'EMAIL',
     dataIndex: 'email',
     key: 'email'
   },
   {
-    title: 'Phone Number',
+    title: 'PHONE',
     dataIndex: 'phoneNo',
     key: 'phoneNo'
   },
   {
-    title: 'Department',
+    title: 'DEPARTMENT',
     dataIndex: 'department',
     key: 'department',
     render: (text) => text?.name
   },
   {
-    title: 'Role',
+    title: 'ROLE',
     dataIndex: 'roles',
     key: 'roles',
     render: (text)=> {
       let role = (text || [])[0]?.name
-      return role?.replaceAll('_', ' ')
+      return role?.replaceAll('_', ' ')?.replace('ROLE', '')
       //return roleName.replcae('_', ' ')
     }
   },
   {
-    title: 'Status',
+    title: 'STATUS',
     dataIndex: 'enabled',
     key: 'department',
-    render: (text) => text ? "Activated" : "Deactivated"
+    render: (text) => text ? (<span style={{color: "green"}}>Activated</span>) : (<span style={{color: 'red'}}>Deactivated</span>)
   },
 ]
 

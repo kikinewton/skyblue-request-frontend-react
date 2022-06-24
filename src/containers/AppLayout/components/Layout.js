@@ -176,7 +176,7 @@ const CollapsibleLayout = (props) => {
                   <span>Petty cash requests</span>
                   {notifications?.pettyCashPendingEndorsement || notifications?.pettyCashPendingApprovalGM ? <NotificationBadge/> : null}
                 </NavLink>
-              </Menu.Item>
+              </Menu.Item> 
             </>
           )}
           {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (

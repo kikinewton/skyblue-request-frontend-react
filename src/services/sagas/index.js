@@ -90,7 +90,8 @@ import {
 } from "./local-purchase-order"
 
 import {
-	watchCreateComment
+	watchCreateComment,
+	watchFetchComments,
 } from "./comment"
 
 import {
@@ -184,6 +185,7 @@ export default function* rootSaga() {
 		watchCreateLocalPurchaseOrderDraft(),
 
 		watchCreateComment(),
+		watchFetchComments(),
 
 		watchCreateGrn(),
 		watchUpdateGrn(),

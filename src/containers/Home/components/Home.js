@@ -17,7 +17,7 @@ const Home = (props) => {
   }, [])
   return (
     <>
-      <h1>Home</h1>
+      <h1>HOME</h1>
         {userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR]) ? (
           <>
             <Card title="My Recent Requests">
@@ -48,22 +48,22 @@ const Home = (props) => {
                 <Col span={24}>
                   <List>
                     <List.Item>
-                      <List.Item.Meta title="First Name" description={currentUser?.firstName} />
+                      <List.Item.Meta title="FIRST NAME" description={currentUser?.firstName} />
                     </List.Item>
                     <List.Item>
-                      <List.Item.Meta title="Last Name" description={currentUser?.lastName} />
+                      <List.Item.Meta title="LAST NAME" description={currentUser?.lastName} />
                     </List.Item>
                     <List.Item>
-                      <List.Item.Meta title="Email" description={currentUser?.email} />
+                      <List.Item.Meta title="EMAIL" description={currentUser?.email} />
                     </List.Item>
                     <List.Item>
-                      <List.Item.Meta title="Phone Number" description={currentUser?.phoneNo} />
+                      <List.Item.Meta title="PHONE NUMBER" description={currentUser?.phoneNo} />
                     </List.Item>
                     <List.Item>
-                      <List.Item.Meta title="Department" description={currentUser?.department?.name} />
+                      <List.Item.Meta title="DEPARTMENT" description={currentUser?.department?.name} />
                     </List.Item>
                     <List.Item>
-                      <List.Item.Meta title="Role" description={currentUser?.role} />
+                      <List.Item.Meta title="USER ROLE" description={currentUser?.role} />
                     </List.Item>
                   </List>
                 </Col>

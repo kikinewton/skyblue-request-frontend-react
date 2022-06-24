@@ -14,3 +14,9 @@ export function createComment(procurementType, payload) {
     data: payload
   })
 }
+
+export function fetchUserComments(query) {
+  return service({
+    url: `/comment/unread?procurementType=${query.procurementType}`
+  })
+}

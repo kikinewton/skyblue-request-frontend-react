@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import { Switch, useRouteMatch } from 'react-router-dom'
 import AppLayout from '../AppLayout'
 import List from './components/List'
-import Add from './components/Add'
-import Edit from './components/Edit'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import { Creators } from '../../services/redux/department/actions'
 
@@ -17,8 +15,6 @@ const Department = (props) => {
       <AppLayout>
         <Switch>
           <AuthenticatedRoute exact path={`${path}`} {...props} component={List} />
-          <AuthenticatedRoute exact path={`${path}/add-new`} {...props} component={Add} />
-          <AuthenticatedRoute exatc path={`${path}/:departmentId/edit`} {...props} component={Edit} />
         </Switch>
       </AppLayout>
     </>

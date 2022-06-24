@@ -6,9 +6,12 @@ export const { Types, Creators } = createActions(
     fetchCommentsSuccess: ["responseData"],
     fetchCommentsFailure: ["error"],
 
+
     createComment: ["procurementType","payload"],
     createCommentSuccess: ["responseData"],
     createCommentFailure: ["error"],
+
+    setNewComment: ["newComment"],
 
     resetComment: null
   }

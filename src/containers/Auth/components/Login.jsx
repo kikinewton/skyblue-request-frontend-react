@@ -11,7 +11,7 @@ const Login = (props) => {
 
   return (
     <>
-      <Card title="Login">
+      <Card title="LOGIN">
         <Form
           name="bs-form"
           initialValues={{ email: '', password: '' }}
@@ -25,7 +25,7 @@ const Login = (props) => {
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={loading}>
-            Log in
+            LOG IN
           </Button>
         </Form.Item>
         </Form>

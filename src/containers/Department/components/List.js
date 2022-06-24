@@ -89,10 +89,10 @@ const List = (props)=> {
     <>
       <Row>
         <Col md={10} style={{paddingBottom: 5}}>
-          <span className="bs-page-title">Departments</span>
+          <span className="bs-page-title">DEPARTMENTS</span>
         </Col>
         <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={()=> setOpenAdd(true)}>Create department</Button>
+          <Button type="primary" onClick={()=> setOpenAdd(true)}>ADD NEW DEPARTMENT</Button>
         </Col>
       </Row>
       <Row>
@@ -112,19 +112,19 @@ const List = (props)=> {
         visible={openAdd}
         onOk={addForm.submit}
         onCancel={()=> setOpenAdd(false)}
-        title="Add Department"
+        title="ADD NEW DEPARTMENT FORM"
         footer={null}
       >
         <Form form={addForm} onFinish={handleAddSubmit} layout="vertical" >
-          <Form.Item name="name" rules={[{ required: true, message: 'Name required' }]}>
+          <Form.Item label="NAME" name="name" rules={[{ required: true, message: 'Name required' }]}>
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item name="description" rules={[{ required: true, message: 'Description required' }]}>
+          <Form.Item label="DESCRIPTION" name="description" rules={[{ required: true, message: 'Description required' }]}>
             <Input  placeholder="Description" />
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
-            Submit
+            SUBMIT
           </Button>
           </Form.Item>
         </Form>
@@ -134,19 +134,19 @@ const List = (props)=> {
         visible={openEdit}
         onOk={editForm.submit}
         onCancel={()=> setOpenEdit(false)}
-        title="Edit Department"
+        title="EDIT DEPARTMENT FORM"
         footer={null}
       >
         <Form form={editForm} onFinish={handleEditSubmit} layout="vertical" >
-          <Form.Item name="name" rules={[{ required: true, message: 'Name required' }]}>
+          <Form.Item label="NAME" name="name" rules={[{ required: true, message: 'Name required' }]}>
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item name="description" rules={[{ required: true, message: 'Description required' }]}>
+          <Form.Item label="DESCRIPTION" name="description" rules={[{ required: true, message: 'Description required' }]}>
             <Input  placeholder="Description" />
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
-            Submit
+            UPDATE
           </Button>
           </Form.Item>
         </Form>

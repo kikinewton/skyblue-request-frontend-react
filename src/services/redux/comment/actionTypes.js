@@ -12,6 +12,8 @@ export default createTypes(
 
   RESET_COMMENT
 
+  SET_NEW_COMMENT
+
 `,
   {}
 );

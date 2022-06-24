@@ -21,6 +21,7 @@ import UploadDocuments from './components/Float/UploadDocuments'
 import FloatsPendingUploadDocument from './components/Float/FloatsPendingUploadDocument'
 import FloatRetire from "./components/Float/FloatRetire"
 import EditFloatOrder from './components/Float/Edit'
+import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 
 const MyRequest = (props)=> {
   const [current, setCurrent] = React.useState("my-lpos")
@@ -117,6 +118,11 @@ const mapStateToProps = (store) => ({
   submit_float_request_success: store.float.submit_success,
   float_orders: store.float.orders,
   float_order: store.float.order,
+
+  comments: store.comment.comments,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -179,7 +185,19 @@ const mapActionsToProps = (dispatch) => {
     updatePettyCashRequest: (id, payload) => {
       dispatch(PettyCashCreators.updatePettyCashRequest(id, payload))
     },
-    resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest())
+    resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest()),
+    createComment: (procurementType, payload) => {
+      dispatch(CommentCreators.createComment(procurementType, payload))
+    },
+    setNewComment: (newComment) => {
+      dispatch(CommentCreators.setNewComment(newComment))
+    },
+    resetComment: () => {
+      dispatch(CommentCreators.resetComment())
+    },
+    fetchComments: (query) => {
+      dispatch(CommentCreators.fetchComments(query))
+    }
   }
 }
 export default connect(mapStateToProps, mapActionsToProps)(MyRequest)

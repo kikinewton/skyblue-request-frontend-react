@@ -211,8 +211,10 @@ const mapStateToProps = (store) => ({
   update_request_success: store.request.update_success, 
   authUser: store.auth,
 
+  comments: store.comment.comments,
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
   notifications: store.notification.notifications || {}
 })
 
@@ -244,6 +246,15 @@ const mapActionsToProps = (dispatch) => {
     },
     createComment: (procurementType, payload) => {
       dispatch(CommentCreators.createComment(procurementType, payload))
+    },
+    fetchComments: (query) => {
+      dispatch(CommentCreators.fetchComments(query))
+    },
+    setNewComment: (newComment) => {
+      dispatch(CommentCreators.setNewComment(newComment))
+    },
+    resetComment: () => {
+      dispatch(CommentCreators.resetComment())
     }
   }
 }

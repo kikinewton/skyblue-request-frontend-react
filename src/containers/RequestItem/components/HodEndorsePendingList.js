@@ -1,6 +1,8 @@
-import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card } from 'antd';
+import { CheckOutlined, CloseOutlined, CommentOutlined, SendOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
 import React, {useState } from 'react';
+import MyDrawer from '../../../shared/MyDrawer';
+import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { FETCH_REQUEST_TYPES, REQUEST_COLUMNS } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
@@ -41,7 +43,18 @@ import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 // ]
 
 const columns = props => REQUEST_COLUMNS.concat([
-  
+  {
+    title: 'Actions',
+    dataIndex: 'actions',
+    key: 'actions',
+    render: (text, row) => (
+      <>
+        <Button type='default' onClick={() => props.onComment(row)}>
+          <CommentOutlined />
+        </Button>
+      </>
+    )
+  }
 ])
 
 const selectedRequestsColumns = props => [
@@ -136,6 +149,8 @@ const HodEndorsePendingList = (props) => {
 
   const [confirmDrawer, setConfirmDrawer] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
+  const [selectedRequest, setSelectedRequest] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
 
   const submit = () => {
     if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
@@ -195,6 +210,8 @@ const HodEndorsePendingList = (props) => {
   }
 
   React.useEffect(()=> {
+    props.resetComment()
+    props.fetchComments({procurementType: 'LPO'})
     resetRequest()
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
@@ -216,7 +233,7 @@ const HodEndorsePendingList = (props) => {
   React.useEffect(() => {
     if(!props.submitting_comment && props.submit_comment_success) {
       setSelectedRequests([])
-      setConfirmDrawer(false)
+      setCommentVisible(false)
       props.fetchRequests({
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
@@ -232,7 +249,7 @@ const HodEndorsePendingList = (props) => {
         (
           <Row style={{marginBottom: 10}}>
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button 
+            {/* <Button 
               disabled={selected_requests.length < 1}
               type="default" 
               style={{marginRight: 5}}
@@ -242,7 +259,7 @@ const HodEndorsePendingList = (props) => {
               }}
             >
               <CommentOutlined /> Comment
-            </Button>
+            </Button> */}
             <Button
               type="default"
               style={{marginRight: 5}} 
@@ -276,7 +293,12 @@ const HodEndorsePendingList = (props) => {
             <Table
               loading={fetching_requests}
               size="small"
-              columns={columns({})}
+              columns={columns({
+                onComment: (row) => {
+                  setSelectedRequest(row)
+                  setCommentVisible(true)
+                }
+              })}
               dataSource={requests}
               rowKey="id"
               bordered
@@ -321,7 +343,7 @@ const HodEndorsePendingList = (props) => {
         <Divider />
         <Row>
           <Col span={24}>
-            <Table 
+            <Table
               columns={actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE  ? selectedRequestsColumns({
                 actionType,
               }) 
@@ -347,6 +369,39 @@ const HodEndorsePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <MyDrawer
+        title='REQUEST COMMENT STATUS'
+        visible={commentVisible}
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedRequest(null)
+        }}
+      >
+        <RequestComment
+          onCommentChange={(newComment) => {
+            props.setNewComment(newComment)
+          }}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          comments={selectedRequest?.comments}
+          request={selectedRequest}
+          userId={props?.authUser}
+          onSubmit={(newComment) => {
+            const commentObj = {
+              cancelled: false,
+              comment: {
+                'description': newComment,
+                'process': 'HOD_REQUEST_ENDORSEMENT'
+              },
+              procurementTypeId: selectedRequest?.id
+            }
+            const payload = {
+              comments: [commentObj]
+            }
+            props.createComment('LPO', payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

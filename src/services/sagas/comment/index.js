@@ -2,8 +2,8 @@ import { call, put, takeLatest, takeLeading } from 'redux-saga/effects'
 import { Creators, Types } from '../../redux/comment/actions'
 
 import {
-  fetchComments as fetchCommentsApi,
   createComment as createCommentApi,
+  fetchUserComments as fetchUserCommentsApi
 } from '../../api/comment'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -11,37 +11,36 @@ import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 export function* fetchComments(action) {
   try {
-    const response = yield call(fetchCommentsApi, {})
+    const response = yield call(fetchUserCommentsApi, action.query)
     if(response.status === 'SUCCESS') {
       const responseData = response.data
       yield put(Creators.fetchCommentsSuccess(responseData))
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'FETCH COMMENTS', response.message)
       yield put(Creators.fetchCommentsFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch Comments'
-    openNotification('error', 'Login', message)
+    openNotification('error', 'FETCH COMMENTS', message)
     yield put(Creators.fetchCommentsFailure(message))
   }
 }
 
 export function* createComment(action) {
-  console.log('create comment saga', action)
   try {
     const response = yield call(createCommentApi, action.procurementType, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
-      console.log('data', responseData)
-      openNotification('success', 'Create comment', response.message)
+      openNotification('success', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentSuccess(responseData))
+      yield put(Creators.fetchComments({procurementType: action.procurementType}))
     } else {
-      openNotification('error', 'Create comment', response.message)
+      openNotification('error', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentFailure(response.message))
     }
   } catch (error) {
     const message = (error && error.response.data && error.response.data.error) || 'Failed to create Comments'
-    openNotification('error', 'Create comment', message)
+    openNotification('error', 'CREATE COMMENT', message)
     yield put(Creators.createCommentFailure(message))
   }
 }

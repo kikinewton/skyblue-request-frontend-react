@@ -17,7 +17,7 @@ const initUser = {
 }
 
 const columns = (props)=> EMPLOYEE_COLUMNS.concat({
-  title: 'Action', key: 'operation', fixed: 'right', width: 100,
+  title: 'ACTIONS', key: 'operation', fixed: 'right', width: 100,
   render: (text, row) => {
     return (
       <Row>
@@ -33,10 +33,9 @@ const columns = (props)=> EMPLOYEE_COLUMNS.concat({
 })
 
 const List = (props)=> {
-  const { employees, createEmployee,loading, fetchEmployees, deleteEmployee, 
+  const { createEmployee,loading, fetchEmployees, deleteEmployee, 
     departments, departmentLoading, submitting, fetchDepartments, submitSuccess, updateEmployee, fetchRoles, 
     user_roles, fetching_roles, filtered_employees, enableEmployee, disableEmployee, resetEmployeePassword, resetting_employee_password,
-    reset_employee_password_success,
   } = props
 
   const [ openAdd, setOpenAdd ] = React.useState(false)
@@ -133,12 +132,12 @@ const List = (props)=> {
   return (
     <>
       <PageHeader 
-        title="Users"
+        title="USERS"
         style={{padding: 0}}
         extra={[
-          <span>Filter</span>,
+          <span>FILTER</span>,
           <Input type="search" onChange={(event) => props.filterEmployees(event.target.value)} style={{width: 200}} />,
-          <Button type="primary" onClick={handleAdd}>Register new employee</Button>
+          <Button type="primary" onClick={handleAdd}>ADD NEW USER</Button>
         ]}
       />
       <Row>
@@ -164,7 +163,7 @@ const List = (props)=> {
         form={addForm}
         visible={openAdd}
         footer={null}
-        title="Add New User"
+        title="ADD NEW USER FORM"
         onOk={addForm.submit}
         onCancel={() => {
           addForm.resetFields()
@@ -172,26 +171,26 @@ const List = (props)=> {
         }}
       >
         <Form form={addForm} onFinish={handleAddSubmit} layout="vertical">
-          <Form.Item label="First Name" name="firstName" rules={[{ required: true, message: 'First name required' }]}>
+          <Form.Item label="FIRST NAME" name="firstName" rules={[{ required: true, message: 'First name required' }]}>
             <Input placeholder="First Name" />
           </Form.Item>
-          <Form.Item label="Last Name" name="lastName" rules={[{ required: true, message: 'Last name required' }]}>
+          <Form.Item label="LAST NAME" name="lastName" rules={[{ required: true, message: 'Last name required' }]}>
             <Input placeholder="Last Name" />
           </Form.Item>
-          <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Email required' }]}>
+          <Form.Item label="EMAIL" name="email" rules={[{ required: true, message: 'Email required' }]}>
             <Input placeholder="Email" />
           </Form.Item>
-          <Form.Item label="Phone Number" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
+          <Form.Item label="PHONE NUMBER" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
             <Input placeholder="Phone Number" />
           </Form.Item>
-          <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
+          <Form.Item label="DEPARTMENT" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
             <Select loading={departmentLoading}>
               {departments && departments.map(department=> (
                 <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Role required' }]}>
+          <Form.Item label="ROLE" name="role" rules={[{ required: true, message: 'Role required' }]}>
             <Select loading={fetching_roles}>
               {user_roles?.map(role=> (
                 <Select.Option key={`role-${role?.id}`} value={role?.id}>{role?.name?.replaceAll("_", " ")}</Select.Option>
@@ -200,7 +199,7 @@ const List = (props)=> {
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
-            Submit
+            REGISTER USER
           </Button>
           </Form.Item>
         </Form>
@@ -210,7 +209,7 @@ const List = (props)=> {
         form={editForm}
         visible={openEdit}
         footer={null}
-        title="Edit User"
+        title="EDIT USER FORM"
         onOk={editForm.submit}
         onCancel={() => {
           setEditData({})
@@ -228,26 +227,26 @@ const List = (props)=> {
             role: (editData?.role || [])[0]
           }}
         >
-          <Form.Item label="First Name" name="firstName" rules={[{ required: true, message: 'First name required' }]}>
+          <Form.Item label="FIRST NAME" name="firstName" rules={[{ required: true, message: 'First name required' }]}>
             <Input placeholder="First Name"/>
           </Form.Item>
-          <Form.Item label="Last Name" name="lastName" rules={[{ required: true, message: 'Last name required' }]}>
+          <Form.Item label="LAST NAME" name="lastName" rules={[{ required: true, message: 'Last name required' }]}>
             <Input placeholder="Last Name" />
           </Form.Item>
-          <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Email required' }]}>
+          <Form.Item label="EMAIL" name="email" rules={[{ required: true, message: 'Email required' }]}>
             <Input placeholder="Email" />
           </Form.Item>
-          <Form.Item label="Phone Number" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
+          <Form.Item label="PHONE NUMBER" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
             <Input placeholder="Phone Number" />
           </Form.Item>
-          <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
+          <Form.Item label="DEPARTMENT" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
             <Select loading={departmentLoading}>
               {departments && departments.map(department=> (
                 <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Role required' }]}>
+          <Form.Item label="ROLE" name="role" rules={[{ required: true, message: 'Role required' }]}>
             <Select loading={fetching_roles}>
               {user_roles?.map(role=> (
                 <Select.Option key={`role-${role.id}`} value={role.id}>
@@ -258,13 +257,13 @@ const List = (props)=> {
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting}>
-            Update
+            UPDATE USER
           </Button>
           </Form.Item>
         </Form>
       </Modal>
       <Drawer
-        title="Employee Details"
+        title="EMPLOYEE INFO"
         visible={viewDrawer}
         width={700}
         placement="right"
@@ -281,7 +280,7 @@ const List = (props)=> {
               disabled={selectedEmployee?.enabled} style={{marginRight: 5}}
               onClick={e => enableEmployee(selectedEmployee?.id)}
             >
-              Activate User
+              ACTIVATE USER
             </Button>
             <Button 
               loading={submitting} danger 
@@ -289,7 +288,7 @@ const List = (props)=> {
               onClick={e => disableEmployee(selectedEmployee?.id)}
               style={{marginRight: 5}}
             >
-              Deactivate User
+              DEACTIVATE USER
             </Button>
             <Button 
               type="default"
@@ -298,7 +297,7 @@ const List = (props)=> {
               onClick={e => resetEmployeePassword(selectedEmployee?.id)}
             >
               <SyncOutlined />
-              Reset User
+              RESET USER
             </Button>
           </Col>
         </Row>

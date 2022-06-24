@@ -36,7 +36,7 @@ const Dashboard = (props) => {
       <MyPageHeader 
         title={(
           <>
-            <span style={{marginRight: 5}}>Dashboard</span>
+            <span style={{marginRight: 5}}>DASHBOARD</span>
             <SyncOutlined spin={fetching_dashboard_data} onClick={() => fetchDashboardData()} />
           </>
         )} 
@@ -47,7 +47,7 @@ const Dashboard = (props) => {
             <Row gutter={12}>
               <Col md={6}>
                 <DashboardCard
-                  title="This month's requests"
+                  title="THIS MONTH'S REQUESTS"
                   value={countOfRequestPerCurrentMonth}
                   onClick={() => {
                     setReportType(REPORT_TYPES.REQUESTS_FOR_CURRENT_MONTH)
@@ -56,7 +56,7 @@ const Dashboard = (props) => {
                 />
               </Col><Col md={6}>
                 <DashboardCard 
-                  title="Payments due in a week"
+                  title="PAYMENTS DUE IN A WEEK"
                   value={countOfPaymentDueWithinOneWeek}
                   onClick={() => {
                     setReportType(REPORT_TYPES.PAYMENTS_DUE_IN_A_WEEK)
@@ -66,7 +66,7 @@ const Dashboard = (props) => {
               </Col>
               <Col md={6}>
                 <DashboardCard 
-                  title="Payments made today"
+                  title="PAYMENTS MADE TODAY"
                   value={countPaymentsMadeToday}
                   onClick={() => {
                     setReportType(REPORT_TYPES.PAYMENTS_MADE_TODAY)
@@ -76,7 +76,7 @@ const Dashboard = (props) => {
               </Col>
               <Col md={6}>
                 <DashboardCard 
-                  title="GRN for today"
+                  title="TODAY'S GRNS"
                   value={countOfGRNForToday}
                   onClick={() => {
                     setReportType(REPORT_TYPES.GRN_FOR_TODAY)
@@ -87,12 +87,12 @@ const Dashboard = (props) => {
             </Row>
             <Row gutter={12} style={{marginTop: 20}}>
               <Col md={8}>
-                <Card style={{height: 350}} title="Approved number of requests per department" hoverable>
+                <Card style={{height: 350}} title="APPROVED NUMBER OF REQUESTS PER DEPARTMENT" hoverable>
                   {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
                       maintainAspectRatio={false}
-                      label="Cost per department for this month"
+                      label="APPROVED NUMBER OF REQUESTS PER DEPARTMENT"
                       labels={(supplierSpendAnalysis || []).map(item=> item.name)}
                       data={(supplierSpendAnalysis || []).map(item=> item.paymentAmount)}
                     />
@@ -107,12 +107,12 @@ const Dashboard = (props) => {
                 </Card>
               </Col>
               <Col md={8}>
-                <Card style={{height: 350}} title="Approved requests per department" hoverable>
+                <Card style={{height: 350}} title="APPROVED REQUESTS PER DEPARTMENT" hoverable>
                   {(approvedNumberRequestItemsAndUserDepartmentToday || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
                       maintainAspectRatio={false}
-                      label="Approved number of requests per department"
+                      label="APPROVED REQUESTS PER DEPARTMENT"
                       labels={(approvedNumberRequestItemsAndUserDepartmentToday || []).map(item=> item.userDepartment)}
                       data={(approvedNumberRequestItemsAndUserDepartmentToday || []).map(item=> item.numOfRequest)}
                     />
@@ -120,12 +120,12 @@ const Dashboard = (props) => {
                 </Card>
               </Col>
               <Col md={8}>
-                <Card style={{height: 350}} title="Request per department for this month" hoverable>
+                <Card style={{height: 350}} title="THIS MONTH'S REQUESTS PER DEPARTMENT" hoverable>
                   {(requestsPerCurrentMonthPerDepartment || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="Pie"
                       maintainAspectRatio={false}
-                      label="Request per department for this month"
+                      label="THIS MONTH'S REQUESTS PER DEPARTMENT"
                       labels={(requestsPerCurrentMonthPerDepartment || []).map(item=> item.department)}
                       data={(requestsPerCurrentMonthPerDepartment || []).map(item=> item.num_of_Request)}
                     />
@@ -135,11 +135,11 @@ const Dashboard = (props) => {
             </Row>
             <Row style={{marginTop: 20}} gutter={12}>
               <Col md={12}>
-                <Card style={{height: 350}} title="Cost per department for this month" hoverable>
+                <Card style={{height: 350}} title="COST PER DEPARTMENT FOR THIS MONTH" hoverable>
                   {(costPerDepartmentForCurrentMonth || []).length < 1 ? "N/A" : 
                     <BarChart
                       maintainAspectRatio={false}
-                      label="Cost per department for this month"
+                      label="COST PER DEPARTMENT FOR THIS MONTH"
                       labels={(costPerDepartmentForCurrentMonth || []).map(item=> item.userDepartment)}
                       data={(costPerDepartmentForCurrentMonth || []).map(item=> item.totalPrice)}
                     />
@@ -147,11 +147,11 @@ const Dashboard = (props) => {
                 </Card>
               </Col>
               <Col md={12}>
-                <Card style={{height: 350}} title="Request per category for today" hoverable>
+                <Card style={{height: 350}} title="REQUEST PER CATEGORY FOR TODAY" hoverable>
                   {(requestPerCategoryForToday || []).length < 1 ? "N/A" : 
                     <BarChart
                       maintainAspectRatio={false}
-                      label="Request per category for today"
+                      label="REQUEST PER CATEGORY FOR TODAY"
                       labels={(requestPerCategoryForToday || []).map(item=> item.requestCategory)}
                       data={(requestPerCategoryForToday || []).map(item=> item.numOfRequest)}
                     />

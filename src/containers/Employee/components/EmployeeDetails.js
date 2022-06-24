@@ -10,28 +10,28 @@ const EmployeeDetails = ({employee}) => {
         <Col span={24}>
           <List>
             <List.Item>
-              <List.Item.Meta title="First Name" description={employee?.firstName} />
+              <List.Item.Meta title="FIRST NAME" description={employee?.firstName} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Last Name" description={employee?.lastName} />
+              <List.Item.Meta title="LAST NAME" description={employee?.lastName} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Email" description={employee?.email} />
+              <List.Item.Meta title="EMAIL" description={employee?.email} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Phone Number" description={employee?.phoneNo} />
+              <List.Item.Meta title="PHONE NUMBER" description={employee?.phoneNo} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Role" description={employee?.roles[0]?.name} />
+              <List.Item.Meta title="USER ROLE" description={employee?.roles[0]?.name} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Department" description={employee?.department?.name} />
+              <List.Item.Meta title="DEPARTMENT" description={employee?.department?.name} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Status" description={employee?.enabled ? 'Acivated' : 'Deactivated'} />
+              <List.Item.Meta title="STATUS" description={employee?.enabled ? 'Acivated' : 'Deactivated'} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Password Status" description={employee?.changedDefaultPassword ? "Valid Pasword" : "Password Needs Changing"} />
+              <List.Item.Meta title="PASSWORD STATUS" description={employee?.changedDefaultPassword ? "Valid Pasword" : "Password Needs Changing"} />
             </List.Item>
           </List>
         </Col>

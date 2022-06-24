@@ -16,10 +16,8 @@ import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
 
 export function* fetchRequests(action) {
-  console.log('=================>FETCH ALL REQUEST SAGA', action)
   try {
     const response = yield call(fetchRequestsApi, action.query)
-    console.log("Request Response", response)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       const responseData = response?.data || []
       yield put(Creators.fetchRequestsSuccess(responseData))
@@ -38,7 +36,6 @@ export function* getRequest(action) {
   try {
     const response = yield call(fetchRequestByIdApi, action.id)
       if(response.status === RESPONSE_SUCCESS_CODE) {
-        console.log('yes fetched', response?.data)
         yield put(Creators.getRequestSuccess(response?.data))
       }
   } catch (error) {
@@ -49,11 +46,8 @@ export function* getRequest(action) {
 }
 
 export function* fetchMyRequests(action) {
-  console.log('HEY LETS FETCH MY REQUESTS SAGA')
-  console.log('=================>FETCH MY REQUEST')
   try {
     const response = yield call(fetchMyRequestsApi, action.query)
-    console.log("Request Response", response)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       const responseData = response?.data || []
       yield put(Creators.fetchMyRequestsSuccess(responseData))
@@ -70,7 +64,6 @@ export function* fetchMyRequests(action) {
 
 
 export function* createRequest(action) {
-  console.log('action data', action)
   try {
     const response = yield call(createRequestApi, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
@@ -90,12 +83,10 @@ export function* createRequest(action) {
 }
 
 export function* updateRequest(action) {
-  console.log('update action saga', action)
   try {
     const response = yield call(updateRequestApi, action.payload)
     if(["OK", "SUCCESS"].includes(response.status)) {
       const responseData = response?.data
-      console.log('API RESPONSE DAYA', responseData)
       openNotification('success', 'Update Request', response.message)
       yield put(Creators.updateRequestSuccess(responseData || {}))
       yield put(NotificationCreators.fetchNotifications())
@@ -112,13 +103,11 @@ export function* updateRequest(action) {
 }
 
 export function* updateSingleRequest(action) {
-  console.log('action', action)
   const {id, payload} = action
   try {
     const response = yield call(updateSingleRequestApi, id, payload)
     if(["OK", "SUCCESS"].includes(response.status)) {
       const responseData = response?.data
-      console.log('API RESPONSE DAYA', responseData)
       openNotification('success', 'Update Request', response.message)
       yield put(Creators.updateSingleRequestSuccess(responseData || {}))
     } else {
