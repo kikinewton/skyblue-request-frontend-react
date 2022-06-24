@@ -216,7 +216,6 @@ const LpoList = (props) => {
             submitting={props.submitting_comment}
             comments={(props.comments || [])}
             request={selectedRequest}
-            userId={props?.authUser}
             onSubmit={(newComment) => {
               const commentObj = {
                 cancelled: false,

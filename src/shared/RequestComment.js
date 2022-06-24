@@ -59,7 +59,7 @@ const RequestComment = (props) => {
             <Row>
               <Col span={24}>
                 <List>
-                  {comments.map(item => {
+                  {comments.filter(item => item?.item?.id === request?.id).map(item => {
                     let data = {
                       userName: `${item?.item?.employee?.firstName} ${item?.item?.employee?.lastName} on ${prettifyDateTime(item?.createdDate)}`,
                       userInitials: `${item?.item?.employee?.firstName.slice(0,1)} ${item?.item?.employee?.lastName.slice(0,1)}`,
@@ -105,6 +105,7 @@ RequestComment.propTypes = {
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool.isRequired,
   onCommentChange: PropTypes.func,
+  request: PropTypes.object,
   newComment: PropTypes.string
 }
 

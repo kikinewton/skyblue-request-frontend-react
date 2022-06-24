@@ -383,9 +383,8 @@ const HodEndorsePendingList = (props) => {
           }}
           newComment={props.new_comment}
           submitting={props.submitting_comment}
-          comments={selectedRequest?.comments}
+          comments={props.comments}
           request={selectedRequest}
-          userId={props?.authUser}
           onSubmit={(newComment) => {
             const commentObj = {
               cancelled: false,
