@@ -1,7 +1,7 @@
 import { Row, Col, Input, Button, List, Badge, Avatar } from 'antd';
 import React, {useState} from 'react';
 import PropTypes from 'prop-types'
-import { SendOutlined } from '@ant-design/icons';
+import { SendOutlined, SyncOutlined } from '@ant-design/icons';
 import { prettifyDateTime } from '../util/common-helper';
 import CommentText from './CommentText';
 
@@ -9,7 +9,9 @@ const RequestComment = (props) => {
   const {
     request,
     comments=[],
-    user,
+    onResolve,
+    showResolveBtn=false,
+    resolveBtnText='Resolve',
     onSubmit,
     submitting,
     onCommentChange,
@@ -22,13 +24,19 @@ const RequestComment = (props) => {
         <Col span={24}>
           <List>
             <List.Item>
-              <List.Item.Meta title='Description' description={request?.name} />
+              <List.Item.Meta title='DESCRIPTION' description={request?.name} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title='Requested on' description={prettifyDateTime(request?.createdDate)} />
+              <List.Item.Meta title='REASON' description={request?.reason} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title='Requested on' description={prettifyDateTime(request?.createdDate)} />
+              <List.Item.Meta title='QUANTITY' description={request?.purpose} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta title='QUANTITY' description={request?.quantity} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta title='REQUESTED ON' description={prettifyDateTime(request?.createdDate)} />
             </List.Item>
           </List>
         </Col>
@@ -36,33 +44,14 @@ const RequestComment = (props) => {
       <Badge.Ribbon text='COMMENTS ON LPO REQUEST' color='cyan'>
         <Row>
           <Col span={24} style={{backgroundColor: '#f5fafa', padding: "30px 10px 10px 10px"}}>
-            {/* <Row>
-              <Col span={24} style={{ minHeight: 300, padding: 10}}>
-                <CommentText text='Hello adkadk' self={false} />
-                <CommentText text='World is yours Boo' self={true} />
-              </Col>
-            </Row>
-            <Row style={{padding: 5}}>
-              <Col span={20}>
-                <Input value={newComment} onChange={e => onCommentChange(e.target.value)} />
-              </Col>
-              <Col span={4} style={{textAlign: 'right'}}>
-                <Button disabled={!newComment} type='default' loading={submitting} onClick={() => {
-                  if(newComment) {
-                    onSubmit(newComment)
-                  }
-                }}>
-                  <SendOutlined/>
-                </Button>
-              </Col>
-            </Row> */}
             <Row>
               <Col span={24}>
                 <List>
                   {comments.filter(item => item?.item?.id === request?.id).map(item => {
+                    const createdBy = item?.commentBy;
                     let data = {
-                      userName: `${item?.item?.employee?.firstName} ${item?.item?.employee?.lastName} on ${prettifyDateTime(item?.createdDate)}`,
-                      userInitials: `${item?.item?.employee?.firstName.slice(0,1)} ${item?.item?.employee?.lastName.slice(0,1)}`,
+                      userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '')}) on ${prettifyDateTime(item?.createdDate)}`,
+                      userInitials: `${createdBy?.firstName.slice(0,1)} ${createdBy?.lastName.slice(0,1)}`,
                       message: item?.description,
                       id: item?.id
                     }
@@ -80,17 +69,24 @@ const RequestComment = (props) => {
               </Col>
             </Row>
             <Row>
-              <Col span={20}>
-                <Input value={newComment} onChange={e => onCommentChange(e.target.value)} />
-              </Col>
-              <Col span={4} style={{textAlign: 'right'}}>
-                <Button disabled={!newComment} type='default' loading={submitting} onClick={() => {
+              <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                <div style={{ flexGrow: 1 }}>
+                  <Input value={newComment} onChange={e => onCommentChange(e.target.value)} />
+                </div>
+                <Button style={{width: 40, marginLeft: 1}} disabled={!newComment} type='default' loading={submitting} onClick={() => {
                   if(newComment) {
                     onSubmit(newComment)
                   }
                 }}>
                   <SendOutlined/>
                 </Button>
+                {showResolveBtn && (
+                  <Button style={{width: 150, marginLeft: 10}} type='primary' onClick={() => {
+                    onResolve()
+                  }}>
+                    {resolveBtnText}
+                  </Button>
+                )}
               </Col>
             </Row>  
           </Col>
@@ -106,7 +102,10 @@ RequestComment.propTypes = {
   submitting: PropTypes.bool.isRequired,
   onCommentChange: PropTypes.func,
   request: PropTypes.object,
-  newComment: PropTypes.string
+  newComment: PropTypes.string,
+  onResolve: PropTypes.func,
+  showResolveBtn: PropTypes.bool,
+  resolveBtnText: PropTypes.any,
 }
 
 export default RequestComment

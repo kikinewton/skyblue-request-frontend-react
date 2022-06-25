@@ -13,8 +13,12 @@ const Home = (props) => {
   console.log("user current", currentUser)
 
   React.useEffect(() => {
-    fetchMyRequests({})
+    //fetch my requests if user is a regular employee
+    if(userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR])) {
+      fetchMyRequests({}) 
+    }
   }, [])
+  
   return (
     <>
       <h1>HOME</h1>

@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone, WarningTwoTone } from "@ant-design/icons"
-import { Badge, Table, Tag } from "antd"
+import { Badge, Button, Table, Tag } from "antd"
 import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
 
@@ -13,6 +13,112 @@ export const USER_ROLES = {
   ROLE_ADMIN: "ROLE_ADMIN",
   ROLE_AUDITOR: "ROLE_AUDITOR"
 }
+
+export const MY_REQUEST_COLUMNS = [
+  {
+    title: 'REF',
+    dataIndex: 'requestItemRef',
+    key: 'requestItemRef',
+    render: (text, row) => (
+      <>
+        <span>{text}</span>
+        {row?.status === "COMMENT" && (<WarningTwoTone style={{marginLeft: 5}} twoToneColor="#eb2f96" />)}
+      </>
+    )
+  },
+  {
+    title: 'DESCRIPTION',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
+  },
+  {
+    title: 'REASON',
+    dataIndex: 'reason',
+    key: 'reason'
+  },
+  {
+    title: 'PURPOSE',
+    dataIndex: 'purpose',
+    key: 'purpose'
+  },
+  {
+    title: 'QUANTITY',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: "UNIT PRICE",
+    dataIndex: "unitPrice",
+    key: "unitPrice",
+    render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"
+  },
+  {
+    title: 'REQUESTED ON',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    render: text => prettifyDateTime(text)
+  },
+]
+
+export const HOD_REQUEST_COLUMNS = [
+  {
+    title: 'REF',
+    dataIndex: 'requestItemRef',
+    key: 'requestItemRef',
+    render: (text, row) => (
+      <>
+        <span>{text}</span>
+        {row?.status === "COMMENT" && (<WarningTwoTone style={{marginLeft: 5}} twoToneColor="#eb2f96" />)}
+      </>
+    )
+  },
+  {
+    title: 'DESCRIPTION',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
+  },
+  {
+    title: 'REASON',
+    dataIndex: 'reason',
+    key: 'reason'
+  },
+  {
+    title: 'PURPOSE',
+    dataIndex: 'purpose',
+    key: 'purpose'
+  },
+  {
+    title: 'QUANTITY',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'DEPARTMENT',
+    dataIndex: 'userDepartment',
+    key: 'userDepartment',
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
+    title: "UNIT PRICE",
+    dataIndex: "unitPrice",
+    key: "unitPrice",
+    render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"
+  },
+  {
+    title: 'REQUESTED ON',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    render: text => prettifyDateTime(text)
+  },
+  {
+    title: 'ENDORSEMENT',
+    dataIndex: 'endorsement',
+    key: 'endorsement'
+  }
+]
+
 
 export const REQUEST_COLUMNS = [
   {

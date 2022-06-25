@@ -1,6 +1,6 @@
 import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge } from 'antd'
 import React, { useState } from 'react'
-import { REQUEST_COLUMNS } from '../../../../util/constants'
+import { MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
@@ -11,7 +11,7 @@ import { debounce } from 'lodash'
 import MyDrawer from '../../../../shared/MyDrawer'
 import RequestComment from '../../../../shared/RequestComment'
 
-const columns = props => REQUEST_COLUMNS.concat([
+const columns = props => MY_REQUEST_COLUMNS.concat([
   // {
   //   title: "User Department",
   //   dataIndex: "userDepartment",
@@ -24,8 +24,8 @@ const columns = props => REQUEST_COLUMNS.concat([
     key: 'status',
     render: (text, row) => (<>
       {row.status === 'COMMENT' ? (<>
-        <Badge size='small' dot offset={[0,10]}>
-          <Button size='small' type='text'
+        <Badge size='small' dot offset={[5,0]}>
+          <Button size='small' type='default'
             onClick={() => {
               props.onViewComment(row)
             }}
@@ -43,10 +43,18 @@ const columns = props => REQUEST_COLUMNS.concat([
     key: "operations",
     align: "right",
     render: (text, row) => (
-      <div style={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
-        {row.status === "COMMENT" && (<EditOutlined onClick={() =>  props.openUpdateRequest(row)} />)}
-        <EyeOutlined onClick={() => props.setRequest(row)}/>
-      </div>
+      <Row>
+        <Col span={12}>
+          <Button size='small' type='default' onClick={() => props.setRequest(row)}>
+            <EyeOutlined />
+          </Button>
+        </Col>
+        <Col span={12}>
+          <Button size='small' onClick={() =>  props.openUpdateRequest(row)} disabled={row.status !== "COMMENT"}>
+            <EditOutlined  />
+          </Button>
+        </Col>
+      </Row>
     )
   }
 ])
@@ -73,7 +81,7 @@ const LpoList = (props) => {
     fetchMyRequests({
 
     })
-    fetchComments({procurementType: 'LPO'})
+    fetchComments({commentType: 'LPO_COMMENT'})
     // eslint-disable-next-line
   }, [])
 
@@ -97,7 +105,7 @@ const LpoList = (props) => {
         <MyPageHeader 
            title="MY LPO REQUESTS"
            extra={[
-            <Button key="add-btn" type="primary" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
+            <Button key="add-btn" type="default" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               ADD NEW LPO REQUEST
             </Button>
           ]}
@@ -161,17 +169,17 @@ const LpoList = (props) => {
             setUpdateDrawer(false)
           }}
         >
-          <Row style={{width: "100%", padding: 10, minHeight: 60, backgroundColor: "#e0dddc", borderRadius: 10, marginBottom: 10}}>
+          <Row style={{width: "100%", padding: 10, minHeight: 60, borderRadius: 10, marginBottom: 10}}>
             <Col span={24}>
               <List>
                 <List.Item>
-                  <List.Item.Meta title="Message" description={(selectedRequest?.comment || [])[0]?.description} />
+                  <List.Item.Meta title="Description" description={selectedRequest?.name} />
                 </List.Item>
                 <List.Item>
-                  <List.Item.Meta title="Commentor" description={(selectedRequest?.comment || [])[0]?.employee?.fullName} />
+                  <List.Item.Meta title="Reason" description={selectedRequest?.reason} />
                 </List.Item>
                 <List.Item>
-                  <List.Item.Meta title="Commented on" description={prettifyDateTime((selectedRequest?.comment || [])[0]?.createdDate)} />
+                  <List.Item.Meta title="Quantity" description={selectedRequest?.quantity} />
                 </List.Item>
               </List>
             </Col>
@@ -201,7 +209,7 @@ const LpoList = (props) => {
         </Drawer>
         <MyDrawer
           visible={commentVisible}
-          title='LOP REQUEST COMMENTS'
+          title='LPO REQUEST COMMENTS'
           onClose={() => {
             setCommentVisible(false)
             setSelectedRequest(null)
@@ -216,6 +224,12 @@ const LpoList = (props) => {
             submitting={props.submitting_comment}
             comments={(props.comments || [])}
             request={selectedRequest}
+            showResolveBtn={true}
+            onResolve={() => {
+              setCommentVisible(false)
+              setUpdateDrawer(true)
+            }}
+            resolveBtnText={'Update Request'}
             onSubmit={(newComment) => {
               const commentObj = {
                 cancelled: false,

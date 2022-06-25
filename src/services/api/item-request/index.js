@@ -237,16 +237,16 @@ export function updateSingleRequest(id, payload) {
   return service({url: `/requestItems/${id}`, method: "PUT", data: payload})
 }
 
+export function resolveComment(reqId, payload) {
+  return service({
+    url: `/requestItems/${reqId}/resolveComment`,
+    method: 'PUT',
+    data: payload
+  })
+}
+
 export function fetchRequests(query) {
   const { requestType } = query
-  
-  console.log('In fetch All requests for requests', requestType, 'value', FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS)
-  // if(requestType === FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS) {
-  //   console.log('in fetch department pending')
-  //   return getAllDepartmentItemRequests(query)
-  // } else if(requestType===FETCH_REQUEST_TYPES.MY_REQUESTS) {
-  //   return getUserItemRequests(query)
-  // }
   switch (requestType) {
     case FETCH_REQUEST_TYPES.MY_REQUESTS:
       return getUserItemRequests(query)

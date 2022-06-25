@@ -8,7 +8,7 @@ import { history } from "../../util/browser-history";
 export const RESPONSE_SUCCESS_CODE = "SUCCESS"
 
 const apiConfig = {
-  timeout: 30000,
+  timeout: 60000,
   baseURL: BASE_URL,
   // headers: {
   //   'Content-Type': 'application/json',

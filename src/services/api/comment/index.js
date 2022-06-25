@@ -2,14 +2,14 @@ import service from '../apiRequest'
 
 export function fetchComments(query) {
   return service({
-    url: `/comment`,
+    url: `/comments`,
     method: "GET",
   })
 }
 
 export function createComment(procurementType, payload) {
   return service({
-    url: `/comment/${procurementType}`,
+    url: `/comments/${procurementType}`,
     method: "POST",
     data: payload
   })
@@ -17,6 +17,6 @@ export function createComment(procurementType, payload) {
 
 export function fetchUserComments(query) {
   return service({
-    url: `/comment/unread?procurementType=${query.procurementType}`
+    url: `/comments/unread?commentType=${query.commentType}`
   })
 }

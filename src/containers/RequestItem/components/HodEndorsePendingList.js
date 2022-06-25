@@ -1,48 +1,34 @@
-import { CheckOutlined, CloseOutlined, CommentOutlined, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
+import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, Badge } from 'antd';
 import React, {useState } from 'react';
 import MyDrawer from '../../../shared/MyDrawer';
 import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES, REQUEST_COLUMNS } from '../../../util/constants';
+import { FETCH_REQUEST_TYPES, HOD_REQUEST_COLUMNS } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
-// const columns = props => [
-//   {
-//     title: "Description",
-//     dataIndex: "name",
-//     key: "name"
-//   },
-//   {
-//     title: "Reason",
-//     dataIndex: "reason",
-//     key: "reason"
-//   },
-//   {
-//     title: "purpose",
-//     dataIndex: "purpose",
-//     key: "purpose"
-//   },
-//   {
-//     title: "Quantity",
-//     dataIndex: "quantity",
-//     key: "quantity"
-//   },
-//   {
-//     title: "Priority",
-//     dataIndex: "priorityLevel",
-//     key: "priorityLevel",
-//     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
-//   },
-//   {
-//     title: "Request Date",
-//     dataIndex: "requestDate",
-//     key: "requestDate",
-//     render: (text) => prettifyDateTime(text)
-//   },
-// ]
-
-const columns = props => REQUEST_COLUMNS.concat([
+const columns = props => HOD_REQUEST_COLUMNS.concat([
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (text, row) => (
+      <>
+        {text === "COMMENT" ? (
+          <>
+            <Badge size='small' dot offset={[5,0]}></Badge>
+            <Button size='small' type='default' 
+              onClick={() => {
+                props.onViewComment(row)
+              }}
+            >
+              VIEW COMMENTS
+            </Button>
+          </>
+        ) : text}
+      </>
+    )
+  },
   {
     title: 'Actions',
     dataIndex: 'actions',
@@ -211,7 +197,7 @@ const HodEndorsePendingList = (props) => {
 
   React.useEffect(()=> {
     props.resetComment()
-    props.fetchComments({procurementType: 'LPO'})
+    props.fetchComments({commentType: 'LPO_COMMENT'})
     resetRequest()
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
@@ -249,17 +235,6 @@ const HodEndorsePendingList = (props) => {
         (
           <Row style={{marginBottom: 10}}>
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            {/* <Button 
-              disabled={selected_requests.length < 1}
-              type="default" 
-              style={{marginRight: 5}}
-              onClick={() => {
-                setActionType(UPDATE_REQUEST_TYPES.HOD_COMMENT)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CommentOutlined /> Comment
-            </Button> */}
             <Button
               type="default"
               style={{marginRight: 5}} 
@@ -370,7 +345,7 @@ const HodEndorsePendingList = (props) => {
         </Row>
       </Drawer>
       <MyDrawer
-        title='REQUEST COMMENT STATUS'
+        title='COMMENTS'
         visible={commentVisible}
         onClose={() => {
           setCommentVisible(false)
