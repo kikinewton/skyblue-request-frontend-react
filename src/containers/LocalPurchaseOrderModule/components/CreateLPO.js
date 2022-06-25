@@ -9,25 +9,25 @@ import { REQUEST_COLUMNS } from '../../../util/constants'
 
 const columns = (props) => [
   {
-    title: 'Supplier',
+    title: 'SUPPLIER',
     dataIndex: 'supplierId',
     key: 'supplierId',
     render: (text, row)=> row?.requestItems[0]?.suppliers.find(item=> item.id === row.supplierId)?.name || 'N/A'
   },
   {
-    title: 'Created On',
+    title: 'CREATED ON',
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: (text) => text ? prettifyDateTime(text) : "N/A"
   },
   {
-    title: 'Delivery Date',
+    title: 'DELIVERY DATE',
     dataIndex: 'deliveryDate',
     key: 'deliveryDate',
     render: (text) => text ? prettifyDateTime(text) : 'N/A'
   },
   {
-    title: 'Message',
+    title: 'MESSAGE',
     dataIndex: 'message',
     key: 'message',
     render: (text, row) => {
@@ -37,7 +37,7 @@ const columns = (props) => [
     }
   },
   {
-    title: 'Action',
+    title: 'ACTION',
     dataIndex: 'action',
     key: 'operation',
     align: 'right',
@@ -49,7 +49,7 @@ const columns = (props) => [
             size="small"
             disabled={row?.requestItems.filter(rq => rq?.approval !== 'APPROVED').length > 0}
           >
-            Create Local Purchase Order
+            CREATE LOCAL PURCHASE ORDER
           </Button>
         </Col>
       </Row>
@@ -60,12 +60,12 @@ const columns = (props) => [
 
 export const requestColumns = [
   {
-    title: 'Reference',
+    title: 'REFERENCE',
     dataIndex: 'requestItemRef',
     key: 'requestItemRef'
   },
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: 'name'
   },
@@ -105,7 +105,6 @@ const CreateLPO = (props) => {
   const { history } = props
 
   const {
-    fetchLocalPurchaseOrders,
     fetchLocalPurchaseOrderDrafts,
     local_purchase_order_drafts,
     resetLocalPurchaseOrder,
@@ -152,15 +151,15 @@ const CreateLPO = (props) => {
 
   const expandedRowRender = (row) => {
     const expandedColumns = [
-      {title: 'Description', dataIndex: 'name', key: 'name'},
-      {title: 'Reason', dataIndex: 'reason', key: 'reason'},
-      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
-      {title: 'Unit Price', dataIndex: 'unitPrice', key: 'unitPrice', render: (text, row) => formatCurrency(row.unitPrice, row.currency)},
-      {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
-      {title: 'Approval', dataIndex: 'approval', key: 'approval', render: (text) => (
+      {title: 'DESCRIPTION', dataIndex: 'name', key: 'name'},
+      {title: 'REASON', dataIndex: 'reason', key: 'reason'},
+      {title: 'QUANTITY', dataIndex: 'quantity', key: 'quantity'},
+      {title: 'UNIT PRICE', dataIndex: 'unitPrice', key: 'unitPrice', render: (text, row) => formatCurrency(row.unitPrice, row.currency)},
+      {title: 'REQUESTED ON', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
+      {title: 'APPROVAL', dataIndex: 'approval', key: 'approval', render: (text) => (
         <span><Badge status={text === 'APPROVED' ? 'success' : 'error'} />{text}</span>
       )},
-      {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
+      {title: 'STATUS', dataIndex: 'status', key: 'status', render: (text) => (
         <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
       )},
     ]
@@ -173,7 +172,7 @@ const CreateLPO = (props) => {
         title={(
           <Row style={{marginBottom: 20}}>
             <Col>
-              <span className="bs-page-title">Local Purchase Order Drafts</span>
+              <span className="bs-page-title">LOCAL PURCHASE ORDER DRAFTS</span>
               <span style={{marginLeft: 5}}><SyncOutlined disabled={fetching_local_purchase_orders} spin={fetching_local_purchase_orders} onClick={()=> {
                 fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
               }} /></span>
@@ -220,7 +219,7 @@ const CreateLPO = (props) => {
               onClick={() => handleCreateLocalPurchaseOrder()}
               loading={submitting_local_purchase_order}
             >
-              Create LPO
+              CREATE LPO
             </Button>
           </Col>
         </Row>

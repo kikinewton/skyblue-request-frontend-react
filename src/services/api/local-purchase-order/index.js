@@ -3,7 +3,6 @@ import apiRequest from "../apiRequest";
 import { BASE_URL } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
-  console.log('fetch supplie API', query)
   const queryStr = serializeQueryParams(query)
   return apiRequest({
     method: "GET",
@@ -27,7 +26,6 @@ export function fetchLocalPurchaseOrderDraft(query) {
 }
 
 export function createLocalPurchaseOrder(payload) {
-  console.log('create LPO API')
   return apiRequest({
     method: "POST",
     url: `/localPurchaseOrders`,
@@ -36,7 +34,6 @@ export function createLocalPurchaseOrder(payload) {
 }
 
 export function createLocalPurchaseOrderDraft(payload) {
-  console.log('create LPO API')
   return apiRequest({
     method: "POST",
     url: `/localPurchaseOrderDrafts`,

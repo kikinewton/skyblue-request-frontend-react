@@ -16,12 +16,12 @@ const columns = props => HOD_REQUEST_COLUMNS.concat([
       <>
         {text === "COMMENT" ? (
           <>
-            <Badge size='small' dot offset={[5,0]}></Badge>
             <Button size='small' type='default' 
               onClick={() => {
-                props.onViewComment(row)
+                props.onComment(row)
               }}
             >
+              <CommentOutlined/>
               VIEW COMMENTS
             </Button>
           </>
@@ -148,7 +148,6 @@ const HodEndorsePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "LPO"}
-      console.log('payload', payload)
       createComment("LPO", payload)
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
       const comments = selected_requests.filter(it => it.comment)
@@ -219,7 +218,7 @@ const HodEndorsePendingList = (props) => {
   React.useEffect(() => {
     if(!props.submitting_comment && props.submit_comment_success) {
       setSelectedRequests([])
-      setCommentVisible(false)
+      //setCommentVisible(false)
       props.fetchRequests({
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
@@ -251,7 +250,6 @@ const HodEndorsePendingList = (props) => {
               disabled={selected_requests.length < 1} 
               type="primary" style={{marginRight: 5}} 
               onClick={() => {
-                console.log('action type on click', UPDATE_REQUEST_TYPES.HOD_ENDORSE)
                 setActionType(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
                 setConfirmDrawer(true)
               }}
@@ -324,7 +322,6 @@ const HodEndorsePendingList = (props) => {
               }) 
               : selectedRequestsColumnsForReject({
                   onComment: (event, row) => {
-                    console.log('row', row, 'value', event.target.value)
                     const data = selected_requests.map(it => {
                       let dt = it
                       if(dt.id === row.id) {
@@ -361,18 +358,11 @@ const HodEndorsePendingList = (props) => {
           comments={props.comments}
           request={selectedRequest}
           onSubmit={(newComment) => {
-            const commentObj = {
-              cancelled: false,
-              comment: {
-                'description': newComment,
-                'process': 'HOD_REQUEST_ENDORSEMENT'
-              },
-              procurementTypeId: selectedRequest?.id
-            }
             const payload = {
-              comments: [commentObj]
+              'description': newComment,
+              'process': 'HOD_REQUEST_ENDORSEMENT'
             }
-            props.createComment('LPO', payload)
+            props.createComment('LPO_COMMENT', selectedRequest?.id, payload)
           }}
         />
       </MyDrawer>

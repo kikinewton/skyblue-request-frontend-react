@@ -6,7 +6,7 @@ import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
 const columns = (props)=> SUPPLIER_COLUMNS.concat({
-  title: 'Action', key: 'operation', fixed: 'right', width: 100,
+  title: 'ACTIONS', key: 'operation', fixed: 'right', width: 100,
   render: (text, row) => {
     return (
       <Row>
@@ -110,7 +110,7 @@ const List = (props)=> {
   return (
     <>
       <PageHeader 
-        title="Suppliers"
+        title="SUPPLIERS"
         style={{padding: 0}}
         extra={[
           <span key="filte-text">Filter</span>,
@@ -120,7 +120,7 @@ const List = (props)=> {
             type="search" 
             style={{width: 300}} 
             placeholder="Search by name, phone, description..." />,
-          <Button key="add-btn" type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
+          <Button key="add-btn" type="primary" onClick={()=> setOpenAdd(true)}>REGISTER SUPPLIER</Button>
         ]}
       />
       <Card
@@ -135,6 +135,9 @@ const List = (props)=> {
               rowKey="id"
               bordered
               size="small"
+              pagination={{
+                pageSize: 30
+              }}
             />
           </Col>
         </Row>
@@ -143,34 +146,34 @@ const List = (props)=> {
         form={addForm}
         visible={openAdd}
         footer={null}
-        title="Add New Supplier"
+        title="REGISTER NEW SUPPLIER"
         onOk={addForm.submit}
         onCancel={() => {
           addForm.resetFields()
           setOpenAdd(false)
         }}
       >
-        <Form form={addForm} onFinish={handleAddSubmit} layout="vertical">
-          <Form.Item name="name" rules={[{ required: true, message: 'Name required' }]}>
-            <Input placeholder="Name" />
+        <Form requiredMark={false} form={addForm} onFinish={handleAddSubmit} layout="vertical">
+          <Form.Item label='NAME' name="name" rules={[{ required: true, message: 'Name required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="email" rules={[{ required: true, message: 'Email required' }]}>
-            <Input placeholder="Email" />
+          <Form.Item label="EMAIL" name="email" rules={[{ required: true, message: 'Email required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
-            <Input placeholder="Phone" />
+          <Form.Item label="PHONE NUMBER" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="location" rules={[{ required: true, message: 'Location required' }]}>
-            <Input placeholder="Location" />
+          <Form.Item label="LOCATION" name="location" rules={[{ required: true, message: 'Location required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="bank">
-            <Input placeholder="Bank" />
+          <Form.Item label="BANK" name="bank">
+            <Input />
           </Form.Item>
-          <Form.Item name="accountNumber">
-            <Input placeholder="Account Number" />
+          <Form.Item label="ACCOUNT NUMBER" name="accountNumber">
+            <Input />
           </Form.Item>
-          <Form.Item name="description" rules={[{ required: true, message: 'Description required' }]}>
-            <Input  placeholder="Description" />
+          <Form.Item label="DESCRIPTION" name="description" rules={[{ required: true, message: 'Description required' }]}>
+            <Input />
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting_supplier}>
@@ -184,34 +187,34 @@ const List = (props)=> {
         form={editForm}
         visible={openEdit}
         footer={null}
-        title="Edit Supplier"
+        title="EDIT SUPPLIER"
         onOk={editForm.submit}
         onCancel={() => {
           editForm.resetFields()
           setOpenEdit(false)
         }}
       >
-        <Form form={editForm} onFinish={handleEditSubmit} layout="vertical">
-          <Form.Item name="name" rules={[{ required: true, message: 'Name required' }]}>
-            <Input placeholder="Name" />
+        <Form requiredMark={false} form={editForm} onFinish={handleEditSubmit} layout="vertical">
+          <Form.Item label="NAME" name="name" rules={[{ required: true, message: 'Name required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="email" rules={[{ required: true, message: 'Email required' }]}>
-            <Input placeholder="Email" />
+          <Form.Item label="EMAIL" name="email" rules={[{ required: true, message: 'Email required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
-            <Input placeholder="Phone" />
+          <Form.Item label="PHONE NUMBER" name="phoneNo" rules={[{ required: true, message: 'Phone number required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="location" rules={[{ required: true, message: 'Location required' }]}>
-            <Input placeholder="Location" />
+          <Form.Item label="LOCATION" name="location" rules={[{ required: true, message: 'Location required' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item name="bank">
-            <Input placeholder="Bank" />
+          <Form.Item label="BANK" name="bank">
+            <Input />
           </Form.Item>
-          <Form.Item name="accountNumber">
-            <Input placeholder="Account Number" />
+          <Form.Item label="ACCCOUNT NUMBER" name="accountNumber">
+            <Input />
           </Form.Item>
-          <Form.Item name="description" rules={[{ required: true, message: 'Description required' }]}>
-            <Input  placeholder="Description" />
+          <Form.Item label="DESCRIPTION" name="description" rules={[{ required: true, message: 'Description required' }]}>
+            <Input />
           </Form.Item>
           <Form.Item>
           <Button type="primary" htmlType="submit" className="bs-form-button" loading={submitting_supplier}>

@@ -1,6 +1,6 @@
 import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge } from 'antd'
 import React, { useState } from 'react'
-import { MY_REQUEST_COLUMNS } from '../../../../util/constants'
+import { COMMENT_PROCESS_VALUES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
@@ -231,18 +231,11 @@ const LpoList = (props) => {
             }}
             resolveBtnText={'Update Request'}
             onSubmit={(newComment) => {
-              const commentObj = {
-                cancelled: false,
-                comment: {
-                  'description': newComment,
-                  'process': 'HOD_REQUEST_ENDORSEMENT'
-                },
-                procurementTypeId: selectedRequest?.id
-              }
               const payload = {
-                comments: [commentObj]
+                'description': newComment,
+                'process': COMMENT_PROCESS_VALUES.HOD_REQUEST_ENDORSEMENT
               }
-              props.createComment('LPO', payload)
+              props.createComment('LPO_COMMENT', selectedRequest?.id, payload)
             }}
           />
         </MyDrawer>

@@ -244,8 +244,8 @@ const mapActionsToProps = (dispatch) => {
     resetRequest: () => {
       dispatch(RequestCreators.resetRequest())
     },
-    createComment: (procurementType, payload) => {
-      dispatch(CommentCreators.createComment(procurementType, payload))
+    createComment: (commentType, itemId, payload) => {
+      dispatch(CommentCreators.createComment(commentType, itemId, payload))
     },
     fetchComments: (query) => {
       dispatch(CommentCreators.fetchComments(query))

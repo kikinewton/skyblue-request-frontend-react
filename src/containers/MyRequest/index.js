@@ -186,8 +186,8 @@ const mapActionsToProps = (dispatch) => {
       dispatch(PettyCashCreators.updatePettyCashRequest(id, payload))
     },
     resetPettyCashRequest: () => dispatch(PettyCashCreators.resetPettyCashRequest()),
-    createComment: (procurementType, payload) => {
-      dispatch(CommentCreators.createComment(procurementType, payload))
+    createComment: (commentType, itemId, payload) => {
+      dispatch(CommentCreators.createComment(commentType, itemId, payload))
     },
     setNewComment: (newComment) => {
       dispatch(CommentCreators.setNewComment(newComment))

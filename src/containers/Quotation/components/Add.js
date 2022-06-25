@@ -10,18 +10,18 @@ const { Step } = Steps
 
 const supplierColumns = props => [
   {
-    title: "Supplier",
+    title: "SUPPLIER",
     dataIndex: "supplierName",
     key: "supplierName"
   },
   {
-    title: "Number of Items Assigned",
+    title: "NUMBER OF ITEMS ASSIGNED",
     dataIndex: "requests",
     key: "requests",
     render: (text, row) => row?.requests?.length || "0"
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     align: "right",
@@ -44,12 +44,12 @@ const supplierColumns = props => [
 
 const requestColumns = props => [
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
@@ -129,7 +129,7 @@ const CreateQuotation = (props) => {
         <Col span={24}>
           <PageHeader
             // onBack={() => history.push("/app/quotations")}
-            title="Create Quotation Document"
+            title="CREATE QUOTATION DOCUMENT"
             style={{padding: 0}}
           />
         </Col>
@@ -137,9 +137,9 @@ const CreateQuotation = (props) => {
       <Row style={{padding: 10}}>
         <Col span={24}>
           <Steps current={current} size="small">
-            <Step title="Select Supplier" icon={<UserSwitchOutlined />} />
-            <Step title="Select Request Items" icon={<DiffOutlined />} />
-            <Step title="Upload File" icon={<UploadOutlined />} />
+            <Step title="SELECT SUPPLIER" icon={<UserSwitchOutlined />} />
+            <Step title="SELECT ITEMS" icon={<DiffOutlined />} />
+            <Step title="UPLOAD FILE" icon={<UploadOutlined />} />
           </Steps>  
         </Col>
       </Row>
@@ -160,7 +160,7 @@ const CreateQuotation = (props) => {
             </Card>
             <Row>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Selected Supplier: {selectedSupplier?.supplierName || "No supplier selected"}</span>
+                <span style={{fontWeight: "bold"}}>SELECTED SUPPLIER: {selectedSupplier?.supplierName || "No supplier selected"}</span>
               </Col>
             </Row>
             <Row>
@@ -189,7 +189,7 @@ const CreateQuotation = (props) => {
             <Row style={{paddingTop: 10, paddingBottom: 10}}>
               <Col span={24} style={{padding: "10px 0px 10px 0px"}}>
                 <span style={{fontWeight: "bold"}}>
-                  selected Supplier: {selectedSupplier?.supplierName}
+                  SELECTED SUPPLIER: {selectedSupplier?.supplierName}
                 </span>
               </Col>
             </Row>
@@ -215,10 +215,10 @@ const CreateQuotation = (props) => {
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <Button type="default" onClick={()=> setCurrent(0)}>
                   <LeftOutlined />
-                  Select Supplier
+                  SELECT SUPPLIER
                 </Button>
                 <Button type="default" onClick={() => setCurrent(2)} disabled={selectedRequestItems?.length < 1}>
-                  Upload Quotation Document
+                  UPLOAD QUOTATION DOCUMENT
                   <RightOutlined />
                 </Button>
               </Col>
@@ -243,7 +243,7 @@ const CreateQuotation = (props) => {
             </Row>
             <Row>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Selected Supplier: {selectedSupplier?.supplierName}</span>
+                <span style={{fontWeight: "bold"}}>SELECTED SUPPLIER: {selectedSupplier?.supplierName}</span>
               </Col>
             </Row>
             <Row>
@@ -262,7 +262,7 @@ const CreateQuotation = (props) => {
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <Button type="default" onClick={()=> setCurrent(1)}>
                   <LeftOutlined />
-                  Select Request Items
+                  SELECT ITEMS
                 </Button>
                 <Button
                   loading={quotationSubmitting}
@@ -271,7 +271,7 @@ const CreateQuotation = (props) => {
                   disabled={quotationSubmitting || selectedRequestItems?.length < 1 || !selectedSupplier?.supplierId || files.length < 1}
                 >
                   <CheckOutlined />
-                  Create Quotation for Supplier ({selectedSupplier?.supplierName})
+                  CREATE QUOTATION FOR SUPPLIER ({selectedSupplier?.supplierName?.toUpperCase()})
                 </Button>
               </Col>
             </Row>

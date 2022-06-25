@@ -262,7 +262,7 @@ export const DEPARTMENT_COLUMNS = [
 
 export const SUPPLIER_COLUMNS = [
   {
-    title: 'Name',
+    title: 'NAME',
     dataIndex: 'name',
     key: 'name',
     render: (text, row) => (
@@ -275,38 +275,38 @@ export const SUPPLIER_COLUMNS = [
     )
   },
   {
-    title: 'Email',
+    title: 'EMAIL',
     dataIndex: 'email',
     key: 'email'
   },
   {
-    title: 'Phone Number',
+    title: 'PHONE NUMBER',
     dataIndex: 'phone_no',
     key: 'phone_no'
   },
   {
-    title: 'Registration',
+    title: 'REGISTRATION STATUS',
     dataSource: 'registered',
     key: 'registered',
     render: (text, row) => row.registered ? "Registered" : "Not Registered"
   },
   {
-    title: 'Location',
+    title: 'LOCATION',
     dataIndex: 'location',
     key: 'location'
   },
   {
-    title: 'Bank',
+    title: 'BANK',
     dataIndex: 'bank',
     key: 'bank'
   },
   {
-    title: 'Account Number',
+    title: 'ACCOUNT NUMBER',
     dataIndex: 'accountNumber',
     key: 'accountNumber'
   },
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'description',
     key: 'description'
   }
@@ -472,4 +472,17 @@ export const EXPANDED_PRODUCT_COLUMNS = (row) => {
     )},
   ]
   return <Table columns={expandedColumns} dataSource={row.requestItems} pagination={false} rowKey="id" />
+}
+
+export const COMMENT_PROCESS_VALUES = {
+  HOD_REQUEST_ENDORSEMENT: 'HOD_REQUEST_ENDORSEMENT',
+  PRICE_DETAILS_PROCUREMENT: 'PRICE_DETAILS_PROCUREMENT',
+  PRICE_REVIEW_HOD: 'PRICE_REVIEW_HOD',
+  REQUEST_APPROVAL_GM: 'REQUEST_APPROVAL_GM',
+  LPO_PROCUREMENT: 'LPO_PROCUREMENT',
+  GRN_STORES: 'GRN_STORES',
+  REVIEW_GRN_HOD: 'REVIEW_GRN_HOD',
+  REVIEW_GRN_PROCUREMENT: 'REVIEW_GRN_PROCUREMENT',
+  REVIEW_AUDITOR_PAYMENT_DRAFT: 'REVIEW_AUDITOR_PAYMENT_DRAFT',
+  REVIEW_GRN_ACCOUNTS: 'REVIEW_GRN_ACCOUNTS'
 }

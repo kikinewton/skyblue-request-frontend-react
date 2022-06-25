@@ -28,12 +28,12 @@ export function* fetchComments(action) {
 
 export function* createComment(action) {
   try {
-    const response = yield call(createCommentApi, action.procurementType, action.payload)
+    const response = yield call(createCommentApi, action.commentType, action.itemId, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       openNotification('success', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentSuccess(responseData))
-      yield put(Creators.fetchComments({procurementType: action.procurementType}))
+      yield put(Creators.fetchComments({commentType: action.commentType}))
     } else {
       openNotification('error', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentFailure(response.message))

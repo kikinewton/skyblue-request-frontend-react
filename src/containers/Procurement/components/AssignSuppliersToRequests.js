@@ -7,22 +7,22 @@ const { Step } = Steps
 
 const requestColumns = props => [
   {
-    title: "Ref",
+    title: "REF",
     dataIndex: "requestItemRef",
     key: "requestItemRef"
   },
   {
-    title: "description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel"
   },
@@ -30,15 +30,12 @@ const requestColumns = props => [
 
 const AssignSuppliersToRequests = (props) => {
   const {
-    selected_suppliers,
     resetSupplier,
     fetchSuppliers,
     suppliers,
-    fetching_suppliers,
     submitting_supplier,
     createSupplier,
     supplier_submit_success,
-
     requests,
     supplier,
     requestLoading,
@@ -111,7 +108,7 @@ const AssignSuppliersToRequests = (props) => {
       <MyPageHeader 
         title={(
           <>
-            <span style={{marginRight: 5}}>Assign Suppliers To Requests Form</span>
+            <span style={{marginRight: 5}}>ASSIGN REQUEST(S) TO SUPPLIER(S)</span>
             <SyncOutlined
               spin={requestLoading}
               onClick={e => {
@@ -127,9 +124,9 @@ const AssignSuppliersToRequests = (props) => {
         <Row style={{marginBottom: 20}}>
           <Col span={24}>
             <Steps current={current} size="small">
-              <Step title="Select Requests" />
-              <Step title="Select suppliers" />
-              <Step title="Confirm and Submit" />
+              <Step title="SELECT ITEMS" />
+              <Step title="SELECT SUPPLIERS" />
+              <Step title="CONFIRM AND SUBMIT" />
             </Steps>
           </Col>
         </Row>
@@ -165,7 +162,7 @@ const AssignSuppliersToRequests = (props) => {
                     onClick={() => setCurrent(1)}
                     disabled={selected_requests.length < 1}
                   >
-                    Proceed to select suppliers
+                    PROCEED TO SELECT SUPPLIERS
                     <RightOutlined />
                   </Button>
                 </Col>
@@ -178,10 +175,10 @@ const AssignSuppliersToRequests = (props) => {
             <Col span={24}>
             <Row>
                 <Col span={24}>
-                  <Card size='small' title="Assign Supplier">
+                  <Card size='small' title="ASSIGN SUPPLIER">
                     <Row gutter={24}>
                       <Col span={12}>
-                        Registered Suppliers:
+                        REGISTERED SUPPLIERS:
                         <Select 
                           showSearch
                           mode="multiple"
@@ -199,7 +196,7 @@ const AssignSuppliersToRequests = (props) => {
                       <Col span={12}>
                         <Row>
                           <Col span={10}>
-                            Unregistered Suppliers:
+                            UNREGISTERED SUPPLIERS:
                           </Col>
                           <Col span={14}>
                             <span style={{width: "100%", cursor: "pointer", color: "#1da57a"}} type="link" onClick={() => setSupplierDrawer(true)}>
@@ -230,7 +227,7 @@ const AssignSuppliersToRequests = (props) => {
               </Row>
               <Row style={{paddingTop: 15, paddingBottom: 15}}>
                 <Col span={24}>
-                  <Card size='small' title="All Selected Requests">
+                  <Card size='small' title="SELECTED ITEMS">
                     <Table 
                       columns={requestColumns({})}
                       dataSource={selected_requests}
@@ -250,14 +247,14 @@ const AssignSuppliersToRequests = (props) => {
                     onClick={() => setCurrent(0)}
                   >
                     <LeftOutlined />
-                    Select Requests
+                    SELECT ITEMS
                   </Button>
                   <Button style={{float: "right"}} 
                     type="primary"
                     onClick={() => setCurrent(2)}
                     disabled={selected_requests.length < 1 && selectedSupplierIds.length < 1 && selectedUnregistredSupplierIds.length < 1 }
                   >
-                    Proceed to Confirm and submit
+                    CONFIRM AND SUBMIT
                     <RightOutlined />
                   </Button>
                 </Col>
@@ -272,7 +269,7 @@ const AssignSuppliersToRequests = (props) => {
                 <Col span={11}>
                   <Card
                     size="small"
-                    title="Selected suppliers (Registered)"
+                    title="SELECTED SUPPLIERS (REGISTERED)"
                   >
                     <List
                       itemLayout="horizontal"
@@ -291,7 +288,7 @@ const AssignSuppliersToRequests = (props) => {
                 <Col span={11} offset={2}>
                   <Card
                     size="small"
-                    title="Selected suppliers (Unregistered)"
+                    title="SELECTED SUPPLIERS (UNREGISTERED)"
                   >
                     <List
                       itemLayout="horizontal"
@@ -332,7 +329,7 @@ const AssignSuppliersToRequests = (props) => {
                     disabled={selected_requests.length < 1}
                   >
                     <LeftOutlined />
-                    Go Back to Select requests
+                    SELECT SUPPLIERS
                   </Button>
                   <Button style={{float: "right"}} 
                     loading={updating_request}

@@ -112,7 +112,7 @@ export function* enableEmployee(action) {
     const response = yield call(enableEmployeeApi, action.employeeId)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
-      openNotification('success', 'Activate Employee', 'SUCCESS')
+      openNotification('success', 'Activate Employee', response.message)
       yield put(Creators.enableEmployeeSuccess(responseData))
       yield put(Creators.fetchEmployees({}))
     } else {
@@ -131,7 +131,7 @@ export function* disableEmployee(action) {
     const response = yield call(disableEmployeeApi, action.employeeId)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
-      openNotification('success', 'Deactivate Employee', 'SUCCESS')
+      openNotification('success', 'Deactivate Employee', response.message)
       yield put(Creators.disableEmployeeSuccess(responseData))
       yield put(Creators.fetchEmployees({}))
     } else {

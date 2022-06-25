@@ -11,25 +11,25 @@ import { NOT_LINKED_TO_LPO } from '../../../util/quotation-types'
 
 const columns = (props) => [
   {
-    title: 'Quotation Ref',
+    title: 'QOUTATION REF',
     dataIndex: 'quotation',
     key: 'quotationRef',
     render: (text, row) => row.quotation?.quotationRef
   },
   {
-    title: 'Created On',
+    title: 'CREATED ON',
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: (text, row) => prettifyDateTime(row.quotation?.createdAt) || "N/A"
   },
   {
-    title: 'Supplier',
+    title: 'SUPPLIER',
     dataIndex: 'supplier',
     key: 'supplier',
     render: (text, row) => row?.quotation?.supplier?.name
   },
   {
-    title: 'Action',
+    title: 'ACTIONS',
     dataIndex: 'action',
     key: 'operation',
     align: 'right',
@@ -106,7 +106,7 @@ const ListQuotations = (props) => {
       <Row>
         <Col span={24}>
           <PageHeader 
-            title="Quotations"
+            title="SUPPLIER QUOTATIONS"
             extra={[
               <Input 
                 type="search"
@@ -115,7 +115,12 @@ const ListQuotations = (props) => {
                 key="input-search"
                 onChange={(event) => props.filterQuotations(event.target.value)}
               />,
-              <Button type="primary" onClick={() => history.push("/app/quotations/add-new")} key="add-button">New Supplier Quote</Button>
+              <Button 
+                type="primary" 
+                onClick={() => history.push("/app/quotations/add-new")} 
+                key="add-button">
+                  ADD QUOTATION
+              </Button>
             ]}
           />
         </Col>

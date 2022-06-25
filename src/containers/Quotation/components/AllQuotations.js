@@ -95,7 +95,7 @@ const ListAllQuotations = (props) => {
       <Row>
         <Col span={24}>
           <PageHeader 
-            title="All Quotations"
+            title="Supplier Quotations"
             extra={[
               <Input 
                 type="search"

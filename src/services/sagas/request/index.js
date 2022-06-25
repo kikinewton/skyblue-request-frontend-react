@@ -26,7 +26,7 @@ export function* fetchRequests(action) {
       yield put(Creators.fetchRequestsFailure(response.message || "Failed to fetch requests!"))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch departments'
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Internal server error'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchRequestsFailure(errorText))
   }
@@ -56,7 +56,7 @@ export function* fetchMyRequests(action) {
       yield put(Creators.fetchMyRequestsFailure(response.message || "Failed to fetch requests!"))
     }
   } catch (error) {
-    const errorText = (error?.response?.data && error?.response?.data?.error) || 'Failed to fetch departments'
+    const errorText = (error?.response?.data && error?.response?.data?.error) || 'Failed to fetch request items'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchMyRequestsFailure(errorText))
   }
@@ -96,7 +96,7 @@ export function* updateRequest(action) {
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
+    const message = (error && error.response.data && error.response.data.error) || 'Internal Server Error'
     openNotification('error', 'Update Request', errors[0])
     yield put(Creators.updateRequestFailure(message))
   }
@@ -116,7 +116,7 @@ export function* updateSingleRequest(action) {
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
-    const message = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
+    const message = (error && error.response.data && error.response.data.error) || 'Internal Server Error'
     openNotification('error', 'Update Request', errors[0])
     yield put(Creators.updateSingleRequestFailure(message))
   }

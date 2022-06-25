@@ -92,7 +92,7 @@ export function* createLocalPurchaseOrderDraft(action) {
   const { payload } = action
   try {
     const response = yield call(saveLocalPurchaseOrderDraftApi, payload)
-    if(response.status === RESPONSE_SUCCESS_CODE) {
+    if(response?.status === RESPONSE_SUCCESS_CODE) {
       openNotification('success', 'Create Local Purchase Order', response?.message)
       yield put(Creators.createLocalPurchaseOrderDraftSuccess(response?.data))
       yield put(NotificationCreators.fetchNotifications())
@@ -101,7 +101,7 @@ export function* createLocalPurchaseOrderDraft(action) {
       yield put(Creators.createLocalPurchaseOrderDraftFailure(response?.message))
     }
   } catch (error) {
-    const errors = error?.response?.data?.errors
+    const errors = error?.response?.data?.errors || []
     const errorText = errors[0] || 'Failed to create local purchase order'
     openNotification('error', 'Create Local Purchase Order', errorText)
     yield put(Creators.createLocalPurchaseOrderDraftFailure(errorText))

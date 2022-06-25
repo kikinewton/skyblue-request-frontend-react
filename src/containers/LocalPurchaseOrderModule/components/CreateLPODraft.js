@@ -14,25 +14,25 @@ import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotati
 
 const quotationColumns = props => [
   {
-    title: "Quotation Ref",
+    title: "QUOTATION REF",
     dataIndex: "quotation",
     key: "quotation",
     render: (text, row) => row?.quotation?.quotationRef
   },
   {
-    title: "Supplier",
+    title: "SUPPLIER",
     dataIndex: "quotation",
     key: "quotation",
     render: (text, row) => row?.quotation?.supplier?.name
   },
   {
-    title: "Created Date",
+    title: "CREATED ON",
     dataIndex: "quotation",
     key: "quotation",
     render: (text, row) => prettifyDateTime(row?.quotation?.createdAt)
   },
   {
-    title: "Action",
+    title: "ACTION",
     dataIndex: "operations",
     key: "operations",
     align: "right",
@@ -46,22 +46,22 @@ const quotationColumns = props => [
 
 const updatePriceColumns = (props)=> [
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: 'quantity'
   },
   {
-    title: 'Reason',
+    title: 'REASON',
     dataIndex: 'reason',
     key: 'reason'
   },
   {
-    title: 'Request Category',
+    title: 'REQUEST CATEGORY',
     dataIndex: 'requestCategory',
     key: 'requestCategory',
     render: (text, row) => (
@@ -75,7 +75,7 @@ const updatePriceColumns = (props)=> [
     )
   },
   {
-    title: 'Unit price',
+    title: 'UNIT PRICE',
     dataIndex: 'unitPrice',
     key: 'unitPrice',
     render: (text, row) => {
@@ -94,22 +94,22 @@ const updatePriceColumns = (props)=> [
 
 const requestColumns = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "requestItemRef",
     key: "requestItemRef",
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity",
   },
   {
-    title: "Requisition Date",
+    title: "REQUESTED ON",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text) => prettifyDateTime(text)
@@ -118,23 +118,23 @@ const requestColumns = props => [
 
 const confirmColumns = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "requestItemRef",
     key: "requestItemRef",
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "Request Category",
+    title: "REQUEST CATEGORY",
     dataIndex: "requestCategory",
     key: "requestCategory",
     render: (text) => props.request_categories.find(it => it.id === text)?.name
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "unitPrice",
     key: "unitPrice",
     render: (text) => `${formatCurrency(text,props.currency)}`
@@ -144,20 +144,13 @@ const confirmColumns = props => [
 
 const CreateLPO = (props) => {
   const {
-    fetching_suppliers,
     suppliers,
-    fetchSuppliers,
-
     request_categories,
-    fetching_request_categories,
-
-    quotations,
     fetching_quotations,
     resetQuotation,
     fetchQuotations,
     filterQuotations,
     filtered_quotations,
-
     createLocalPurchaseOrderDraft,
     submitting_local_purchase_order,
     submit_local_purchase_order_success,
@@ -224,8 +217,6 @@ const CreateLPO = (props) => {
   useEffect(() => {
     props.resetSuppliers()
     props.resetQuotation()
-    //props.resetRequestCategory()
-    //fetchSuppliers({suppliersWithRQ: true})
     fetchQuotations({
       requestType: NOT_LINKED_TO_LPO
     })
@@ -247,13 +238,13 @@ const CreateLPO = (props) => {
 
   return (
     <>
-      <Row>
+      <Row style={{marginBottom: 10}}>
         <Col span={24}>
           <Steps current={current} size="small">
-            <Steps.Step title="Select Quotation" />
-            <Steps.Step title="Select Request Items" />
-            <Steps.Step title="Update Unit Price And Request Category" />
-            <Steps.Step title="Confirm and submit" />
+            <Steps.Step title="SELECT QUOTATION" />
+            <Steps.Step title="SELECT ITEMS" />
+            <Steps.Step title="UPDATE UNIT PRICE AND CATEGORY" />
+            <Steps.Step title="CONFIRM AND SUBMIT" />
           </Steps>
         </Col>
       </Row>
@@ -262,7 +253,7 @@ const CreateLPO = (props) => {
           <>
             <Row style={{marginBottom: 20}}>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Selected Quotation: {selectedQuotation?.quotation?.quotationRef || "N/A"}</span>
+                <span style={{fontWeight: "bold"}}>SELECTED QUOTATION: {selectedQuotation?.quotation?.quotationRef || "N/A"}</span>
               </Col>
             </Row>
             <Row style={{padding: "10px 0px 10px 0px"}}>
@@ -340,7 +331,7 @@ const CreateLPO = (props) => {
                   style={{float: "left"}}
                 >
                   <LeftOutlined />
-                  Previous
+                  SELECT QUOTATION
                 </Button>
                 <Button type="primary"
                   onClick={() => {
@@ -349,7 +340,7 @@ const CreateLPO = (props) => {
                   style={{float: "right"}}
                   disabled={!selectedQuotation?.quotation?.quotationRef || selectedRequests.length < 1}
                 >
-                  Next (Update Unit Price And Product Category)
+                  UPDATE UNIT PRICE AND CATEGORY
                   <RightOutlined />
                 </Button>
               </Col>
@@ -367,7 +358,7 @@ const CreateLPO = (props) => {
                   </Col>
                 </Row>
                   <Row>
-                    <Col md={6}>Delivery Date:</Col>
+                    <Col md={6}>DELIVERY DATE:</Col>
                     <Col md={6}>
                       <DatePicker
                         format="YYYY-MM-DD"
@@ -380,7 +371,7 @@ const CreateLPO = (props) => {
                       />
                     </Col>
                     <Col md={1}></Col>
-                    <Col md={5}>Currency</Col>
+                    <Col md={5}>CURRENCY:</Col>
                     <Col md={6}>
                         <Select
                           style={{width: "100%"}} 
@@ -450,16 +441,16 @@ const CreateLPO = (props) => {
             </Row>
             <Row>
               <Col md={24} className="bs-stepper-nav">
-                <Button type="primary" onClick={()=> {
+                <Button type="default" onClick={()=> {
                   setCurrent(1)
                 }}>
-                  <LeftOutlined /> Prev
+                  <LeftOutlined /> SELECT ITEMS
                 </Button>
                 <Button 
                   type="primary" onClick={()=> setCurrent(3)}
                   disabled={!deliveryDate || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
                 >
-                  Next <RightOutlined />
+                  CONFIRM AND SUBMIT <RightOutlined />
                 </Button>
               </Col>
             </Row>
@@ -484,8 +475,8 @@ const CreateLPO = (props) => {
             </Row>
             <Row>
               <Col md={24} className="bs-stepper-nav">
-                <Button type="primary" onClick={()=> setCurrent(2)}>
-                  <LeftOutlined /> Prev
+                <Button type="default" onClick={()=> setCurrent(2)}>
+                  <LeftOutlined /> UPDATE UNIT PRICE AND CATEGORY
                 </Button>
                 <Button
                   loading={submitting_local_purchase_order} 
@@ -494,7 +485,7 @@ const CreateLPO = (props) => {
                   disabled={!deliveryDate || submitting_local_purchase_order || selectedRequests.filter(it => !it.unitPrice).length > 0 || selectedRequests.filter(it => !it.requestCategory).length > 0}
                 >
                   <CheckOutlined />
-                  SUBMIT
+                  SUBMIT LOCAL PURCHASE ORDER DRAFT
                 </Button>
               </Col>
             </Row>

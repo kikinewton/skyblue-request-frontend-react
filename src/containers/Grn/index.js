@@ -69,8 +69,6 @@ const GrnIndex = (props) => {
       return <Redirect to="/app/grn/lpos-pending-grn" />
     } else if(role === EMPLOYEE_ROLE.ROLE_HOD) {
       return <Redirect to="/app/grn/pending-endorsement" />
-    } else if(role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER) {
-      return <Redirect to="/app/grn/pending-approval" />
     } else if(role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER) {
       return <Redirect to="/app/grn/pending-payment-advice" />
     }
@@ -133,7 +131,7 @@ const GrnIndex = (props) => {
               </NavLink>
             </Menu.Item>
             )}
-            {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
+            {/* {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
               <Menu.Item key="/app/grn/pending-approval">
                 <NavLink to="/app/grn/pending-approval">
                   {notifications.grnPendingApprovalGM ? (
@@ -144,7 +142,7 @@ const GrnIndex = (props) => {
                   
                 </NavLink>
               </Menu.Item>
-            )}
+            )} */}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER && (
               <Menu.Item key="/app/grn/pending-payment-advice">
                 <NavLink to="/app/grn/pending-payment-advice">
@@ -164,7 +162,7 @@ const GrnIndex = (props) => {
             {DefaultRedirect}
           </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/pending-endorsement`} {...props} component={GrnPendingEndorsement} />
-          <AuthenticatedRoute path={`${path}/pending-approval`} {...props} component={GrnPendingApproval} />
+          {/* <AuthenticatedRoute path={`${path}/pending-approval`} {...props} component={GrnPendingApproval} /> */}
           <AuthenticatedRoute path={`${path}/add-new`} {...props} component={CreateGrn} />
           <AuthenticatedRoute path={`${path}/grn-success`} {...props} component={GrnSuccessPage} />
           <AuthenticatedRoute path={`${path}/lpos/:lpoId/create-goods-receive-note`} component={ReceiveItems} {...props} />

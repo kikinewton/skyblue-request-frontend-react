@@ -1,83 +1,112 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message, Badge } from 'antd';
 import React, {useState } from 'react';
 import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
+import MyDrawer from '../../../shared/MyDrawer';
+import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES } from '../../../util/constants';
+import { COMMENT_PROCESS_VALUES, FETCH_REQUEST_TYPES } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
 
 const columns = props => [
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Reason",
+    title: "REASON",
     dataIndex: "reason",
     key: "reason"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "requestDate",
     key: "requestDate",
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: "Actions",
+    title: 'STATUS',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text, row) => (
+      <>
+        {text === 'COMMENT' ? (
+          <>
+            <Badge size='small' dot offset={[5,0]}></Badge>
+            <Button type="default" onClick={() => props.onComment(row)}>
+              VIEW COMMENT
+            </Button>
+          </>
+        ) : text}
+      </>
+    )
+  },
+  {
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     align: "right",
-    render: (text, row) => (<><Button type="default" onClick={() => props.onReview(row)}>Review Document</Button></>)
+    render: (text, row) => (
+    <Row>
+      <Col span={8}>
+        <Button size='small' type="primary" onClick={() => props.onComment(row)}>
+          <CommentOutlined/>
+        </Button>
+      </Col>
+      <Col span={15} offset={1}>
+        <Button size='small' type="primary" onClick={() => props.onReview(row)}>Review</Button>
+      </Col>
+    </Row>)
   }
 ]
 
 const selectedRequestsColumns = props => [
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Reason",
+    title: "REASON",
     dataIndex: "reason",
     key: "reason"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUNATITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "requestDate",
     key: "requestDate",
     render: (text) => prettifyDateTime(text)
@@ -86,39 +115,39 @@ const selectedRequestsColumns = props => [
 
 const selectedRequestsColumnsForReject = props => [
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Reason",
+    title: "REASON",
     dataIndex: "reason",
     key: "reason"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "requestDate",
     key: "requestDate",
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: "Comment",
+    title: "COMMENT",
     dataIndex: "comment",
     key: "comment",
     render: (text, row) => (<Input type="text" defaultValue={text} onChange={(value) => props.onComment(value, row)} />)
@@ -143,9 +172,9 @@ const ApprovePendingList = (props) => {
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
   const [reviewDrawer, setReviewDrawer] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
 
   const submit = () => {
-    console.log("action", actionType)
     if((actionType === UPDATE_REQUEST_TYPES.GM_CANCEL || actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) && selected_requests.filter(it => !it.comment).length > 0) {
       return message.error("Please make sure comment field is not empty")
     }
@@ -158,7 +187,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "LPO"}
-      console.log('payload', payload)
       createComment("LPO", payload)
     } else if(actionType === UPDATE_REQUEST_TYPES.GM_CANCEL) {
       const comments = selected_requests.map(it => {
@@ -170,7 +198,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "LPO"}
-      console.log('payload', payload)
       createComment("LPO", payload)
     } else {
       updateRequest({
@@ -199,6 +226,9 @@ const ApprovePendingList = (props) => {
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
     })
+    props.fetchComments({
+      commentType: 'LPO_COMMENT'
+    })
     // eslint-disable-next-line
   }, [])
 
@@ -226,11 +256,11 @@ const ApprovePendingList = (props) => {
 
   return (
     <>
-      <PageHeader title="Requests awaiting approval" extra={[
+      <PageHeader title="REQUESTS AWAITING APPROVAL" extra={[
         (
           <Row style={{marginBottom: 10}} key="actions">
             <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-              <Button
+              {/* <Button
                 disabled={selected_requests.length < 1} 
                 style={{marginRight: 5}}
                 type="default"
@@ -240,7 +270,7 @@ const ApprovePendingList = (props) => {
                 }}
               >
                 <CommentOutlined /> Comment Selected List
-              </Button>
+              </Button> */}
               <Button
                 style={{marginRight: 5}} 
                 type="default"
@@ -251,19 +281,18 @@ const ApprovePendingList = (props) => {
                 }}
               >
                 <CloseOutlined />
-                Reject Selected List
+                CANCEL SELECTED REQUESTS
               </Button>
               <Button 
                 disabled={selected_requests.length < 1} 
                 type="primary" style={{marginRight: 5}} 
                 onClick={() => {
-                  console.log('action type on click', UPDATE_REQUEST_TYPES.GM_APPROVE)
                   setActionType(UPDATE_REQUEST_TYPES.GM_APPROVE)
                   setConfirmDrawer(true)
                 }}
               >
                 <CheckOutlined />
-                Approve Selected List
+                APPROVE SELECTED REQUESTS
               </Button>
             </Col>
           </Row>
@@ -279,6 +308,10 @@ const ApprovePendingList = (props) => {
                 onReview: (row) => {
                   setSelectedRequest(row)
                   setReviewDrawer(true)
+                },
+                onComment: row => {
+                  setSelectedRequest(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={requests}
@@ -330,7 +363,6 @@ const ApprovePendingList = (props) => {
               }) 
               : selectedRequestsColumnsForReject({
                   onComment: (event, row) => {
-                    console.log('row', row, 'value', event.target.value)
                     const data = selected_requests.map(it => {
                       let dt = it
                       if(dt.id === row.id) {
@@ -367,6 +399,32 @@ const ApprovePendingList = (props) => {
           quotation={selectedRequest?.quotations.filter(qt => qt?.supplier?.id === selectedRequest.suppliedBy)[0]}
         />
       </Drawer>
+
+      <MyDrawer
+        title='COMMENTS'
+        visible={commentVisible}
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedRequest(null)
+        }}
+      >
+        <RequestComment
+          onCommentChange={(newComment) => {
+            props.setNewComment(newComment)
+          }}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          comments={props.comments}
+          request={selectedRequest}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': COMMENT_PROCESS_VALUES.REQUEST_APPROVAL_GM
+            }
+            props.createComment('LPO_COMMENT', selectedRequest?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

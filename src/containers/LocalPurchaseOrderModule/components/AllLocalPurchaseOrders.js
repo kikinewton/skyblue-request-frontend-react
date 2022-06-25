@@ -7,25 +7,25 @@ import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
 
 const columns = (props) => [
   {
-    title: 'Supplier',
+    title: 'SUPPLIER',
     dataIndex: 'supplierId',
     key: 'supplierId',
     render: (text, row)=> row?.requestItems[0]?.suppliers.find(item=> item.id === row.supplierId)?.name || 'N/A'
   },
   {
-    title: 'Created On',
+    title: 'CREATED ON',
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: (text) => text ? prettifyDateTime(text) : "N/A"
   },
   {
-    title: 'Delivery Date',
+    title: 'DELIVERY DATE',
     dataIndex: 'deliveryDate',
     key: 'deliveryDate',
     render: (text) => text ? prettifyDateTime(text) : 'N/A'
   },
   {
-    title: 'Action',
+    title: 'ACTION',
     dataIndex: 'action',
     key: 'operation',
     align: 'right',
@@ -93,7 +93,7 @@ const AllLocalPurchaseOrders = (props) => {
     <React.Fragment>
       <Row style={{marginBottom: 20}}>
         <Col>
-          <span className="bs-page-title">All Local Purchase Orders</span>
+          <span className="bs-page-title">ALL LOCAL PURCHASE ORDERS</span>
           <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
             fetchLocalPurchaseOrders({withGRN: false})
           }} /></span>

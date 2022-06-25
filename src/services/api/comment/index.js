@@ -7,9 +7,9 @@ export function fetchComments(query) {
   })
 }
 
-export function createComment(procurementType, payload) {
+export function createComment(commentType, itemId, payload) {
   return service({
-    url: `/comments/${procurementType}`,
+    url: `/comments/${commentType}/${itemId}`,
     method: "POST",
     data: payload
   })

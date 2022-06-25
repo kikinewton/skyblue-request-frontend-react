@@ -7,7 +7,7 @@ import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
 const columns = (props)=> SUPPLIER_COLUMNS.concat({
-  title: 'Action', key: 'operation', fixed: 'right', width: 100,
+  title: 'ACTIONS', key: 'operation', fixed: 'right', width: 100,
   render: (text, row) => {
     return (
       <Row>
@@ -111,10 +111,10 @@ const List = (props)=> {
     <>
       <Row>
         <Col md={10} style={{paddingBottom: 5}}>
-          <span className="bs-page-title">Suppliers</span>
+          <span className="bs-page-title">SUPPLIERS</span>
         </Col>
         <Col md={14} style={{textAlign: 'right'}}>
-          <Button type="primary" onClick={()=> setOpenAdd(true)}>Add New</Button>
+          <Button type="primary" onClick={()=> setOpenAdd(true)}>REGISTER NEW SUPPLIER</Button>
         </Col>
       </Row>
       <Row>

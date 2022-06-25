@@ -30,7 +30,7 @@ const RequestComment = (props) => {
               <List.Item.Meta title='REASON' description={request?.reason} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title='QUANTITY' description={request?.purpose} />
+              <List.Item.Meta title='PURPOSE' description={request?.purpose} />
             </List.Item>
             <List.Item>
               <List.Item.Meta title='QUANTITY' description={request?.quantity} />
@@ -46,30 +46,39 @@ const RequestComment = (props) => {
           <Col span={24} style={{backgroundColor: '#f5fafa', padding: "30px 10px 10px 10px"}}>
             <Row>
               <Col span={24}>
-                <List>
-                  {comments.filter(item => item?.item?.id === request?.id).map(item => {
-                    const createdBy = item?.commentBy;
-                    let data = {
-                      userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '')}) on ${prettifyDateTime(item?.createdDate)}`,
-                      userInitials: `${createdBy?.firstName.slice(0,1)} ${createdBy?.lastName.slice(0,1)}`,
-                      message: item?.description,
-                      id: item?.id
-                    }
-                    return data
-                  }).map(comment => (
-                    <List.Item key={comment.id}>
-                      <List.Item.Meta 
-                        avatar={<Avatar style={{backgroundColor: "#f56a00", verticalAlign: 'middle'}} size="large">{comment?.userInitials}</Avatar>}  
-                        title={comment?.userName}
-                        description={comment.message}
-                      />
-                    </List.Item>
-                  ))}
-                </List>
+                {comments.filter(item => item?.item?.id === request?.id).length > 0 ? (
+                  <List>
+                    {comments.filter(item => item?.item?.id === request?.id).map(item => {
+                      const createdBy = item?.commentBy;
+                      let data = {
+                        userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '')}) on ${prettifyDateTime(item?.createdDate)}`,
+                        userInitials: `${createdBy?.firstName.slice(0,1)} ${createdBy?.lastName.slice(0,1)}`,
+                        message: item?.description,
+                        id: item?.id
+                      }
+                      return data
+                    }).map(comment => (
+                      <List.Item key={comment.id}>
+                        <List.Item.Meta 
+                          avatar={<Avatar style={{backgroundColor: "#1890ff", verticalAlign: 'middle'}} size="large">{comment?.userInitials}</Avatar>}  
+                          title={comment?.userName}
+                          description={comment.message}
+                        />
+                      </List.Item>
+                    ))}
+                  </List>
+                ) : (
+                  <Row>
+                    <Col span={24} style={{height: 70, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <h3>No comment found!</h3>
+                    </Col>
+                  </Row>
+                )}
+                
               </Col>
             </Row>
             <Row>
-              <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+              <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 10}}>
                 <div style={{ flexGrow: 1 }}>
                   <Input value={newComment} onChange={e => onCommentChange(e.target.value)} />
                 </div>

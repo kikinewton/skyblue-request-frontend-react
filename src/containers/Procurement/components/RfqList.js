@@ -6,12 +6,12 @@ import MyPageHeader from '../../../shared/MyPageHeader'
 
 const columns = props => [
   {
-    title: "Supplier",
+    title: "SUPPLIER",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     align: "right",
@@ -29,7 +29,7 @@ const columns = props => [
           {/* {row?.email && (
             <Button style={{marginRight: 5}} size="small" onClick={() => props.generateRfq(row)} type="default"><MailOutlined /> Send</Button>
           )} */}
-          <Button size="small" onClick={() => props.generateRfq(row)} type="default"><DownloadOutlined /> Generate RFQ</Button>
+          <Button size="small" onClick={() => props.generateRfq(row)} type="default"><DownloadOutlined />DOWNLOAD RFQ</Button>
         </div>
       )
   },
