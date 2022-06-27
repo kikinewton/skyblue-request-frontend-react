@@ -13,21 +13,19 @@ import {
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
-
 export function* fetchLocalPurchaseOrders(action) {
-  console.log('=================>FETCH REQUEST', action)
   const { query } = action
   try {
     const response = yield call(fetchLocalPurchaseOrdersApi, query)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       yield put(Creators.fetchLocalPurchaseOrdersSuccess(response?.data))
     } else {
-      openNotification('error', 'Fetch Request', response?.message)
+      openNotification('error', 'FETCH LPO', response?.message)
       yield put(Creators.fetchLocalPurchaseOrdersFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
-    openNotification('error', 'Fetch Request', errorText)
+    openNotification('error', 'FETCH LPO', errorText)
     yield put(Creators.fetchLocalPurchaseOrdersFailure(errorText))
   }
 }
@@ -43,7 +41,7 @@ export function* fetchLocalPurchaseOrder(action) {
       yield put(Creators.fetchLocalPurchaseOrderFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to Lpo'
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Internal server error'
     openNotification('error', 'Fetch Lpo', errorText)
     yield put(Creators.fetchLocalPurchaseOrderFailure(errorText))
   }
@@ -57,12 +55,12 @@ export function* fetchLocalPurchaseOrderDrafts(action) {
     if(response.status === RESPONSE_SUCCESS_CODE) {
       yield put(Creators.fetchLocalPurchaseOrderDraftsSuccess(response?.data))
     } else {
-      openNotification('error', 'Fetch Request', response?.message)
+      openNotification('error', 'FETCH LPO', response?.message)
       yield put(Creators.fetchLocalPurchaseOrderDraftsFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
-    openNotification('error', 'Fetch Request', errorText)
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Internal server error'
+    openNotification('error', 'FETCH LPO', errorText)
     yield put(Creators.fetchLocalPurchaseOrderDraftsFailure(errorText))
   }
 }
@@ -73,17 +71,17 @@ export function* createLocalPurchaseOrder(action) {
   try {
     const response = yield call(saveLocalPurchaseOrderApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Local Purchase Order', response?.message)
+      openNotification('success', 'CREATE LPO', response?.message)
       yield put(Creators.createLocalPurchaseOrderSuccess(response?.data))
       yield put(NotificationCreators.fetchNotifications())
     } else {
-      openNotification('error', 'Create Local Purchase Order', response?.message)
+      openNotification('error', 'CREATE LPO', response?.message)
       yield put(Creators.createLocalPurchaseOrderFailure(response?.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
     const errorText = errors[0] || 'Failed to create local purchase order'
-    openNotification('error', 'Create Local Purchase Order', errorText)
+    openNotification('error', 'CREATE LPO', errorText)
     yield put(Creators.createLocalPurchaseOrderFailure(errorText))
   }
 }
@@ -93,17 +91,17 @@ export function* createLocalPurchaseOrderDraft(action) {
   try {
     const response = yield call(saveLocalPurchaseOrderDraftApi, payload)
     if(response?.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Local Purchase Order', response?.message)
+      openNotification('success', 'DRAFT LPO', response?.message)
       yield put(Creators.createLocalPurchaseOrderDraftSuccess(response?.data))
       yield put(NotificationCreators.fetchNotifications())
     } else {
-      openNotification('error', 'Create Local Purchase Order', response?.message)
+      openNotification('error', 'DRAFT LPO', response?.message)
       yield put(Creators.createLocalPurchaseOrderDraftFailure(response?.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors || []
-    const errorText = errors[0] || 'Failed to create local purchase order'
-    openNotification('error', 'Create Local Purchase Order', errorText)
+    const errorText = errors[0] || 'Internal server error'
+    openNotification('error', 'DRAFT LPO', errorText)
     yield put(Creators.createLocalPurchaseOrderDraftFailure(errorText))
   }
 }

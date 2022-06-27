@@ -3,7 +3,8 @@ import { Creators, Types } from '../../redux/comment/actions'
 
 import {
   createComment as createCommentApi,
-  fetchUserComments as fetchUserCommentsApi
+  fetchUserComments as fetchUserCommentsApi,
+  createCommentWithCancel as createCommentWithCancelApi
 } from '../../api/comment'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
@@ -45,10 +46,32 @@ export function* createComment(action) {
   }
 }
 
+export function* createCommentWithCancel(action) {
+  try {
+    const response = yield call(createCommentWithCancelApi, action.procurementType, action.payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      const responseData = response.data
+      openNotification('success', 'CANCEL REQUEST', response.message)
+      yield put(Creators.createCommentWithCancelSuccess(responseData))
+    } else {
+      openNotification('error', 'CANCEL REQUEST', response.message)
+      yield put(Creators.createCommentWithCancelFailure(response.message))
+    }
+  } catch (error) {
+    const message = (error && error.response.data && error.response.data.error) || 'Failed to create Comments'
+    openNotification('error', 'CANCEL REQUEST', message)
+    yield put(Creators.createCommentWithCancelFailure(message))
+  }
+}
+
 export function* watchFetchComments(action) {
   yield takeLatest(Types.FETCH_COMMENTS, fetchComments)
 }
 
 export function* watchCreateComment(action) {
   yield takeLeading(Types.CREATE_COMMENT, createComment)
+}
+
+export function* watchCreateCommentWithCancel(action) {
+  yield takeLeading(Types.CREATE_COMMENT_WITH_CANCEL, createCommentWithCancel)
 }

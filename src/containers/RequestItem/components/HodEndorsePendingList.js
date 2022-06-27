@@ -1,7 +1,9 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, Badge } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, Badge, List } from 'antd';
 import React, {useState } from 'react';
+import ConfirmModal from '../../../shared/ConfirmModal';
 import MyDrawer from '../../../shared/MyDrawer';
+import RequestCancelModal from '../../../shared/RequestCancelModal';
 import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { FETCH_REQUEST_TYPES, HOD_REQUEST_COLUMNS } from '../../../util/constants';
@@ -9,7 +11,7 @@ import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => HOD_REQUEST_COLUMNS.concat([
   {
-    title: "Status",
+    title: "STATUS",
     dataIndex: "status",
     key: "status",
     render: (text, row) => (
@@ -30,13 +32,16 @@ const columns = props => HOD_REQUEST_COLUMNS.concat([
     )
   },
   {
-    title: 'Actions',
+    title: 'ACTIONS',
     dataIndex: 'actions',
     key: 'actions',
     render: (text, row) => (
       <>
         <Button type='default' onClick={() => props.onComment(row)}>
           <CommentOutlined />
+        </Button>
+        <Button type='default' onClick={() => props.onCancel(row)}>
+          <CloseOutlined />
         </Button>
       </>
     )
@@ -137,19 +142,10 @@ const HodEndorsePendingList = (props) => {
   const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [commentVisible, setCommentVisible] = useState(false)
+  const [cancelVisible, setCancelVisible] = useState(false)
 
   const submit = () => {
-    if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
-      const comments = selected_requests.map(it => {
-        let data = {
-          procurementTypeId: it.id,
-          comment: { description: it?.comment || "", process: actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL ? "HOD_REQUEST_ENDORSEMENT" : "HOD_REQUEST_ENDORSEMENT"},
-        }
-        return data
-      })
-      const payload = {comments: comments, procurementType: "LPO"}
-      createComment("LPO", payload)
-    } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
+    if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
       const comments = selected_requests.filter(it => it.comment)
                             .map(it => {
                               let data = {
@@ -160,7 +156,7 @@ const HodEndorsePendingList = (props) => {
                               return data
                             })
       const commentPayload = {comments: comments}
-      createComment("LPO", commentPayload)
+      props.createCommentWithCancel("LPO", commentPayload)
     } else {
       updateRequest({
         updateType: actionType,
@@ -218,7 +214,8 @@ const HodEndorsePendingList = (props) => {
   React.useEffect(() => {
     if(!props.submitting_comment && props.submit_comment_success) {
       setSelectedRequests([])
-      //setCommentVisible(false)
+      setCancelVisible(false)
+      setSelectedRequest(null)
       props.fetchRequests({
         requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
       })
@@ -232,7 +229,7 @@ const HodEndorsePendingList = (props) => {
         size="small"
         title="Requests pending Endorsement" extra={[
         (
-          <Row style={{marginBottom: 10}}>
+          <Row style={{marginBottom: 10}} key="1">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
             <Button
               type="default"
@@ -270,6 +267,10 @@ const HodEndorsePendingList = (props) => {
                 onComment: (row) => {
                   setSelectedRequest(row)
                   setCommentVisible(true)
+                },
+                onCancel: (row) => {
+                  setSelectedRequest(row)
+                  setCancelVisible(true)
                 }
               })}
               dataSource={requests}
@@ -341,6 +342,45 @@ const HodEndorsePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <ConfirmModal 
+        onSubmit={() => {
+          const payload = {
+            itemId: selectedRequest?.id
+          }
+          props.createCommentWithCancel("LPO", payload)
+        }}
+        loading={props.submitting_comment}
+        onCancel={() => {
+          setCancelVisible(false)
+          setSelectedRequest(null)
+        }}
+        isVisible={cancelVisible}
+      >
+        <>
+          <Row>
+            <Col span={24}>
+              <h3>
+                Are you sure you want to cancel request?
+              </h3>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <List>
+                <List.Item key="name">
+                  <List.Item.Meta title="DESCRIPTION" description={selectedRequest?.name} />
+                </List.Item>
+                <List.Item key="reason">
+                  <List.Item.Meta title="REASON" description={selectedRequest?.name} />
+                </List.Item>
+                <List.Item key="qnty">
+                  <List.Item.Meta title="QUANTITY" description={selectedRequest?.quantity} />
+                </List.Item>
+              </List>
+            </Col>
+          </Row>
+        </>
+      </ConfirmModal>
       <MyDrawer
         title='COMMENTS'
         visible={commentVisible}

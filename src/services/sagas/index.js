@@ -91,6 +91,7 @@ import {
 
 import {
 	watchCreateComment,
+	watchCreateCommentWithCancel,
 	watchFetchComments,
 } from "./comment"
 
@@ -186,6 +187,7 @@ export default function* rootSaga() {
 
 		watchCreateComment(),
 		watchFetchComments(),
+		watchCreateCommentWithCancel(),
 
 		watchCreateGrn(),
 		watchUpdateGrn(),

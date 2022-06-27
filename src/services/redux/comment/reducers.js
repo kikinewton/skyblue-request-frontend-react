@@ -42,6 +42,25 @@ export const createCommentFailure = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: false, error: action.error, submit_success: false};
 };
 
+//create
+export const createCommentWithCancel = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
+};
+
+export const createCommentWithCancelSuccess = (state = INITIAL_STATE, action) => {
+  console.log('resposeData', action.responseData)
+  return {
+    ...state,
+    submitting: false, 
+    submit_success: true,
+    new_comment: ''
+  };
+};
+
+export const createCommentWithCancelFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false};
+};
+
 export const setNewComment = (state = INITIAL_STATE, action) => {
   const {newComment} = action
   return {
@@ -69,6 +88,10 @@ export const HANDLERS = {
   [Types.CREATE_COMMENT]: createComment,
   [Types.CREATE_COMMENT_SUCCESS]: createCommentSuccess,
   [Types.CREATE_COMMENT_FAILURE]: createCommentFailure,
+
+  [Types.CREATE_COMMENT_WITH_CANCEL]: createCommentWithCancel,
+  [Types.CREATE_COMMENT_WITH_CANCEL_SUCCESS]: createCommentWithCancelSuccess,
+  [Types.CREATE_COMMENT_WITH_CANCEL_FAILURE]: createCommentWithCancelFailure,
   
   [Types.RESET_COMMENT]: resetComment,
   [Types.SET_NEW_COMMENT]: setNewComment

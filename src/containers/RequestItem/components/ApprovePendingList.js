@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message, Badge } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message, Badge, List } from 'antd';
 import React, {useState } from 'react';
 import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
 import MyDrawer from '../../../shared/MyDrawer';
@@ -7,6 +7,7 @@ import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { COMMENT_PROCESS_VALUES, FETCH_REQUEST_TYPES } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
+import ConfirmModal from '../../../shared/ConfirmModal'
 
 
 const columns = props => [
@@ -67,12 +68,17 @@ const columns = props => [
     render: (text, row) => (
     <Row>
       <Col span={8}>
-        <Button size='small' type="primary" onClick={() => props.onComment(row)}>
+        <Button size='small' type="default" onClick={() => props.onComment(row)}>
           <CommentOutlined/>
         </Button>
       </Col>
-      <Col span={15} offset={1}>
-        <Button size='small' type="primary" onClick={() => props.onReview(row)}>Review</Button>
+      <Col span={6} offset={1}>
+        <Button size='small' danger type='default' onClick={() => props.onCancel(row)}>
+          <CloseOutlined />
+        </Button>
+      </Col>
+      <Col span={8} offset={1}>
+        <Button size='small' type="primary" onClick={() => props.onReview(row)}>REVIEW</Button>
       </Col>
     </Row>)
   }
@@ -173,22 +179,13 @@ const ApprovePendingList = (props) => {
   const [reviewDrawer, setReviewDrawer] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [commentVisible, setCommentVisible] = useState(false)
+  const [cancelVisible, setCancelVisible] = useState(false)
 
   const submit = () => {
     if((actionType === UPDATE_REQUEST_TYPES.GM_CANCEL || actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) && selected_requests.filter(it => !it.comment).length > 0) {
       return message.error("Please make sure comment field is not empty")
     }
-    if(actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) {
-      const comments = selected_requests.map(it => {
-        let data = {
-          procurementTypeId: it.id,
-          comment: { description: it?.comment || "", process: "REQUEST_APPROVAL_GM"},
-        }
-        return data
-      })
-      const payload = {comments: comments, procurementType: "LPO"}
-      createComment("LPO", payload)
-    } else if(actionType === UPDATE_REQUEST_TYPES.GM_CANCEL) {
+    if(actionType === UPDATE_REQUEST_TYPES.GM_CANCEL) {
       const comments = selected_requests.map(it => {
         let data = {
           procurementTypeId: it.id,
@@ -198,7 +195,7 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "LPO"}
-      createComment("LPO", payload)
+      props.createCommentWithCancel("LPO", payload)
     } else {
       updateRequest({
         updateType: actionType,
@@ -271,7 +268,7 @@ const ApprovePendingList = (props) => {
               >
                 <CommentOutlined /> Comment Selected List
               </Button> */}
-              <Button
+              {/* <Button
                 style={{marginRight: 5}} 
                 type="default"
                 disabled={selected_requests.length < 1}
@@ -282,7 +279,7 @@ const ApprovePendingList = (props) => {
               >
                 <CloseOutlined />
                 CANCEL SELECTED REQUESTS
-              </Button>
+              </Button> */}
               <Button 
                 disabled={selected_requests.length < 1} 
                 type="primary" style={{marginRight: 5}} 
@@ -312,6 +309,10 @@ const ApprovePendingList = (props) => {
                 onComment: row => {
                   setSelectedRequest(row)
                   setCommentVisible(true)
+                },
+                onCancel: row => {
+                  setSelectedRequest(row)
+                  setCancelVisible(true)
                 }
               })}
               dataSource={requests}
@@ -382,6 +383,45 @@ const ApprovePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <ConfirmModal 
+        onSubmit={() => {
+          const payload = {
+            itemId: selectedRequest?.id
+          }
+          props.createCommentWithCancel("LPO", payload)
+        }}
+        loading={props.submitting_comment}
+        onCancel={() => {
+          setCancelVisible(false)
+          setSelectedRequest(null)
+        }}
+        isVisible={cancelVisible}
+      >
+        <>
+          <Row>
+            <Col span={24}>
+              <h3>
+                Are you sure you want to cancel request?
+              </h3>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <List>
+                <List.Item key="name">
+                  <List.Item.Meta title="DESCRIPTION" description={selectedRequest?.name} />
+                </List.Item>
+                <List.Item key="reason">
+                  <List.Item.Meta title="REASON" description={selectedRequest?.name} />
+                </List.Item>
+                <List.Item key="qnty">
+                  <List.Item.Meta title="QUANTITY" description={selectedRequest?.quantity} />
+                </List.Item>
+              </List>
+            </Col>
+          </Row>
+        </>
+      </ConfirmModal>
       <Drawer
         forceRender
         visible={reviewDrawer}

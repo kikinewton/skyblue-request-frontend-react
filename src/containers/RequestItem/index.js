@@ -247,6 +247,7 @@ const mapActionsToProps = (dispatch) => {
     createComment: (commentType, itemId, payload) => {
       dispatch(CommentCreators.createComment(commentType, itemId, payload))
     },
+    createCommentWithCancel: (procurementType, payload) => dispatch(CommentCreators.createCommentWithCancel(procurementType, payload)),
     fetchComments: (query) => {
       dispatch(CommentCreators.fetchComments(query))
     },

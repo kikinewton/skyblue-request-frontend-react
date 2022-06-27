@@ -15,6 +15,14 @@ export function createComment(commentType, itemId, payload) {
   })
 }
 
+export function createCommentWithCancel(procurementType, payload) {
+  return service({
+    url: `/comments/${procurementType}/cancel?itemId=${payload?.itemId}`,
+    method: "PUT",
+    data: payload
+  })
+}
+
 export function fetchUserComments(query) {
   return service({
     url: `/comments/unread?commentType=${query.commentType}`

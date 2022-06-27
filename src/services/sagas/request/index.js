@@ -56,7 +56,7 @@ export function* fetchMyRequests(action) {
       yield put(Creators.fetchMyRequestsFailure(response.message || "Failed to fetch requests!"))
     }
   } catch (error) {
-    const errorText = (error?.response?.data && error?.response?.data?.error) || 'Failed to fetch request items'
+    const errorText = (error?.response?.data && error?.response?.data?.error) || 'Internal server error'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchMyRequestsFailure(errorText))
   }
@@ -72,12 +72,12 @@ export function* createRequest(action) {
       clearLocalState("NEW-REQUEST")
       openNotification('success', 'CREATE REQUEST', response.message)
     } else {
-      openNotification('error', 'Login', response.message)
+      openNotification('error', 'CREATE REQUEST', response.message)
       yield put(Creators.createRequestFailure(response.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors[0]
-    openNotification('error', 'Create Requests', errors)
+    openNotification('error', 'CREATE REQUEST', errors)
     yield put(Creators.createRequestFailure(errors))
   }
 }
@@ -87,17 +87,17 @@ export function* updateRequest(action) {
     const response = yield call(updateRequestApi, action.payload)
     if(["OK", "SUCCESS"].includes(response.status)) {
       const responseData = response?.data
-      openNotification('success', 'Update Request', response.message)
+      openNotification('success', 'UPDATE REQUEST', response.message)
       yield put(Creators.updateRequestSuccess(responseData || {}))
       yield put(NotificationCreators.fetchNotifications())
     } else {
-      openNotification('error', 'Update Request', response.message)
+      openNotification('error', 'UPDATE REQUEST', response.message)
       yield put(Creators.updateRequestFailure(response.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
     const message = (error && error.response.data && error.response.data.error) || 'Internal Server Error'
-    openNotification('error', 'Update Request', errors[0])
+    openNotification('error', 'UPDATE REQUEST', errors[0])
     yield put(Creators.updateRequestFailure(message))
   }
 }
@@ -108,16 +108,16 @@ export function* updateSingleRequest(action) {
     const response = yield call(updateSingleRequestApi, id, payload)
     if(["OK", "SUCCESS"].includes(response.status)) {
       const responseData = response?.data
-      openNotification('success', 'Update Request', response.message)
+      openNotification('success', 'UPDATE REQUEST', response.message)
       yield put(Creators.updateSingleRequestSuccess(responseData || {}))
     } else {
-      openNotification('error', 'Update Request', response.message)
+      openNotification('error', 'UPDATE REQUEST', response.message)
       yield put(Creators.updateSingleRequestFailure(response.message))
     }
   } catch (error) {
     const errors = error?.response?.data?.errors
     const message = (error && error.response.data && error.response.data.error) || 'Internal Server Error'
-    openNotification('error', 'Update Request', errors[0])
+    openNotification('error', 'UPDATE REQUEST', errors[0])
     yield put(Creators.updateSingleRequestFailure(message))
   }
 }
