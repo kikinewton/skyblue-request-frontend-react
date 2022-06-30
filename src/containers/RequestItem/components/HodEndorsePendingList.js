@@ -6,7 +6,7 @@ import MyDrawer from '../../../shared/MyDrawer';
 import RequestCancelModal from '../../../shared/RequestCancelModal';
 import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { FETCH_REQUEST_TYPES, HOD_REQUEST_COLUMNS } from '../../../util/constants';
+import { COMMENT_TYPES, FETCH_REQUEST_TYPES, HOD_REQUEST_COLUMNS } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = props => HOD_REQUEST_COLUMNS.concat([
@@ -50,33 +50,33 @@ const columns = props => HOD_REQUEST_COLUMNS.concat([
 
 const selectedRequestsColumns = props => [
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Reason",
+    title: "REASON",
     dataIndex: "reason",
     key: "reason"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
     render: (text) => text === "URGENT" ? (<Tag color="red">{text}</Tag>) : text
   },
   {
-    title: "Request Date",
+    title: "REQUEST DATE",
     dataIndex: "requestDate",
     key: "requestDate",
     render: (text) => prettifyDateTime(text)
@@ -168,7 +168,7 @@ const HodEndorsePendingList = (props) => {
 
   const submitBtnText = () => {
     if(actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE) {
-      return "Endorse Selected Requests"
+      return "ENDORSE SELECTED REQUESTS"
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
       return "Cancel Selected Requests"
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
@@ -180,7 +180,7 @@ const HodEndorsePendingList = (props) => {
 
   const drawerTitleText = () => {
     if(actionType === UPDATE_REQUEST_TYPES.HOD_ENDORSE) {
-      return "Endorse Selected Requests"
+      return "ENDORSE SELECTED REQUESTS"
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_CANCEL) {
       return "Cancel Selected Requests"
     } else if(actionType === UPDATE_REQUEST_TYPES.HOD_COMMENT) {
@@ -192,7 +192,6 @@ const HodEndorsePendingList = (props) => {
 
   React.useEffect(()=> {
     props.resetComment()
-    props.fetchComments({commentType: 'LPO_COMMENT'})
     resetRequest()
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
@@ -265,6 +264,8 @@ const HodEndorsePendingList = (props) => {
               size="small"
               columns={columns({
                 onComment: (row) => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.LPO)
                   setSelectedRequest(row)
                   setCommentVisible(true)
                 },
@@ -390,6 +391,7 @@ const HodEndorsePendingList = (props) => {
         }}
       >
         <RequestComment
+          loading={props.comments_loading}
           onCommentChange={(newComment) => {
             props.setNewComment(newComment)
           }}

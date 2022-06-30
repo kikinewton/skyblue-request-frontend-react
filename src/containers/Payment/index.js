@@ -19,7 +19,7 @@ import FloatAllocateFunds from './component/FloatAllocateFunds'
 import CloseFloatPendingList from './component/CloseFloatPendingList'
 import PaymentHistory from './component/PaymentHistory'
 import PaymentDraftHistory from './component/PaymentDraftHistory'
-
+import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 
 
 export const PAYMENT_COLUMNS = [
@@ -119,7 +119,13 @@ const mapStateToProps = store => ({
   submitting_float_request: store.float.submitting,
   suppliers: store.supplier.filtered_suppliers,
 
-  notifications: store.notification.notifications || {}
+  notifications: store.notification.notifications || {},
+
+  comments: store.comment.comments,
+  comments_loading: store.comment.loading,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 })
 
 const mapActionToProps = dispatch => ({
@@ -150,6 +156,19 @@ const mapActionToProps = dispatch => ({
 
   fetchSuppliers: () => dispatch(SupplierCreators.fetchSuppliers()),
   filterSuppliers: (query) => dispatch(SupplierCreators.filterSuppliers(query)),
+  createComment: (commentType, itemId, payload) => {
+    dispatch(CommentCreators.createComment(commentType, itemId, payload))
+  },
+  createCommentWithCancel: (procurementType, payload) => dispatch(CommentCreators.createCommentWithCancel(procurementType, payload)),
+  fetchComments: (itemId, commentType) => {
+    dispatch(CommentCreators.fetchComments(itemId, commentType))
+  },
+  setNewComment: (newComment) => {
+    dispatch(CommentCreators.setNewComment(newComment))
+  },
+  resetComment: () => {
+    dispatch(CommentCreators.resetComment())
+  }
 
 })
 

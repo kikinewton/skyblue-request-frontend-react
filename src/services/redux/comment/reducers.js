@@ -7,12 +7,14 @@ export const INITIAL_STATE = {
   loading: false,
   submitting: false,
   submit_success: false,
-  new_comment: ''
+  new_comment: '',
+  itemId: null
 };
 
 //fetch
 export const fetchComments = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: true, errors: null, submitting: false };
+  const {itemId} = action
+  return { ...state, loading: true, errors: null, submitting: false, itemId: itemId };
 };
 
 export const fetchCommentsSuccess = (state = INITIAL_STATE, action) => {
@@ -76,7 +78,8 @@ export const resetComment = (state = INITIAL_STATE, action) => {
     error: null,
     loading: false,
     submitting: false,
-    new_comment: ''
+    new_comment: '',
+    itemId: null
   };
 };
 

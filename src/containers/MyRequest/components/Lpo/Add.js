@@ -10,43 +10,43 @@ import AppLayout from '../../../AppLayout'
 
 const columns = props => [
   {
-    title: 'Request Type',
+    title: 'REQUEST TYPE',
     dataIndex: 'requestType',
     key: "requestType"
   },
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: "name"
   },
   {
-    title: 'Purpose',
+    title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: "quantity"
   },
   {
-    title: 'Department',
+    title: 'DEPARTMENT',
     dataIndex: 'userDepartment',
     key: "userDepartment.id",
     render: (text)=> text?.name
   },
   {
-    title: 'Purpose',
+    title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
   },
   {
-    title: "Priority",
+    title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel"
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "operation",
     key: "operation",
     render: (text, row) => (<Button type="default" onClick={() => props.removeEntry(row)}><MinusOutlined color="red" /></Button>)
@@ -120,13 +120,13 @@ const AddNewRequest = (props) => {
         <Row>
           <Col span={24}>
             <MyPageHeader 
-              title="Request New Item/Items"
+              title="REQUEST NEW ITEM(S)"
               onBack={() => history.goBack()}
             />
           </Col>
         </Row>
         <Card 
-          title="Create New Request Form"
+          title="CREATE NEW REQUEST"
         >
           <Row gutter={24}>
             <Col md={6}>
@@ -142,14 +142,14 @@ const AddNewRequest = (props) => {
                       requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL"}}
                     onFinish={addToEntires}
                   >
-                    <Form.Item label="Department" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
+                    <Form.Item label="DEPARTMENT" name="departmentId" rules={[{ required: true, message: 'Department required' }]}>
                       <Select loading={departmentLoading}  ref={departmentFieldRef}>
                         {departments && departments.map(department=> (
                           <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
                         ))}
                       </Select>
                     </Form.Item>
-                    <Form.Item label="Request Type" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
+                    <Form.Item label="REQUEST TYPE" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
                       <Select onChange={(value) =>setRequestType(value)}>
                         {REQUEST_TYPES.map(rt => (
                           <Select.Option key={`request-type-${rt.id}`} value={rt.id}>{rt.label}</Select.Option>
@@ -163,27 +163,27 @@ const AddNewRequest = (props) => {
                         ))}
                       </Select>
                     </Form.Item>
-                    <Form.Item label="Description" name="name" rules={[{ required: true, message: 'Description required' }]}>
+                    <Form.Item label="DESCRIPTION" name="name" rules={[{ required: true, message: 'Description required' }]}>
                       <Input.TextArea placeholder="Description" rows={3} />
                     </Form.Item>
-                    <Form.Item label="Reason" name="reason" rules={[{ required: true, message: 'Reason required' }]}>
+                    <Form.Item label="REASON" name="reason" rules={[{ required: true, message: 'Reason required' }]}>
                       <Select>
                         {REQUEST_REASONS.map(item=> (
                           <Select.Option key={`reason-${item.id}`} value={item.id}>{item.label}</Select.Option>
                         ))}
                       </Select>
                     </Form.Item>
-                    <Form.Item label="Purpose" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
+                    <Form.Item label="PURPOSE" name="purpose" rules={[{ required: true, message: 'Purpose required' }]}>
                       <Input  placeholder="Purpose" />
                     </Form.Item>
                     {(requestType === REQUEST_TYPES[1]?.id) && (
-                      <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
+                      <Form.Item label="QUANTITY" name="quantity" rules={[{ required: true, message: 'Quantity required' }]}>
                         <Input type="number"  placeholder="Quantity" />
                       </Form.Item>
                     )}
                     <Form.Item>
                       <Button type="primary" htmlType="submit" className="bs-form-button">
-                        Add Entry
+                        ADD ITEM
                       </Button>
                     </Form.Item>
                   </Form>

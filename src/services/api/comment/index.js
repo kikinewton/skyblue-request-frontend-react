@@ -28,3 +28,9 @@ export function fetchUserComments(query) {
     url: `/comments/unread?commentType=${query.commentType}`
   })
 }
+
+export function fetchRequestComment(itemId, commentType) {
+  return service({
+    url: `/comments/${itemId}/unread?commentType=${commentType}`
+  })
+}

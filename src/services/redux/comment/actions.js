@@ -2,7 +2,7 @@ import { createActions } from 'reduxsauce'
 
 export const { Types, Creators } = createActions(
   {
-    fetchComments: ["query"],
+    fetchComments: ["itemId", "commentType"],
     fetchCommentsSuccess: ["responseData"],
     fetchCommentsFailure: ["error"],
 

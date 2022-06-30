@@ -3,16 +3,17 @@ import { Creators, Types } from '../../redux/comment/actions'
 
 import {
   createComment as createCommentApi,
-  fetchUserComments as fetchUserCommentsApi,
+  fetchRequestComment as fetchUserCommentsApi,
   createCommentWithCancel as createCommentWithCancelApi
 } from '../../api/comment'
 import openNotification from '../../../util/notification'
 import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 
-
 export function* fetchComments(action) {
+  console.log("action", action)
+  const { itemId, commentType } = action
   try {
-    const response = yield call(fetchUserCommentsApi, action.query)
+    const response = yield call(fetchUserCommentsApi, itemId, commentType)
     if(response.status === 'SUCCESS') {
       const responseData = response.data
       yield put(Creators.fetchCommentsSuccess(responseData))
@@ -28,13 +29,14 @@ export function* fetchComments(action) {
 }
 
 export function* createComment(action) {
+  const { commentType, itemId, payload } = action
   try {
     const response = yield call(createCommentApi, action.commentType, action.itemId, action.payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       const responseData = response.data
       openNotification('success', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentSuccess(responseData))
-      yield put(Creators.fetchComments({commentType: action.commentType}))
+      yield put(Creators.fetchComments(itemId, commentType))
     } else {
       openNotification('error', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentFailure(response.message))
