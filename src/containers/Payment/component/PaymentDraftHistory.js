@@ -3,6 +3,7 @@ import { Table , Card, Row, Col, Drawer, Input, Button, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
+import { userHasAnyRole } from '../../../services/api/auth'
 import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
 import MyDrawer from '../../../shared/MyDrawer'
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -26,7 +27,9 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
         </Button>
       </Col>
       <Col span={12}>
-        <Button size='small' onClick={() => props.onComment(row)}>
+        <Button 
+          disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER])} 
+          size='small' onClick={() => props.onComment(row)}>
           <CommentOutlined />
         </Button>
       </Col>
@@ -171,7 +174,8 @@ const PaymentDraftHistory = (props) => {
                     props.fetchComments(row.id, COMMENT_TYPES.PAYMENT)
                     setSelectedPayment(row)
                     setCommentVisible(true)
-                  }
+                  },
+                  userRole: props?.current_user?.role
                 })}
                 dataSource={filteredData}
                 pagination={{
@@ -257,7 +261,7 @@ const PaymentDraftHistory = (props) => {
           </Drawer>
           <MyDrawer
             visible={commentVisible}
-            title="Payment Details"
+            title="PAYMENT DRAFT DETAILS"
             onClose={() => {
               setCommentVisible(false)
               setSelectedPayment(null)
