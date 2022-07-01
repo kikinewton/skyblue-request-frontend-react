@@ -27,14 +27,14 @@ const columns = props => PAYMENT_COLUMNS.concat([
     key: "actions",
     render: (text, row) => (
       <Row>
-        <Col span={12}>
-          <Button onClick={() => props.onApprove(row)} size="small" type="default">
-            <CheckOutlined />{props.buttonLabel}
+        <Col span={7}>
+          <Button size='small' type='default' onClick={() => props.onComment(row)}>
+            <CommentOutlined />
           </Button>
         </Col>
-        <Col span={24}>
-          <Button type='default' onClick={() => props.onComment(row)}>
-            <CommentOutlined />
+        <Col span={16} offset={1}>
+          <Button onClick={() => props.onApprove(row)} size="small" type="default">
+            <CheckOutlined/> {props.buttonLabel}
           </Button>
         </Col>
       </Row>
@@ -62,11 +62,11 @@ const ApprovePaymentList = (props) => {
   const buttonLabel = () => {
     switch(current_user.role) {
       case EMPLOYEE_ROLE.ROLE_AUDITOR:
-        return "Check Payment"
+        return "CHECK"
       case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
-        return "Authorise Payment"
+        return "AUTHORISE"
       default:
-        return "Approve Payment"
+        return "APPROVE"
     }
   }
 
@@ -218,17 +218,20 @@ const ApprovePaymentList = (props) => {
         </Drawer>
         <MyDrawer
           visible={commentVisible}
-          title="COMMENTS ON PAYMENT"
+          title="PAYMENT DRAFT DETAILS"
+          onClose={() => {
+            setCommentVisible(false)
+            setSelectedDraft(null)
+          }}
         >
-          <PaymentComment
-            loading={props.comments_loading}
-            onCommentChange={(newComment) => {
-              props.setNewComment(newComment)
-            }}
+          <PaymentComment 
+            payment={selectedDraft}
+            comments={props.comments}
             newComment={props.new_comment}
             submitting={props.submitting_comment}
-            comments={props.comments}
-            payment={selectedDraft}
+            onCommentChange={newComment => {
+              props.setNewComment(newComment)
+            }}
             onSubmit={(newComment) => {
               const payload = {
                 'description': newComment,
