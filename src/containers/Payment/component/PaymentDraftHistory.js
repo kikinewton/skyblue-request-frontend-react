@@ -1,21 +1,36 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { CommentOutlined, EyeOutlined } from '@ant-design/icons'
 import { Table , Card, Row, Col, Drawer, Input, Button, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
+import MyDrawer from '../../../shared/MyDrawer'
 import MyPageHeader from '../../../shared/MyPageHeader'
+import PaymentComment from '../../../shared/PaymentComment'
 import PaymentDraftDetails from '../../../shared/PaymentDraftDetails'
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => PAYMENT_COLUMNS.concat([
   {
-    title: "actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
-    render: (text, row) => <EyeOutlined onClick={e =>  props.onView(row)} />
+    render: (text, row) => (<Row>
+      <Col span={12}>
+        <Button size='small' onClick={e =>  props.onView(row)}>
+          <EyeOutlined />
+        </Button>
+      </Col>
+      <Col span={12}>
+        <Button size='small' onClick={() => props.onComment(row)}>
+          <CommentOutlined />
+        </Button>
+      </Col>
+    </Row>)
   }
 ])
 
@@ -33,6 +48,20 @@ const PaymentDraftHistory = (props) => {
   const [purchaseNumber, setPurchaseNumber] = useState("")
   const [cancelling, setCancelling] = useState(false)
   const [cancelVisible, setCancelVisible] = useState(false)
+  const [commentVisible, setCommentVisible] = useState(false)
+
+  const paymentProcessMethod = () => {
+    switch(current_user.role) {
+      case EMPLOYEE_ROLE.ROLE_AUDITOR:
+        return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_AUDITOR
+      case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
+        return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_FM
+      case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
+        return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_GM
+      default:
+        return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_AUDITOR
+    }
+  }
 
   const resetPagination = () => {
     setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
@@ -108,7 +137,7 @@ const PaymentDraftHistory = (props) => {
         <MyPageHeader
           title={(
             <>
-              <span style={{marginRight: 5}}>Recent payment drafts</span>
+              <span style={{marginRight: 5}}>PAYMENT DRAFTS</span>
             </>
           )}
         />
@@ -136,6 +165,12 @@ const PaymentDraftHistory = (props) => {
                   onView: row =>  {
                     setSelectedPayment(row)
                     setVisible(true)
+                  },
+                  onComment: row => {
+                    props.resetComment()
+                    props.fetchComments(row.id, COMMENT_TYPES.PAYMENT)
+                    setSelectedPayment(row)
+                    setCommentVisible(true)
                   }
                 })}
                 dataSource={filteredData}
@@ -162,7 +197,7 @@ const PaymentDraftHistory = (props) => {
             </Col>
           </Row> */}
           <Drawer
-            title="Payment Draft Details"
+            title="PAYMENT DRAFT DETAILS"
             visible={visible}
             width={800}
             placement="right"
@@ -220,6 +255,28 @@ const PaymentDraftHistory = (props) => {
               </Col>
             </Row>
           </Drawer>
+          <MyDrawer
+            visible={commentVisible}
+            title="Payment Details"
+            onClose={() => {
+              setCommentVisible(false)
+              setSelectedPayment(null)
+            }}
+          >
+            <PaymentComment 
+              payment={selectedPayment}
+              comments={props.comments}
+              newComment={props.new_comment}
+              submitting={props.submitting_comment}
+              onSubmit={(newComment) => {
+                const payload = {
+                  'description': newComment,
+                  'process': paymentProcessMethod()
+                }
+                props.createComment(COMMENT_TYPES.PAYMENT, selectedPayment?.id, payload)
+              }}
+            />
+          </MyDrawer>
         </Card>
       </AppLayout>
     </>

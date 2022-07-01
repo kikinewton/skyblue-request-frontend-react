@@ -220,7 +220,7 @@ const ApprovePaymentList = (props) => {
           visible={commentVisible}
           title="COMMENTS ON PAYMENT"
         >
-          <PaymentComment 
+          <PaymentComment
             loading={props.comments_loading}
             onCommentChange={(newComment) => {
               props.setNewComment(newComment)
@@ -234,7 +234,7 @@ const ApprovePaymentList = (props) => {
                 'description': newComment,
                 'process': paymentProcessMethod()
               }
-              props.createComment('LPO_COMMENT', selectedDraft?.id, payload)
+              props.createComment(COMMENT_TYPES.PAYMENT, selectedDraft?.id, payload)
             }}
           />
         </MyDrawer>

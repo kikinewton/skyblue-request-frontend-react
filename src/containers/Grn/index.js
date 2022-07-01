@@ -23,30 +23,30 @@ import NotificationBadge from '../../shared/NotificationBadge'
 
 export const GRN_COLUMNS = [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "grnRef",
     key: "grnRef"
   },
   {
-    title: "Invoice Number",
+    title: "INVOICE NUMBER",
     dataIndex: "invoice",
     key: "invoice",
     render: (text, row) => row?.invoice?.invoiceNumber
   },
   {
-    title: "Supplier",
+    title: "SUPPLIER",
     dataIndex: "finalSupplier",
     key: "finalSupplier",
     render: (text, row) => row?.finalSupplier?.name
   },
   {
-    title: "Amount",
+    title: "AMOUNT",
     dataIndex: "invoiceAmountPayable",
     key: "invoiceAmountPayable",
     render: (text, row) => formatCurrency(text, row?.receivedItems[0]?.currency || "GHS")
   },
   {
-    title: "Number of items",
+    title: "ITEM COUNT",
     dataIndex: "receivedItems",
     key: "receivedItems",
     render: (text, row) => row?.receivedItems.length

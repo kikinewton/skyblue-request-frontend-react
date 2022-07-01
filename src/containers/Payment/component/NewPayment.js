@@ -72,15 +72,15 @@ const NewPayment = (props) => {
       >
         <Row>
           <MyPageHeader 
-            title="Make Payment"
+            title="MAKE PAYMENT"
             onBack={() => history.goBack()}
           />
         </Row>
         <Row style={{margin: "20px 0 20px 0"}}>
           <Col span={24}>
             <Steps current={current} size="small">
-              <Steps.Step icon={<FileExcelFilled />} title="Review Documents" key={0} />
-              <Steps.Step icon={<CheckOutlined />} title="Make Payment" key={1} />
+              <Steps.Step icon={<FileExcelFilled />} title="REVIEW DOCUMENTS" key={0} />
+              <Steps.Step icon={<CheckOutlined />} title="MAKE PAYMENT" key={1} />
             </Steps>
           </Col>
         </Row>
@@ -99,7 +99,7 @@ const NewPayment = (props) => {
                         />
                       </Col>
                     </Row>
-                    <Row>
+                    <Row style={{marginTop: 20}}>
                       <Col span={24}>
                         <LocalPurchaseOrderDetails 
                           lpo={grn?.localPurchaseOrder}
@@ -116,7 +116,7 @@ const NewPayment = (props) => {
                             setCurrent(1)
                           }}
                         >
-                          Review and proceed to make payment
+                          MAKE PAYMENT
                           <RightOutlined />
                         </Button>
                       </Col>
@@ -139,33 +139,33 @@ const NewPayment = (props) => {
                     withholdingTaxPercentage: 0
                   }}
                 >
-                  <Form.Item label="Invoice Amount Payable">
+                  <Form.Item label="INVOICE AMOUNT PAYABLE">
                     <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </Form.Item>
-                  <Form.Item label="Payment Channel" name="paymentMethod" rules={[{required: true, message: 'Payment channel required!'}]}>
+                  <Form.Item label="PAYMENT CHANNEL" name="paymentMethod" rules={[{required: true, message: 'Payment channel required!'}]}>
                     <Select>
                       {PAYMENT_METHODS.map(item=> (
                         <Option key={item.id} value={item.id}>{item.label}</Option>
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Payment Type" name="paymentStatus" rules={[{required: true, message: 'Payment type required!'}]}>
+                  <Form.Item label="PAYMENT TYPE" name="paymentStatus" rules={[{required: true, message: 'Payment type required!'}]}>
                     <Select>
                       {PAYMENT_STATUS.map(item=> (
                         <Option key={item.id} value={item.id}>{item.label}</Option>
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Purchase Number" name="purchaseNumber">
+                  <Form.Item label="PURCHASE NUMBER" name="purchaseNumber">
                     <Input />
                   </Form.Item>
-                  <Form.Item label="Bank/Telco" name="bank">
+                  <Form.Item label="BANK/TELCO" name="bank">
                     <Input />
                   </Form.Item>
-                  <Form.Item label="Cheque Number/Mobile Number" name="chequeNumber" rules={[{required: true, message: "Account Number / Phone Number / Cheque Number required!"}]}> 
+                  <Form.Item label="CHEQUE NUMBER / MOMO NUMBER" name="chequeNumber" rules={[{required: true, message: "Account Number / Phone Number / Cheque Number required!"}]}> 
                     <Input />
                   </Form.Item>
-                  <Form.Item label="Currency" name="currency">
+                  <Form.Item label="CURRENCY" name="currency">
                     <Select
                       value={grn?.receivedItems[0]?.currency}
                       disabled
@@ -174,13 +174,13 @@ const NewPayment = (props) => {
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Payment Amount" name="paymentAmount">
+                  <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
                     <Input prefix={grn?.receivedItems[0]?.currency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
                   </Form.Item>
-                  <Form.Item label="Withholding Tax (Percentage)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
+                  <Form.Item label="WITHHOLDING TAX (PERCENTAGE)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
                     <Input  prefix={<PercentageOutlined/>} type="number" />
                   </Form.Item>
-                  <Form.Item label="Amount After Withholding Tax">
+                  <Form.Item label="AMOUNT AFTER WITHHOLDING TAX">
                     <Input disabled prefix={grn?.receivedItems[0]?.currency}
                       value={getWithholdingTaxPercentageAmount(amount, percentage)}  />
                   </Form.Item>
@@ -193,7 +193,7 @@ const NewPayment = (props) => {
                             onClick={e => setCurrent(0)}
                           >
                             <LeftOutlined />
-                            Review GRN
+                            REVIEW GRN
                           </Button>
                       </Col>
                       <Col span={12} style={{textAlign: "left"}}>
@@ -204,7 +204,7 @@ const NewPayment = (props) => {
                           loading={submitting_payment}
                         >
                           <CheckOutlined />
-                          Draft Payment
+                          DRAFT PAYMENT
                         </Button>
                       </Col>
                     </Row>

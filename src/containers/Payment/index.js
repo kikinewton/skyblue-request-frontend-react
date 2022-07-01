@@ -24,34 +24,34 @@ import { Creators as CommentCreators } from '../../services/redux/comment/action
 
 export const PAYMENT_COLUMNS = [
   {
-    title: "Purchase Number",
+    title: "PURCHASE NUMBER",
     dataIndex: "purchaseNumber",
     key: "purchaseNumber"
   },
   {
-    title: "Supplier",
+    title: "SUPPLIER",
     dataIndex: "supplier",
     key: "supplier",
     render: (text, record) => record?.goodsReceivedNote?.finalSupplier?.name
   },
   {
-    title: "Payment Channel",
+    title: "PAYMENT CHANNEL",
     dataIndex: "paymentMethod",
     key: "paymentMethod"
   },
   {
-    title: "Amount",
+    title: "AMOUNT",
     dataIndex: "paymentAmount",
     key: "paymentAmount",
     render: text => formatCurrency(text)
   },
   {
-    title: "Payment Type",
+    title: "PAYMENT TYPE",
     dataIndex: "paymentStatus",
     key: "paymentStatus",
   },
   {
-    title: "Payment Date",
+    title: "PAYMENT DATE",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text) => prettifyDateTime(text)

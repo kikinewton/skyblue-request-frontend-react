@@ -10,29 +10,29 @@ const LocalPurchaseOrderDetails = (props) => {
   const { lpo, showRequestItems=true } = props
   return (
     <>
-      <Card title="Local Purchase Order" size="small">
+      <Card title="LOCAL PURCHASE ORDER" size="small">
         <Row>
           <Col span={12}>
             <List>
               <List.Item>
-                <List.Item.Meta title="Reference" description={lpo?.lpoRef} />
+                <List.Item.Meta title="REFERENCE" description={lpo?.lpoRef} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Date" description={prettifyDateTime(lpo?.createdAt)} />
+                <List.Item.Meta title="DATE" description={prettifyDateTime(lpo?.createdAt)} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Delivery Date" description={prettifyDateTime(lpo?.deliveryDate)} />
+                <List.Item.Meta title="DELIVERY DATE" description={prettifyDateTime(lpo?.deliveryDate)} />
               </List.Item>
             </List>
           </Col>
           <Col span={12}>
             <List>
               <List.Item>
-                <List.Item.Meta title="Approval Status" description={lpo?.isApproved ? "Approved" : "Not Approved"} />
+                <List.Item.Meta title="APPROVAL STATUS" description={lpo?.isApproved ? "Approved" : "Not Approved"} />
               </List.Item>
               {lpo?.isApproved && (
                 <List.Item>
-                  <List.Item.Meta title="Approved By" description={`${lpo?.approvedBy?.fullName}`} />
+                  <List.Item.Meta title="APPROVED BY" description={`${lpo?.approvedBy?.fullName}`} />
                 </List.Item>
               )}
             </List>
@@ -42,7 +42,7 @@ const LocalPurchaseOrderDetails = (props) => {
           <>
             <Row style={{marginTop: 20}}>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Request Items</span>
+                <span style={{fontWeight: "bold"}}>REQUEST ITEMS</span>
               </Col>
             </Row>
             <Row>

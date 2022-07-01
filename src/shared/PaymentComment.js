@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { SendOutlined, SyncOutlined } from '@ant-design/icons';
 import { prettifyDateTime } from '../util/common-helper';
 import CommentText from './CommentText';
+import PaymentDraftDetails from './PaymentDraftDetails';
 
 const PaymentComment = (props) => {
   const {
@@ -22,23 +23,9 @@ const PaymentComment = (props) => {
     <>
       <Row>
         <Col span={24}>
-          <List>
-            {/* <List.Item>
-              <List.Item.Meta title='DESCRIPTION' description={payment?.name} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title='REASON' description={request?.reason} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title='PURPOSE' description={request?.purpose} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title='QUANTITY' description={request?.quantity} />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta title='REQUESTED ON' description={prettifyDateTime(request?.createdDate)} />
-            </List.Item> */}
-          </List>
+          <PaymentDraftDetails 
+            payment={payment}
+          />
         </Col>
       </Row>
       <Badge.Ribbon text='COMMENTS ON LPO REQUEST' color='cyan'>

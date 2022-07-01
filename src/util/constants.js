@@ -185,23 +185,23 @@ export const REQUEST_COLUMNS = [
 
 export const MINI_REQUEST_COLUMNS = [
   {
-    title: 'Reference',
+    title: 'REFERENCE',
     dataIndex: 'requestItemRef',
     key: 'requestItemRef'
   },
   {
-    title: 'Name',
+    title: 'NAME',
     dataIndex: 'name',
     key: 'name',
     render: (text, row) => row?.priority === "URGENT" ? <Tag color="red">{text}</Tag> : text
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: 'quantity'
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "unitPrice",
     key: "unitPrice",
     render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency) : "N/A"

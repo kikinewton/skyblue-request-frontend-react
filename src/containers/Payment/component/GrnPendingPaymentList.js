@@ -7,7 +7,7 @@ import PaymentsSubNav from './PaymentsSubNav'
 
 const columns = (props) => GRN_COLUMNS.concat([
   {
-    title: "Payment History",
+    title: "PAYMENT HISTORY",
     dataIndex: "hasPendingPaymentDraft",
     key: "hasPendingPaymentDraft",
     render: (text, row) => row?.hasPendingPaymentDraft ? (
@@ -23,7 +23,7 @@ const columns = (props) => GRN_COLUMNS.concat([
     )
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "operation",
     key: "operation",
     align: 'right',
@@ -64,7 +64,7 @@ const GrnPendingPaymentList = (props) => {
       >
         <Row>
           <Col md={24}>
-            <Card size="small" title="Goods Receive Notes With Pending Payments">
+            <Card size="small" title="GOODS RECEIVE NOTES AWAITING PAYMENT">
               <Table
                 columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
                 dataSource={grns}

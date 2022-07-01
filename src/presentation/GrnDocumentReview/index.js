@@ -6,18 +6,18 @@ import FilesView from "../../shared/FilesView"
 
 const columns = [
   {
-    title: "Item Description",
+    title: "ITEM DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "unitPrice",
     key: "unitPrice",
     render: (text, row) => formatCurrency(row?.unitPrice, row?.currency)
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
@@ -40,29 +40,29 @@ const GrnDocumentReview = (props) => {
     <>
       <Row style={{margin: "30px 0 30px 0"}}>
         <Col span={24}>
-          <Card title="Goods Received Note" style={{marginBottom: 10}} size="small">
+          <Card title="GOODS RECEIVE NOTE" style={{marginBottom: 10}} size="small">
             <Row>
               <Col span={24}>
                 <List 
                   itemLayout="horizontal"
                 >
                   <List.Item key="GRN Reference">
-                    <List.Item.Meta title="GRN Reference" description={grn?.grnRef} />
+                    <List.Item.Meta title="GRN REFERENCE" description={grn?.grnRef} />
                   </List.Item>
                   <List.Item key="invoiceNumber">
-                    <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
+                    <List.Item.Meta title="INVOICE NUMBER" description={invoice?.invoiceNumber} />
                   </List.Item>
                   <List.Item key="createdOn">
-                    <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
+                    <List.Item.Meta title="CREATED ON" description={prettifyDateTime(grn?.createdDate)} />
                   </List.Item>
                   <List.Item key="cretedBy">
-                    <List.Item.Meta title="GRN Created By" description={grn?.createdBy?.fullName} />
+                    <List.Item.Meta title="GRN CREATED BY" description={grn?.createdBy?.fullName} />
                   </List.Item>
                   <List.Item key="supplier">
-                    <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
+                    <List.Item.Meta title="SUPPLIER" description={invoice?.supplier?.name} />
                   </List.Item>
                   <List.Item key="amount">
-                    <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
+                    <List.Item.Meta title="AMOUNT" description={formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </List.Item>
                 </List>
               </Col>
@@ -82,7 +82,7 @@ const GrnDocumentReview = (props) => {
           <Card style={{marginTop: 10, marginBottom: 10}} size='small' title="Quotation Details">
             <Row style={{padding: "10px 0 2px 0"}}>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>Quotations</span>
+                <span style={{fontWeight: "bold"}}>QUOTATIONS</span>
               </Col>
             </Row>
             <Row style={{padding: "0 0 10px 0"}}>
