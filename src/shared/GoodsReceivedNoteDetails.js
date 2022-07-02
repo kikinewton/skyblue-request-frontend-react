@@ -6,17 +6,17 @@ import FilesView from './FilesView'
 
 const columns = [
   {
-    title: "Item Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "unitPrice",
     key: "unitPrice"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
@@ -33,39 +33,39 @@ const GoodsReceivedNoteDetails = (props) => {
   } = props
   return (
     <>
-      <Card title="Goods Received Note" style={{marginBottom: 10}} size="small">
+      <Card title="GOODS RECEIVE NOTE" style={{marginBottom: 10}} size="small">
         <Row>
           <Col span={12}>
             <List 
               itemLayout="horizontal"
             >
               <List.Item key="invoiceNumber">
-                <List.Item.Meta title="Invoice Number" description={invoice?.invoiceNumber} />
+                <List.Item.Meta title="INVOICE NUMBER" description={invoice?.invoiceNumber} />
               </List.Item>
               <List.Item key="createdOn">
-                <List.Item.Meta title="Created On" description={prettifyDateTime(grn?.createdDate)} />
+                <List.Item.Meta title="CREATED ON" description={prettifyDateTime(grn?.createdDate)} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Invoice Created By" description={grn?.createdBy?.fullName} />
+                <List.Item.Meta title="INVOICE CREATED BY" description={grn?.createdBy?.fullName} />
               </List.Item>
             </List>
           </Col>
           <Col span={12}>
             <List>
               <List.Item key="supplier">
-                <List.Item.Meta title="Supplier" description={invoice?.supplier?.name} />
+                <List.Item.Meta title="SUPPLIER" description={invoice?.supplier?.name} />
               </List.Item>
               <List.Item key="amount">
-                <List.Item.Meta title="Amount" description={formatCurrency(grn?.invoiceAmountPayable)} />
+                <List.Item.Meta title="AMOUNT" description={formatCurrency(grn?.invoiceAmountPayable)} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Local Purchase Order Reference" description={grn?.localPurchaseOrder?.lpoRef} />
+                <List.Item.Meta title="LOCAL PURCHASE ORDER REFERENCE" description={grn?.localPurchaseOrder?.lpoRef} />
               </List.Item>
             </List>
           </Col>
         </Row>
         <Row style={{marginTop: 20}}>
-          <Col><span style={{fontWeight: "bold"}}>Supporting Document (Goods Received Note)</span></Col>
+          <Col><span style={{fontWeight: "bold"}}>SUPPORTING DOCUMENT (GOODS RECEIVE NOTE)</span></Col>
         </Row>
         <Row style={{minHeight: 200, border: "#000 1px solid"}}>
           <Col span={24}>
@@ -81,7 +81,7 @@ const GoodsReceivedNoteDetails = (props) => {
           {requestItems && (
             <>
               <Row style={{marginTop: 20}}>
-                <Col><span style={{fontWeight: "bold"}}>Received Items</span></Col>
+                <Col><span style={{fontWeight: "bold"}}>RECEIVED ITEMS</span></Col>
               </Row>
               <Row>
                 <Col span={24}>

@@ -10,43 +10,43 @@ const PaymentDetails = (props) => {
   } = props
 
   return (
-    <Card size='small' title="Payment Details">
+    <Card size='small' title="PAYMENT INFO">
       <Row>
         <Col span={11}>
           <List>
             <List.Item>
-              <List.Item.Meta title="Purchase Number" description={payment?.purchaseNumber} />
+              <List.Item.Meta title="PURCHASE NUMBER" description={payment?.purchaseNumber} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Method" description={payment?.paymentMethod} />
+              <List.Item.Meta title="PAYMENT METHOD" description={payment?.paymentMethod} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Status" description={payment?.paymentStatus} />
+              <List.Item.Meta title="PAYMENT STATUS" description={payment?.paymentStatus} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment By" description={`${payment?.createdBy?.fullName} (${payment?.createdBy?.email})`} />
+              <List.Item.Meta title="PAYMENT CREATED BY" description={`${payment?.createdBy?.fullName} (${payment?.createdBy?.email})`} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Method" description={payment?.paymentMethod} />
+              <List.Item.Meta title="PAYMENT METHOD" description={payment?.paymentMethod} />
             </List.Item>
           </List>
         </Col>
         <Col span={11} offset={2}>
           <List>
             <List.Item>
-              <List.Item.Meta title="Cheque Number" description={payment?.chequeNumber} />
+              <List.Item.Meta title="CHEQUE NUMBER" description={payment?.chequeNumber} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Date" description={prettifyDateTime(payment?.createdDate)} />
+              <List.Item.Meta title="PAYMENT DATE" description={prettifyDateTime(payment?.createdDate)} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Payment Withholding Tax(%)" description={payment?.withholdingTaxAmount ? `${payment?.withholdingTaxPercentage * 100}%` : '0%'} />
+              <List.Item.Meta title="WITHHOLDING TAX(%)" description={payment?.withholdingTaxAmount ? `${payment?.withholdingTaxPercentage * 100}%` : '0%'} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="Amount Payable" description={formatCurrency(payment?.paymentAmount)} />
+              <List.Item.Meta title="AMOUNT PAYABLE" description={formatCurrency(payment?.paymentAmount)} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="WithHolding Amount" description={formatCurrency(payment?.withholdingTaxAmount)} />
+              <List.Item.Meta title="WITHHOLDING AMOUNT" description={formatCurrency(payment?.withholdingTaxAmount)} />
             </List.Item>
           </List>
         </Col>

@@ -169,7 +169,6 @@ const mapActionToProps = dispatch => ({
   resetComment: () => {
     dispatch(CommentCreators.resetComment())
   }
-
 })
 
 export default connect(mapStateToProps, mapActionToProps)(PaymentModule)

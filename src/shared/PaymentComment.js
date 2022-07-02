@@ -9,6 +9,7 @@ import PaymentDraftDetails from './PaymentDraftDetails';
 const PaymentComment = (props) => {
   const {
     payment,
+    loading,
     comments=[],
     onResolve,
     showResolveBtn=false,
@@ -36,7 +37,7 @@ const PaymentComment = (props) => {
                 <Col span={24}>
                   {comments.filter(item => item?.item?.id === payment?.id).length > 0 ? (
                     <List>
-                      {comments.filter(item => item?.item?.id === payment?.id).map(item => {
+                      {comments.map(item => {
                         const createdBy = item?.commentBy;
                         let data = {
                           userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '')}) on ${prettifyDateTime(item?.createdDate)}`,
@@ -95,6 +96,7 @@ const PaymentComment = (props) => {
 }
 
 PaymentComment.propTypes = {
+  loading: PropTypes.bool,
   comments: PropTypes.array,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool.isRequired,

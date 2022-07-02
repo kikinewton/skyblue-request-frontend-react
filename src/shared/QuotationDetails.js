@@ -9,27 +9,27 @@ const columns = REQUEST_COLUMNS
 const QuotationDetails = ({quotation, showItems=false, files}) => {
   return (
     <>
-      <Card size='small' title="Quotation Details" style={{marginBottom: 20}}>
+      <Card size='small' title="QUOTATION DETAILS" style={{marginBottom: 20}}>
         <Row>
           <Col span={24}>
             <List
               itemLayout="horizontal"
             >
               <List.Item>
-                <List.Item.Meta title="Quotation Reference" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
+                <List.Item.Meta title="QUOTATION REFERENCE" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Created Date" description={prettifyDateTime(quotation?.quotation?.createdAt || quotation?.createdAt) || "N/A"} />
+                <List.Item.Meta title="CREATED ON" description={prettifyDateTime(quotation?.quotation?.createdAt || quotation?.createdAt) || "N/A"} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Supplier" description={quotation?.quotation?.supplier?.name || quotation?.supplier?.name} />
+                <List.Item.Meta title="SUPPLIER" description={quotation?.quotation?.supplier?.name || quotation?.supplier?.name} />
               </List.Item>
             </List>
           </Col>
         </Row>
         <Row style={{marginTop: 20}}>
           <Col span={24}>
-            <span style={{fontWeight: "bold"}}>Quotation Supporting Document</span>
+            <span style={{fontWeight: "bold"}}>QUOTATION SUPPORTING DOCUMENT</span>
           </Col>
         </Row>
         <Row>
@@ -44,7 +44,7 @@ const QuotationDetails = ({quotation, showItems=false, files}) => {
         <>
           <Row style={{marginTop: 20}}>
             <Col span={24}>
-              <span style={{fontWeight: "bold"}}>Quotation Supporting Document</span>
+              <span style={{fontWeight: "bold"}}>QUOTATION SUPPORTING DOCUMENT</span>
             </Col>
           </Row>
           <Row>

@@ -11,7 +11,6 @@ import MyPageHeader from '../../../shared/MyPageHeader'
 import PaymentComment from '../../../shared/PaymentComment'
 import PaymentDetails from '../../../shared/PaymentDetails'
 import QuotationDetails from '../../../shared/QuotationDetails'
-import { formatCurrency } from '../../../util/common-helper'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import AppLayout from '../../AppLayout'
@@ -33,7 +32,7 @@ const columns = props => PAYMENT_COLUMNS.concat([
           </Button>
         </Col>
         <Col span={16} offset={1}>
-          <Button onClick={() => props.onApprove(row)} size="small" type="default">
+          <Button onClick={() => props.onApprove(row)} size="small" type="primary">
             <CheckOutlined/> {props.buttonLabel}
           </Button>
         </Col>
@@ -78,6 +77,8 @@ const ApprovePaymentList = (props) => {
         return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_FM
       case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
         return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_GM
+      case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
+        return COMMENT_PROCESS_VALUES.ACCOUNT_OFFICER_RESPONSE_TO_AUDITOR_COMMENT
       default:
         return COMMENT_PROCESS_VALUES.REVIEW_PAYMENT_DRAFT_AUDITOR
     }
@@ -97,11 +98,11 @@ const ApprovePaymentList = (props) => {
   const drawerTitle = () => {
     switch(current_user.role) {
       case EMPLOYEE_ROLE.ROLE_AUDITOR:
-        return "Check payment"
+        return "CHECK PAYMENT"
       case EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER:
-        return "Authorise payment"
+        return "AURHORISE PAYMENT"
       default:
-        return "Approve payment"
+        return "APPROVE PAYMENT"
     }
   }
 
@@ -206,7 +207,7 @@ const ApprovePaymentList = (props) => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row style={{marginTop: 10}}>
             <Col span={24}>
               <QuotationDetails 
                 quotation={selectedDraft?.goodsReceivedNote?.localPurchaseOrder?.quotation}
@@ -225,6 +226,7 @@ const ApprovePaymentList = (props) => {
           }}
         >
           <PaymentComment 
+            loading={props.comments_loading}
             payment={selectedDraft}
             comments={props.comments}
             newComment={props.new_comment}

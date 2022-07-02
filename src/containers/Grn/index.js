@@ -20,6 +20,7 @@ import { formatCurrency } from '../../util/common-helper'
 import CreateFloatGrn from './components/CreateFloatGrn'
 import AllGrns from './components/AllGrns'
 import NotificationBadge from '../../shared/NotificationBadge'
+import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 
 export const GRN_COLUMNS = [
   {
@@ -196,7 +197,13 @@ const mapStateToProps = (store) => ({
 
   employees: store.employee.employees,
   fetching_employees: store.employee.loading,
-  notifications: store.notification.notifications || {}
+  notifications: store.notification.notifications || {},
+
+  comments: store.comment.comments,
+  comments_loading: store.comment.loading,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 
 })
 
@@ -217,7 +224,21 @@ const mapActionsToProps = dispatch => ({
   resetFloatRequest: () => dispatch(FloatCreators.resetFloatRequest()),
 
   fetchEmployees: query => dispatch(EmployeeCreators.fetchEmployees(query)),
-  resetEmployee: () => dispatch(EmployeeCreators.resetEmployee())
+  resetEmployee: () => dispatch(EmployeeCreators.resetEmployee()),
+
+  createComment: (commentType, itemId, payload) => {
+    dispatch(CommentCreators.createComment(commentType, itemId, payload))
+  },
+  createCommentWithCancel: (procurementType, payload) => dispatch(CommentCreators.createCommentWithCancel(procurementType, payload)),
+  fetchComments: (itemId, commentType) => {
+    dispatch(CommentCreators.fetchComments(itemId, commentType))
+  },
+  setNewComment: (newComment) => {
+    dispatch(CommentCreators.setNewComment(newComment))
+  },
+  resetComment: () => {
+    dispatch(CommentCreators.resetComment())
+  }
 })
 
 

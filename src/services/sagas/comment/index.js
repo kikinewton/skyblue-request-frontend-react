@@ -36,7 +36,7 @@ export function* createComment(action) {
       const responseData = response.data
       openNotification('success', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentSuccess(responseData))
-      yield put(Creators.fetchComments(itemId, commentType))
+      //yield put(Creators.fetchComments(itemId, commentType))
     } else {
       openNotification('error', 'CREATE COMMENT', response.message)
       yield put(Creators.createCommentFailure(response.message))

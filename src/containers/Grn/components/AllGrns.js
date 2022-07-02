@@ -1,5 +1,5 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { Badge, Card, Col, Drawer, Input, Row, Table } from 'antd'
+import { CommentOutlined, EyeOutlined } from '@ant-design/icons'
+import { Badge, Button, Card, Col, Drawer, Input, Row, Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
@@ -7,14 +7,35 @@ import { getAllGoodsReceiveNotes } from '../../../services/api/goods-receive-not
 import GoodsReceivedNoteDetails from '../../../shared/GoodsReceivedNoteDetails'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import { prettifyDateTime } from '../../../util/common-helper'
-import { EXPANDED_PRODUCT_COLUMNS } from '../../../util/constants'
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, EXPANDED_PRODUCT_COLUMNS } from '../../../util/constants'
+import MyDrawer from '../../../shared/MyDrawer'
+import PaymentComment from '../../../shared/PaymentComment'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
+import GrnComment from '../../../shared/GrnComment'
 
 const columns = (props) => GRN_COLUMNS.concat([
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions", 
     key: "actions",
-    render: (text, row) => (<EyeOutlined onClick={e => props.onShow(row)} />)
+    render: (text, row) => (<>
+      <Row>
+      <Col span={12}>
+          <Tooltip title="COMMENT">
+            <Button onClick={e => props.onComment(row)} size='small' >
+              <CommentOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
+        <Col span={12}>
+          <Tooltip title="VIEW DETAILS">
+            <Button onClick={e => props.onShow(row)} size='small' >
+              <EyeOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
+      </Row>
+    </>)
   }
 ])
 
@@ -26,6 +47,21 @@ const AllGrns = (props) => {
   const [visible, setVisible] = useState(false)
   const [selectedGrn, setSelectedGrn] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
+  const [commentVisible, setCommentVisible] = useState(false)
+  const { currentUser } = props
+
+  const paymentProcessMethod = () => {
+    switch(currentUser.role) {
+      case EMPLOYEE_ROLE.ROLE_STORE_OFFICER:
+        return COMMENT_PROCESS_VALUES.GRN_STORES
+      case EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER:
+        return COMMENT_PROCESS_VALUES.REVIEW_GRN_PROCUREMENT
+      case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
+        return COMMENT_PROCESS_VALUES.REVIEW_GRN_ACCOUNTS
+      default:
+        return COMMENT_PROCESS_VALUES.GRN_STORES
+    }
+  }
 
   const handleFetch = async() => {
     setLoading(true)
@@ -69,7 +105,7 @@ const AllGrns = (props) => {
   return (
     <>
       <MyPageHeader 
-        title="All Goods Receive Notes"
+        title="ALL GOODS RECEIVE NOTES"
         extra={[
           <span key="filter">Filter:</span>,
           <Input 
@@ -93,6 +129,12 @@ const AllGrns = (props) => {
                 onShow: row => {
                   setSelectedGrn(row)
                   setVisible(true)
+                },
+                onComment: row => {
+                  props.resetComment()
+                  props.fetchComments(row.id, COMMENT_TYPES.GRN)
+                  setSelectedGrn(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={filteredData}
@@ -121,6 +163,32 @@ const AllGrns = (props) => {
           requestItems={selectedGrn?.localPurchaseOrder?.requestItems}
         />
       </Drawer>
+      <MyDrawer
+        visible={commentVisible}
+        title="GRN COMMENTS"
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedGrn(null)
+        }}
+      >
+        <GrnComment 
+          loading={props.comments_loading}
+          grn={selectedGrn}
+          comments={props.comments}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          onCommentChange={newComment => {
+            props.setNewComment(newComment)
+          }}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': paymentProcessMethod()
+            }
+            props.createComment(COMMENT_TYPES.GRN, selectedGrn?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

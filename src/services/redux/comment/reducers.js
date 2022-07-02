@@ -31,12 +31,14 @@ export const createComment = (state = INITIAL_STATE, action) => {
 };
 
 export const createCommentSuccess = (state = INITIAL_STATE, action) => {
-  console.log('resposeData', action.responseData)
+  const { responseData } = action
+  const comments = state.comments.concat(responseData)
   return {
     ...state,
     submitting: false, 
     submit_success: true,
-    new_comment: ''
+    new_comment: '',
+    comments
   };
 };
 
