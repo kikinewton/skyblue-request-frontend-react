@@ -1,46 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Form, Tag, Button, Card, Drawer, Input, List as AntList } from "antd"
+import { Table, Row, Col, Form, Tag, Button, Card, Drawer, Input, List as AntList, Tooltip } from "antd"
 import { useHistory } from 'react-router';
-import { CURRENCY_CODE } from '../../../../util/constants';
-import { EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, CURRENCY_CODE } from '../../../../util/constants';
+import { CommentOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/lib/form/Form';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
 import { formatCurrency, prettifyDateTime } from '../../../../util/common-helper';
+import PettyCashDetails from '../../../../shared/PettyCashDetails';
+import MyDrawer from '../../../../shared/MyDrawer';
+import GenericComment from '../../../../shared/GenericComment';
 
 const columns = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "pettyCashRef",
     key: "pettyCashRef",
   },
   {
-    title: "Descrption",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "Purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose",
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity",
   },
   {
-    title: `Unit Price (${CURRENCY_CODE})`,
+    title: `UNIT PRICE (${CURRENCY_CODE})`,
     dataIndex: "amount",
     key: "amount",
   },
   {
-    title: "Endorsement",
+    title: "ENDORSEMENT",
     dataIndex: "endorsement",
     key: "endorsement",
   },
   {
-    title: "Status",
+    title: "STATUS",
     dataIndex: "status",
     key: "status",
     render: (text) => {
@@ -54,18 +57,23 @@ const columns = props => [
     }
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (
       <>
         <Row>
-          <Col span={12}>
+          <Col span={8}>
+            <Tooltip title="COMMENT">
+              <CommentOutlined onClick={() => props.onComment(row)} />
+            </Tooltip>
+          </Col>
+          <Col span={8}>
             {row.status === 'COMMENT' && (
               <EditOutlined onClick={() => props.onEdit(row)} />
             )}
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <EyeOutlined onClick={() => props.onView(row)} />
           </Col>
         </Row>
@@ -85,6 +93,7 @@ const List = (props) => {
   const [updateVisible, setUpdateVisible] = useState(false)
   const [viewVisible, setViewVisible] = useState(false)
   const [selectedPettyCash, setSelectedPettyCash] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
   const [updateForm] = useForm()
 
   React.useEffect(() => {
@@ -117,7 +126,7 @@ const List = (props) => {
             <Button type="primary"
               onClick={()=> history.push("/app/my-requests/petty-cash-requests/add-new")}
             >
-              Create New Petty Cash Request
+              ADD NEW PETTY CASH REQUEST
             </Button>
           ]}
         >
@@ -136,6 +145,12 @@ const List = (props) => {
                     const data = Object.assign({}, row)
                     setSelectedPettyCash(data)
                     setViewVisible(true)
+                  },
+                  onComment: row => {
+                    props.resetComment()
+                    props.fetchComments(row.id, COMMENT_TYPES.PETTY_CASH)
+                    setSelectedPettyCash(row)
+                    setCommentVisible(true)
                   }
                 })}
                 dataSource={my_petty_cash_requests}
@@ -151,54 +166,46 @@ const List = (props) => {
         <Drawer
           forceRender
           visible={viewVisible}
-          title={`Details`}
+          title={`DETAILS`}
           placement="right"
-          width={600}
+          width={800}
           maskClosable={false}
           onClose={() => {
             setSelectedPettyCash(null)
             setViewVisible(false)
           }}
         >
-          <>
-            <Row>
-              <Col span={24}>
-                <AntList>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Requested On" description={prettifyDateTime(selectedPettyCash?.createdDate)} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Reference" description={selectedPettyCash?.pettyCashRef} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Description" description={selectedPettyCash?.name} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Purpose" description={selectedPettyCash?.purpose} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Quantity" description={selectedPettyCash?.quantity} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Unit Price" description={formatCurrency(selectedPettyCash?.amount)} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Endorsement Status (BY HOD)" description={selectedPettyCash?.endorsement} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Approval Status (By GM)" description={selectedPettyCash?.approval} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Status" description={selectedPettyCash?.status} />
-                  </AntList.Item>
-                  <AntList.Item>
-                    <AntList.Item.Meta title="Payment Status" description={selectedPettyCash?.paid ? 'PAID' : "PENDING"} />
-                  </AntList.Item>
-                </AntList>
-              </Col>
-            </Row>
-          </>
+          <PettyCashDetails 
+            pettyCash={selectedPettyCash}
+          />
         </Drawer>
+
+        <MyDrawer
+          visible={commentVisible}
+          title="PAYMENT DRAFT DETAILS"
+          onClose={() => {
+            setCommentVisible(false)
+            setSelectedPettyCash(null)
+          }}
+        >
+          <GenericComment 
+            loading={props.comment_loading}
+            itemDescription={<PettyCashDetails pettyCash={selectedPettyCash} />}
+            comments={props.comments}
+            newComment={props.new_comment}
+            submitting={props.submitting_comment}
+            onCommentChange={newComment => {
+              props.setNewComment(newComment)
+            }}
+            onSubmit={(newComment) => {
+              const payload = {
+                'description': newComment,
+                'process': COMMENT_PROCESS_VALUES.REVIEW_PETTY_CASH_HOD
+              }
+              props.createComment(COMMENT_TYPES.PAYMENT, selectedPettyCash?.id, payload)
+            }}
+          />
+        </MyDrawer>
 
         <Drawer
           forceRender

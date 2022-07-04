@@ -120,6 +120,7 @@ const mapStateToProps = (store) => ({
   float_order: store.float.order,
 
   comments: store.comment.comments,
+  comment_loading: store.comment.loading,
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
   new_comment: store.comment.new_comment,
@@ -195,8 +196,8 @@ const mapActionsToProps = (dispatch) => {
     resetComment: () => {
       dispatch(CommentCreators.resetComment())
     },
-    fetchComments: (query) => {
-      dispatch(CommentCreators.fetchComments(query))
+    fetchComments: (itemId, commentType) => {
+      dispatch(CommentCreators.fetchComments(itemId, commentType))
     }
   }
 }

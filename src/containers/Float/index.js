@@ -167,7 +167,13 @@ const mapStateToProps = (store) => ({
 
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
-  notifications: store.notification.notifications || {}
+  notifications: store.notification.notifications || {},
+
+  comments: store.comment.comments,
+  comment_loading: store.comment.loading,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -197,8 +203,17 @@ const mapActionsToProps = (dispatch) => {
     resetFloatRequest: () => {
       dispatch(FloatCreators.resetFloatRequest())
     },
-    createComment: (pT, comment) => {
-      dispatch(CommentCreators.createComment(pT,comment))
+    createComment: (commentType, itemId, payload) => {
+      dispatch(CommentCreators.createComment(commentType, itemId, payload))
+    },
+    setNewComment: (newComment) => {
+      dispatch(CommentCreators.setNewComment(newComment))
+    },
+    resetComment: () => {
+      dispatch(CommentCreators.resetComment())
+    },
+    fetchComments: (itemId, commentType) => {
+      dispatch(CommentCreators.fetchComments(itemId, commentType))
     }
   }
 }

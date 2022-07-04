@@ -1,6 +1,6 @@
 import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge } from 'antd'
 import React, { useState } from 'react'
-import { COMMENT_PROCESS_VALUES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
@@ -78,10 +78,10 @@ const LpoList = (props) => {
   } , 1000)
 
   React.useEffect(()=> {
+    props.resetRequest()
     fetchMyRequests({
 
     })
-    fetchComments({commentType: 'LPO_COMMENT'})
     // eslint-disable-next-line
   }, [])
 
@@ -144,6 +144,8 @@ const LpoList = (props) => {
                     setUpdateDrawer(true)
                   },
                   onViewComment: row => {
+                    props.resetComment()
+                    props.fetchComments(row?.id, COMMENT_TYPES.LPO)
                     setSelectedRequest(row)
                     setCommentVisible(true)
                   }
@@ -220,6 +222,7 @@ const LpoList = (props) => {
             onCommentChange={(newComment) => {
               props.setNewComment(newComment)
             }}
+            loading={props.comment_loading}
             newComment={props.new_comment}
             submitting={props.submitting_comment}
             comments={(props.comments || [])}

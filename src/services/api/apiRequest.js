@@ -26,7 +26,6 @@ request.interceptors.request.use((config) => {
   if(accessToken) {
     config.headers['Authorization'] = `Bearer ${accessToken}`
   }
-  console.log('API CONFIG: ', config)
   return config
 }, error => {
   return Promise.reject(error)

@@ -1,28 +1,48 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, DeleteColumnOutlined, DeleteOutlined, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form, Tooltip } from 'antd';
 import React, {useState } from 'react';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
 import MyPageHeader from "../../../shared/MyPageHeader"
-import FloatDetails from './FloatDetails';
+import GenericComment from '../../../shared/GenericComment';
+import MyDrawer from '../../../shared/MyDrawer';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants';
+import FloatDetails from '../../../shared/FloatDetails';
+
 
 const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (
-      <>
-        <Button 
-          size='small' 
-          type="default" 
-          shape="circle"
-          onClick={() => props.onViewDetails(row)}
-        >
-          <EyeOutlined />
-        </Button>
-      </>
+      <Row>
+        <Col span={12}>
+          <Tooltip title="Comment">
+            <Button 
+              size='small' 
+              type="default" 
+              shape="circle"
+              onClick={() => props.onComment(row)}
+            >
+              <CommentOutlined/>
+            </Button>
+          </Tooltip>
+        </Col>
+        <Col span={12}>
+          <Tooltip title="View">
+            <Button 
+              size='small' 
+              type="default" 
+              shape="circle"
+              onClick={() => props.onViewDetails(row)}
+            >
+              <EyeOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
+      </Row>
     )
   }
 ])
@@ -140,6 +160,7 @@ const HodEndorsePendingList = (props) => {
   const [selectedFloatOrder, setSelectedFloatOrder] = useState(null)
   const [comment, setComment] = useState("")
   const [commentRequired, setCommentRequired] = useState(false)
+  const [commentVisible, setCommentVisible] = useState(false)
   
 
   const expandedRowRender = (row) => {
@@ -237,6 +258,12 @@ const HodEndorsePendingList = (props) => {
                 onViewDetails: row => {
                   setSelectedFloatOrder(row)
                   setConfirmDrawer(row)
+                },
+                onComment: row => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.FLOAT)
+                  setSelectedFloatOrder(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={float_requests}
@@ -332,6 +359,33 @@ const HodEndorsePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <MyDrawer
+        visible={commentVisible}
+        title="FLOAT COMMENTS"
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedFloatOrder(null)
+        }}
+        width={900}
+      >
+        <GenericComment 
+          loading={props.comment_loading}
+          itemDescription={<FloatDetails floatOrder={selectedFloatOrder} />}
+          comments={props.comments}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          onCommentChange={newComment => {
+            props.setNewComment(newComment)
+          }}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+            }
+            props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

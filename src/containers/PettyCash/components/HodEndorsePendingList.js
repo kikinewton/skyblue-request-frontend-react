@@ -1,50 +1,54 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, EyeFilled, SyncOutlined, WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
 import React, {useEffect, useState } from 'react';
+import GenericComment from '../../../shared/GenericComment';
+import MyDrawer from '../../../shared/MyDrawer';
+import PettyCashDetails from '../../../shared/PettyCashDetails';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
-import { CURRENCY_CODE } from '../../../util/constants';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, CURRENCY_CODE } from '../../../util/constants';
 import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types';
+
 
 const columns = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "pettyCashRef",
     key: "pettyCashRef"
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "amount",
     key: "amount",
     render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: "Endorsement Status",
+    title: "ENDORSEMENT",
     dataIndex: "endorsement",
     key: "endorsement"
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     key: "actions",
     align: "right",
@@ -54,39 +58,39 @@ const columns = props => [
 
 const selectedRequestsColumns = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "pettyCashRef",
     key: "pettyCashRef"
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "amount",
     key: "amount",
     render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: "Endorsement Status",
+    title: "ENDORSEMENT STATUS",
     dataIndex: "endorsement",
     key: "endorsement"
   },
@@ -94,44 +98,44 @@ const selectedRequestsColumns = props => [
 
 const selectedRequestsColumnsForReject = props => [
   {
-    title: "Reference",
+    title: "REFERENCE",
     dataIndex: "pettyCashRef",
     key: "pettyCashRef"
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "name",
     key: "name"
   },
   {
-    title: "purpose",
+    title: "PURPOSE",
     dataIndex: "purpose",
     key: "purpose"
   },
   {
-    title: "Quantity",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
   {
-    title: "Unit Price",
+    title: "UNIT PRICE",
     dataIndex: "amount",
     key: "amount",
     render: (text) => `${CURRENCY_CODE} ${text}`
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: "Endorsement Status",
+    title: "ENDORSEMENT STATUS",
     dataIndex: "endorsement",
     key: "endorsement"
   },
   {
-    title: "Comment",
+    title: "COMMENT",
     dataIndex: "comment",
     key: "comment",
     render: (text, row) => (<Input type="text" defaultValue={text} onChange={(value) => props.onComment(value, row)} />)
@@ -159,6 +163,7 @@ const HodEndorsePendingList = (props) => {
   const [infoVisible, setInfoVisible] = useState(false)
   const [actionType, setActionType] = useState(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_ENDORSE)
   const [selectedRequest, setSelectedRequest] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
 
   const fetchRequests = () => {
     fetchPettyCashRequests({
@@ -235,7 +240,7 @@ const HodEndorsePendingList = (props) => {
         size='small'
         title={(<Row>
           <Col span={24}>
-            <span style={{marginRight: 5}}>Petty Cash Requests Awaiting Endorsement</span>
+            <span style={{marginRight: 5}}>PETTY CASH AWAITING ENDORSEMENT</span>
             <SyncOutlined spin={fetching_petty_cash_requests} onClick={() => fetchRequests()} />
           </Col>
         </Row>)} 
@@ -243,17 +248,6 @@ const HodEndorsePendingList = (props) => {
         (
           <Row style={{marginBottom: 10}} key="extras-first">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button 
-              disabled={selected_petty_cash_requests.length < 1} 
-              type="default"
-              style={{marginRight: 5}}
-              onClick={() => {
-                setActionType(UPDATE_PETTY_CASH_REQUEST_TYPES.HOD_COMMENT)
-                setConfirmDrawer(true)
-              }}
-            >
-              <CommentOutlined /> Comment
-            </Button>
             <Button
               style={{marginRight: 5}} 
               disabled={selected_petty_cash_requests.length < 1}
@@ -263,7 +257,7 @@ const HodEndorsePendingList = (props) => {
               }}
             >
               <CloseOutlined />
-              Cancel
+              CANCEL
             </Button>
             <Button 
               disabled={selected_petty_cash_requests.length < 1} 
@@ -274,7 +268,7 @@ const HodEndorsePendingList = (props) => {
               }}
             >
               <CheckOutlined />
-              Endorse
+              ENDORSE
             </Button>
           </Col>
         </Row>
@@ -289,6 +283,12 @@ const HodEndorsePendingList = (props) => {
                 viewDetails: (row) => {
                   setSelectedRequest(row)
                   setInfoVisible(true)
+                },
+                onComment: row => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.PETTY_CASH)
+                  setSelectedRequest(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={petty_cash_requests}
@@ -381,7 +381,7 @@ const HodEndorsePendingList = (props) => {
                 <List.Item.Meta title="Requested On" description={prettifyDateTime(selectedRequest?.createdDate)} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta title="Reference" description={selectedRequest?.pettyCashRef} />
+                <List.Item.Meta title="REFERENCE" description={selectedRequest?.pettyCashRef} />
               </List.Item>
               <List.Item>
                 <List.Item.Meta title="Description" description={selectedRequest?.name} />
@@ -416,6 +416,33 @@ const HodEndorsePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+
+      <MyDrawer
+        visible={commentVisible}
+        title="PAYMENT DRAFT DETAILS"
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedRequest(null)
+        }}
+      >
+        <GenericComment 
+          loading={props.comment_loading}
+          itemDescription={<PettyCashDetails pettyCash={selectedRequest} />}
+          comments={props.comments}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          onCommentChange={newComment => {
+            props.setNewComment(newComment)
+          }}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': COMMENT_PROCESS_VALUES.REVIEW_PETTY_CASH_HOD
+            }
+            props.createComment(COMMENT_TYPES.PAYMENT, selectedRequest?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

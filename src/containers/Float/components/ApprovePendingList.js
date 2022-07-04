@@ -6,6 +6,10 @@ import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../
 import { FLOAT_ORDERS_COLUMN } from '../../MyRequest/components/Float/List';
 import MyPageHeader from "../../../shared/MyPageHeader"
 import FloatDetails from './FloatDetails';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants';
+import MyDrawer from '../../../shared/MyDrawer';
+import GenericComment from '../../../shared/GenericComment';
+
 
 const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
@@ -140,6 +144,7 @@ const ApprovePendingList = (props) => {
   const [selectedFloatOrder, setSelectedFloatOrder] = useState(null)
   const [comment, setComment] = useState("")
   const [commentRequired, setCommentRequired] = useState(false)
+  const [commentVisible, setCommentVisible] = useState(false)
   
 
   const expandedRowRender = (row) => {
@@ -236,6 +241,12 @@ const ApprovePendingList = (props) => {
                 onViewDetails: row => {
                   setSelectedFloatOrder(row)
                   setConfirmDrawer(row)
+                },
+                onComment: row => {
+                  props.resetComment()
+                  props.fetchCOmments(row?.id, COMMENT_TYPES.FLOAT)
+                  setSelectedFloatOrder(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={float_requests}
@@ -331,6 +342,33 @@ const ApprovePendingList = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <MyDrawer
+        visible={commentVisible}
+        title="FLOAT COMMENTS"
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedFloatOrder(null)
+        }}
+        width={900}
+      >
+        <GenericComment 
+          loading={props.comment_loading}
+          itemDescription={<FloatDetails floatOrder={selectedFloatOrder} />}
+          comments={props.comments}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          onCommentChange={newComment => {
+            props.setNewComment(newComment)
+          }}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+            }
+            props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

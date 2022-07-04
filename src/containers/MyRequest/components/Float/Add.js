@@ -10,27 +10,27 @@ const { Step } = Steps
 
 const columns = (props) => [
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: "name"
   },
   {
-    title: 'Purpose',
+    title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: "quantity"
   },
   {
-    title: 'Unit Price',
+    title: 'UNIT PRICE',
     dataIndex: 'unitPrice',
     key: "unitPrice"
   },
   {
-    title: "Action",
+    title: "ACTIONS",
     dataIndex: "operation",
     key: "operation",
     align: "right",
@@ -40,22 +40,22 @@ const columns = (props) => [
 
 const verificationColumns = [
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: "name"
   },
   {
-    title: 'Purpose',
+    title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
   },
   {
-    title: 'Quantity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: "quantity"
   },
   {
-    title: 'Unit Price',
+    title: 'UNIT PRICE',
     dataIndex: 'unitPrice',
     key: "unitPrice"
   }

@@ -4,7 +4,7 @@ import { Switch, useRouteMatch, NavLink, Redirect, useLocation } from 'react-rou
 import { Creators as DepartmentCreators  } from '../../services/redux/department/actions'
 import { Creators as PettyCashCreators } from '../../services/redux/petty-cash/actions';
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
-import { Creators as CommentCreatores } from '../../services/redux/comment/actions';
+import { Creators as CommentCreators } from '../../services/redux/comment/actions';
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
 import HodReviewPendingList from './components/HodReviewPendingList';
@@ -135,7 +135,13 @@ const mapStateToProps = (store) => ({
   authUser: store.auth.user,
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
-  notifications: store?.notification?.notifications || {}
+  notifications: store?.notification?.notifications || {},
+
+  comments: store.comment.comments,
+  comment_loading: store.comment.loading,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -164,7 +170,18 @@ const mapActionsToProps = (dispatch) => {
     resetPettyCashRequest: () => {
       dispatch(PettyCashCreators.resetPettyCashRequest())
     },
-    createComment: (type, payload) => dispatch(CommentCreatores.createComment(type, payload)),
+    createComment: (commentType, itemId, payload) => {
+      dispatch(CommentCreators.createComment(commentType, itemId, payload))
+    },
+    setNewComment: (newComment) => {
+      dispatch(CommentCreators.setNewComment(newComment))
+    },
+    resetComment: () => {
+      dispatch(CommentCreators.resetComment())
+    },
+    fetchComments: (itemId, commentType) => {
+      dispatch(CommentCreators.fetchComments(itemId, commentType))
+    }
   }
 }
 

@@ -15,8 +15,6 @@ const PaymentsSubNav = (props) => {
     notifications
   } = props
 
-  console.log('current user', currentUser)
-
   const paymentApprovalNav = () => {
     if(currentUser.role === EMPLOYEE_ROLE.ROLE_AUDITOR) {
       if(notifications.paymentDraftPendingAuditorCheck) {

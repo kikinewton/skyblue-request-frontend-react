@@ -7,6 +7,7 @@ import CommentText from './CommentText';
 
 const RequestComment = (props) => {
   const {
+    loading,
     request,
     comments=[],
     onResolve,
@@ -42,7 +43,7 @@ const RequestComment = (props) => {
         </Col>
       </Row>
       <Badge.Ribbon text='COMMENTS ON LPO REQUEST' color='cyan'>
-        {props?.loading ? <Spin/> : (
+        {loading ? <Spin/> : (
           <Row>
             <Col span={24} style={{backgroundColor: '#f5fafa', padding: "30px 10px 10px 10px"}}>
               <Row>

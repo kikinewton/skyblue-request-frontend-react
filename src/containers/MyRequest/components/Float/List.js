@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { Table, Row, Col, Card, Button, Tag, Badge, Drawer, List } from "antd"
-import { EditOutlined, EyeOutlined, SyncOutlined } from "@ant-design/icons"
+import { Table, Row, Col, Card, Button, Tag, Badge, Drawer, List, Tooltip } from "antd"
+import { CommentOutlined, EditOutlined, EyeOutlined, SyncOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router';
-import { CURRENCY_CODE } from '../../../../util/constants';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, CURRENCY_CODE } from '../../../../util/constants';
 import UpdateFloatForm from './UpdateForm';
-import FloatDetails from '../../../Float/components/FloatDetails';
 import AppLayout from '../../../AppLayout';
 import MyRequestMenu from '../MyRequestMenu';
 import { prettifyDateTime } from '../../../../util/common-helper';
 import { useRouteMatch } from "react-router-dom"
 import MyPageHeader from '../../../../shared/MyPageHeader';
+import MyDrawer from '../../../../shared/MyDrawer';
+import GenericComment from '../../../../shared/GenericComment';
+import FloatDetails from '../../../../shared/FloatDetails';
+
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 
@@ -25,27 +28,27 @@ const retirmentStatus = row => {
 
 export const FLOAT_ORDERS_COLUMN = [
   {
-    title: "Float Reference",
+    title: "REFERENCE",
     dataIndex: "floatOrderRef",
     key: "floatOrderRef"
   },
   {
-    title: "Description",
+    title: "DESCRIPTION",
     dataIndex: "description",
     key: "description"
   },
   {
-    title: "Requested By",
+    title: "REQUESTED BY",
     dataIndex: "requestedBy",
     key: "requestedBy"
   },
   {
-    title: "Phone Number",
+    title: "PHONE",
     dataIndex: "requestedByPhoneNo",
     key: "requestedByPhoneNo"
   },
   {
-    title: "Request Date",
+    title: "REQUESTED ON",
     dataIndex: "createdDate",
     key: "createdDate",
     render: (text, row) => prettifyDateTime(text)
@@ -54,78 +57,93 @@ export const FLOAT_ORDERS_COLUMN = [
 
 const myColumns = props => FLOAT_ORDERS_COLUMN.concat([
   {
-    title: "Endorsement",
+    title: "ENDORSEMENT",
     dataIndex: "endorsement",
     key: "endorsement"
   },
   {
-    title: "Approval",
+    title: "APPROVAL",
     dataIndex: "approval",
     key: "approval"
   },
   {
-    title: "Status",
+    title: "STATUS",
     dataIndex: "status",
     key: "status"
   },
   {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "operations",
     key: "operations",
     render: (text, row) => (
-      <>
-        <Button 
-          shape="circle"
-          style={{marginRight: 5}}
-          size='small' 
-          type='default'
-          onClick={() => props.onShowMore(row)}
-        >
-          <EyeOutlined />
-        </Button>
+      <Row>
+        <Col span={8}>
+          <Tooltip title="comment">
+            <Button shape='circle' size='small' onClick={() => props.onComment(row)}>
+              <CommentOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
+        <Col span={8}>
+          <Tooltip title="">
+            <Button 
+              shape="circle"
+              style={{marginRight: 5}}
+              size='small' 
+              type='default'
+              onClick={() => props.onShowMore(row)}
+            >
+              <EyeOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
         {!row.comment && (
-          <Button
-            disabled={row?.retired}
-            shape="circle"
-            size='small' 
-            type='default'
-            onClick={() => props.onEdit(row)}
-          >
-            <EditOutlined />
-          </Button>
+          <Col span={8}>
+            <Tooltip>
+              <Button
+                disabled={row?.retired}
+                shape="circle"
+                size='small' 
+                type='default'
+                onClick={() => props.onEdit(row)}
+              >
+                <EditOutlined />
+              </Button>
+            </Tooltip>
+          </Col>
         )}
-      </>
+      </Row>
     )
   }
 ])
 
-const floatEntriesColumns = [
-  {
-    title: "Reference",
-    dataIndex: "floatRef",
-    key: "floatRef"
-  },
-  {
-    title: "Descrption",
-    dataIndex: "itemDescription",
-    key: "itemDescription",
-  },
-  {
-    title: "Purpose",
-    dataIndex: "purpose",
-    key: "purpose",
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity",
-  },
-  {
-    title: `Unit Price (${CURRENCY_CODE})`,
-    dataIndex: "estimatedUnitPrice",
-    key: "estimatedUnitPrice",
-  }
-]
+// const floatEntriesColumns = [
+//   {
+//     title: "Reference",
+//     dataIndex: "floatRef",
+//     key: "floatRef"
+//   },
+//   {
+//     title: "Descrption",
+//     dataIndex: "itemDescription",
+//     key: "itemDescription",
+//   },
+//   {
+//     title: "Purpose",
+//     dataIndex: "purpose",
+//     key: "purpose",
+//   },
+//   {
+//     title: "Quantity",
+//     dataIndex: "quantity",
+//     key: "quantity",
+//   },
+//   {
+//     title: `Unit Price (${CURRENCY_CODE})`,
+//     dataIndex: "estimatedUnitPrice",
+//     key: "estimatedUnitPrice",
+//   }
+// ]
 
 const FloatList = (props) => {
   const { fetchMyFloatRequests, fetching_float_requests, 
@@ -139,6 +157,7 @@ const FloatList = (props) => {
   const { path } = useRouteMatch()
   const [editVisible, setEditVisible] = useState(false)
   const [selectedFloatOrder, setSelectedFloatOrder] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
 
   const expandedRowRender = (row) => {
     const expandedColumns = [
@@ -208,6 +227,12 @@ const FloatList = (props) => {
                   onShowMore: (row) => {
                     setSelectedFloatForRetirement(row)
                     setViewDetailsVisible(true)
+                  },
+                  onComment: row => {
+                    props.resetComment()
+                    props.fetchComments(row?.id, COMMENT_TYPES.PETTY_CASH)
+                    setSelectedFloatOrder(row)
+                    setCommentVisible(true)
                   }
                 })}
                 dataSource={float_orders}
@@ -282,6 +307,32 @@ const FloatList = (props) => {
             float={selectedFloatOrder}
           />
         </Drawer>
+        <MyDrawer
+          visible={commentVisible}
+          title="PAYMENT DRAFT DETAILS"
+          onClose={() => {
+            setCommentVisible(false)
+            setSelectedFloatOrder(null)
+          }}
+        >
+          <GenericComment 
+            loading={props.comment_loading}
+            itemDescription={<FloatDetails floatOrder={selectedFloatOrder} />}
+            comments={props.comments}
+            newComment={props.new_comment}
+            submitting={props.submitting_comment}
+            onCommentChange={newComment => {
+              props.setNewComment(newComment)
+            }}
+            onSubmit={(newComment) => {
+              const payload = {
+                'description': newComment,
+                'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+              }
+              props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+            }}
+          />
+        </MyDrawer>
       </AppLayout>
     </>
   )

@@ -29,7 +29,7 @@ const PaymentComment = (props) => {
           />
         </Col>
       </Row>
-      <Badge.Ribbon text='COMMENTS ON LPO REQUEST' color='cyan'>
+      <Badge.Ribbon text='COMMENTS' color='cyan'>
         {props?.loading ? <Spin/> : (
           <Row>
             <Col span={24} style={{backgroundColor: '#f5fafa', padding: "30px 10px 10px 10px"}}>

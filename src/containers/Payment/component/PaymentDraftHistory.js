@@ -80,7 +80,7 @@ const PaymentDraftHistory = (props) => {
     setLoading(true)
     const query = {}
     try {
-      const result = await fetchPaymentDraftsHistory({})
+      const result = await fetchPaymentDraftsHistory({all: true})
       // if(result?.meta) {
       //   const { currentPage, pageSize, total, totalPages } = result?.meta
       //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
