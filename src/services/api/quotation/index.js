@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED }
+import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED, LINKED_TO_LPO }
  from '../../../util/quotation-types'
 import { serializeQueryParamsNotNull } from '../../../util/common-helper'
 
@@ -75,6 +75,8 @@ export function getAllQuotations(query) {
       return getQuotationBySupplier(query)
     case NOT_LINKED_TO_LPO:
       return service({url: `/quotations?linkedToLpo=${false}`, method: "GET"})
+    case LINKED_TO_LPO:
+      return service({url: `/quotations?linkedToLpo=${true}`, method: "GET"})
     default:
       return getQuotations()
   }
