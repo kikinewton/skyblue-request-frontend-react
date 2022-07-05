@@ -202,7 +202,7 @@ const List = (props) => {
                 'description': newComment,
                 'process': COMMENT_PROCESS_VALUES.REVIEW_PETTY_CASH_HOD
               }
-              props.createComment(COMMENT_TYPES.PAYMENT, selectedPettyCash?.id, payload)
+              props.createComment(COMMENT_TYPES.PETTY_CASH, selectedPettyCash?.id, payload)
             }}
           />
         </MyDrawer>

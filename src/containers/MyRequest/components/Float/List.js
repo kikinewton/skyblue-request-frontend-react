@@ -230,7 +230,7 @@ const FloatList = (props) => {
                   },
                   onComment: row => {
                     props.resetComment()
-                    props.fetchComments(row?.id, COMMENT_TYPES.PETTY_CASH)
+                    props.fetchComments(row?.id, COMMENT_TYPES.FLOAT)
                     setSelectedFloatOrder(row)
                     setCommentVisible(true)
                   }
@@ -327,9 +327,9 @@ const FloatList = (props) => {
             onSubmit={(newComment) => {
               const payload = {
                 'description': newComment,
-                'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+                'process': COMMENT_PROCESS_VALUES.REVIEW_FLOAT_HOD
               }
-              props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+              props.createComment(COMMENT_TYPES.FLOAT, selectedFloatOrder?.id, payload)
             }}
           />
         </MyDrawer>

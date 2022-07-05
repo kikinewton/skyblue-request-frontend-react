@@ -380,9 +380,9 @@ const HodEndorsePendingList = (props) => {
           onSubmit={(newComment) => {
             const payload = {
               'description': newComment,
-              'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+              'process': COMMENT_PROCESS_VALUES.REVIEW_FLOAT_HOD
             }
-            props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+            props.createComment(COMMENT_TYPES.FLOAT, selectedFloatOrder?.id, payload)
           }}
         />
       </MyDrawer>

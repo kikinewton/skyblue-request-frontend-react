@@ -445,7 +445,7 @@ const ApprovePendingList = (props) => {
               'description': newComment,
               'process': COMMENT_PROCESS_VALUES.REVIEW_PETTY_CASH_GM
             }
-            props.createComment(COMMENT_TYPES.PAYMENT, selectedRequest?.id, payload)
+            props.createComment(COMMENT_TYPES.PETTY_CASH, selectedRequest?.id, payload)
           }}
         />
       </MyDrawer>

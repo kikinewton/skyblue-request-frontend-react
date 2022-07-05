@@ -74,9 +74,9 @@ const PettyCashIndex = (props) => {
                 <NavLink to="/app/petty-cash/hod-pending-endorse">
                   {notifications.pettyCashPendingEndorsement ? (
                     <NotificationBadge count={notifications?.pettyCashPendingEndorsement}>
-                       <span>Awaiting Endorsement</span>
+                       <span>AWAITING ENDORSEMENT</span>
                     </NotificationBadge>
-                  ) : (<span>Awaiting Endorsement</span>)}
+                  ) : (<span>AWAITING ENDORSEMENT</span>)}
                 </NavLink>
               </Menu.Item>
             )}
@@ -85,9 +85,9 @@ const PettyCashIndex = (props) => {
                 <NavLink to="/app/petty-cash/gm-approve-list">
                 {notifications.pettyCashPendingApproval ? (
                     <NotificationBadge count={notifications?.pettyCashPendingApproval}>
-                       <span>Awaiting Endorsement</span>
+                       <span>AWAITING APPROVAL</span>
                     </NotificationBadge>
-                  ) : (<span>Awaiting Endorsement</span>)}
+                  ) : (<span>AWAITING APPROVAL</span>)}
                 </NavLink>
               </Menu.Item>
             )}

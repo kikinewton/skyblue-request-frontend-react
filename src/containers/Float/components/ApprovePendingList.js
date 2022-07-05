@@ -210,15 +210,15 @@ const ApprovePendingList = (props) => {
     }
   }, [float_submit_success, float_submitting])
 
-  React.useEffect(() => {
-    if(!props.submitting_comment && props.submit_comment_success) {
-      setSelectedFloatRequests([])
-      setConfirmDrawer(false)
-      props.fetchFloatRequests({
-        requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL
-      })
-    }
-  }, [props.submitting_comment, props.submit_comment_success])
+  // React.useEffect(() => {
+  //   if(!props.submitting_comment && props.submit_comment_success) {
+  //     setSelectedFloatRequests([])
+  //     setConfirmDrawer(false)
+  //     props.fetchFloatRequests({
+  //       requestType: FETCH_FLOAT_REQUEST_TYPES.PENDING_APPROVAL
+  //     })
+  //   }
+  // }, [props.submitting_comment, props.submit_comment_success])
 
   return (
     <>
@@ -363,9 +363,9 @@ const ApprovePendingList = (props) => {
           onSubmit={(newComment) => {
             const payload = {
               'description': newComment,
-              'process': COMMENT_PROCESS_VALUES.PETTY_CASH
+              'process': COMMENT_PROCESS_VALUES.REVIEW_FLOAT_GM
             }
-            props.createComment(COMMENT_TYPES.PAYMENT, selectedFloatOrder?.id, payload)
+            props.createComment(COMMENT_TYPES.FLOAT, selectedFloatOrder?.id, payload)
           }}
         />
       </MyDrawer>
