@@ -55,6 +55,10 @@ const NewPayment = (props) => {
     return (amount - withholdingTaxAmount).toFixed(2);
   }
 
+  const getAmountToPaySupplier = () => {
+    
+  }
+
   React.useEffect(()=> {
     fetchGrn(grnId)
   }, [grnId])
@@ -141,9 +145,6 @@ const NewPayment = (props) => {
                     withholdingTaxPercentage: 0
                   }}
                 >
-                  <Form.Item label="INVOICE AMOUNT PAYABLE">
-                    <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
-                  </Form.Item>
                   <Form.Item label="PAYMENT CHANNEL" name="paymentMethod" rules={[{required: true, message: 'Payment channel required!'}]}>
                     <Select>
                       {PAYMENT_METHODS.map(item=> (
@@ -161,10 +162,10 @@ const NewPayment = (props) => {
                   <Form.Item label="PURCHASE NUMBER" name="purchaseNumber">
                     <Input />
                   </Form.Item>
-                  <Form.Item label="BANK/TELCO" name="bank">
+                  <Form.Item label="BANK" name="bank">
                     <Input />
                   </Form.Item>
-                  <Form.Item label="CHEQUE NUMBER / MOMO NUMBER" name="chequeNumber" rules={[{required: true, message: "Account Number / Phone Number / Cheque Number required!"}]}> 
+                  <Form.Item label="CHEQUE NUMBER" name="chequeNumber" rules={[{required: true, message: "Account Number / Phone Number / Cheque Number required!"}]}> 
                     <Input />
                   </Form.Item>
                   <Form.Item label="CURRENCY" name="currency">
@@ -179,15 +180,19 @@ const NewPayment = (props) => {
                   {/* <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
                     <Input prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="text" min="0" onChange={e => setAmount(e.target.value)} />
                   </Form.Item> */}
-                  <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
-                    <InputNumber prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                  <Form.Item label="INVOICE AMOUNT PAYABLE">
+                    <Input disabled value={ formatCurrency(grn?.invoiceAmountPayable, grn?.receivedItems[0]?.currency)} />
                   </Form.Item>
                   <Form.Item label="WITHHOLDING TAX (PERCENTAGE)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
                     <Input  prefix={<PercentageOutlined/>} type="number" />
                   </Form.Item>
                   <Form.Item label="AMOUNT AFTER WITHHOLDING TAX">
                     <Input disabled prefix={grn?.receivedItems[0]?.currency}
-                      value={getWithholdingTaxPercentageAmount(amount, percentage)}  />
+                      value={getWithholdingTaxPercentageAmount(grn?.invoiceAmountPayable, percentage)}  
+                    />
+                  </Form.Item>
+                  <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
+                    <Input style={{width: '100%'}} prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="number" min="0" onChange={e => setAmount(e.target.value)} />
                   </Form.Item>
                   <Form.Item >
                     <Row>

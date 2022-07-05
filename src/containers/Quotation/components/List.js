@@ -1,13 +1,17 @@
-import { EyeFilled } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List } from 'antd'
+import { CommentOutlined, EyeFilled } from '@ant-design/icons'
+import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import MyPdfView from '../../../presentation/MyPdfView'
 import { generateResourceUrl } from '../../../services/api/document'
 import { BASE_URL } from '../../../services/api/urls'
+import GenericComment from '../../../shared/GenericComment'
+import MyDrawer from '../../../shared/MyDrawer'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
 import { NOT_LINKED_TO_LPO } from '../../../util/quotation-types'
+
 
 const columns = (props) => [
   {
@@ -35,10 +39,20 @@ const columns = (props) => [
     align: 'right',
     render: (text, row) => (
       <Row>
-        <Col md={24}>
-          <Button size="small" shape="circle" onClick={() => props.onView(row)}>
-            <EyeFilled />
-          </Button>
+        <Col span={12}>
+          <Tooltip title="Comment">
+            <Button size='small' shape='circle' onClick={() => props.onComment(row)}>
+              <CommentOutlined/>
+            </Button>
+          </Tooltip>
+        </Col>
+        <Col md={12}>
+          <Tooltip title="View Info">
+            <Button size="small" shape="circle" onClick={() => props.onView(row)}>
+              <EyeFilled />
+            </Button>
+          </Tooltip>
+
         </Col>
       </Row>
       
@@ -78,6 +92,7 @@ const ListQuotations = (props) => {
   } = props
   const [quotationViewVisible, setQuotationViewVisible] = useState(false)
   const [selectedQuotation, setSelectedQuotation] = useState(null)
+  const [commentVisible, setCommentVisible] = useState(false)
   const history = useHistory()
 
   // const expandedRowRender = (row) => {
@@ -133,6 +148,13 @@ const ListQuotations = (props) => {
               console.log('row', row)
               setSelectedQuotation(row)
               setQuotationViewVisible(true)
+            },
+            onComment: row => {
+              console.log('row', row)
+              props.resetComment()
+              props.fetchComments(row?.quotation?.id, COMMENT_TYPES.QUOTATION)
+              setSelectedQuotation(row)
+              setCommentVisible(true)
             }
           })}
           loading={quotationLoading}
@@ -156,8 +178,43 @@ const ListQuotations = (props) => {
           setQuotationViewVisible(false)
         }}
       >
-        <QuotationDetails quotation={selectedQuotation} />
+        <QuotationDetails quotation={selectedQuotation} showItems={true} />
       </Drawer>
+
+      <MyDrawer
+        visible={commentVisible}
+        width={900}
+        onClose={() => {
+          setSelectedQuotation(null)
+          setCommentVisible(false)
+        }}
+      >
+        <GenericComment
+          loading={props.comments_loading}
+          onCommentChange={(newComment) => {
+            props.setNewComment(newComment)
+          }}
+          itemDescription={(
+            <>
+              <List>
+                <List.Item>
+                  <List.Item.Meta title="SUPPLIER" description={selectedQuotation?.quotation?.supplier?.name} />
+                </List.Item>
+              </List>
+            </>
+          )}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          comments={props.comments}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': COMMENT_PROCESS_VALUES.PROCUREMENT_RESPONSE_TO_QUOTATION_REVIEW
+            }
+            props.createComment(COMMENT_TYPES.QUOTATION, selectedQuotation?.quotation?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

@@ -13,6 +13,7 @@ import { Menu } from "antd"
 import { FileDoneOutlined, SolutionOutlined } from '@ant-design/icons'
 import ListAllQuotations from './components/AllQuotations'
 import AddQuotationFOrUnregisteredSupplier from './components/AddQuotationForUnregisteredSupplier'
+import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -117,7 +118,13 @@ const mapStateToProps = (store) => ({
   request_category_loading: store.requestCategory.loading,
   request_category_submit_success: store.requestCategory.submit_success,
   request_category_submitting: store.requestCategory.submitting,
-  request_category: store.requestCategory.request_category
+  request_category: store.requestCategory.request_category,
+
+  comments: store.comment.comments,
+  comments_loading: store.comment.loading,
+  submitting_comment: store.comment.submitting,
+  submit_comment_success: store.comment.submit_success,
+  new_comment: store.comment.new_comment,
 })
 
 const mapActionsToState = (dispatch) => {
@@ -188,7 +195,21 @@ const mapActionsToState = (dispatch) => {
   },
   createQuotation: (payload) => {
     dispatch(QuotationCreators.createQuotation(payload))
-  }
+  },
+
+  createComment: (commentType, itemId, payload) => {
+    dispatch(CommentCreators.createComment(commentType, itemId, payload))
+  },
+  createCommentWithCancel: (procurementType, payload) => dispatch(CommentCreators.createCommentWithCancel(procurementType, payload)),
+  fetchComments: (itemId, commentType) => {
+    dispatch(CommentCreators.fetchComments(itemId, commentType))
+  },
+  setNewComment: (newComment) => {
+    dispatch(CommentCreators.setNewComment(newComment))
+  },
+  resetComment: () => {
+    dispatch(CommentCreators.resetComment())
+  },
 }}
 
 export default connect(mapStateToProps, mapActionsToState)(Quotation)

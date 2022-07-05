@@ -7,23 +7,23 @@ import MySwal from '../../../util/sweet-alert'
 
 const COLUMNS = (props) => [
   {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'Quatity',
+    title: 'QUANTITY',
     dataIndex: 'quantity',
     key: 'quantity'
   },
   {
-    title: 'Date',
+    title: 'DATE',
     dataIndex: 'requestDate',
     key: 'requestDate',
     render: (text) => prettifyDateTime(text)
   },
   {
-    title: 'Assigned Suppliers',
+    title: 'ASSIGNED SUPPLIERS',
     dataIndex: 'suppliers',
     key: 'suppliers',
     align: 'right',

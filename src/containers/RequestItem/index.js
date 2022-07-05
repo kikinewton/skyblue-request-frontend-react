@@ -16,6 +16,8 @@ import ApprovedItemRequest from './components/ApprovedItemRequests';
 import EndorsedItemRequest from './components/EndorsedItemRequest';
 import RequestItemHistory from './components/RequestItemHistory';
 import NotificationBadge from '../../shared/NotificationBadge';
+import RequestPendingQuotationReview from './components/RequestPendingQuotationReview';
+import { Creators as LocalPurchaseOrderCreators } from '../../services/redux/local-purchase-order/actions';
 
 
 export const REQUEST_ITEMS = [
@@ -100,9 +102,9 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/hod-pending-approve">
                     {notifications.quotationPendingReviewHOD ? (
                       <NotificationBadge count={notifications.quotationPendingReviewHOD}>
-                        <span>Requests Awaiting Review</span>
+                        <span>REQUESTS AWAITING REVIEW</span>
                       </NotificationBadge>
-                    ) : (<span>Requests Awaiting Review</span>)}
+                    ) : (<span>REQUESTS AWAITING REVIEW</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-endorsed-requests">
@@ -155,10 +157,10 @@ const RequestItemIndex = (props) => {
             {...props}
           />
           <AuthenticatedRoute
-            roles={[EMPLOYEE_ROLE.ROLE_HOD]}
+            roles={[EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
             exact
             path={`/app/request-items/hod-pending-approve`}
-            component={HodReviewPendingList}
+            component={RequestPendingQuotationReview}
             {...props}
           />
           <AuthenticatedRoute 
@@ -216,7 +218,10 @@ const mapStateToProps = (store) => ({
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
   new_comment: store.comment.new_comment,
-  notifications: store.notification.notifications || {}
+  notifications: store.notification.notifications || {},
+
+  local_purchase_order_drafts: store.local_purchase_order.local_purchase_order_drafts,
+  local_purchase_order_drafts_loading: store.local_purchase_order.loading
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -257,7 +262,9 @@ const mapActionsToProps = (dispatch) => {
     },
     resetComment: () => {
       dispatch(CommentCreators.resetComment())
-    }
+    },
+
+    fetchLocalPurchaseOrderDrafts: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrderDrafts(query)),
   }
 }
 

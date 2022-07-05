@@ -6,7 +6,7 @@ import { prettifyDateTime } from '../util/common-helper';
 import FilesView from './FilesView';
 const columns = REQUEST_COLUMNS
 
-const QuotationDetails = ({quotation, showItems=false, files}) => {
+const QuotationDetails = ({quotation, showItems=false, files, ...props}) => {
   return (
     <>
         <Row>
@@ -50,7 +50,7 @@ const QuotationDetails = ({quotation, showItems=false, files}) => {
               <Table
                 rowKey="id"
                 columns={columns}
-                dataSource={quotation?.requestItems || []}
+                dataSource={props.requestItems || quotation?.requestItems || []}
                 size="small"
                 pagination={false}
                 bordered
@@ -66,7 +66,8 @@ const QuotationDetails = ({quotation, showItems=false, files}) => {
 QuotationDetails.propTypes = {
   quotation: PropTypes.object,
   files: PropTypes.array,
-  showItems: PropTypes.bool
+  showItems: PropTypes.bool,
+  requestItems: PropTypes.array
 }
 
 export default QuotationDetails

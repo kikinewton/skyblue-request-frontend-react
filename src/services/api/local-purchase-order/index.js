@@ -51,3 +51,11 @@ export function downloadLPODocument({lpoId}) {
   link.click()
   link.parentNode.removeChild(link)
 }
+
+export function fetchLpoDraftsPendingApproval(query) {
+  const queryStr = serializeQueryParams(query)
+  return apiRequest({
+    url: `/localPurchaseOrderDrafts${queryStr}`,
+    method: 'GET'
+  })
+}
