@@ -139,14 +139,14 @@ const CollapsibleLayout = (props) => {
           <Menu.Item key="home">
             <NavLink to="/app">
               <HomeOutlined />
-              <span>Home</span>
+              <span>HOME</span>
             </NavLink>
           </Menu.Item>
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.dashboardRoles) &&   
             <Menu.Item key="dashboard">
               <NavLink to="/app/dashboard">
                 <DashboardOutlined />
-                <span>Dashboard</span>
+                <span>DASHBOARD</span>
               </NavLink>
             </Menu.Item>
           }
@@ -155,7 +155,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="my-requests">
                 <NavLink to="/app/my-requests">
                   <SendOutlined />
-                  <span>My Requests</span>
+                  <span>MY REQUESTS</span>
                 </NavLink>
               </Menu.Item>
             </>
@@ -165,7 +165,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="request">
                 <NavLink to="/app/request-items">
                     <ReconciliationOutlined />
-                    <span>Item requests</span>
+                    <span>ITEM REQUESTS</span>
                     {notifications?.requestPendingEndorsementHOD || notifications.requestPendingApprovalGM || 
                      notifications.requestEndorsedByHOD ? <NotificationBadge /> : null} 
                 </NavLink>
@@ -173,7 +173,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="petty-cash">
                 <NavLink to="/app/petty-cash">
                   <ReconciliationOutlined />
-                  <span>Petty cash requests</span>
+                  <span>PETTY CASH</span>
                   {notifications?.pettyCashPendingEndorsement || notifications?.pettyCashPendingApprovalGM ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item> 
@@ -184,7 +184,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="float">
                 <NavLink to="/app/float">
                   <ReconciliationOutlined />
-                  <span>Float requests</span>
+                  <span>FLOATS</span>
                   {notifications?.floatPendingEndorsement || notifications?.floatPendingApprovalGM ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item>
@@ -196,7 +196,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="/app/payments">
                 <NavLink to="/app/payments">
                   <WalletOutlined />
-                  <span>Payments</span>
+                  <span>PAYMENTS</span>
                   {notifications?.paymentDraftPendingAuthorizationFM || notifications?.grnAwaitingPaymentAdvice || 
                   notifications?.grnReadyForPaymentAccount || notifications?.paymentDraftPendingAuditorCheck || 
                   notifications?.paymentDraftPendingApproval ? <NotificationBadge/> : null}
@@ -225,7 +225,7 @@ const CollapsibleLayout = (props) => {
                 <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
                   {notifications.assignSupplierProcurement ? (
                     <NotificationBadge count={notifications.assignSupplierProcurement}>
-                      Assign Supplier
+                      ASSIGN SUPPLIER
                     </NotificationBadge>
                   ) : (<span>Assign Supplier</span>)}
                 </NavLink>
@@ -237,7 +237,7 @@ const CollapsibleLayout = (props) => {
               </Menu.Item>
               <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
-                  Request Categories
+                  REQUEST CATEGORIES
                 </NavLink>
               </Menu.Item>
             </Menu.SubMenu>
@@ -246,7 +246,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key={`/app/quotations`}>
               <NavLink to={`/app/quotations`}>
                 <ProfileOutlined />
-                <span>Quotations</span>
+                <span>QUOTATIONS</span>
               </NavLink>
             </Menu.Item>
           }
@@ -254,7 +254,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key={`/app/local-purchase-orders`}>
               <NavLink to={`/app/local-purchase-orders`}>
                 <ShoppingCartOutlined />
-                <span>Local Purchase Orders</span>
+                <span>LPO</span>
                 {notifications?.lpoDraftAwaitingApproval ? <NotificationBadge/> : null}
               </NavLink>
             </Menu.Item>
@@ -263,7 +263,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key="department">
               <NavLink to="/app/departments">
                 <AppstoreOutlined />
-                <span>Departments</span>
+                <span>DEPARTMENTS</span>
               </NavLink>
             </Menu.Item>
           }
@@ -271,7 +271,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key="/app/suppliers">
               <NavLink to="/app/suppliers">
                 <UsergroupAddOutlined />
-                <span>Supplier Management</span>
+                <span>SUPPLIERS</span>
               </NavLink>
             </Menu.Item>
           }
@@ -281,19 +281,19 @@ const CollapsibleLayout = (props) => {
               
               <NavLink to="/app/employees">
                 <UsergroupAddOutlined />
-                <span>User Management</span>
+                <span>USER MANAGEMENT</span>
               </NavLink>
             </Menu.Item>
           }
           <Menu.Item key="setting" icon={<SettingOutlined />}>
             <NavLink to="/app/settings">
-              <span>Settings</span>
+              <span>SETTINGS</span>
             </NavLink>
           </Menu.Item>
           {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.report) && 
             <Menu.Item key="/app/reports" icon={<PieChartOutlined />}>
               <NavLink to="/app/reports">
-                <span>Reports</span>
+                <span>REPORTS</span>
               </NavLink>
             </Menu.Item>
           }
@@ -303,7 +303,7 @@ const CollapsibleLayout = (props) => {
               authService.signOut()
             }}
           >
-            Logout
+            LOGOUT
           </Menu.Item>
         </Menu>
       </Sider>
