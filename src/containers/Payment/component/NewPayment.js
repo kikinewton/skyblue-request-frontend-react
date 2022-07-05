@@ -1,4 +1,4 @@
-import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps } from 'antd'
+import { Card, Col, Row, Form, Input, Select, Button, Spin, Steps, InputNumber } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { CURRENCIES, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../util/datas'
@@ -176,8 +176,11 @@ const NewPayment = (props) => {
                       {CURRENCIES.map(currency => <Select.Option value={currency.code} key={currency.code}>{currency.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
+                  {/* <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
+                    <Input prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="text" min="0" onChange={e => setAmount(e.target.value)} />
+                  </Form.Item> */}
                   <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
-                    <Input prefix={grn?.receivedItems[0]?.currency} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                    <InputNumber prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="number" min="0" onChange={e => setAmount(e.target.value)} />
                   </Form.Item>
                   <Form.Item label="WITHHOLDING TAX (PERCENTAGE)" name="withholdingTaxPercentage" onChange={e => setPercenatage(e.target.value)}>
                     <Input  prefix={<PercentageOutlined/>} type="number" />
