@@ -96,6 +96,8 @@ const NewPayment = (props) => {
                           grn={grn}
                           invoice={grn?.invoice}
                           invoiceDocument={grn?.invoice?.invoiceDocument}
+                          quotation={grn?.localPurchaseOrder?.quotation}
+                          showRequestItems={true}
                         />
                       </Col>
                     </Row>
@@ -103,7 +105,7 @@ const NewPayment = (props) => {
                       <Col span={24}>
                         <LocalPurchaseOrderDetails 
                           lpo={grn?.localPurchaseOrder}
-                          showRequestItems={false}
+                          showRequestItems={true}
                         />
                       </Col>
                     </Row>

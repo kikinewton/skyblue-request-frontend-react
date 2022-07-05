@@ -208,7 +208,7 @@ const CollapsibleLayout = (props) => {
             <Menu.Item key="/app/grn">
               <NavLink to="/app/grn">
                 <ShopOutlined />
-                <span>Goods Receive Note</span>
+                <span>GRN</span>
                 {notifications.grnPendingApprovalGM || notifications?.grnPendingApproval || 
                   notifications.lpoWithoutGRN ? <NotificationBadge/> : null}
               </NavLink>

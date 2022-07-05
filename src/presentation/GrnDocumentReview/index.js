@@ -42,8 +42,8 @@ const GrnDocumentReview = (props) => {
         <Col span={24}>
           <Card title="GOODS RECEIVE NOTE" style={{marginBottom: 10}} size="small">
             <Row>
-              <Col span={24}>
-                <List 
+              <Col span={12}>
+                <List
                   itemLayout="horizontal"
                 >
                   <List.Item key="GRN Reference">
@@ -55,7 +55,11 @@ const GrnDocumentReview = (props) => {
                   <List.Item key="createdOn">
                     <List.Item.Meta title="CREATED ON" description={prettifyDateTime(grn?.createdDate)} />
                   </List.Item>
-                  <List.Item key="cretedBy">
+                </List>
+              </Col>
+              <Col span={12}>
+                <List>
+                <List.Item key="cretedBy">
                     <List.Item.Meta title="GRN CREATED BY" description={grn?.createdBy?.fullName} />
                   </List.Item>
                   <List.Item key="supplier">
@@ -68,23 +72,37 @@ const GrnDocumentReview = (props) => {
               </Col>
             </Row>
             <Row>
+              <Col span={24}>
+                <h4>INVOICE DOCUMENT</h4>
+              </Col>
+            </Row>
+            <Row>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "100%"}}>
                 <FilesView
                   files={[invoiceDocument]}
                 />
               </Col>
             </Row>
+            {showRequestItems && (
+              <Row>
+                <Col span={24}>
+                  <Table 
+                    columns={columns}
+                    dataSource={grn?.receivedItems}
+                    bordered
+                    size="small"
+                    pagination={false}
+                    rowKey="id"
+                  />
+                </Col>
+              </Row>
+            )}
           </Card>
         </Col>
       </Row>
       {quotation && (
         <>
-          <Card style={{marginTop: 10, marginBottom: 10}} size='small' title="Quotation Details">
-            <Row style={{padding: "10px 0 2px 0"}}>
-              <Col span={24}>
-                <span style={{fontWeight: "bold"}}>QUOTATIONS</span>
-              </Col>
-            </Row>
+          <Card style={{marginTop: 10, marginBottom: 10}} size='small' title="QUOTATION">
             <Row style={{padding: "0 0 10px 0"}}>
               <Col span={24}>
                 <QuotationDetails 
@@ -95,20 +113,6 @@ const GrnDocumentReview = (props) => {
             </Row>
           </Card>
         </>
-      )}
-      {showRequestItems && (
-        <Row>
-          <Col span={24}>
-            <Table 
-              columns={columns}
-              dataSource={grn?.receivedItems}
-              bordered
-              size="small"
-              pagination={false}
-              rowKey="id"
-            />
-          </Col>
-        </Row>
       )}
       {onFinish && onFinishText && (
         <Row style={{marginTop: 10}}>

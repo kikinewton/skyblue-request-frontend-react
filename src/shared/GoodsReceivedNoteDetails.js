@@ -40,7 +40,7 @@ const GoodsReceivedNoteDetails = (props) => {
               itemLayout="horizontal"
             >
               <List.Item key="invoiceNumber">
-                <List.Item.Meta title="INVOICE NUMBER" description={invoice?.invoiceNumber} />
+                <List.Item.Meta title="INVOICE NUMBER" description={grn?.invoice?.invoiceNumber} />
               </List.Item>
               <List.Item key="createdOn">
                 <List.Item.Meta title="CREATED ON" description={prettifyDateTime(grn?.createdDate)} />
@@ -53,7 +53,7 @@ const GoodsReceivedNoteDetails = (props) => {
           <Col span={12}>
             <List>
               <List.Item key="supplier">
-                <List.Item.Meta title="SUPPLIER" description={invoice?.supplier?.name} />
+                <List.Item.Meta title="SUPPLIER" description={grn?.invoice?.supplier?.name} />
               </List.Item>
               <List.Item key="amount">
                 <List.Item.Meta title="AMOUNT" description={formatCurrency(grn?.invoiceAmountPayable)} />

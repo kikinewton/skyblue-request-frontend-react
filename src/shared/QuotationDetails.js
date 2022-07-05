@@ -9,14 +9,13 @@ const columns = REQUEST_COLUMNS
 const QuotationDetails = ({quotation, showItems=false, files}) => {
   return (
     <>
-      <Card size='small' title="QUOTATION DETAILS" style={{marginBottom: 20}}>
         <Row>
           <Col span={24}>
             <List
               itemLayout="horizontal"
             >
               <List.Item>
-                <List.Item.Meta title="QUOTATION REFERENCE" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
+                <List.Item.Meta title="REFERENCE" description={quotation?.quotation?.quotationRef || quotation?.quotationRef || "N/A"} />
               </List.Item>
               <List.Item>
                 <List.Item.Meta title="CREATED ON" description={prettifyDateTime(quotation?.quotation?.createdAt || quotation?.createdAt) || "N/A"} />
@@ -29,7 +28,7 @@ const QuotationDetails = ({quotation, showItems=false, files}) => {
         </Row>
         <Row style={{marginTop: 20}}>
           <Col span={24}>
-            <span style={{fontWeight: "bold"}}>QUOTATION SUPPORTING DOCUMENT</span>
+            <span style={{fontWeight: "bold"}}>QUOTATION DOCUMENT</span>
           </Col>
         </Row>
         <Row>
@@ -39,12 +38,11 @@ const QuotationDetails = ({quotation, showItems=false, files}) => {
             />
           </Col>
         </Row>
-      </Card>
       {showItems && (
         <>
           <Row style={{marginTop: 20}}>
             <Col span={24}>
-              <span style={{fontWeight: "bold"}}>QUOTATION SUPPORTING DOCUMENT</span>
+              <span style={{fontWeight: "bold"}}>QUOTATION ITEMS</span>
             </Col>
           </Row>
           <Row>

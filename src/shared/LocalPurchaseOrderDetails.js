@@ -42,7 +42,7 @@ const LocalPurchaseOrderDetails = (props) => {
           <>
             <Row style={{marginTop: 20}}>
               <Col span={24}>
-                <span style={{fontWeight: "bold"}}>REQUEST ITEMS</span>
+                <span style={{fontWeight: "bold"}}>ITEMS</span>
               </Col>
             </Row>
             <Row>

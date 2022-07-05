@@ -41,7 +41,7 @@ const GrnComment = (props) => {
                       {comments.map(item => {
                         const createdBy = item?.commentBy;
                         let data = {
-                          userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '')}) on ${prettifyDateTime(item?.createdDate)}`,
+                          userName: `${createdBy?.firstName} ${createdBy?.lastName} (${createdBy?.role?.replaceAll('ROLE_', '').replaceAll('_', ' ')}) on ${prettifyDateTime(item?.createdDate)}`,
                           userInitials: `${createdBy?.firstName.slice(0,1)} ${createdBy?.lastName.slice(0,1)}`,
                           message: item?.description,
                           id: item?.id

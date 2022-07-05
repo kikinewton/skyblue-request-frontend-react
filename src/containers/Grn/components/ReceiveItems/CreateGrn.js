@@ -126,13 +126,13 @@ const CreateGrn = (props) => {
         <Col md={24}>
           <Card title="Goods Received">
             <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
-              <TextArea 
+              {/* <TextArea 
                 name="comment" 
-                placeholder="Comment" 
+                placeholder="Comment"
                 value={formData.comment} 
                 onChange={(event)=> handleFormInputChange(event)} 
                 rows={4} style={{marginBottom: 20}} 
-              />
+              /> */}
               <Table 
                 columns={columns({...props})}
                 size="small"
