@@ -5,7 +5,7 @@ import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
 import MyDrawer from '../../../shared/MyDrawer';
 import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
-import { COMMENT_PROCESS_VALUES, FETCH_REQUEST_TYPES } from '../../../util/constants';
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, FETCH_REQUEST_TYPES } from '../../../util/constants';
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 import ConfirmModal from '../../../shared/ConfirmModal'
 
@@ -223,9 +223,9 @@ const ApprovePendingList = (props) => {
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
     })
-    props.fetchComments({
-      commentType: 'LPO_COMMENT'
-    })
+    // props.fetchComments({
+    //   commentType: 'LPO_COMMENT'
+    // })
     // eslint-disable-next-line
   }, [])
 
@@ -240,16 +240,16 @@ const ApprovePendingList = (props) => {
     // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
-  React.useEffect(() => {
-    if(!submitting_comment && submit_comment_success) {
-      setSelectedRequests([])
-      setConfirmDrawer(false);
-      props.fetchRequests({
-        requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
-      })
-    }
-    // eslint-disable-next-line
-  }, [submitting_comment, submit_comment_success])
+  // React.useEffect(() => {
+  //   if(!submitting_comment && submit_comment_success) {
+  //     setSelectedRequests([])
+  //     setConfirmDrawer(false);
+  //     props.fetchRequests({
+  //       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
+  //     })
+  //   }
+  //   // eslint-disable-next-line
+  // }, [submitting_comment, submit_comment_success])
 
   return (
     <>
@@ -307,6 +307,8 @@ const ApprovePendingList = (props) => {
                   setReviewDrawer(true)
                 },
                 onComment: row => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.LPO)
                   setSelectedRequest(row)
                   setCommentVisible(true)
                 },

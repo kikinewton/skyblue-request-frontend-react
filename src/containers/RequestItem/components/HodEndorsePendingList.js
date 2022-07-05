@@ -210,23 +210,23 @@ const HodEndorsePendingList = (props) => {
     // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
-  React.useEffect(() => {
-    if(!props.submitting_comment && props.submit_comment_success) {
-      setSelectedRequests([])
-      setCancelVisible(false)
-      setSelectedRequest(null)
-      props.fetchRequests({
-        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
-      })
-    }
-    // eslint-disable-next-line
-  }, [props.submitting_comment, props.submit_comment_success])
+  // React.useEffect(() => {
+  //   if(!props.submitting_comment && props.submit_comment_success) {
+  //     setSelectedRequests([])
+  //     setCancelVisible(false)
+  //     setSelectedRequest(null)
+  //     props.fetchRequests({
+  //       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+  //     })
+  //   }
+  //   // eslint-disable-next-line
+  // }, [props.submitting_comment, props.submit_comment_success])
 
   return (
     <>
       <Card
         size="small"
-        title="Requests pending Endorsement" extra={[
+        title="REQUESTS PENDING ENDORSEMENT" extra={[
         (
           <Row style={{marginBottom: 10}} key="1">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
