@@ -96,7 +96,7 @@ const RequestPendingQuotationReview = (props) => {
   }
 
   useEffect(() => {
-    props.fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
+    props.fetchLocalPurchaseOrderDrafts({underReview: true})
   }, [])
   
   return (

@@ -219,7 +219,7 @@ const CollapsibleLayout = (props) => {
             <Menu.SubMenu
               key="procurement"
               icon={<ReconciliationOutlined />} 
-              title="Procurement"
+              title="PROCUREMENT"
             >
               <Menu.Item key="assign-suppliers">
                 <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
@@ -227,7 +227,7 @@ const CollapsibleLayout = (props) => {
                     <NotificationBadge count={notifications.assignSupplierProcurement}>
                       ASSIGN SUPPLIER
                     </NotificationBadge>
-                  ) : (<span>Assign Supplier</span>)}
+                  ) : (<span>ASSIGN SUPPLIER</span>)}
                 </NavLink>
               </Menu.Item>
               <Menu.Item key={`procurement/rfqs`}>
