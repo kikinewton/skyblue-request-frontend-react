@@ -102,14 +102,14 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/hod-pending-approve">
                     {notifications.quotationPendingReviewHOD ? (
                       <NotificationBadge count={notifications.quotationPendingReviewHOD}>
-                        <span>REQUESTS AWAITING REVIEW</span>
+                        <span>QUOTATIONS AWAITING REVIEW</span>
                       </NotificationBadge>
-                    ) : (<span>REQUESTS AWAITING REVIEW</span>)}
+                    ) : (<span>QUOTATIONS AWAITING REVIEW</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-endorsed-requests">
                   <NavLink to="/app/request-items/all-endorsed">
-                    <span> Endorsed Request Items</span>
+                    <span> ENDORSED REQUESTS</span>
                   </NavLink>    
                 </Menu.Item>
               </>
@@ -120,14 +120,14 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/gm-pending-approve">
                     {notifications.requestPendingApprovalGM ? (
                       <NotificationBadge count={notifications.requestPendingApprovalGM}>
-                        <span>Requests Awaiting Approval</span>
+                        <span>REQUESTS AWAITING APPROVAL</span>
                       </NotificationBadge>
-                    ) : (<span>Requests Awaiting Approval</span>)}
+                    ) : (<span>REQUESTS AWAITING APPROVAL</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-approved-requests">
                   <NavLink to="/app/request-items/all-approved">
-                    <span> Approved Request Items</span>
+                    <span>APPROVED REQUEST ITEMS</span>
                   </NavLink>    
                 </Menu.Item>
               </>
@@ -135,7 +135,7 @@ const RequestItemIndex = (props) => {
             {[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN].includes(currentUser.role) && (
               <Menu.Item key="/app/request-items/all">
                 <NavLink to="/app/request-items/all">
-                  <span>Request Items</span>
+                  <span>REQUEST ITEMS</span>
                 </NavLink>
               </Menu.Item> 
             )}

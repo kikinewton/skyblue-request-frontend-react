@@ -318,7 +318,7 @@ const CreateLPO = (props) => {
                 ) : (
                   <div style={{height: 100, width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <h3>
-                      NO QUOTATION DOCUMENT
+                      NO QUOTATION DOCUMENT FOUND
                     </h3>
                   </div>
                 )}
@@ -384,7 +384,7 @@ const CreateLPO = (props) => {
                 ) : (
                   <div style={{height: 100, width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <h3>
-                      NO QUOTATION DOCUMENT
+                      NO QUOTATION DOCUMENT FOUND
                     </h3>
                   </div>
                 )}

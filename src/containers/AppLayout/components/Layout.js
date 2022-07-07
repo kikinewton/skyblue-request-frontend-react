@@ -237,7 +237,7 @@ const CollapsibleLayout = (props) => {
               </Menu.Item>
               <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
-                  REQUEST CATEGORIES
+                  ITEM CATEGORY
                 </NavLink>
               </Menu.Item>
             </Menu.SubMenu>
