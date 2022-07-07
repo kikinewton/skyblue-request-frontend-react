@@ -3,7 +3,7 @@ var jwt = require("jsonwebtoken");
 
 export function prettifyDateTime(date) {
   if(!date) return 'N/A'
-  return dateFormatter.default(date, 'mm dd yyyy')
+  return dateFormatter.default(date, 'mm-dd-yyyy')
 }
 
 export function generateHexColorString() {
