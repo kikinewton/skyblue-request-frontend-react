@@ -159,7 +159,7 @@ const NewPayment = (props) => {
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="PURCHASE NUMBER" name="purchaseNumber">
+                  <Form.Item rules={[{required: true, message: "Purchase number required"}]} label="PURCHASE NUMBER" name="purchaseNumber">
                     <Input />
                   </Form.Item>
                   <Form.Item label="BANK" name="bank">

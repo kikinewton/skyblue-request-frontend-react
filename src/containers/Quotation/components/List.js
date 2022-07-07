@@ -10,7 +10,7 @@ import MyDrawer from '../../../shared/MyDrawer'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
-import { NOT_LINKED_TO_LPO, LINKED_TO_LPO } from '../../../util/quotation-types'
+import { NOT_LINKED_TO_LPO, LINKED_TO_LPO, UNDER_REVIEW } from '../../../util/quotation-types'
 
 
 const columns = (props) => [
@@ -111,7 +111,7 @@ const ListQuotations = (props) => {
   useEffect(() => {
     resetQuotation()
     fetchQuotations({
-      requestType: LINKED_TO_LPO
+      requestType: UNDER_REVIEW
     })
     // eslint-disable-next-line
   }, [])

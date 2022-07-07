@@ -6,6 +6,7 @@ import MyPdfView from '../../../presentation/MyPdfView'
 import { generateResourceUrl } from '../../../services/api/document'
 import { BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
+import FilesView from '../../../shared/FilesView'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
 import { CURRENCY_CODE } from '../../../util/constants'
 import { CURRENCIES } from '../../../util/datas'
@@ -305,6 +306,26 @@ const CreateLPO = (props) => {
           <>
             <Row>
               <Col span={24}>
+                <h4>QUOTATION DOCUMENT</h4>
+              </Col>
+            </Row>
+            <Row style={{border: '1px solid #000'}}>
+              <Col span={24}>
+                {selectedQuotation?.quotation?.requestDocument ? (
+                  <FilesView 
+                    files={[selectedQuotation?.quotation?.requestDocument]}
+                  />
+                ) : (
+                  <div style={{height: 100, width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <h3>
+                      NO QUOTATION DOCUMENT
+                    </h3>
+                  </div>
+                )}
+              </Col>
+            </Row>
+            <Row style={{marginTop: 20}}>
+              <Col span={24}>
                 <Table
                   columns={requestColumns({})}
                   size="small"
@@ -349,6 +370,26 @@ const CreateLPO = (props) => {
         )}
         {current === 2 && (
           <React.Fragment>
+            <Row>
+              <Col span={24}>
+                <h4>QUOTATION DOCUMENT</h4>
+              </Col>
+            </Row>
+            <Row style={{border: '1px solid #000'}}>
+              <Col span={24}>
+                {selectedQuotation?.quotation?.requestDocument ? (
+                  <FilesView 
+                    files={[selectedQuotation?.quotation?.requestDocument]}
+                  />
+                ) : (
+                  <div style={{height: 100, width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <h3>
+                      NO QUOTATION DOCUMENT
+                    </h3>
+                  </div>
+                )}
+              </Col>
+            </Row>
             <Row style={{paddingTop: 20, paddingBottom: 20}}>
               <Col md={24}>
                 <Card>

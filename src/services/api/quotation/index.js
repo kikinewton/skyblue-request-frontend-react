@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED, LINKED_TO_LPO }
+import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED, LINKED_TO_LPO, UNDER_REVIEW }
  from '../../../util/quotation-types'
 import { serializeQueryParamsNotNull } from '../../../util/common-helper'
 
@@ -58,10 +58,8 @@ export function getQuotationBySupplier(query) {
 
 
 export function getAllQuotations(query) {
-  console.log('query api', query)
   const { requestType } = query
   const queryStr = serializeQueryParamsNotNull(query);
-  console.log('quey str', queryStr)
   switch(requestType) {
     case ALL_QUOTATIONS:
       return service({url: `/quotations${queryStr}`, method: "GET"})
@@ -77,6 +75,8 @@ export function getAllQuotations(query) {
       return service({url: `/quotations?linkedToLpo=${false}`, method: "GET"})
     case LINKED_TO_LPO:
       return service({url: `/quotations?linkedToLpo=${true}`, method: "GET"})
+    case UNDER_REVIEW:
+      return service({url: `/quotations?underReview=${true}`, method: "GET"})
     default:
       return getQuotations()
   }
