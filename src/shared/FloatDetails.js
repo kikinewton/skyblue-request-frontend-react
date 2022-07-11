@@ -75,21 +75,23 @@ const FloatDetails = ({
           </List>
         </Col>
         <Col span={12}>
-          <List.Item>
-            <List.Item.Meta avatar={<CommentOutlined/>} title="ENDORSEMENT STATUS" description={floatOrder?.endorsement} />
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta avatar={<CommentOutlined/>} title="APPROVAL STATUS" description={floatOrder?.approval} />
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="SUB TOTAL" description={formatCurrency(sumTotalAmount(floatOrder?.floats || []))} />
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="AMOUNT REQUESTED" description={formatCurrency(floatOrder?.amount)} />
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="FUND ALLOCATION STATUS" description={floatOrder?.fundsReceived ? "FUNDS ALLOCATED" : "FUNDS NOT ALLOCATED"} />
-          </List.Item>
+          <List>
+            <List.Item>
+              <List.Item.Meta avatar={<CommentOutlined/>} title="ENDORSEMENT STATUS" description={floatOrder?.endorsement} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<CommentOutlined/>} title="APPROVAL STATUS" description={floatOrder?.approval} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="SUB TOTAL" description={formatCurrency(sumTotalAmount(floatOrder?.floats || []))} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="AMOUNT REQUESTED" description={formatCurrency(floatOrder?.amount)} />
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<MoneyCollectOutlined/>} title="FUND ALLOCATION STATUS" description={floatOrder?.fundsReceived ? "FUNDS ALLOCATED" : "FUNDS NOT ALLOCATED"} />
+            </List.Item>
+          </List>
         </Col>
       </Row>
       {floatOrder?.floats.length > 0 && (
