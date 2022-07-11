@@ -214,7 +214,7 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
                       setSelectedSupplier(row)
                       setCurrent(1)
                     },
-                    selectedSupplier: selectedSupplier
+                    selectedSupplier: selectedSupplier 
                   })}
                   dataSource={filtered_quotations}
                   rowKey="supplierId"
