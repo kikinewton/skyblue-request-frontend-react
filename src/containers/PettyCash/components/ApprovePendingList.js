@@ -8,6 +8,46 @@ import { prettifyDateTime, formatCurrency } from '../../../util/common-helper';
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, CURRENCY_CODE } from '../../../util/constants';
 import { FETCH_PETTY_CASH_REQUEST_TYPES, UPDATE_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types';
 
+export const PETTY_CASH_COLUMNS = [
+  {
+    title: "REFERENCE",
+    dataIndex: "pettyCashRef",
+    key: "pettyCashRef"
+  },
+  {
+    title: "DESCRIPTION",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "PURPOSE",
+    dataIndex: "purpose",
+    key: "purpose"
+  },
+  {
+    title: "QUANTITY",
+    dataIndex: "quantity",
+    key: "quantity"
+  },
+  {
+    title: "UNIT PRICE",
+    dataIndex: "amount",
+    key: "amount",
+    render: (text) => `${CURRENCY_CODE} ${text}`
+  },
+  {
+    title: "REQUESTED ON",
+    dataIndex: "createdDate",
+    key: "createdDate",
+    render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "ENDORSEMENT",
+    dataIndex: "endorsement",
+    key: "endorsement"
+  }
+]
+
 const columns = props => [
   {
     title: "REFERENCE",

@@ -135,7 +135,6 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
       supplier: selectedSupplier,
       productDescription: selectedRequestItems.map(it => `${it.name} (GHS ${it.unitPrice})`).join(", "),
     }
-    console.log('payload', payload)
     createQuotation({
       documentId: document?.id,
       requestItemIds: selectedRequestItems.map(it => it.id), 
@@ -163,6 +162,7 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
 
   React.useEffect(() => {
     filterQuotations(supplierSearch)
+    // eslint-disable-next-line
   }, [supplierSearch])
 
   return (
@@ -285,7 +285,6 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
                 <Table 
                   columns={requestUpdatePriceColumns({
                     onPriceChange: (row, value) => {
-                      console.log("lets update price", row, value)
                       setSelectedRequestItems(selectedRequestItems.map(it => {
                         if(it.id === row?.id) {
                           return {...it, unitPrice: value}

@@ -1,8 +1,7 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
 import { Row, Col, Card, DatePicker, Button, message, Pagination, Table, Input } from 'antd'
-import moment from 'moment'
 import React, { useState } from 'react'
-import { generateAccountPaymentsReport, generateFloatAgeingAnalysisReport } from '../../../../services/api/report'
+import { generateFloatAgeingAnalysisReport } from '../../../../services/api/report'
 import MyPageHeader from "../../../../shared/MyPageHeader"
 import { prettifyDateTime } from '../../../../util/common-helper'
 const { RangePicker } = DatePicker
@@ -112,7 +111,7 @@ const FloatAgeingAnalysisReport = props => {
 
     try {
       const result = await generateFloatAgeingAnalysisReport(query)
-      const { currentPage, pageSize, total, totalPages } = result?.meta
+      const { currentPage, pageSize, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {

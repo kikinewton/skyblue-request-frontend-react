@@ -20,6 +20,7 @@ const ReportMenuItems = props => {
     } else if(pathname.includes("/app/reports/procurement/items")) {
       setCurrent("/procurement/items")
     }
+    // eslint-disable-next-line
   }, [current])
   
   return (

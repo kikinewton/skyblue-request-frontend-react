@@ -1,9 +1,8 @@
 import { Row, Col, Input, Button, List, Badge, Avatar, Spin } from 'antd';
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types'
-import { SendOutlined, SyncOutlined } from '@ant-design/icons';
+import { SendOutlined } from '@ant-design/icons';
 import { prettifyDateTime } from '../util/common-helper';
-import CommentText from './CommentText';
 
 const RequestComment = (props) => {
   const {

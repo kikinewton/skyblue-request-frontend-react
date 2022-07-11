@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import { Button, Card, Col, List, Row, Table, Tooltip } from 'antd'
-import { fetchLpoDraftsPendingApproval } from '../../../services/api/local-purchase-order'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { CheckOutlined, CommentOutlined, InfoOutlined } from '@ant-design/icons'
 import MyDrawer from '../../../shared/MyDrawer'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
 import GenericComment from '../../../shared/GenericComment'
-import { userHasAnyRole } from '../../../services/api/auth'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 
@@ -97,6 +94,7 @@ const RequestPendingQuotationReview = (props) => {
 
   useEffect(() => {
     props.fetchLocalPurchaseOrderDrafts({underReview: true})
+    // eslint-disable-next-line
   }, [])
   
   return (

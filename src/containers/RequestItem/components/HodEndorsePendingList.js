@@ -1,9 +1,8 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, Badge, List } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
 import React, {useState } from 'react';
 import ConfirmModal from '../../../shared/ConfirmModal';
 import MyDrawer from '../../../shared/MyDrawer';
-import RequestCancelModal from '../../../shared/RequestCancelModal';
 import RequestComment from '../../../shared/RequestComment';
 import { prettifyDateTime } from '../../../util/common-helper';
 import { COMMENT_TYPES, FETCH_REQUEST_TYPES, HOD_REQUEST_COLUMNS } from '../../../util/constants';
@@ -210,17 +209,17 @@ const HodEndorsePendingList = (props) => {
     // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
-  // React.useEffect(() => {
-  //   if(!props.submitting_comment && props.submit_comment_success) {
-  //     setSelectedRequests([])
-  //     setCancelVisible(false)
-  //     setSelectedRequest(null)
-  //     props.fetchRequests({
-  //       requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
-  //     })
-  //   }
-  //   // eslint-disable-next-line
-  // }, [props.submitting_comment, props.submit_comment_success])
+  React.useEffect(() => {
+    if(!props.submitting_comment && props.submit_comment_success) {
+      setSelectedRequests([])
+      setCancelVisible(false)
+      setSelectedRequest(null)
+      props.fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
+      })
+    }
+    // eslint-disable-next-line
+  }, [props.submitting_comment, props.submit_comment_success])
 
   return (
     <>
@@ -230,7 +229,7 @@ const HodEndorsePendingList = (props) => {
         (
           <Row style={{marginBottom: 10}} key="1">
           <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-            <Button
+            {/* <Button
               type="default"
               style={{marginRight: 5}} 
               disabled={selected_requests.length < 1}
@@ -241,7 +240,7 @@ const HodEndorsePendingList = (props) => {
             >
               <CloseOutlined />
               Cancel
-            </Button>
+            </Button> */}
             <Button 
               disabled={selected_requests.length < 1} 
               type="primary" style={{marginRight: 5}} 
@@ -404,7 +403,7 @@ const HodEndorsePendingList = (props) => {
               'description': newComment,
               'process': 'HOD_REQUEST_ENDORSEMENT'
             }
-            props.createComment('LPO_COMMENT', selectedRequest?.id, payload)
+            createComment('LPO_COMMENT', selectedRequest?.id, payload)
           }}
         />
       </MyDrawer>

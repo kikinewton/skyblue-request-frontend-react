@@ -2,7 +2,7 @@ import { Col, Table, Row, Drawer, Card } from 'antd';
 import React, {useState } from 'react';
 import MyPageHeader from '../../../shared/MyPageHeader';
 import { REQUEST_COLUMNS } from '../../../util/constants';
-import { UPDATE_REQUEST_TYPES, FETCH_REQUEST_TYPES } from '../../../util/request-types';
+import { FETCH_REQUEST_TYPES } from '../../../util/request-types';
 
 const columns = REQUEST_COLUMNS.concat([])
 
@@ -15,7 +15,6 @@ const EndorsedItemRequest = (props) => {
   } = props
 
   const [viewDrawer, setViewDrawer] = useState(false)
-  const [actionType, setActionType] = useState(UPDATE_REQUEST_TYPES.HOD_ENDORSE)
 
 
   React.useEffect(()=> {
@@ -51,7 +50,7 @@ const EndorsedItemRequest = (props) => {
       <Drawer
         forceRender
         visible={viewDrawer}
-        title={`${actionType} REQUESTS`}
+        title={`ENDORSE REQUESTS`}
         placement="right"
         width={900}
         maskClosable={false}

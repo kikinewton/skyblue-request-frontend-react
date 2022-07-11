@@ -62,3 +62,12 @@ export function allocateFundsToPettyCash(payload) {
     data: payload
   })
 }
+
+
+export function fetchPettyCashRequests(query) {
+  const queryStr = serializeQueryParams(query)
+  return service({
+    url: `/pettyCash${queryStr}`,
+    method: 'GET'
+  })
+}

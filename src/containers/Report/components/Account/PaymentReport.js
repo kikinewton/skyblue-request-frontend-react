@@ -1,6 +1,5 @@
 import { FileExcelOutlined, EyeOutlined } from '@ant-design/icons'
 import { Row, Col, Card, DatePicker, Button, message, Table, Pagination, Input } from 'antd'
-import moment from 'moment'
 import React, { useState } from 'react'
 import { generateAccountPaymentsReport } from '../../../../services/api/report'
 import MyPageHeader from "../../../../shared/MyPageHeader"
@@ -96,7 +95,7 @@ const PaymentReport = props => {
     try {
       const result = await generateAccountPaymentsReport(query)
 
-      const { currentPage, pageSize, total, totalPages } = result?.meta
+      const { currentPage, pageSize, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {

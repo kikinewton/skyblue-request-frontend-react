@@ -1,6 +1,5 @@
 import { FileExcelOutlined, EyeOutlined } from '@ant-design/icons'
 import { Row, Col, Card, DatePicker, Button, message, Table, Pagination, Input } from 'antd'
-import moment from 'moment'
 import React, { useState } from 'react'
 import { generateProcureItemsReportReport } from '../../../../services/api/report'
 import MyPageHeader from "../../../../shared/MyPageHeader"
@@ -123,6 +122,7 @@ const ProcuredItemsReport = props => {
     try {
       const result = await generateProcureItemsReportReport(query)
       const { currentPage, pageSize, total, totalPages } = result?.meta
+      console.log('total', total)
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {

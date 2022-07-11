@@ -1,10 +1,8 @@
 import { Row, Col, Input, Button, List, Badge, Avatar, Spin } from 'antd';
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types'
-import { SendOutlined, SyncOutlined } from '@ant-design/icons';
+import { SendOutlined } from '@ant-design/icons';
 import { prettifyDateTime } from '../util/common-helper';
-import CommentText from './CommentText';
-import PaymentDraftDetails from './PaymentDraftDetails';
 
 const GenericComment = (props) => {
   const {
@@ -28,7 +26,7 @@ const GenericComment = (props) => {
         </Col>
       </Row>
       <Badge.Ribbon text='COMMENTS' color='cyan'>
-        {props?.loading ? <Spin/> : (
+        {loading ? <Spin/> : (
           <Row>
             <Col span={24} style={{backgroundColor: '#f5fafa', padding: "30px 10px 10px 10px"}}>
               <Row>

@@ -14,6 +14,7 @@ import { EMPLOYEE_ROLE } from '../../util/datas';
 import ApprovePendingList from './components/ApprovePendingList';
 import { userHasAnyRole } from "../../services/api/auth"
 import NotificationBadge from '../../shared/NotificationBadge';
+import AllPettyCash from './components/AllPettyCash';
 
 
 export const REQUEST_ITEMS = [
@@ -44,6 +45,8 @@ const PettyCashIndex = (props) => {
       setKey("hod-pending-review")
     } else if(pathname.includes("/petty-cash/gm-approve-list")) {
       setKey("/petty-cash/gm-approve-list")
+    } else if(pathname.includes("/petty-cash/all")) {
+      setKey('/petty-cash-all')
     }
   }, [key])
 
@@ -54,7 +57,7 @@ const PettyCashIndex = (props) => {
       case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
         return <Redirect to="/app/petty-cash/gm-approve-list" />
       default:
-        return <Redirect to="/app" />
+        return <Redirect to="/app/petty-cash/all" />
     }
   }
 
@@ -91,7 +94,13 @@ const PettyCashIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
-            
+            {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_ADMIN]) && (
+              <Menu.Item key="/petty-cash-all">
+                <NavLink to="/app/petty-cash/all">
+                  <span>ALL PETTY CASH REQUESTS</span>
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu>
         )}
       >
@@ -112,6 +121,13 @@ const PettyCashIndex = (props) => {
             exact
             path={`${path}/hod-pending-review`}
             component={HodReviewPendingList} 
+            {...props}
+          />
+          <AuthenticatedRoute
+            exact
+            path={`${path}/all`}
+            component={AllPettyCash}
+            roles={[EMPLOYEE_ROLE.ROLE_ADMIN]} 
             {...props}
           />
           <AuthenticatedRoute path={`${path}/gm-approve-list`} component={ApprovePendingList} {...props} />

@@ -7,7 +7,6 @@ import { Creators as SupplierCreators } from '../../services/redux/supplier/acti
 import { Creators as CommentCreators } from "../../services/redux/comment/actions"
 import AppLayout from '../AppLayout';
 import AuthenticatedRoute from "../../presentation/AuthenticatedRoute"
-import HodReviewPendingList from './components/HodReviewPendingList';
 import HodEndorsePendingList from "./components/HodEndorsePendingList"
 import ApprovePendingList from './components/ApprovePendingList';
 import { Menu } from "antd"

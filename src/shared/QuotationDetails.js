@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types"
 import { REQUEST_COLUMNS } from '../util/constants';
-import { Row, Col, Table, List, Card } from 'antd';
+import { Row, Col, Table, List } from 'antd';
 import { prettifyDateTime } from '../util/common-helper';
 import FilesView from './FilesView';
 const columns = REQUEST_COLUMNS

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
 import { getAllItemRequests, getRequestItemStatus } from '../../../services/api/item-request'
-import MyPageHeader from '../../../shared/MyPageHeader'
 import { COMMENT_TYPES, REQUEST_COLUMNS } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import RequestItemStatus from './RequestItemStatus'
@@ -33,10 +32,10 @@ const RequestItemHistory = (props) => {
   //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   // }
 
-  const handleChange = () => {
-    //resetPagination()
-    fetchRequestItemHistory()
-  }
+  // const handleChange = () => {
+  //   //resetPagination()
+  //   fetchRequestItemHistory()
+  // }
 
 
   const fetchRequestItemStatus = async (id) => {

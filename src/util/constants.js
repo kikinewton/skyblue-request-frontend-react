@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone, WarningTwoTone } from "@ant-design/icons"
-import { Badge, Button, Table, Tag } from "antd"
+import { Badge, Table, Tag } from "antd"
 import { formatCurrency, prettifyDateTime } from "./common-helper"
 import { EMPLOYEE_ROLE } from "./datas"
 

@@ -240,16 +240,16 @@ const ApprovePendingList = (props) => {
     // eslint-disable-next-line
   }, [updating_request, update_request_success])
 
-  // React.useEffect(() => {
-  //   if(!submitting_comment && submit_comment_success) {
-  //     setSelectedRequests([])
-  //     setConfirmDrawer(false);
-  //     props.fetchRequests({
-  //       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
-  //     })
-  //   }
-  //   // eslint-disable-next-line
-  // }, [submitting_comment, submit_comment_success])
+  React.useEffect(() => {
+    if(!submitting_comment && submit_comment_success) {
+      setSelectedRequests([])
+      setConfirmDrawer(false);
+      props.fetchRequests({
+        requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
+      })
+    }
+    // eslint-disable-next-line
+  }, [submitting_comment, submit_comment_success])
 
   return (
     <>
@@ -463,7 +463,7 @@ const ApprovePendingList = (props) => {
               'description': newComment,
               'process': COMMENT_PROCESS_VALUES.REQUEST_APPROVAL_GM
             }
-            props.createComment('LPO_COMMENT', selectedRequest?.id, payload)
+            createComment('LPO_COMMENT', selectedRequest?.id, payload)
           }}
         />
       </MyDrawer>

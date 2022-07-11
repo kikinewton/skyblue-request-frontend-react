@@ -121,7 +121,7 @@ const PettyCashPaymentReport = props => {
 
     try {
       const result = await generateAccountPettyCashPaymentsReport(query)
-      const { currentPage, pageSize, total, totalPages } = result?.meta
+      const { currentPage, pageSize, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setData(result?.data)
     } catch (error) {

@@ -48,29 +48,6 @@ const columns = (props) => [
   },
 ]
 
-const requestItemColumns = props => [
-  {
-    title: "Reference",
-    dataIndex: "requestItemRef",
-    key: "requestItemRef"
-  },
-  {
-    title: "Descripton",
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity"
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status"
-  },
-]
-
 const ListAllQuotations = (props) => {
   const {
     fetchQuotations,

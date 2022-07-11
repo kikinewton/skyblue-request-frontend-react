@@ -27,7 +27,6 @@ const columns = [
 const GoodsReceivedNoteDetails = (props) => {
   const {
     grn,
-    invoice,
     invoiceDocument,
     requestItems
   } = props

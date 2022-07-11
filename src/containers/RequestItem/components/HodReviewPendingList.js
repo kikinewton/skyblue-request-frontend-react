@@ -1,11 +1,8 @@
 import React from 'react';
-import { Row, Col, Button, Table, Drawer, Card, List, Image, PageHeader } from "antd"
-import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Table, Drawer, Card, List, PageHeader } from "antd"
+import { CheckOutlined } from '@ant-design/icons';
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
-import { BASE_URL } from '../../../services/api/urls';
-import MyPdfView from "../../../presentation/MyPdfView"
-import { generateResourceUrl } from "../../../services/api/document"
 import FilesView from "../../../shared/FilesView"
 import { REQUEST_COLUMNS } from '../../../util/constants';
 
@@ -31,7 +28,6 @@ const HodReviewPendingList = (props) => {
   } = props
   const [drawer, setDrawer] = React.useState(false)
   const [selectedRequest, setSelectedRequest] = React.useState(null)
-  const [imagePreview, setImagePreview] = React.useState(false)
 
   // const submit = () => {
   //   updateRequest({

@@ -2,15 +2,12 @@ import { CommentOutlined, EyeFilled } from '@ant-design/icons'
 import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import MyPdfView from '../../../presentation/MyPdfView'
-import { generateResourceUrl } from '../../../services/api/document'
-import { BASE_URL } from '../../../services/api/urls'
 import GenericComment from '../../../shared/GenericComment'
 import MyDrawer from '../../../shared/MyDrawer'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
-import { NOT_LINKED_TO_LPO, LINKED_TO_LPO, UNDER_REVIEW } from '../../../util/quotation-types'
+import { UNDER_REVIEW } from '../../../util/quotation-types'
 
 
 const columns = (props) => [
@@ -60,28 +57,6 @@ const columns = (props) => [
   },
 ]
 
-const requestItemColumns = props => [
-  {
-    title: "Reference",
-    dataIndex: "requestItemRef",
-    key: "requestItemRef"
-  },
-  {
-    title: "Descripton",
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity"
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status"
-  },
-]
 
 const ListQuotations = (props) => {
   const {
