@@ -26,7 +26,8 @@ export const PAYMENT_COLUMNS = [
   {
     title: "PURCHASE NUMBER",
     dataIndex: "purchaseNumber",
-    key: "purchaseNumber"
+    key: "purchaseNumber",
+    render: text => text ? text : 'N/A'
   },
   {
     title: "SUPPLIER",
@@ -70,7 +71,7 @@ const PaymentModule = (props) => {
       case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
         return <Redirect to="/app/payments/goods-receive-notes"/>
       case EMPLOYEE_ROLE.ROLE_ADMIN:
-        return <Redirect to="/app/payments/all"/>
+        return <Redirect to="/app/payments/all-drafts"/>
       default:
         return <Redirect to="/app/payments/pending-approval" />
     }

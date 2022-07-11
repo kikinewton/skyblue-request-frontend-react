@@ -143,7 +143,6 @@ const selectedRequestsColumnsForReject = props => [
 ]
 
 const HodEndorsePendingList = (props) => {
-  console.log('my props', props)
   const {
     selected_petty_cash_requests,
     setSelectedPettyCashRequests,

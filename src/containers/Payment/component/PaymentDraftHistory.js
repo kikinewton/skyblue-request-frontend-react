@@ -1,9 +1,10 @@
-import { CommentOutlined, EyeOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, Input, Button, Form } from 'antd'
+import { CommentOutlined, ExceptionOutlined, EyeOutlined } from '@ant-design/icons'
+import { Table , Card, Row, Col, Drawer, Input, Button, Form, Pagination } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { userHasAnyRole } from '../../../services/api/auth'
+import { downloadComments } from '../../../services/api/comment'
 import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
 import MyDrawer from '../../../shared/MyDrawer'
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -76,15 +77,19 @@ const PaymentDraftHistory = (props) => {
   }
 
   
-  const fetchPaymentHistory = async () => {
+  const fetchPaymentHistory = async (query) => {
     setLoading(true)
-    const query = {}
+    const queryObj = {
+      all: true,
+      pageNo: query?.currentPage,
+      pageSize: query?.pageSize
+    }
     try {
-      const result = await fetchPaymentDraftsHistory({all: true})
-      // if(result?.meta) {
-      //   const { currentPage, pageSize, total, totalPages } = result?.meta
-      //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-      // }
+      const result = await fetchPaymentDraftsHistory(queryObj)
+      if(result?.meta) {
+        const { currentPage, pageSize, total, totalPages } = result?.meta
+        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      }
       setRequests(result?.data)
       setFilteredData(result?.data)
     } catch (error) {
@@ -94,20 +99,20 @@ const PaymentDraftHistory = (props) => {
     }
   }
 
-  // const handlePageChange = async(page, pageSize) => {
-  //   setLoading(true)
-  //   const query = {}
-  //   try {
-  //     const result = await fetchPaymentDraftsHistory(query)
-  //     const { currentPage, pageSize, total, totalPages } = result?.meta
-  //     setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
-  //     setRequests(result?.data)
-  //   } catch (error) {
+  const handlePageChange = async(page, pageSize) => {
+    setLoading(true)
+    const query = {...meta, pageNo: page - 1, pageSize: pageSize}
+    try {
+      const result = await fetchPaymentDraftsHistory(query)
+      const { currentPage, pageSize, total, totalPages } = result?.meta
+      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
+      setRequests(result?.data)
+    } catch (error) {
       
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const onFilter = (value) => {
     setFilteredData(requests.filter(request => {
@@ -131,7 +136,7 @@ const PaymentDraftHistory = (props) => {
   }
 
   useEffect(() => {
-    fetchPaymentHistory()
+    fetchPaymentHistory({...meta})
   }, [])
 
   return (
@@ -166,6 +171,8 @@ const PaymentDraftHistory = (props) => {
                 loading={loading}
                 columns={columns({
                   onView: row =>  {
+                    props.resetComment()
+                    props.fetchComments(row.id, COMMENT_TYPES.PAYMENT)
                     setSelectedPayment(row)
                     setVisible(true)
                   },
@@ -186,7 +193,7 @@ const PaymentDraftHistory = (props) => {
               />
             </Col>
           </Row>
-          {/* <Row>
+          <Row>
             <Col span={24}>
               <Pagination
                 showSizeChanger={false}
@@ -199,7 +206,7 @@ const PaymentDraftHistory = (props) => {
                 size='small'
               />
             </Col>
-          </Row> */}
+          </Row>
           <Drawer
             title="PAYMENT DRAFT DETAILS"
             visible={visible}
@@ -210,6 +217,19 @@ const PaymentDraftHistory = (props) => {
               setVisible(false)
             }}
           >
+            <Row>
+              <Col span={24} style={{textAlign: 'right'}}>
+                <Button
+                  type='default'
+                  disabled={props.comments.length < 1 || !userHasAnyRole(current_user?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
+                  onClick={() => {
+                    downloadComments(selectedPayment?.id, COMMENT_TYPES.PAYMENT)
+                  }}
+                >
+                  <ExceptionOutlined/> EXPORT COMMENTS
+                </Button>
+              </Col>
+            </Row>
             <Row>
               <Col span={24}>
                 <PaymentDraftDetails 

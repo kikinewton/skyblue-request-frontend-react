@@ -30,7 +30,7 @@ const columns = (props) => PETTY_CASH_COLUMNS.concat([
 ])
 
 const AllPettyCash = (props) => {
-  const [pagination, setPagination] = useState({currentPage: 0, total: 0, pageSize: 2})
+  const [pagination, setPagination] = useState({currentPage: 0, total: 0, pageSize: 20})
   const [PettyCash, setPettyCash] = useState([])
   const [loading, setLoading] = useState(false)
   const [selectedPettyCash, setSelectedPettyCash] = useState(null)
