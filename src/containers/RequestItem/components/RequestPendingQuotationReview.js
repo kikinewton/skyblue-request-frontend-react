@@ -101,7 +101,7 @@ const RequestPendingQuotationReview = (props) => {
   
   return (
     <>
-      <MyPageHeader 
+      <MyPageHeader
         title="QUOTATIONS AWAITING REVIEW"
       />
       <Card>

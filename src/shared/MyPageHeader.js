@@ -11,7 +11,7 @@ const MyPageHeader = (props) => {
 
   return (
     <PageHeader 
-      style={{padding: 0, color: "#999594"}}
+      style={{padding: 0, color: "#999594", textTransform: 'uppercase'}}
       title={title}
       extra={extra}
       onBack={onBack}

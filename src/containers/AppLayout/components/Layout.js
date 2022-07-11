@@ -179,7 +179,8 @@ const CollapsibleLayout = (props) => {
               </Menu.Item> 
             </>
           )}
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR]) && (
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, 
+              EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_ADMIN]) && (
             <>
               <Menu.Item key="float">
                 <NavLink to="/app/float">
@@ -318,7 +319,7 @@ const CollapsibleLayout = (props) => {
             </Col>
             <Col span={14}>
               {props.title && (
-                <span style={{fontSize: 20, fontWeight: "lighter", color: "#6e7273"}}>{props.title}</span>
+                <span style={{fontSize: 20, fontWeight: "lighter", color: "#6e7273", textTransform: 'uppercase'}}>{props.title}</span>
               )}
             </Col>
             <Col span={8}>

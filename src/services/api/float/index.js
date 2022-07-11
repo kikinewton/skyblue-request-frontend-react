@@ -11,7 +11,6 @@ export function saveFloatRequest(payload){
 }
 
 export function updateFloatRequest(payload){
-  
   const { updateType } = payload
   console.log('update float api', updateType, 'compare', UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL)
   switch(updateType) {

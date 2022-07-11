@@ -187,7 +187,7 @@ const FloatList = (props) => {
   return (
     <>
       <AppLayout
-        title="My Float Requests"
+        title="MY FLOAT REQUESTS"
         subNav={<MyRequestMenu />}
       >
         <MyPageHeader 
@@ -204,7 +204,7 @@ const FloatList = (props) => {
           )}
           extra={[
             <Button key="create-new-float-btn" size="small" type="primary" onClick={() => history.push("/app/my-requests/float-requests/add-new")}>
-              Create New Float Request
+              ADD NEW FLOAT
             </Button>
           ]}
         />

@@ -1,4 +1,5 @@
 import service from '../apiRequest'
+import { BASE_URL } from '../urls'
 
 export function fetchComments(query) {
   return service({
@@ -33,4 +34,14 @@ export function fetchRequestComment(itemId, commentType) {
   return service({
     url: `/comments/${itemId}/unread?commentType=${commentType}`
   })
+}
+
+export function downloadComments(itemId, commentType) {
+  const url = `${BASE_URL}/comments/${itemId}/export?commentType=${commentType}`
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute("target", "_blank")
+  document.body.appendChild(link)
+  link.click()
+  link.parentNode.removeChild(link)
 }

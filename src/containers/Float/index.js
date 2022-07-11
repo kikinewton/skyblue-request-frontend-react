@@ -15,6 +15,7 @@ import { userHasAnyRole } from "../../services/api/auth";
 import GmRetireFloat from './components/GmRetireFloat';
 import AuditRetireFloat from './components/AuditRetireFloat';
 import NotificationBadge from '../../shared/NotificationBadge';
+import AllFloats from './components/AllFloats';
 
 export const REQUEST_ITEMS = [
   {id: 1, name: "Coca cola", reason: "REPLACE", purpose: "refreshment", createdAt: "2021-12-18 14:00:50", status: "PENDING", quantity: 10},
@@ -46,6 +47,8 @@ const FloatIndex = (props) => {
       setKey("/float/gm-pending-retire")
     } else if(url.indexOf("/audit-pending-retire") !== -1) {
       setKey("/audit-pending-retire")
+    } else if(url.indexOf('/float/all') !== -1) {
+      setKey('/float-all')
     }
   }, [key])
 
@@ -99,9 +102,18 @@ const FloatIndex = (props) => {
                   <NavLink to="/app/float/audit-pending-retire">
                     {notifications?.retireFloatPendingAuditorCheck ? (
                       <NotificationBadge count={notifications?.retireFloatPendingAuditorCheck}>
-                        <span>Approve Float Retirement</span>
+                        <span>APPROVE FLOAT RETIREMENT</span>
                       </NotificationBadge>
-                    ) : (<span>Approve Float Retirement</span>)}
+                    ) : (<span>APPROVE FLOAT RETIREMENT</span>)}
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_ADMIN]) && (
+              <>
+                <Menu.Item key="/float-all">
+                  <NavLink to="/app/float/all">
+                    <span>ALL FLOATS</span>
                   </NavLink>
                 </Menu.Item>
               </>
@@ -118,6 +130,7 @@ const FloatIndex = (props) => {
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && <Redirect to="/app/float/hod-pending-endorse" />}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && <Redirect to="/app/float/approve" />}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_AUDITOR && <Redirect to="/app/float/audit-pending-retire" />}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_ADMIN && <Redirect to="/app/float/all" />}
           </AuthenticatedRoute>
           <AuthenticatedRoute
             path={`${path}/hod-pending-endorse`}
@@ -142,6 +155,12 @@ const FloatIndex = (props) => {
             component={ApprovePendingList}
             {...props}
             roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
+          />
+          <AuthenticatedRoute 
+            path={`${path}/all`}
+            component={AllFloats}
+            {...props}
+            roles={[EMPLOYEE_ROLE.ROLE_ADMIN]}
           />
         </Switch>
       </AppLayout>

@@ -1,9 +1,12 @@
 import { EyeOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input } from 'antd'
+import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { userHasAnyRole } from '../../../services/api/auth'
+import { downloadComments } from '../../../services/api/comment'
 import { getAllItemRequests, getRequestItemStatus } from '../../../services/api/item-request'
 import MyPageHeader from '../../../shared/MyPageHeader'
-import { REQUEST_COLUMNS } from '../../../util/constants'
+import { COMMENT_TYPES, REQUEST_COLUMNS } from '../../../util/constants'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
 import RequestItemStatus from './RequestItemStatus'
 
 const columns = (props) => REQUEST_COLUMNS.concat([
@@ -24,6 +27,7 @@ const RequestItemHistory = (props) => {
   const [loadingStatus, setLoadingStatus] = useState(false)
   const [visible, setVisible] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [downloading, setDownloading] = useState(false)
 
   // const resetPagination = () => {
   //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
@@ -68,6 +72,7 @@ const RequestItemHistory = (props) => {
       setLoading(false)
     }
   }
+ 
   
   // const fetchRequestItemHistory = async () => {
   //   setLoading(true)
@@ -127,36 +132,43 @@ const RequestItemHistory = (props) => {
 
   return (
     <>
-      <MyPageHeader 
+      {/* <MyPageHeader 
         title={(
           <>
             <span style={{marginRight: 5}}>Recent Request Items</span>
           </>
         )}
-      />
-      <Card>
-        <Row>
-          <Col span={12} offset={12}>
-            <Input 
-              type="search" 
-              value={searchTerm} 
-              onChange={value => {
-                setSearchTerm(value.target.value)
-                onFilterBySearch(value.target.value)
-              }}
-              placeholder="Search"
-              allowClear
-            />
-          </Col>
-        </Row>
-      </Card>
-      <Card>
+      /> */}
+      <Row>
+        <Col xs={24} sm={24} md={8}>
+          <Breadcrumb>
+            <Breadcrumb.Item>ALL LPO REQUESTS</Breadcrumb.Item>
+          </Breadcrumb>
+        </Col>
+        <Col xs={24} sm={24} md={16} style={{textAlign: 'right'}}>
+          <Input
+            type="search" 
+            value={searchTerm} 
+            onChange={value => {
+              setSearchTerm(value.target.value)
+              onFilterBySearch(value.target.value)
+            }}
+            placeholder="Search"
+            allowClear
+            style={{width: 400}}
+          />
+        </Col>
+      </Row>
+      <Card style={{marginTop: 10}}>
         <Row>
           <Col span={24}>
             <Table
+              scroll={{x: true}}
               loading={loading}
               columns={columns({
                 onView: row => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.LPO)
                   setSelectedRequest(row)
                   setRequestStatus(null)
                   setVisible(true)
@@ -187,18 +199,27 @@ const RequestItemHistory = (props) => {
           </Col>
         </Row> */}
         <Drawer
-          title="Request Item Status"
+          title="REQUEST STATUS"
           visible={visible}
-          width={800}
+          width={900}
           placement="right"
           onClose={() => {
             setSelectedRequest(null)
             setVisible(false)
             setRequestStatus(null)
           }}
+          
         >
           {loadingStatus ? <Spin /> : (
-            <RequestItemStatus 
+            <RequestItemStatus
+              comments={props.comments}
+              showCommentDownload={userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
+              onCommentDownload={() => {
+                setDownloading(true)
+                downloadComments(selectedRequest?.id, COMMENT_TYPES.LPO)
+                setDownloading(false)
+              }}
+              downloading={downloading}
               requestItemStatus={requestStatus}
               requestItem={selectedRequest}
             />

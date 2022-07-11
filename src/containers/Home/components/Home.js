@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Table, Row, Col, List } from 'antd'
+import { Card, Table, Row, Col, List, Breadcrumb } from 'antd'
 import { REQUEST_COLUMNS } from '../../../util/constants';
 import { NavLink } from "react-router-dom"
 import { userHasAnyRole } from '../../../services/api/auth';
@@ -21,7 +21,11 @@ const Home = (props) => {
   
   return (
     <>
-      <h1>HOME</h1>
+      <Breadcrumb>
+        <Breadcrumb.Item >
+          <NavLink to="/app">HOME</NavLink>
+        </Breadcrumb.Item>
+      </Breadcrumb>
         {userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR]) ? (
           <>
             <Card title="My Recent Requests">

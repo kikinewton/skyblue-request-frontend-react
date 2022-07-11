@@ -121,10 +121,10 @@ const AddNewRequest = (props) => {
   return (
     <>
       <AppLayout
-        title="My Float Requests"
+        title="MY FLOAT REQUESTS"
       >
         <MyPageHeader 
-          title="Create New Float Entries"
+          title="CREATE NEW FLOAT ENTRIES"
           onBack={()=> history.goBack()}
         />
         <Row style={{padding: "10px 0 10px 0"}}>

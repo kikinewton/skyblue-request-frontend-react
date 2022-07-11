@@ -9,6 +9,9 @@ import { SyncOutlined } from '@ant-design/icons'
 import PaymentsDueInWeek from './PaymentsDueInWeek'
 import PaymentsMadeToday from './PaymentsMadeToday'
 import GrnForToday from './GrnForToday'
+import AuthMiddleware from '../../../middleware/auth-middleware'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
+import { FUNCTIONAL_ROLES } from '../../../util/constants'
 
 const REPORT_TYPES = {
   REQUESTS_FOR_CURRENT_MONTH: "REQUESTS_FOR_CURRENT_MONTH",
@@ -33,6 +36,7 @@ const Dashboard = (props) => {
 
   return (
     <React.Fragment>
+      <AuthMiddleware roles={FUNCTIONAL_ROLES.dashboardRoles}>
       <MyPageHeader 
         title={(
           <>
@@ -191,6 +195,7 @@ const Dashboard = (props) => {
           </>
         )}
       </Drawer>
+      </AuthMiddleware>
     </React.Fragment>
   )
 }

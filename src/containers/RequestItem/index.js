@@ -63,8 +63,7 @@ const RequestItemIndex = (props) => {
 
   const DefaultPage = () => {
     console.log('currentUserRole', currentUser.role, "ROLE ID", EMPLOYEE_ROLE.ROLE_HOD)
-    const userRole = currentUser.role
-    switch(userRole) {
+    switch(currentUser.role) {
       case EMPLOYEE_ROLE.ROLE_HOD:
         return <Redirect to="/app/request-items/hod-pending-endorse" />
       case EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER:
@@ -85,7 +84,6 @@ const RequestItemIndex = (props) => {
             selectedKeys={[key]}
             mode="horizontal"
             onClick={handleNavClick}
-            forceSubMenuRender
           >
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
               <>
@@ -93,18 +91,18 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/hod-pending-endorse">
                     {notifications.requestPendingEndorsementHOD ? (
                       <NotificationBadge count={notifications.requestPendingEndorsementHOD}>
-                        <span>Requests Awaiting Endorsement</span>
+                        <span>ENDORSE REQUESTS</span>
                       </NotificationBadge>
-                    ) : (<span>Requests Awaiting Endorsement</span>)}
+                    ) : (<span>ENDORSE REQUESTS</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="hod-pending-approve">
                   <NavLink to="/app/request-items/hod-pending-approve">
                     {notifications.quotationPendingReviewHOD ? (
                       <NotificationBadge count={notifications.quotationPendingReviewHOD}>
-                        <span>QUOTATIONS AWAITING REVIEW</span>
+                        <span>REVIEW QUOTATIONS</span>
                       </NotificationBadge>
-                    ) : (<span>QUOTATIONS AWAITING REVIEW</span>)}
+                    ) : (<span>REVIEW QUOTATIONS</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-endorsed-requests">
@@ -120,14 +118,14 @@ const RequestItemIndex = (props) => {
                   <NavLink to="/app/request-items/gm-pending-approve">
                     {notifications.requestPendingApprovalGM ? (
                       <NotificationBadge count={notifications.requestPendingApprovalGM}>
-                        <span>REQUESTS AWAITING APPROVAL</span>
+                        <span>APPROVE REQUESTS</span>
                       </NotificationBadge>
-                    ) : (<span>REQUESTS AWAITING APPROVAL</span>)}
+                    ) : (<span>APPROVE REQUESTS</span>)}
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="all-approved-requests">
                   <NavLink to="/app/request-items/all-approved">
-                    <span>APPROVED REQUEST ITEMS</span>
+                    <span>APPROVED REQUEST LIST</span>
                   </NavLink>    
                 </Menu.Item>
               </>
