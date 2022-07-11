@@ -66,10 +66,11 @@ const PaymentModule = (props) => {
   const { path } = useRouteMatch()
 
   const DefaultPage = () => {
-    console.log('hey')
     switch(current_user.role) {
       case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
         return <Redirect to="/app/payments/goods-receive-notes"/>
+      case EMPLOYEE_ROLE.ROLE_ADMIN:
+        return <Redirect to="/app/payments/all"/>
       default:
         return <Redirect to="/app/payments/pending-approval" />
     }

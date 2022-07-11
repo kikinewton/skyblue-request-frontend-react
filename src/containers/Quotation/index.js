@@ -4,7 +4,7 @@ import { Creators as QuotationCreators } from '../../services/redux/quotation/ac
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import {  Creators as RequestCategoryCreator } from '../../services/redux/request-category/actions'
 import { connect } from 'react-redux'
-import { Switch, useRouteMatch, NavLink, useLocation } from 'react-router-dom'
+import { Switch, useRouteMatch, NavLink, useLocation, Redirect } from 'react-router-dom'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import AppLayout from '../AppLayout'
 import ListQuotations from './components/List'
@@ -14,6 +14,8 @@ import { FileDoneOutlined, SolutionOutlined } from '@ant-design/icons'
 import ListAllQuotations from './components/AllQuotations'
 import AddQuotationFOrUnregisteredSupplier from './components/AddQuotationForUnregisteredSupplier'
 import { Creators as CommentCreators } from '../../services/redux/comment/actions'
+import { userHasAnyRole } from '../../services/api/auth'
+import { EMPLOYEE_ROLE } from '../../util/datas'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -43,6 +45,12 @@ const Quotation = (props) => {
     // eslint-disable-next-line
   }, [key])
 
+  // const DefaultPage = () => {
+  //   if(props.currentUser?.role === EMPLOYEE_ROLE.ROLE_ADMIN) {
+  //     return <Redirect to="/app/quotations/all" />
+  //   }
+  // }
+
   return (
     <React.Fragment>
       <AppLayout 
@@ -54,34 +62,49 @@ const Quotation = (props) => {
             onClick={(value) => setKey(value)}
             mode="horizontal"
           >
-            <Menu.Item key="add">
-              <NavLink to="/app/quotations/add-new">
-                <FileDoneOutlined />
-                <span>Create Quotation</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="list">
-              <NavLink to="/app/quotations">
-                <SolutionOutlined />
-                <span>Supplier Quotes</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="list-all">
-              <NavLink to="/app/quotations/all">
-                <SolutionOutlined />
-                <span>All Quotations</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="add-new-to-unregistered">
-              <NavLink to="/app/quotations/add-new-to-unregistered">
-                <SolutionOutlined />
-                <span>Create Quotation for Unregistered Supplier</span>
-              </NavLink>
-            </Menu.Item>
+            {userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]) && (
+              <>
+                <Menu.Item key="add">
+                  <NavLink to="/app/quotations/add-new">
+                    <FileDoneOutlined />
+                    <span>Create Quotation</span>
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="list">
+                  <NavLink to="/app/quotations">
+                    <SolutionOutlined />
+                    <span>Supplier Quotes</span>
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="add-new-to-unregistered">
+                  <NavLink to="/app/quotations/add-new-to-unregistered">
+                    <SolutionOutlined />
+                    <span>Create Quotation for Unregistered Supplier</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+            {userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_ADMIN]) && (
+              <>
+                <Menu.Item key="list-all">
+                  <NavLink to="/app/quotations/all">
+                    <SolutionOutlined />
+                    <span>All Quotations</span>
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
           </Menu>
         )}
       >
         <Switch>
+          {/* <AuthenticatedRoute
+            exact
+            path={`${path}`}
+            {...props}
+          >
+            {DefaultPage}
+          </AuthenticatedRoute> */}
           <AuthenticatedRoute path={`${path}/add-new-to-unregistered`} component={AddQuotationFOrUnregisteredSupplier} {...props} />
           <AuthenticatedRoute path={`${path}/add-new`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/all`} component={ListAllQuotations} {...props} />

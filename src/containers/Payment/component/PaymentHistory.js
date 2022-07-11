@@ -64,7 +64,7 @@ const PaymentHistory = (props) => {
         purchaseNumber: paymentRef ? paymentRef : null,
     }
     try {
-      const result = await fetchPayments({})
+      const result = await fetchPayments(query)
       console.log('result', result.data)
       if(result?.meta) {
         const { currentPage, pageSize, total, totalPages } = result?.meta
