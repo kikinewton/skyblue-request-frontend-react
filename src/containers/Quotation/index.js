@@ -22,8 +22,7 @@ const Quotation = (props) => {
   const [key, setKey] = useState("list")
   const location = useLocation()
 
-  React.useEffect(() => {
-    console.log('my path name', location.pathname)
+  const setActiveLink = () => {
     const { pathname } = location
     switch(pathname) {
       case "/app/quotations":
@@ -42,14 +41,21 @@ const Quotation = (props) => {
         setKey("list")
         break
     }
+  }
+
+  React.useEffect(() => {
+    setActiveLink()
     // eslint-disable-next-line
   }, [key])
 
-  // const DefaultPage = () => {
-  //   if(props.currentUser?.role === EMPLOYEE_ROLE.ROLE_ADMIN) {
-  //     return <Redirect to="/app/quotations/all" />
-  //   }
-  // }
+  const DefaultPage = () => {
+    setActiveLink()
+    if(props.currentUser?.role === EMPLOYEE_ROLE.ROLE_ADMIN) {
+      setActiveLink()
+      return <Redirect to="/app/quotations/all" />
+    }
+  }
+  
 
   return (
     <React.Fragment>
@@ -89,7 +95,7 @@ const Quotation = (props) => {
                 <Menu.Item key="list-all">
                   <NavLink to="/app/quotations/all">
                     <SolutionOutlined />
-                    <span>All Quotations</span>
+                    <span>All Supplier Quotations</span>
                   </NavLink>
                 </Menu.Item>
               </>
@@ -98,13 +104,13 @@ const Quotation = (props) => {
         )}
       >
         <Switch>
-          {/* <AuthenticatedRoute
+          <AuthenticatedRoute
             exact
             path={`${path}`}
             {...props}
           >
             {DefaultPage}
-          </AuthenticatedRoute> */}
+          </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/add-new-to-unregistered`} component={AddQuotationFOrUnregisteredSupplier} {...props} />
           <AuthenticatedRoute path={`${path}/add-new`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/all`} component={ListAllQuotations} {...props} />

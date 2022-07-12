@@ -29,8 +29,6 @@ const FloatIndex = (props) => {
   } = props
   const [key, setKey] = React.useState([])
   const { path } = useRouteMatch()
-  console.log('my request path', path)
-  console.log('path', path)
 
   const handleNavClick = (value) => {
     setKey(value)
@@ -38,7 +36,6 @@ const FloatIndex = (props) => {
 
   React.useEffect(() => {
     const url = window.location.href
-    console.log("url", url)
     if(url.indexOf("/float/hod-pending-endorse") !== -1) {
       setKey("hod-pending-endorse")
     } else if(url.indexOf("/float/approve") !== -1) {

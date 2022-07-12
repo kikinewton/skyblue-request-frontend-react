@@ -1,7 +1,7 @@
 import service from '../apiRequest'
 import { ALL_QUOTATIONS, QUOTATIONS_BY_SUPPLIER, QUOTATIONS_WITHOUT_DOCUMENT, QUOTATIONS_WITHOUT_DOCUMENT_TEST, NOT_LINKED_TO_LPO, QUOTATIONS_WITHOUT_DOCUMENT_TEST_FOR_UNREGISTERED, LINKED_TO_LPO, UNDER_REVIEW }
  from '../../../util/quotation-types'
-import { serializeQueryParamsNotNull } from '../../../util/common-helper'
+import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 
 
 const path = "/quotations"
@@ -114,5 +114,14 @@ export function createQuotation(payload) {
     url: `/quotations`,
     method: 'POST',
     data: payload
+  })
+}
+
+
+export function fetchQuotations(query) {
+  const queryStr = serializeQueryParams(query);
+  return service({
+    url: `/quotations${queryStr}`,
+    method: 'GET'
   })
 }
