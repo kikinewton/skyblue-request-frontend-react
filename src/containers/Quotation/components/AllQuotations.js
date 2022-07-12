@@ -1,4 +1,4 @@
-import { EyeFilled, EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
+import { FileExcelOutlined, InfoOutlined } from '@ant-design/icons'
 import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
@@ -9,7 +9,6 @@ import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_TYPES } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
-import { ALL_QUOTATIONS } from '../../../util/quotation-types'
 
 const columns = (props) => [
   {
@@ -45,7 +44,7 @@ const columns = (props) => [
       <Row>
         <Col md={24}>
           <Button size="small" shape="circle" onClick={() => props.onView(row)}>
-            <EyeOutlined />
+            <InfoOutlined />
           </Button>
         </Col>
       </Row>
@@ -138,7 +137,7 @@ const ListAllQuotations = (props) => {
         visible={quotationViewVisible}
         title="Quotation Detail"
         placement="right"
-        width={800}
+        width={900}
         maskClosable={false}
         onClose={() => {
           setSelectedQuotation(null)
@@ -159,7 +158,7 @@ const ListAllQuotations = (props) => {
             </Button>
           </Col>
         </Row>
-        <QuotationDetails quotation={selectedQuotation} />
+        <QuotationDetails showItems={true} quotation={selectedQuotation} />
       </Drawer>
     </>
   )
