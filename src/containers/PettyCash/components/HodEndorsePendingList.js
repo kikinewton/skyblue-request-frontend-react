@@ -1,5 +1,5 @@
-import { CheckOutlined, CloseOutlined, CommentOutlined, EyeFilled, SyncOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List } from 'antd';
+import { CheckOutlined, CloseOutlined, CommentOutlined, EyeFilled, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, List, Tooltip } from 'antd';
 import React, {useEffect, useState } from 'react';
 import GenericComment from '../../../shared/GenericComment';
 import MyDrawer from '../../../shared/MyDrawer';
@@ -52,7 +52,14 @@ const columns = props => [
     dataIndex: "actions",
     key: "actions",
     align: "right",
-    render: (text, row) => (<EyeFilled onClick={() => props.viewDetails(row)} />)
+    render: (text, row) => (<div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+      <Tooltip title="View" >
+        <EyeOutlined onClick={() => props.viewDetails(row)} />
+      </Tooltip>
+      <Tooltip title="Comment" style={{marginRight: 5}}>
+        <CommentOutlined onClick={() => props.onComment(row)} />
+      </Tooltip>
+    </div>)
   }
 ]
 
@@ -226,6 +233,7 @@ const HodEndorsePendingList = (props) => {
   useEffect(() => {
     if(!submitting_comment && submit_comment_success) {
       setConfirmDrawer(false)
+      setCommentVisible(false)
       setSelectedPettyCashRequests([])
       props.fetchPettyCashRequests({
         requestType: FETCH_PETTY_CASH_REQUEST_TYPES.HOD_PENDING_ENDORSEMENT_REQUESTS
