@@ -220,6 +220,7 @@ const PaymentDraftHistory = (props) => {
             <Row>
               <Col span={24} style={{textAlign: 'right'}}>
                 <Button
+                  loading={props.comments_loading}
                   type='default'
                   disabled={props.comments.length < 1 || !userHasAnyRole(current_user?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
                   onClick={() => {
