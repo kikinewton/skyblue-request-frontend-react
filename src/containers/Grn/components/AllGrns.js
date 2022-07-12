@@ -1,4 +1,4 @@
-import { CommentOutlined, EyeOutlined } from '@ant-design/icons'
+import { CommentOutlined, ExceptionOutlined, EyeOutlined } from '@ant-design/icons'
 import { Badge, Button, Card, Col, Drawer, Input, Row, Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
@@ -12,6 +12,8 @@ import MyDrawer from '../../../shared/MyDrawer'
 import PaymentComment from '../../../shared/PaymentComment'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import GrnComment from '../../../shared/GrnComment'
+import { userHasAnyRole } from '../../../services/api/auth'
+import { downloadComments } from '../../../services/api/comment'
 
 const columns = (props) => GRN_COLUMNS.concat([
   {
@@ -127,6 +129,8 @@ const AllGrns = (props) => {
               size='small'
               columns={columns({
                 onShow: row => {
+                  props.resetComment()
+                  props.fetchComments(row?.id, COMMENT_TYPES.GRN)
                   setSelectedGrn(row)
                   setVisible(true)
                 },
@@ -156,6 +160,19 @@ const AllGrns = (props) => {
         placement="right"
         width={800}
       >
+        <Row>
+          <Col span={24} style={{textAlign: 'right'}}>
+            <Button 
+              type='default'
+              disabled={props.comments.length < 1 || !userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
+              onClick={() => {
+                downloadComments(selectedGrn?.id, COMMENT_TYPES.GRN)
+              }}
+            >
+              <ExceptionOutlined/> EXPORT COMMENTS
+            </Button>
+          </Col>
+        </Row>
         <GoodsReceivedNoteDetails 
           grn={selectedGrn}
           invoice={selectedGrn?.invoice}

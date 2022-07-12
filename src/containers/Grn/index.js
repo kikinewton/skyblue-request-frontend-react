@@ -72,6 +72,8 @@ const GrnIndex = (props) => {
       return <Redirect to="/app/grn/pending-endorsement" />
     } else if(role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER) {
       return <Redirect to="/app/grn/pending-payment-advice" />
+    } else if(role === EMPLOYEE_ROLE.ROLE_ADMIN) {
+      return <Redirect to="/app/grn/all" />
     }
   }
 
