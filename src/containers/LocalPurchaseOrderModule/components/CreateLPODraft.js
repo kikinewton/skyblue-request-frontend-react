@@ -436,7 +436,7 @@ const CreateLPO = (props) => {
                       preview={imageVisible}
                       onClick={() => setImageVisible(true)}
                       width={200}
-                      src={`${BASE_URL}/requestDocument/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}
+                      src={`${BASE_URL}/requestDocuments/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}
                     />
                     <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
                       <span style={{fontWeight: "bold"}}>Quotation Document</span>

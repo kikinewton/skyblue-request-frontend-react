@@ -2,7 +2,7 @@ import service from '../apiRequest'
 import { BASE_URL } from '../urls'
 
 
-const path = "/requestDocument"
+const path = "/requestDocuments"
 export function getAllDocuments(payload){
   return service({
     url: `${path}/${payload.quotationId}/assignRequestDocument/${payload.documentId}`,
@@ -12,8 +12,7 @@ export function getAllDocuments(payload){
 }
 
 export function generateResourceUrl(fileName) {
-  const url = `${BASE_URL}/requestDocument/download/${fileName}`;
-  console.log('url: ', url)
+  const url = `${BASE_URL}/requestDocuments/download/${fileName}`;
   return url;
 }
 
@@ -62,7 +61,7 @@ export function saveMultipleDocument(payload) {
   const fd = new FormData()
   fd.append("files", payload.files)
   return service({
-    url: `/requestDOcument/uploadMultipleFiles`,
+    url: `/requestDocument/uploadMultipleFiles`,
     method: 'POST',
     data: fd,
   })

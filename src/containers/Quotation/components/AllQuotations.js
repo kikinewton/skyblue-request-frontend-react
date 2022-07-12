@@ -1,5 +1,6 @@
 import { FileExcelOutlined, InfoOutlined } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge } from 'antd'
+import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge, Pagination } from 'antd'
+import Meta from 'antd/lib/card/Meta'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { userHasAnyRole } from '../../../services/api/auth'
@@ -15,25 +16,25 @@ const columns = (props) => [
     title: 'Quotation Ref',
     dataIndex: 'quotationRef',
     key: 'quotationRef',
-    render: (text, row) => row?.quotation?.quotationRef
+    render: (text, row) => row?.quotationRef
   },
   {
     title: 'Created On',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    render: (text, row) => prettifyDateTime(row?.quotation?.createdAt) || "N/A"
+    render: (text, row) => prettifyDateTime(row?.createdAt) || "N/A"
   },
   {
     title: 'Supplier',
     dataIndex: 'supplier',
     key: 'supplier',
-    render: (text, row) => row?.quotation?.supplier?.name
+    render: (text, row) => row?.supplier?.name
   },
   {
     title: 'LPO Status',
     dataIndex: 'linkedToLpo',
     key: 'linkedToLpo',
-    render: (text, row) => row?.quotation?.linkedToLpo ? (<><Badge color="green" /> Linked to LPO</>) : (<><Badge color="yellow" /> Not linked to LPO</>)
+    render: (text, row) => row?.linkedToLpo ? (<><Badge color="green" /> Linked to LPO</>) : (<><Badge color="yellow" /> Not linked to LPO</>)
   },
   {
     title: 'Action',
@@ -61,15 +62,16 @@ const ListAllQuotations = (props) => {
   const [quotations, setQuotations] = useState([])
   const history = useHistory()
 
-  const handleChange = () => {
-    
+  const handlePageChange = (page, pageSize) => {
+    const queryObj = {...Meta, currentPage: page - 1, pageSize}
+    fetchData(queryObj)
   }
 
 
   const fetchData = async (query) => {
     setLoading(true)
     const queryObj = {
-      linkedToLpo: true,
+      approved: true,
       pageNo: query.currentPage,
       pageSize: query.pageSize
     }
@@ -132,6 +134,20 @@ const ListAllQuotations = (props) => {
             pageSize: 30
           }}
         />
+        <Row>
+          <Col span={24}>
+            <Pagination
+              showSizeChanger={false}
+              defaultCurrent={1}
+              total={meta.total}
+              current={meta.currentPage + 1}
+              defaultPageSize={meta.pageSize}
+              pageSize={meta?.pageSize}
+              onChange={handlePageChange}
+              size='small'
+            />
+          </Col>
+        </Row>
       </Card>
       <Drawer
         visible={quotationViewVisible}
