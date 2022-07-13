@@ -46,14 +46,16 @@ const columns = props => [
     title: "STATUS",
     dataIndex: "status",
     key: "status",
-    render: (text) => {
+    render: (text, row) => {
       let color = "default"
-      if(text === "PENDING") {
+      if(row?.status === "PENDING") {
         color = "processing"
-      } else if(text = "APPROVED") {
+      } else if(row?.status === "APPROVED") {
         color = "success"
+      } else if(row?.status === "COMMENT") {
+        color = "warning"
       }
-      return (<Tag color={color}>{text}</Tag>)
+      return (<Tag color={color}>{row?.status}</Tag>)
     }
   },
   {

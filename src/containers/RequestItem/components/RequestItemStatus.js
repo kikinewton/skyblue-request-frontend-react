@@ -56,7 +56,7 @@ const RequestItemStatus = (props) => {
             </List.Item>
             <List.Item>
               <List.Item.Meta title="ASSIGNED TO"
-                description={requestItem?.quantity} />
+                description={(requestItem?.suppliers.filter(it => it?.id === requestItem?.suppliedBy) || [])[0]?.name || 'N/A'} />
             </List.Item>
             <List.Item>
               <List.Item.Meta title="DEPARTMENT"
@@ -75,6 +75,14 @@ const RequestItemStatus = (props) => {
                 description={requestItem?.status} />
             </List.Item>
           </List>
+        </Col>
+      </Row>
+      {props.showDocs && (
+        <span>hahd</span>
+      )}
+      <Row>
+        <Col span={24}>
+
         </Col>
       </Row>
       <Card title="Status Tracker" style={{marginTop: 20}}>
@@ -129,7 +137,8 @@ RequestItemStatus.propTypes = {
   requestItemStatus: PropTypes.object.isRequired,
   comments: PropTypes.array,
   onCommentDownload: PropTypes.func,
-  showCommentDownload: PropTypes.bool
+  showCommentDownload: PropTypes.bool,
+  showDocs: PropTypes.bool,
 }
 
 export default RequestItemStatus

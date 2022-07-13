@@ -174,6 +174,7 @@ const RequestItemHistory = (props) => {
                   fetchRequestItemStatus(row?.id)
                 }
               })}
+              bordered
               dataSource={filteredRequests}
               pagination={{
                 pageSize: 30
@@ -210,18 +211,21 @@ const RequestItemHistory = (props) => {
           
         >
           {loadingStatus ? <Spin /> : (
-            <RequestItemStatus
-              comments={props.comments}
-              showCommentDownload={userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
-              onCommentDownload={() => {
-                setDownloading(true)
-                downloadComments(selectedRequest?.id, COMMENT_TYPES.LPO)
-                setDownloading(false)
-              }}
-              downloading={downloading}
-              requestItemStatus={requestStatus}
-              requestItem={selectedRequest}
-            />
+            <>
+              <RequestItemStatus
+                showDocs={true}
+                comments={props.comments}
+                showCommentDownload={userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
+                onCommentDownload={() => {
+                  setDownloading(true)
+                  downloadComments(selectedRequest?.id, COMMENT_TYPES.LPO)
+                  setDownloading(false)
+                }}
+                downloading={downloading}
+                requestItemStatus={requestStatus}
+                requestItem={selectedRequest}
+              />
+            </>
           )}
         </Drawer>
       </Card>
