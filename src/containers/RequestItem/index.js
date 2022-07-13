@@ -122,12 +122,14 @@ const RequestItemIndex = (props) => {
                     ) : (<span>APPROVE REQUESTS</span>)}
                   </NavLink>
                 </Menu.Item>
-                <Menu.Item key="all-approved-requests">
-                  <NavLink to="/app/request-items/all-approved">
-                    <span>APPROVED REQUEST LIST</span>
-                  </NavLink>    
-                </Menu.Item>
               </>
+            )}
+            {[EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER].includes(currentUser.role) && (
+              <Menu.Item key="all-approved-requests">
+                <NavLink to="/app/request-items/all-approved">
+                  <span>APPROVED REQUEST LIST</span>
+                </NavLink>    
+              </Menu.Item>
             )}
             {[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN].includes(currentUser.role) && (
               <Menu.Item key="/app/request-items/all">
@@ -168,7 +170,7 @@ const RequestItemIndex = (props) => {
             {...props}
           />
           <AuthenticatedRoute 
-            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER]}
+            roles={[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]}
             exact
             path={`/app/request-items/all-approved`}
             component={ApprovedItemRequest}

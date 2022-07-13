@@ -9,7 +9,6 @@ const FilesView = ({
   files
 }) => {
   const renderFile = (file) => {
-    console.log('doc', file)
     const src = generateResourceUrl(file?.fileName)
     if(file?.documentFormat && file?.documentFormat.includes("pdf")) {
       return (
