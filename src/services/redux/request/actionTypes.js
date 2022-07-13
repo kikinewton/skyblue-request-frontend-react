@@ -35,6 +35,8 @@ export default createTypes(
 
   FILTER_MY_REQUESTS
 
+  FILTER_REQUESTS
+
   RESET_REQUEST
 
 `,

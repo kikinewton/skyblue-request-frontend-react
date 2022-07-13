@@ -11,15 +11,15 @@ const FilesView = ({
   const renderFile = (file) => {
     console.log('doc', file)
     const src = generateResourceUrl(file?.fileName)
-    if(file?.documentFormat.includes("pdf")) {
+    if(file?.documentFormat && file?.documentFormat.includes("pdf")) {
       return (
         <MyPdfView key={file.id} src={src} />
       )
-    } else if(file?.documentFormat.includes("image")) {
+    } else if(file?.documentFormat && file?.documentFormat.includes("image")) {
       return (
         <MyImageView 
           key={file.id}
-          src={generateResourceUrl(file.fileName)}
+          src={generateResourceUrl(file?.fileName)}
         />
       )
     }

@@ -200,6 +200,7 @@ const mapStateToProps = (store) => ({
   departmentsLoading: store.department.loading,
   currentUser: store.auth.user,
   requests: store.request.requests,
+  filtered_requests: store.request.filtered_requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
   requestSubmitSuccess: store.request.submitSuccess,
@@ -231,6 +232,9 @@ const mapActionsToProps = (dispatch) => {
     },
     fetchRequests: (query) => {
       dispatch(RequestCreators.fetchRequests(query))
+    },
+    filterRequests: (filter) => {
+      dispatch(RequestCreators.filterRequests(filter))
     },
     updateRequest: (options) => {
       dispatch(RequestCreators.updateRequest(options))

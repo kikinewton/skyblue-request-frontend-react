@@ -276,4 +276,20 @@ export function fetchRequests(query) {
   }
 }
 
+export function getRequestDocs(id) {
+  return service({
+    url: `/requestDocuments/requestItems/${id}`,
+    method: 'GET'
+  })
+}
+
+
+export function fetchAllRequests(query) {
+  const queryStr = serializeQueryParams(query)
+  return service({
+    url: `/requestItems${queryStr}`,
+    method: 'GET'
+  })
+}
+
 
