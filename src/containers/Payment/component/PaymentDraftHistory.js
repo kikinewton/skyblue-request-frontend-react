@@ -253,7 +253,6 @@ const PaymentDraftHistory = (props) => {
               <Col span={24}>
                 <Form
                   onFinish={values => {
-                    console.log('finish', values)
                     const paylaod = {
                       comment: values.comment,
                       paymentId: selectedPayment?.id
@@ -289,6 +288,9 @@ const PaymentDraftHistory = (props) => {
             }}
           >
             <PaymentComment 
+              onCommentChange={(newComment) => {
+                props.setNewComment(newComment)
+              }}
               payment={selectedPayment}
               comments={props.comments}
               newComment={props.new_comment}
