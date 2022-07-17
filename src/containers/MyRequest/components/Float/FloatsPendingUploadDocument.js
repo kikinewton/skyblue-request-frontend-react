@@ -261,6 +261,9 @@ const FloatsPendingUploadDocument = (props) => {
               <Col span={24}>
                 <Card title="Upload Supporting Documents" size='small'>
                   <UploadFiles 
+                    onRemove={(file) => {
+                      setFiles(files.filter(f => f.uid !== file.uid))
+                    }}
                     files={files}
                     onUpload={handleUpload}
                     loading={loadingDocument}
