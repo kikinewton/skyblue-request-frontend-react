@@ -159,7 +159,6 @@ const FloatsPendingUploadDocument = (props) => {
   }
 
   const onSubmit = () => {
-    console.log('files', files)
     const payload = {
       documents: files
     }
@@ -178,6 +177,7 @@ const FloatsPendingUploadDocument = (props) => {
     if(!submiting_float_request && submit_float_request_success) {
       console.log("float submit successful hence lets update state")
       setVisible(false)
+      setFiles([])
       setSelectedFloatForRetirement(null)
       fetchFloatRequests({requestType: FETCH_FLOAT_REQUEST_TYPES.MY_AWAITING_RETIREMENT})
       //setSelectionDetails({type: SELECTION_TYPES.VIEW, row: null})
@@ -239,6 +239,7 @@ const FloatsPendingUploadDocument = (props) => {
           width={800}
           onClose={() => {
             setSelectedFloatForRetirement(null)
+            setFiles([])
             setVisible(false)
           }}
         >
