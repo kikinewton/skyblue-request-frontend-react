@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined, DeleteColumnOutlined, DeleteOutlined, EyeOutlined, SyncOutlined, WarningOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, message, List, Form, Tooltip } from 'antd';
 import React, {useState } from 'react';
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper';
 import { UPDATE_FLOAT_REQUEST_TYPES, FETCH_FLOAT_REQUEST_TYPES } from '../../../util/request-types';
@@ -17,7 +17,12 @@ const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (
-      <>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <Tooltip title="Comment">
+          <Button size='small' style={{marginRight: 5}} shape='circle' type="default" onClick={() => props.onComment(row)}>
+            <CommentOutlined/>
+          </Button>
+        </Tooltip>
         <Button 
           size='small' 
           type="default" 
@@ -26,7 +31,7 @@ const floatOrderColumns = props => FLOAT_ORDERS_COLUMN.concat([
         >
           <EyeOutlined />
         </Button>
-      </>
+      </div>
     )
   }
 ])
@@ -244,7 +249,7 @@ const ApprovePendingList = (props) => {
                 },
                 onComment: row => {
                   props.resetComment()
-                  props.fetchCOmments(row?.id, COMMENT_TYPES.FLOAT)
+                  props.fetchComments(row?.id, COMMENT_TYPES.FLOAT)
                   setSelectedFloatOrder(row)
                   setCommentVisible(true)
                 }
@@ -307,7 +312,7 @@ const ApprovePendingList = (props) => {
             </Button>
           </Col>
           <Col span={8} style={{textAlign: "center"}}>
-            <Button 
+            {/* <Button 
               type='default'
               onClick={e => {
                 if(!comment) {
@@ -320,7 +325,7 @@ const ApprovePendingList = (props) => {
             >
               <CommentOutlined />
               Comment
-            </Button>
+            </Button> */}
           </Col>
           <Col span={8} >
             <Button 
