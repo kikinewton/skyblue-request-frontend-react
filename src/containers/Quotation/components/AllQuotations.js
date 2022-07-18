@@ -120,7 +120,7 @@ const ListAllQuotations = (props) => {
           columns={columns({
             onView: (row) => {
               props.resetComment()
-              props.fetchComments(row.quotation.id, COMMENT_TYPES.QUOTATION)
+              props.fetchComments(row?.id, COMMENT_TYPES.QUOTATION)
               setSelectedQuotation(row)
               setQuotationViewVisible(true)
             }
