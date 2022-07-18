@@ -2,11 +2,13 @@ import { CommentOutlined, EyeFilled } from '@ant-design/icons'
 import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, List, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import { userHasAnyRole } from '../../../services/api/auth'
 import GenericComment from '../../../shared/GenericComment'
 import MyDrawer from '../../../shared/MyDrawer'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
 import { UNDER_REVIEW } from '../../../util/quotation-types'
 
 
@@ -58,6 +60,8 @@ const columns = (props) => [
 ]
 
 
+
+
 const ListQuotations = (props) => {
   const {
     fetchQuotations,
@@ -106,6 +110,7 @@ const ListQuotations = (props) => {
                 onChange={(event) => props.filterQuotations(event.target.value)}
               />,
               <Button 
+                disabled={!userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER])}
                 type="primary" 
                 onClick={() => history.push("/app/quotations/add-new")} 
                 key="add-button">

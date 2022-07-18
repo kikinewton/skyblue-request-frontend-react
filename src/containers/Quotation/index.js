@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Creators as SupplierCreators } from '../../services/redux/supplier/actions'
 import { Creators as QuotationCreators } from '../../services/redux/quotation/actions'
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
@@ -16,6 +16,7 @@ import AddQuotationFOrUnregisteredSupplier from './components/AddQuotationForUnr
 import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 import { userHasAnyRole } from '../../services/api/auth'
 import { EMPLOYEE_ROLE } from '../../util/datas'
+import { history } from '../../util/browser-history'
 
 const Quotation = (props) => {
   const { path } = useRouteMatch()
@@ -48,13 +49,19 @@ const Quotation = (props) => {
     // eslint-disable-next-line
   }, [key])
 
-  const DefaultPage = () => {
-    setActiveLink()
-    if(props.currentUser?.role === EMPLOYEE_ROLE.ROLE_ADMIN) {
-      setActiveLink()
-      return <Redirect to="/app/quotations/all" />
+  // const DefaultPage = () => {
+  //   if(userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])) {
+  //     return <Redirect to="/app/quotations/all" />
+  //   } else {
+  //     return <Redirect to="/app/quotations" />
+  //   }
+  // }
+
+  useEffect(() => {
+    if(userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])) {
+      history.push("/app/quotations/all")
     }
-  }
+  }, [])
   
 
   return (
@@ -104,13 +111,6 @@ const Quotation = (props) => {
         )}
       >
         <Switch>
-          <AuthenticatedRoute
-            exact
-            path={`${path}`}
-            {...props}
-          >
-            {DefaultPage}
-          </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/add-new-to-unregistered`} component={AddQuotationFOrUnregisteredSupplier} {...props} />
           <AuthenticatedRoute path={`${path}/add-new`} component={CreateQuotation} {...props} />
           <AuthenticatedRoute path={`${path}/all`} component={ListAllQuotations} {...props} />
