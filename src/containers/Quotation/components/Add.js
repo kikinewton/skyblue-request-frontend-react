@@ -6,6 +6,9 @@ import { saveSingleDocument } from "../../../services/api/document"
 import { useHistory } from 'react-router'
 import UploadFiles from '../../../shared/UploadFiles'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
+import AuthMiddleware from '../../../middleware/auth-middleware'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
+
 const { Step } = Steps
 
 const supplierColumns = props => [
@@ -125,6 +128,7 @@ const CreateQuotation = (props) => {
 
   return (
     <React.Fragment>
+      <AuthMiddleware roles={[EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]}>
       <Row>
         <Col span={24}>
           <PageHeader
@@ -278,6 +282,7 @@ const CreateQuotation = (props) => {
           </>
         )}
       </Card>
+      </AuthMiddleware>
     </React.Fragment>
   )
 }

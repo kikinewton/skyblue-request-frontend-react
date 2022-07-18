@@ -109,7 +109,14 @@ const ListAllQuotations = (props) => {
                 key="input-search"
                 onChange={(event) => props.filterQuotations(event.target.value)}
               />,
-              <Button type="primary" onClick={() => history.push("/app/quotations/add-new")} key="add-button">New Supplier Quote</Button>
+              <Button 
+                type="primary" 
+                onClick={() => history.push("/app/quotations/add-new")} 
+                key="add-button"
+                disabled={!userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER])}
+              >
+                  ADD NEW QUOTATION
+                </Button>
             ]}
           />
         </Col>
