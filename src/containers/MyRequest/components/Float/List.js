@@ -16,15 +16,15 @@ import FloatDetails from '../../../../shared/FloatDetails';
 
 const SELECTION_TYPES = {UPDATE: "UPDATE", VIEW: "VIEW"}
 
-const retirmentStatus = row => {
-  if(row.hasDocument) {
-    return 'Retired'
-  } else if(row.fundsReceived) {
-    return 'Awaiting Retirement'
-  } else {
-    return 'Cannot Retire'
-  }
-}
+// const retirmentStatus = row => {
+//   if(row.hasDocument) {
+//     return 'Retired'
+//   } else if(row.fundsReceived) {
+//     return 'Awaiting Retirement'
+//   } else {
+//     return 'Cannot Retire'
+//   }
+// }
 
 export const FLOAT_ORDERS_COLUMN = [
   {

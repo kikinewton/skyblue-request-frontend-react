@@ -1,5 +1,5 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb } from 'antd'
+import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
+import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
@@ -213,15 +213,22 @@ const RequestItemHistory = (props) => {
         >
           {loadingStatus ? <Spin /> : (
             <>
+              <Row>
+                <Col span={24} style={{textAlign: 'right'}}>
+                  <Button type='default' disabled={props.comments.length < 1 || !userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])} 
+                    onClick={()=> {
+                      setDownloading(true)
+                      downloadComments(selectedRequest?.id, COMMENT_TYPES.LPO)
+                      setDownloading(false)
+                    }}
+                  >
+                    <FileExcelOutlined/> EXPORT COMMENTS
+                  </Button>
+                </Col>
+              </Row>
               <RequestItemStatus
                 showDocs={true}
                 comments={props.comments}
-                showCommentDownload={userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
-                onCommentDownload={() => {
-                  setDownloading(true)
-                  downloadComments(selectedRequest?.id, COMMENT_TYPES.LPO)
-                  setDownloading(false)
-                }}
                 downloading={downloading}
                 requestItemStatus={requestStatus}
                 requestItem={selectedRequest}

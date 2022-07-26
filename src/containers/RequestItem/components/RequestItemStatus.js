@@ -13,13 +13,6 @@ const RequestItemStatus = (props) => {
   return (
     <>
       <Row>
-        <Col span={24} style={{textAlign: 'right'}}>
-          <Button type='default' disabled={props.comments.length < 1 || !props.showCommentDownload} onClick={()=> props.onCommentDownload()}>
-            <FileExcelOutlined/> EXPORT COMMENTS
-          </Button>
-        </Col>
-      </Row>
-      <Row>
         <Col span={12}>
           <List>
             <List.Item>
