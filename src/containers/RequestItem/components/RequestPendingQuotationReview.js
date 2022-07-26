@@ -148,13 +148,17 @@ const RequestPendingQuotationReview = (props) => {
             </Button>
           </Col>
           <Col span={12} style={{textAlign: "right"}}>
-            <Button type='primary' loading={props.updating_request} onClick={() => {
-              props.updateRequest({
-                updateType: UPDATE_REQUEST_TYPES.HOD_REVIEW,
-                role: "hod",
-                payload: {requestItems: selectedRow?.requestItems}
-              })
-            }}>
+            <Button 
+              type='primary' 
+              loading={props.updating_request}
+              onClick={() => {
+                props.updateRequest({
+                  updateType: UPDATE_REQUEST_TYPES.HOD_REVIEW,
+                  role: "hod",
+                  payload: {requestItems: selectedRow?.requestItems}
+                })
+              }}
+            >
               <CheckOutlined/>
               REVIEW QUOTATION
             </Button>
