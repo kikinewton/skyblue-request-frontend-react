@@ -49,7 +49,7 @@ const Dashboard = (props) => {
         <Row>
           <Col md={24}>
             <Row gutter={12}>
-              <Col md={6}>
+              <Col md={6} xs={24} sm={24}>
                 <DashboardCard
                   title="THIS MONTH'S REQUESTS"
                   value={countOfRequestPerCurrentMonth}
@@ -58,7 +58,7 @@ const Dashboard = (props) => {
                     setVisible(true)
                   }}
                 />
-              </Col><Col md={6}>
+              </Col><Col md={6} xs={12} sm={24}>
                 <DashboardCard 
                   title="PAYMENTS DUE IN A WEEK"
                   value={countOfPaymentDueWithinOneWeek}
@@ -68,7 +68,7 @@ const Dashboard = (props) => {
                   }}
                 />
               </Col>
-              <Col md={6}>
+              <Col md={6} xs={24} sm={24}>
                 <DashboardCard 
                   title="PAYMENTS MADE TODAY"
                   value={countPaymentsMadeToday}
@@ -78,7 +78,7 @@ const Dashboard = (props) => {
                   }}
                 />
               </Col>
-              <Col md={6}>
+              <Col md={6} xs={24} sm={24}>
                 <DashboardCard 
                   title="TODAY'S GRNS"
                   value={countOfGRNForToday}
@@ -90,8 +90,8 @@ const Dashboard = (props) => {
               </Col>
             </Row>
             <Row gutter={12} style={{marginTop: 20}}>
-              <Col md={8}>
-                <Card style={{height: 350}} title="APPROVED NUMBER OF REQUESTS PER DEPARTMENT" hoverable>
+              <Col md={8} sm={24} xs={24}>
+                <Card style={{height: 350, marginBottom: 5}} title="APPROVED NUMBER OF REQUESTS PER DEPARTMENT" hoverable>
                   {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
@@ -110,8 +110,8 @@ const Dashboard = (props) => {
                   } */}
                 </Card>
               </Col>
-              <Col md={8}>
-                <Card style={{height: 350}} title="APPROVED REQUESTS PER DEPARTMENT" hoverable>
+              <Col md={8} sm={24} xs={24}>
+                <Card style={{height: 350, marginBottom: 5}} title="APPROVED REQUESTS PER DEPARTMENT" hoverable>
                   {(approvedNumberRequestItemsAndUserDepartmentToday || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
@@ -123,8 +123,8 @@ const Dashboard = (props) => {
                   }
                 </Card>
               </Col>
-              <Col md={8}>
-                <Card style={{height: 350}} title="THIS MONTH'S REQUESTS PER DEPARTMENT" hoverable>
+              <Col md={8} sm={24} xs={24}>
+                <Card style={{height: 350, marginBottom: 5}} title="THIS MONTH'S REQUESTS PER DEPARTMENT" hoverable>
                   {(requestsPerCurrentMonthPerDepartment || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="Pie"
@@ -138,8 +138,8 @@ const Dashboard = (props) => {
               </Col>
             </Row>
             <Row style={{marginTop: 20}} gutter={12}>
-              <Col md={12}>
-                <Card style={{height: 350}} title="COST PER DEPARTMENT FOR THIS MONTH" hoverable>
+              <Col md={12} xs={24}>
+                <Card style={{height: 350, marginBottom: 5}} title="COST PER DEPARTMENT FOR THIS MONTH" hoverable>
                   {(costPerDepartmentForCurrentMonth || []).length < 1 ? "N/A" : 
                     <BarChart
                       maintainAspectRatio={false}
@@ -150,8 +150,8 @@ const Dashboard = (props) => {
                   }
                 </Card>
               </Col>
-              <Col md={12}>
-                <Card style={{height: 350}} title="REQUEST PER CATEGORY FOR TODAY" hoverable>
+              <Col md={12} xs={24}>
+                <Card style={{height: 350, marginBottom: 5}} title="REQUEST PER CATEGORY FOR TODAY" hoverable>
                   {(requestPerCategoryForToday || []).length < 1 ? "N/A" : 
                     <BarChart
                       maintainAspectRatio={false}

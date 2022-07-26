@@ -129,7 +129,7 @@ const RequestPendingQuotationReview = (props) => {
         </Row>
       </Card>
       <MyDrawer
-        titlw="QUOTATION INFO"
+        title="QUOTATION INFO"
         visible={visible}
         width={900}
         onClose={() => {
