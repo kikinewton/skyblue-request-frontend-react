@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { BASE_URL } from '../urls'
+import { BASE_URL, RESOURCE_BASE_URL } from '../urls'
 
 
 const path = "/requestDocuments"
@@ -12,7 +12,7 @@ export function getAllDocuments(payload){
 }
 
 export function generateResourceUrl(fileName) {
-  const url = `${BASE_URL}/requestDocuments/download/${fileName}`;
+  const url = `${RESOURCE_BASE_URL}/requestDocuments/download/${fileName}`;
   return url;
 }
 

@@ -283,7 +283,7 @@ const CollapsibleLayout = (props) => {
               
               <NavLink to="/app/employees">
                 <UsergroupAddOutlined />
-                <span>USER MANAGEMENT</span>
+                <span>USERS</span>
               </NavLink>
             </Menu.Item>
           }

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MyPdfView from "../presentation/MyPdfView"
 import MyImageView from "../presentation/MyImageView"
 import { generateResourceUrl } from '../services/api/document';
 import PropTypes from "prop-types"
+import { BASE_URL } from '../services/api/urls';
 
 
 const FilesView = ({
