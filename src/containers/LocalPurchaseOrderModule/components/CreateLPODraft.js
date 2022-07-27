@@ -4,7 +4,7 @@ import { Card, Col, Row, Steps, Select, Table, Button, Input, DatePicker, Image 
 import React, { useEffect, useState } from 'react'
 import MyPdfView from '../../../presentation/MyPdfView'
 import { generateResourceUrl } from '../../../services/api/document'
-import { BASE_URL } from '../../../services/api/urls'
+import { BASE_URL, RESOURCE_BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import FilesView from '../../../shared/FilesView'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
@@ -436,7 +436,7 @@ const CreateLPO = (props) => {
                       preview={imageVisible}
                       onClick={() => setImageVisible(true)}
                       width={200}
-                      src={`${BASE_URL}/requestDocuments/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}
+                      src={`${RESOURCE_BASE_URL}/requestDocuments/download/${selectedQuotation?.quotation?.requestDocument?.fileName}`}
                     />
                     <div style={{height: "100%",display: "flex", flexDirection: "row", alignItems: "center"}}>
                       <span style={{fontWeight: "bold"}}>Quotation Document</span>

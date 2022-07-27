@@ -1,6 +1,6 @@
 import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 import service from '../apiRequest'
-import { BASE_URL } from '../urls'
+import { BASE_URL, RESOURCE_BASE_URL } from '../urls'
 
 export function downloadPaymentsReport(query) {
   const queryStr = serializeQueryParams(query)
@@ -32,7 +32,7 @@ export function downloadGrnReport(query) {
 
 export function downloadPaymentReportLink(query) {
   const queryStr = serializeQueryParams(query)
-  const url = `${BASE_URL}/accounts/paymentReport/download/${queryStr}`
+  const url = `${RESOURCE_BASE_URL}/accounts/paymentReport/download/${queryStr}`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")
@@ -43,7 +43,7 @@ export function downloadPaymentReportLink(query) {
 
 export function downloadProcuredItemsLink(query) {
   const queryStr = serializeQueryParams(query)
-  const url = `${BASE_URL}/procurement/procuredItemsReport/download/${queryStr}`
+  const url = `${RESOURCE_BASE_URL}/procurement/procuredItemsReport/download/${queryStr}`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")
@@ -54,7 +54,7 @@ export function downloadProcuredItemsLink(query) {
 
 export function downloadGrnLink(query) {
   const queryStr = serializeQueryParams(query)
-  const url = `${BASE_URL}/stores/grn/download/${queryStr}`
+  const url = `${RESOURCE_BASE_URL}/stores/grn/download/${queryStr}`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")
@@ -66,7 +66,7 @@ export function downloadGrnLink(query) {
 export function generateAccountPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query?.download) {
-    const url = `${BASE_URL}/accounts/paymentReport${queryStr}`
+    const url = `${RESOURCE_BASE_URL}/accounts/paymentReport${queryStr}`
     downloadFile(url)
   } else {
     console.log('api query', query)
@@ -78,7 +78,7 @@ export function generateAccountPaymentsReport(query) {
 export function generateAccountPettyCashPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query.download) {
-    const url = `${BASE_URL}/accounts/pettyCashPaymentReport${queryStr}`
+    const url = `${RESOURCE_BASE_URL}/accounts/pettyCashPaymentReport${queryStr}`
     downloadFile(url)
   } else {
     return service({
@@ -105,7 +105,7 @@ export function generateFloatAgeingAnalysisReport(query) {
 export function generateGoodsReceiveNotesReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query.download) {
-    const url = `${BASE_URL}/stores/grnReport${queryStr}`
+    const url = `${RESOURCE_BASE_URL}/stores/grnReport${queryStr}`
     downloadFile(url)
   } else {
     return service({
@@ -119,7 +119,7 @@ export function generateGoodsReceiveNotesReport(query) {
 export function generateProcureItemsReportReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query.download) {
-    const url = `${BASE_URL}/procurement/procuredItemsReport${queryStr}`
+    const url = `${RESOURCE_BASE_URL}/procurement/procuredItemsReport${queryStr}`
     downloadFile(url)
   } else {
     return service({

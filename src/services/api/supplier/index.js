@@ -1,6 +1,6 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { BASE_URL, SUPPLIERS_ENDPOINT } from "../urls";
+import { BASE_URL, RESOURCE_BASE_URL, SUPPLIERS_ENDPOINT } from "../urls";
 
 export function getSuppliers(query) {
   const queryStr = serializeQueryParams(query)
@@ -41,7 +41,7 @@ export function deleteSupplier(supplierId) {
 }
 
 export function downloadRfqForSupplier({supplierId}) {
-  const url = `${BASE_URL}/procurement/generateRequestListForSupplier/suppliers/${supplierId}`
+  const url = `${RESOURCE_BASE_URL}/procurement/generateRequestListForSupplier/suppliers/${supplierId}`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")

@@ -1,15 +1,17 @@
-import { CommentOutlined, ExceptionOutlined, EyeOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, Input, Button, Form, Pagination } from 'antd'
+import { CloseOutlined, CommentOutlined, ExceptionOutlined, EyeOutlined } from '@ant-design/icons'
+import { Table , Card, Row, Col, Drawer, Input, Button, Form, Pagination, Tooltip, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
 import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
+import ConfirmModal from '../../../shared/ConfirmModal'
 import MyDrawer from '../../../shared/MyDrawer'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import PaymentComment from '../../../shared/PaymentComment'
 import PaymentDraftDetails from '../../../shared/PaymentDraftDetails'
+import { formatCurrency } from '../../../util/common-helper'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import openNotification from '../../../util/notification'
@@ -22,17 +24,34 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
     dataIndex: "actions",
     key: "actions",
     render: (text, row) => (<Row>
-      <Col span={12}>
-        <Button size='small' onClick={e =>  props.onView(row)}>
-          <EyeOutlined />
-        </Button>
+      <Col span={8}>
+        <Tooltip title="INFO">
+          <Button shape='circle' size='small' onClick={e =>  props.onView(row)}>
+            <EyeOutlined />
+          </Button>
+        </Tooltip>
       </Col>
-      <Col span={12}>
-        <Button 
-          disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER])} 
-          size='small' onClick={() => props.onComment(row)}>
-          <CommentOutlined />
-        </Button>
+      <Col span={8}>
+        <Tooltip title="COMMENT">
+          <Button 
+            shape='circle'
+            disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER])} 
+            size='small' onClick={() => props.onComment(row)}>
+            <CommentOutlined />
+          </Button>
+        </Tooltip>
+      </Col>
+      <Col span={8}>
+        <Tooltip title="CANCEL">
+          <Button
+            shape='circle'
+            danger 
+            disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER])} 
+            size='small' onClick={() => props.onDelete(row)}>
+            <CloseOutlined />
+          </Button>
+        </Tooltip>
+
       </Col>
     </Row>)
   }
@@ -53,6 +72,7 @@ const PaymentDraftHistory = (props) => {
   const [cancelling, setCancelling] = useState(false)
   const [cancelVisible, setCancelVisible] = useState(false)
   const [commentVisible, setCommentVisible] = useState(false)
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
 
   const paymentProcessMethod = () => {
     switch(current_user.role) {
@@ -182,6 +202,10 @@ const PaymentDraftHistory = (props) => {
                     setSelectedPayment(row)
                     setCommentVisible(true)
                   },
+                  onDelete: row => {
+                    setSelectedPayment(row)
+                    setDeleteDialogVisible(true)
+                  },
                   userRole: props?.current_user?.role
                 })}
                 dataSource={filteredData}
@@ -305,6 +329,38 @@ const PaymentDraftHistory = (props) => {
             />
           </MyDrawer>
         </Card>
+        <ConfirmModal
+          title="CANCEL PAYMENT"
+          isVisible={deleteDialogVisible}
+          onSubmit={() => {
+            console.log('lets delete')
+          }}
+          submitBtnText='CANCEL PAYMENT DRAFT'
+          cancelBtnText='UNDO CANCEL'
+          loading={props.submitting_payment}
+          onCancel={() => {
+            setSelectedPayment(null)
+            setDeleteDialogVisible(false)
+          }}
+        >
+          <Row>
+            <Col span={24}>
+              {`Are you sure you want to cancel this payment draft (${selectedPayment?.reference})?`}
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <List>
+                <List.Item>
+                  <List.Item.Meta title="PURCHASE NUMBER" description={ selectedPayment?.purchaseNumber} />
+                </List.Item>
+                <List.Item>
+                  <List.Item.Meta title="PAYMENT AMOUNT" description={ formatCurrency(selectedPayment?.paymentAmount)} />
+                </List.Item>
+              </List>
+            </Col>
+          </Row>
+        </ConfirmModal>
       </AppLayout>
     </>
   )

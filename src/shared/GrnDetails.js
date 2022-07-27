@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Row, Col, List, Image, Card, Table, Button } from "antd"
-import { BASE_URL } from '../services/api/urls'
+import { BASE_URL, RESOURCE_BASE_URL } from '../services/api/urls'
 import { formatCurrency, prettifyDateTime } from '../util/common-helper'
 import { DownloadOutlined } from '@ant-design/icons'
 import { generateResourceUrl } from '../services/api/document'
@@ -73,7 +73,7 @@ const GrnDetails = (props) => {
                   onClick={() => setImagePreview(true)}
                   preview={imagePreview}
                   width={200}
-                  src={`${BASE_URL}/requestDocuments/download/${invoiceDocument?.fileName}`}
+                  src={`${RESOURCE_BASE_URL}/requestDocuments/download/${invoiceDocument?.fileName}`}
                 />
               )}
               {invoiceDocument?.documentFormat.includes("application/pdf") && (
@@ -83,7 +83,7 @@ const GrnDetails = (props) => {
                 // <a href={`${BASE_URL}/requestDocument/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
               )}
               {invoiceDocument?.documentFormat.includes("excel/") && (
-                <a href={`${BASE_URL}/requestDocuments/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
+                <a href={`${RESOURCE_BASE_URL}/requestDocuments/download/${invoiceDocument?.fileName}`}><DownloadOutlined /> Download PDF</a>
               )}
             </Col>
           </Row>

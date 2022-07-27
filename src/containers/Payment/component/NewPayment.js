@@ -192,7 +192,7 @@ const NewPayment = (props) => {
                     />
                   </Form.Item>
                   <Form.Item label="PAYMENT AMOUNT" name="paymentAmount">
-                    <Input style={{width: '100%'}} prefix={grn?.receivedItems[0]?.currency} pattern={new RegExp(/^[0-9]*$/)} type="number" min="0" onChange={e => setAmount(e.target.value)} />
+                    <Input style={{width: '100%'}} prefix={grn?.receivedItems[0]?.currency} type="number" onChange={e => setAmount(e.target.value)} />
                   </Form.Item>
                   <Form.Item >
                     <Row>

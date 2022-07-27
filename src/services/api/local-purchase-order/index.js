@@ -1,6 +1,6 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { BASE_URL } from "../urls";
+import { BASE_URL, RESOURCE_BASE_URL } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
   const queryStr = serializeQueryParams(query)
@@ -43,7 +43,7 @@ export function createLocalPurchaseOrderDraft(payload) {
 
 
 export function downloadLPODocument({lpoId}) {
-  const url = `${BASE_URL}/localPurchaseOrders/${lpoId}/download`
+  const url = `${RESOURCE_BASE_URL}/localPurchaseOrders/${lpoId}/download`
   const link = document.createElement('a')
   link.href = url
   link.setAttribute("target", "_blank")
