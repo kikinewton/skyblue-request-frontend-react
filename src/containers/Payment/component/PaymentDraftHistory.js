@@ -46,7 +46,7 @@ const columns = (props) => PAYMENT_COLUMNS.concat([
           <Button
             shape='circle'
             danger 
-            disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_FINANCIAL_MANAGER, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER])} 
+            disabled={!userHasAnyRole(props.userRole, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER])} 
             size='small' onClick={() => props.onDelete(row)}>
             <CloseOutlined />
           </Button>

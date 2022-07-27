@@ -3,9 +3,11 @@ import { Table , Card, Row, Col, Pagination, Modal, Input, Button, Form, List, D
 import React, { useEffect, useState } from 'react'
 import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
+import { userHasAnyRole } from '../../../services/api/auth'
 import { fetchPayments, cancelPayment } from '../../../services/api/payment-draft'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import PaymentDetails from '../../../shared/PaymentDetails'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
 import openNotification from '../../../util/notification'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
@@ -114,15 +116,19 @@ const PaymentHistory = (props) => {
         chequeNumber: selectedPayment?.chequeNumber
       }
       const result = await cancelPayment(selectedPayment?.id, payload)
+      console.log('response', result)
       if(result.status === RESPONSE_SUCCESS_CODE) {
         openNotification("success", "Cancel Payment", result?.message)
         setCancelVisible(false)
         setSelectedPayment(null)
         cancelForm.resetFields()
         fetchPaymentHistory()
+      } else {
+        openNotification("error", "Cancel Payment", result?.message)
       }
     } catch (error) {
-      openNotification("success", "Cancel Payment", "Failed")
+      const message = error?.response?.data?.message || "Failed to cancel payment"
+      openNotification("success", "Cancel Payment", message)
     } finally {
       setCancelling(false)
     }
@@ -246,7 +252,7 @@ const PaymentHistory = (props) => {
               <Input.TextArea rows={4} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" danger htmlType="submit" loading={cancelling}>
+              <Button disabled={!userHasAnyRole(props?.current_user?.role, [EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER])} type="primary" danger htmlType="submit" loading={cancelling}>
                 Cancel Payment
               </Button>
             </Form.Item>
