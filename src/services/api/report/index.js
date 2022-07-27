@@ -69,7 +69,6 @@ export function generateAccountPaymentsReport(query) {
     const url = `${RESOURCE_BASE_URL}/accounts/paymentReport${queryStr}`
     downloadFile(url)
   } else {
-    console.log('api query', query)
     return service({url: `/accounts/paymentReport${queryStr}`})
   }
   
