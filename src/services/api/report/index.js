@@ -90,7 +90,7 @@ export function generateAccountPettyCashPaymentsReport(query) {
 export function generateFloatAgeingAnalysisReport(query) {
   
   const queryStr = serializeQueryParamsNotNull(query)
-  const url = `${BASE_URL}/accounts/floatAgeingAnalysisReport${queryStr}`
+  const url = `${RESOURCE_BASE_URL}/accounts/floatAgeingAnalysisReport${queryStr}`
   if(query.download) {
     downloadFile(url)
   } else {
