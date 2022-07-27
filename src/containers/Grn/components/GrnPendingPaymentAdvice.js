@@ -1,10 +1,16 @@
-import { CheckOutlined, RightOutlined } from '@ant-design/icons'
-import { Card, Row, Col, Button, Table, Drawer, Form, DatePicker } from 'antd'
+import { CheckOutlined, RightOutlined, CommentOutlined } from '@ant-design/icons'
+import { Card, Row, Col, Button, Table, Drawer, Form, DatePicker, Tooltip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { GRN_COLUMNS } from '..'
 import GrnDocumentReview from '../../../presentation/GrnDocumentReview'
+import GrnComment from '../../../shared/GrnComment'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
+import MyDrawer from '../../../shared/MyDrawer'
+import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
+import { EMPLOYEE_ROLE } from '../../../util/datas'
+
+
 
 const columns = props => GRN_COLUMNS.concat([
   {
@@ -12,7 +18,16 @@ const columns = props => GRN_COLUMNS.concat([
     dataIndex: "actions",
     key: "actions",
     align: "right",
-    render: (text, row) => (<Button size="small" type="default" onClick={() => props.onSelect(row)}>Advise Payment <RightOutlined /></Button>)
+    render: (text, row) => (<div style={{display: 'flex', flexDirection: 'row'}}>
+          <Tooltip title="COMMENT">
+            <Button onClick={e => props.onComment(row)} size='small' style={{merginRight: 5}}>
+              <CommentOutlined />
+            </Button>
+          </Tooltip>
+          <Tooltip>
+            <Button size="small" type="default" onClick={() => props.onSelect(row)}>Advise Payment <RightOutlined /></Button>
+          </Tooltip>
+    </div>)
   }
 ])
 
@@ -29,6 +44,20 @@ const GrnPendingPaymentAdvice = (props) => {
   const [visible, setVisible] = useState(false)
   const [selectedGrn, setSelectedGrn] = useState(null)
   const [form] = Form.useForm()
+  const [commentVisible, setCommentVisible] = useState(false)
+
+  const paymentProcessMethod = () => {
+    switch(props?.currentUser.role) {
+      case EMPLOYEE_ROLE.ROLE_STORE_OFFICER:
+        return COMMENT_PROCESS_VALUES.GRN_STORES
+      case EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER:
+        return COMMENT_PROCESS_VALUES.REVIEW_GRN_PROCUREMENT
+      case EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER:
+        return COMMENT_PROCESS_VALUES.REVIEW_GRN_ACCOUNTS
+      default:
+        return COMMENT_PROCESS_VALUES.GRN_STORES
+    }
+  }
 
   useEffect(() => {
     fetchGrns({needPaymentAdvice: true})
@@ -53,6 +82,12 @@ const GrnPendingPaymentAdvice = (props) => {
                 onSelect: (row) => {
                   setSelectedGrn(Object.assign({}, row))
                   setVisible(true)
+                },
+                onComment: row => {
+                  props.resetComment()
+                  props.fetchComments(row.id, COMMENT_TYPES.GRN)
+                  setSelectedGrn(row)
+                  setCommentVisible(true)
                 }
               })}
               dataSource={grns}
@@ -121,6 +156,32 @@ const GrnPendingPaymentAdvice = (props) => {
           </Col>
         </Row>
       </Drawer>
+      <MyDrawer
+        visible={commentVisible}
+        title="GRN COMMENTS"
+        onClose={() => {
+          setCommentVisible(false)
+          setSelectedGrn(null)
+        }}
+      >
+        <GrnComment 
+          loading={props.comments_loading}
+          grn={selectedGrn}
+          comments={props.comments}
+          newComment={props.new_comment}
+          submitting={props.submitting_comment}
+          onCommentChange={newComment => {
+            props.setNewComment(newComment)
+          }}
+          onSubmit={(newComment) => {
+            const payload = {
+              'description': newComment,
+              'process': paymentProcessMethod()
+            }
+            props.createComment(COMMENT_TYPES.GRN, selectedGrn?.id, payload)
+          }}
+        />
+      </MyDrawer>
     </>
   )
 }

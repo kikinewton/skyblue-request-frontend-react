@@ -22,7 +22,7 @@ const columns = (props) => GRN_COLUMNS.concat([
     key: "actions",
     render: (text, row) => (<>
       <Row>
-      <Col span={12}>
+        <Col span={12}>
           <Tooltip title="COMMENT">
             <Button onClick={e => props.onComment(row)} size='small' >
               <CommentOutlined />
