@@ -20,6 +20,13 @@ export function fetchPaymentDraft(query) {
   })
 }
 
+export function deletePaymentDraft(id) {
+  return service({
+    url: `/paymentDrafts/${id}`,
+    method: 'DELETE',
+  })
+}
+
 export function updatePaymentDraft(id, payload) {
   if(payload.approval) {
     return service({

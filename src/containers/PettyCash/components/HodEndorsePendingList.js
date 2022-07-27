@@ -426,7 +426,7 @@ const HodEndorsePendingList = (props) => {
 
       <MyDrawer
         visible={commentVisible}
-        title="PAYMENT DRAFT DETAILS"
+        title="PETTY CASH"
         onClose={() => {
           setCommentVisible(false)
           setSelectedRequest(null)

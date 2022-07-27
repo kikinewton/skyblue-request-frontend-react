@@ -11,7 +11,8 @@ import {
   fetchPaymentDrafts as fetchPaymentDraftsApi,
   fetchPaymentDraft as fetchPaymentDraftApi,
   createPaymentDraft as createPaymentDraftApi,
-  updatePaymentDraft as updatePaymentDraftApi
+  updatePaymentDraft as updatePaymentDraftApi,
+  deletePaymentDraft as deletePaymentDraftApi
 } from '../../api/payment-draft'
 
 import openNotification from '../../../util/notification'
@@ -176,6 +177,26 @@ export function* createPaymentDraft(action) {
   }
 }
 
+export function* deletePaymentDraft(action) {
+  const { id } = action
+  try {
+    const response = yield call(deletePaymentDraftApi, id)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.createPaymentDraftSuccess(response.data))
+      message.success("Payment Draft successfully")
+    } else {
+
+      message.error(response?.message)
+      yield put(Creators.deletePaymentDraftFailure(response.message))
+    }
+  } catch (error) {
+    console.log('err: ', error?.response)
+    const errors = error?.response?.data?.message || "Payment Fialed"
+    message.error(errors)
+    yield put(Creators.delPaymentDraftFailure(errors))
+  }
+}
+
 
 export function* watchFetchPayments(action) {
   yield takeLatest(Types.FETCH_PAYMENTS, fetchPayments)
@@ -208,4 +229,8 @@ export function* watchUpdatePaymentDraft(action) {
 
 export function* watchCreatePaymentDraft(action) {
   yield takeLatest(Types.CREATE_PAYMENT_DRAFT, createPaymentDraft)
+}
+
+export function* watchDeletePaymentDraft(action) {
+  yield takeLatest(Types.CREATE_PAYMENT_DRAFT, deletePaymentDraft)
 }

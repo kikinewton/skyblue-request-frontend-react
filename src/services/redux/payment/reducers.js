@@ -109,6 +109,27 @@ export const fetchPaymentDraftsFailure = (state = INITIAL_STATE, action) => {
   return { ...state, loading: false, error: action.error, payments: [], filtered_payment_drafts: []};
 };
 
+//delete
+export const deletePaymentDraft = (state = INITIAL_STATE, action) => {
+  return { ...state, errors: null, submitting: false };
+};
+
+export const deletePaymentDraftSuccess = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state, 
+    submit_success: true,
+    submitting: false
+  };
+};
+
+export const deletePaymentDraftFailure = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state, error: action.error,
+    submit_success: false,
+    submitting: false
+  };
+};
+
 //edit
 export const updatePaymentDraft = (state = INITIAL_STATE, action) => {
   return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
@@ -187,6 +208,10 @@ export const HANDLERS = {
   [Types.CREATE_PAYMENT_DRAFT]: createPaymentDraft,
   [Types.CREATE_PAYMENT_DRAFT_SUCCESS]: createPaymentDraftSuccess,
   [Types.CREATE_PAYMENT_DRAFT_FAILURE]: createPaymentDraftFailure,
+
+  [Types.DELETE_PAYMENT_DRAFT]: deletePaymentDraft,
+  [Types.DELETE_PAYMENT_DRAFT_SUCCESS]: deletePaymentDraftSuccess,
+  [Types.DELETE_PAYMENT_DRAFT_FAILURE]: deletePaymentDraftFailure,
 
   [Types.FILTER_PAYMENT_DRAFTS]: filterPaymentDrafts,
   

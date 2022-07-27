@@ -465,7 +465,7 @@ const ApprovePendingList = (props) => {
       </Drawer>
       <MyDrawer
         visible={commentVisible}
-        title="PAYMENT DRAFT DETAILS"
+        title="PETTY CASH"
         onClose={() => {
           setCommentVisible(false)
           setSelectedRequest(null)

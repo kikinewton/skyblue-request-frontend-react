@@ -5,7 +5,7 @@ import { PAYMENT_COLUMNS } from '..'
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
-import { cancelPayment, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
+import { cancelPayment, deletePaymentDraft, fetchPaymentDraftsHistory } from '../../../services/api/payment-draft'
 import ConfirmModal from '../../../shared/ConfirmModal'
 import MyDrawer from '../../../shared/MyDrawer'
 import MyPageHeader from '../../../shared/MyPageHeader'
@@ -73,6 +73,7 @@ const PaymentDraftHistory = (props) => {
   const [cancelVisible, setCancelVisible] = useState(false)
   const [commentVisible, setCommentVisible] = useState(false)
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
+  const [deleting, setDeleting] = useState(false);
 
   const paymentProcessMethod = () => {
     switch(current_user.role) {
@@ -131,6 +132,17 @@ const PaymentDraftHistory = (props) => {
       
     } finally {
       setLoading(false)
+    }
+  }
+
+  const onDeleteDraft = async (id) => {
+    setDeleting(true)
+    const response = await deletePaymentDraft(id);
+    setDeleting(false)
+    if(response?.status === RESPONSE_SUCCESS_CODE) {
+      fetchPaymentHistory({...meta})
+      setDeleteDialogVisible(false)
+      setSelectedPayment(null)
     }
   }
 
@@ -334,15 +346,17 @@ const PaymentDraftHistory = (props) => {
           isVisible={deleteDialogVisible}
           onSubmit={() => {
             console.log('lets delete')
+            onDeleteDraft(selectedPayment?.id)
           }}
           submitBtnText='CANCEL PAYMENT DRAFT'
           cancelBtnText='UNDO CANCEL'
-          loading={props.submitting_payment}
+          loading={deleting}
           onCancel={() => {
             setSelectedPayment(null)
             setDeleteDialogVisible(false)
           }}
         >
+          <>
           <Row>
             <Col span={24}>
               {`Are you sure you want to cancel this payment draft (${selectedPayment?.reference})?`}
@@ -360,6 +374,7 @@ const PaymentDraftHistory = (props) => {
               </List>
             </Col>
           </Row>
+          </>
         </ConfirmModal>
       </AppLayout>
     </>

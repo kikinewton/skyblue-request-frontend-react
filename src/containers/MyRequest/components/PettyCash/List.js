@@ -168,7 +168,7 @@ const List = (props) => {
         <Drawer
           forceRender
           visible={viewVisible}
-          title={`DETAILS`}
+          title="PETTY CASH DETAILS"
           placement="right"
           width={800}
           maskClosable={false}

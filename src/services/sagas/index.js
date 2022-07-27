@@ -112,6 +112,7 @@ import {
 	watchFetchPaymentDraft,
 	watchFetchPaymentDrafts,
 	watchUpdatePaymentDraft,
+  watchDeletePaymentDraft,
 } from "./payment"
 import { watchfetchDashboardData } from "./dashboard";
 import { watchFetchNotifications } from "./notification";
@@ -203,6 +204,7 @@ export default function* rootSaga() {
 		watchFetchPaymentDraft(),
 		watchFetchPaymentDrafts(),
 		watchUpdatePaymentDraft(),
+    watchDeletePaymentDraft(),
 
 		watchfetchDashboardData(),
 

@@ -309,7 +309,7 @@ const FloatList = (props) => {
         </Drawer>
         <MyDrawer
           visible={commentVisible}
-          title="PAYMENT DRAFT DETAILS"
+          title="FLOAT"
           onClose={() => {
             setCommentVisible(false)
             setSelectedFloatOrder(null)

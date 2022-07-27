@@ -31,9 +31,13 @@ export const { Types, Creators } = createActions(
     fetchPaymentDraftSuccess: ["responseData"],
     fetchPaymentDraftFailure: ["error"],
 
-    updatePaymentDraft: ["id","payload"],
     updatePaymentDraftSuccess: ["responseData"],
+    updatePaymentDraft: ["id","payload"],
     updatePaymentDraftFailure: ["error"],
+
+    deletePaymentDraft: ["id"],
+    deletePaymentDraftSuccess: ["responseData"],
+    deletePaymentDraftFailure: ["error"],
 
     createPaymentDraft: ["payload"],
     createPaymentDraftSuccess: ["responseData"],
