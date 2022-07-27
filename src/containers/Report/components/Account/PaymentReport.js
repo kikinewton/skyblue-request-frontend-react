@@ -70,7 +70,6 @@ const PaymentReport = props => {
       query['pageNo'] = 0
       query['pageSize'] = meta?.pageSize
     }
-    console.log('query', query)
     const result = await generateAccountPaymentsReport(query) 
     if(type === 'get') {
       const { currentPage, pageSize, total, totalPages } = result?.meta
