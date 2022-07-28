@@ -21,6 +21,7 @@ import CreateFloatGrn from './components/CreateFloatGrn'
 import AllGrns from './components/AllGrns'
 import NotificationBadge from '../../shared/NotificationBadge'
 import { Creators as CommentCreators } from '../../services/redux/comment/actions'
+import GrnAwaitingPaymentList from './components/GrnAwaitingPaymentList'
 
 export const GRN_COLUMNS = [
   {
@@ -83,8 +84,10 @@ const GrnIndex = (props) => {
       setKey("/app/grn/lpos-pending-grn")
     } else if(url.includes("/app/grn/pending-endorsement")) {
       setKey("/app/grn/pending-endorsement")
-    } else if(url.includes("/app/grn/pending-approval")) {
+    }  else if(url.includes("/app/grn/pending-approval")) {
       setKey("/app/grn/pending-approval")
+    } else if(url.includes("/app/grn/pending-payment")) {
+      setKey("/app/grn/pending-payment")
     } else if(url.includes("/app/grn/all")) {
       setKey("/app/grn/all")
     } else if(url.includes("/app/grn/pending-payment-advice")) {
@@ -134,6 +137,17 @@ const GrnIndex = (props) => {
               </NavLink>
             </Menu.Item>
             )}
+            {currentUser.role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER && (
+            <Menu.Item key="/app/grn/pending-payment">
+              <NavLink to="/app/grn/pending-payment">
+                {notifications.grnPendingEndorsement ? (
+                  <NotificationBadge count={notifications.grnsPendingEndorsement || 0}>
+                    GRNs Awaiting payment
+                  </NotificationBadge>
+                ) : (<span>GRNs Awaiting payment</span>)}
+              </NavLink>
+            </Menu.Item>
+            )}
             {/* {currentUser.role === EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER && (
               <Menu.Item key="/app/grn/pending-approval">
                 <NavLink to="/app/grn/pending-approval">
@@ -165,6 +179,7 @@ const GrnIndex = (props) => {
             {DefaultRedirect}
           </AuthenticatedRoute>
           <AuthenticatedRoute path={`${path}/pending-endorsement`} {...props} component={GrnPendingEndorsement} />
+          <AuthenticatedRoute path={`${path}/pending-payment`} {...props} component={GrnAwaitingPaymentList} />
           {/* <AuthenticatedRoute path={`${path}/pending-approval`} {...props} component={GrnPendingApproval} /> */}
           <AuthenticatedRoute path={`${path}/add-new`} {...props} component={CreateGrn} />
           <AuthenticatedRoute path={`${path}/grn-success`} {...props} component={GrnSuccessPage} />
