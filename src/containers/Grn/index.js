@@ -86,12 +86,12 @@ const GrnIndex = (props) => {
       setKey("/app/grn/pending-endorsement")
     }  else if(url.includes("/app/grn/pending-approval")) {
       setKey("/app/grn/pending-approval")
+    } else if(url.includes("/app/grn/pending-payment-advice")) {
+      setKey("/app/grn/pending-payment-advice")
     } else if(url.includes("/app/grn/pending-payment")) {
       setKey("/app/grn/pending-payment")
     } else if(url.includes("/app/grn/all")) {
       setKey("/app/grn/all")
-    } else if(url.includes("/app/grn/pending-payment-advice")) {
-      setKey("/app/grn/pending-payment-advice")
     } else if(url.includes("/app/grn/new-float-grn")) {
       setKey("/app/grn/new-float-grn")
     }
