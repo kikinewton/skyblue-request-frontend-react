@@ -116,7 +116,6 @@ const PaymentHistory = (props) => {
         chequeNumber: selectedPayment?.chequeNumber
       }
       const result = await cancelPayment(selectedPayment?.id, payload)
-      console.log('response', result)
       if(result.status === RESPONSE_SUCCESS_CODE) {
         openNotification("success", "Cancel Payment", result?.message)
         setCancelVisible(false)
