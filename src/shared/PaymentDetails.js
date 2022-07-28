@@ -55,7 +55,7 @@ const PaymentDetails = (props) => {
         <Col span={24}>
           <GoodsReceivedNoteDetails 
             grn={payment?.grn || payment?.goodsReceivedNote}
-            invoiceDocument={(payment?.grn || payment?.goodsReceivedNote || {}).invoice?.invoiceDocument}
+            invoiceDocument={(payment?.grn || payment?.goodsReceivedNote || {})?.invoice?.invoiceDocument}
           />
         </Col>
       </Row>
