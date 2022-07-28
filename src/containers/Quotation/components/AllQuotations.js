@@ -174,7 +174,8 @@ const ListAllQuotations = (props) => {
               type='default'
               disabled={props.comments.length < 1 || !userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])}
               onClick={() => {
-                downloadComments(selectedQuotation?.quotation?.id, COMMENT_TYPES.QUOTATION)
+                console.log('selcte dquoataion', selectedQuotation)
+                downloadComments(selectedQuotation?.id, COMMENT_TYPES.QUOTATION)
               }}
             >
               <FileExcelOutlined/> EXPORT COMMENTS
