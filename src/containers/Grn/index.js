@@ -140,11 +140,7 @@ const GrnIndex = (props) => {
             {currentUser.role === EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER && (
             <Menu.Item key="/app/grn/pending-payment">
               <NavLink to="/app/grn/pending-payment">
-                {notifications.grnPendingEndorsement ? (
-                  <NotificationBadge count={notifications.grnsPendingEndorsement || 0}>
-                    GRNs Awaiting payment
-                  </NotificationBadge>
-                ) : (<span>GRNs Awaiting payment</span>)}
+                <span>GRNs Awaiting payment</span>
               </NavLink>
             </Menu.Item>
             )}
