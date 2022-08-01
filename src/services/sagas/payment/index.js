@@ -232,5 +232,5 @@ export function* watchCreatePaymentDraft(action) {
 }
 
 export function* watchDeletePaymentDraft(action) {
-  yield takeLatest(Types.CREATE_PAYMENT_DRAFT, deletePaymentDraft)
+  yield takeLatest(Types.DELETE_PAYMENT_DRAFT, deletePaymentDraft)
 }
