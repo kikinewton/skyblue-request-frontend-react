@@ -78,7 +78,7 @@ const columns = props => [
         </Button>
       </Col>
       <Col span={8} offset={1}>
-        <Button size='small' type="primary" onClick={() => props.onReview(row)}>REVIEW</Button>
+        <Button disabled={row.status === 'PENDING'} size='small' type="primary" onClick={() => props.onReview(row)}>REVIEW</Button>
       </Col>
     </Row>)
   }
