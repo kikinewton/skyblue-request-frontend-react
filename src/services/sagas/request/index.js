@@ -95,9 +95,10 @@ export function* updateRequest(action) {
       yield put(Creators.updateRequestFailure(response.message))
     }
   } catch (error) {
-    const errors = error?.response?.data?.errors
-    const message = (error && error.response.data && error.response.data.error) || 'Internal Server Error'
-    openNotification('error', 'UPDATE REQUEST', errors[0])
+    //const errors = error?.response?.data?.errors
+    console.log('update request error', error?.response?.data)
+    const message = (error?.response?.data?.message) || 'Internal Server Error'
+    openNotification('error', 'UPDATE REQUEST', message)
     yield put(Creators.updateRequestFailure(message))
   }
 }
