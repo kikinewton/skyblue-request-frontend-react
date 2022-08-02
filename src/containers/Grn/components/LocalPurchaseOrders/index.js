@@ -16,7 +16,7 @@ const columns = (props) => [
     title: 'Supplier',
     dataIndex: 'supplierId',
     key: 'supplierId',
-    render: (text, row) => row?.requestItems[0]?.suppliers.find(item => item.id === row.supplierId)?.name || 'N/A'
+    render: (text, row) => row?.quotation?.supplier || 'N/A'
   },
   {
     title: 'Created On',
