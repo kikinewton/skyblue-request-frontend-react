@@ -21,13 +21,13 @@ const columns = (props) => [
     title: 'CREATED ON',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    render: (text, row) => prettifyDateTime(row?.quotation?.createdAt)
+    render: (text, row) => prettifyDateTime(row?.createdAt)
   },
   {
     title: 'SUPPLIER',
     dataIndex: 'supplier',
     key: 'supplier',
-    render: (text, row) => row?.quotation?.supplier?.name
+    render: (text, row) => row?.quotation?.supplier
   },
   {
     title: 'QUOTATION REF',

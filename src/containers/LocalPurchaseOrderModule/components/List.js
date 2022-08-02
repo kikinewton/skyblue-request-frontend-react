@@ -9,7 +9,7 @@ const columns = (props) => [
     title: 'SUPPLIER',
     dataIndex: 'supplierId',
     key: 'supplierId',
-    render: (text, row)=> row?.requestItems[0]?.suppliers.find(item=> item.id === row.supplierId)?.name || 'N/A'
+    render: (text, row)=> row?.quotation?.supplier
   },
   {
     title: 'CREATED ON',
