@@ -186,7 +186,8 @@ const CollapsibleLayout = (props) => {
                 <NavLink to="/app/float">
                   <ReconciliationOutlined />
                   <span>FLOATS</span>
-                  {notifications?.floatPendingEndorsement || notifications?.floatPendingApprovalGM ? <NotificationBadge/> : null}
+                  {notifications?.floatPendingEndorsement || notifications?.floatPendingApprovalGM || notifications?.retireFloatPendingApprovalGM 
+                   || notifications?.retireFloatPendingAuditorCheck ? <NotificationBadge/> : null}
                 </NavLink>
               </Menu.Item>
             </>
