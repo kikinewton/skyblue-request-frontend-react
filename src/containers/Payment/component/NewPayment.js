@@ -39,7 +39,7 @@ const NewPayment = (props) => {
       paymentMethod,
       purchaseNumber,
       bank,
-      paymentAmount: parseInt(paymentAmount),
+      paymentAmount: parseFloat(paymentAmount),
       paymentStatus,
       currency: grn?.receivedItems[0]?.currency,
       withholdingTaxPercentage,

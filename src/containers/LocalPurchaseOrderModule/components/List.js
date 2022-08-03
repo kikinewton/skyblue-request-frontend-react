@@ -79,7 +79,7 @@ const List = (props) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'name', key: 'name'},
       {title: 'Reason', dataIndex: 'reason', key: 'reason'},
-      {title: 'Qauntity', dataIndex: 'quantity', key: 'quantity'},
+      {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
       {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
       {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
         <span><Badge status={text === 'PROCESSED' ? 'success' : 'error'} />{text}</span>
