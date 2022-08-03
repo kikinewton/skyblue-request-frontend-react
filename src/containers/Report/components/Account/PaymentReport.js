@@ -59,6 +59,16 @@ const columns = [
     render: text => formatCurrency(text)
   },
   {
+    title: "Approved By (GM)",
+    dataIndex: "approvedByGm",
+    key: "approvedByGm"
+  },
+  {
+    title: "Checked By (Auditor)",
+    dataIndex: "checkedByAuditor",
+    key: "checkedByAuditor"
+  },
+  {
     title: "Payment Status",
     dataIndex: "paymentStatus",
     key: "paymentStatus"
