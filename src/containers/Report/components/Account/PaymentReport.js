@@ -13,7 +13,7 @@ const columns = [
     key: "supplier"
   },
   {
-    title: "Payment Data",
+    title: "Payment Date",
     dataIndex: "paymentDate",
     key: "paymentDate",
     render: (text) => prettifyDateTime(text)
@@ -29,16 +29,34 @@ const columns = [
     key: "chequeNumber"
   },
   {
-    title: "Paid Amount",
-    dataIndex: "paidAmount",
-    key: "paidAmount",
-    render: text => formatCurrency(text)
-  },
-  {
     title: "Payment Due Data",
     dataIndex: "paymentDueDate",
     key: "PaymentDueDate",
     render: text => prettifyDateTime(text)
+  },
+  {
+    title: "Amount Payable",
+    dataIndex: "payableAmount",
+    key: "payableAmount",
+    render: text => formatCurrency(text)
+  },
+  {
+    title: "Withholding Tax (%)",
+    dataIndex: "withholdingTaxPercentage",
+    key: "withholdingTaxPercentage",
+    render: text => `${text}%`
+  },
+  {
+    title: "Withholding Tax amount",
+    dataIndex: "withholdingTaxAmount",
+    key: "withholdingTaxAmount",
+    render: text => formatCurrency(text)
+  },
+  {
+    title: "Amount After Tax",
+    dataIndex: "amountAfterTax",
+    key: "amountAfterTax",
+    render: text => formatCurrency(text)
   },
   {
     title: "Payment Status",

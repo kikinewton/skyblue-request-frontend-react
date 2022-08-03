@@ -61,7 +61,6 @@ const NewPayment = (props) => {
   }
 
   React.useEffect(()=> {
-    console.log('==========ON NEW PAYMENT PAGE============')
     props.resetPayment()
     fetchGrn(grnId)
   }, [grnId])
