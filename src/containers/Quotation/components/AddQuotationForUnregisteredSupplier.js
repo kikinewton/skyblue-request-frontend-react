@@ -330,7 +330,7 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
                 <FilesView files={files} />
               </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop: 10}}>
               <Col span={12} style={{textAlign: 'left'}}>
                 <Button type="default" onClick={()=> setCurrent(2)}>
                   <LeftOutlined />
