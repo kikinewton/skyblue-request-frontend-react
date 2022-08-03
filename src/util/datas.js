@@ -34,6 +34,9 @@ export const REQUEST_REASONS = [
   {id: "Replace", label: "REPLACE"},
   {id: "Restock", label: "RESTOCK"},
   {id: "FreshNeed", label: "FRESH-NEED"},
+  {id: "Renovation", label: "RENOVATION"},
+  {id: "Servicing", label: "SERVICING"},
+  {id: "NewProject", label: "NEW-PROJECT"},
 ]
 
 export const PAYMENT_METHODS = [

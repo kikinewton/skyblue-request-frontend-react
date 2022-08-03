@@ -74,7 +74,7 @@ const GrnPendingPaymentAdvice = (props) => {
 
   return (
     <>
-      <Card size="small" title="Goods Received Note Awaiting Payment Advive">
+      <Card size="small" title="Goods Received Note Awaiting Payment Advice">
         <Row>
           <Col span={24}>
             <Table
