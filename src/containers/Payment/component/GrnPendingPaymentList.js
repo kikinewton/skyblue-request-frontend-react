@@ -73,11 +73,12 @@ const GrnPendingPaymentList = (props) => {
     }
   }
 
-  const handleGoToNewPayment = (row) => {
-    history.push(`/app/payments/goods-receive-notes/${row.id}/add-new-payment`)
-  }
+  // const handleGoToNewPayment = (row) => {
+  //   history.push(`/app/payments/goods-receive-notes/${row.id}/add-new-payment`)
+  // }
 
   React.useEffect(()=> {
+    props.resetPayment()
     resetGrn()
     fetchGrns({
       paymentInComplete: true
@@ -93,7 +94,8 @@ const GrnPendingPaymentList = (props) => {
           <Col md={24}>
             <Card size="small" title="GOODS RECEIVE NOTES AWAITING PAYMENT">
               <Table
-                columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row), 
+                columns={columns({...props, 
+                  onNewPaymentClick: (row)=> history.push(`/app/payments/goods-receive-notes/${row.id}/add-new-payment`),
                   onComment: row => {
                     props.resetComment()
                     props.fetchComments(row?.id, COMMENT_TYPES.GRN)

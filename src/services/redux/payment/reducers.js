@@ -175,7 +175,8 @@ export const resetPaymentDraft = (state = INITIAL_STATE, action) => {
     filtered_payment_drafts: [],
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    submit_success: false
   };
 };
 

@@ -9,6 +9,7 @@ import MyPageHeader from "../../../shared/MyPageHeader"
 import { formatCurrency } from "../../../util/common-helper"
 import AppLayout from '../../AppLayout'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
+import openNotification from '../../../util/notification'
 
 const { Option } = Select
 
@@ -60,12 +61,17 @@ const NewPayment = (props) => {
   }
 
   React.useEffect(()=> {
+    console.log('==========ON NEW PAYMENT PAGE============')
+    props.resetPayment()
     fetchGrn(grnId)
   }, [grnId])
 
   React.useEffect(() => {
     if(!submitting_payment && submit_payment_success) {
+      console.log('Payment created successfully')
       history.push("/app/payments/payment-success")
+      //openNotification("success", "CREATE PAYMENT DRAFT", "PAYMENT DRAFT CREATED")
+      //history.push('/app/payments/all-drafts')
     }
   }, [submitting_payment, submit_payment_success])
 
