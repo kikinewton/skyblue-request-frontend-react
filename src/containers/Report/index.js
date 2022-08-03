@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../AppLayout'
 import ReportMenuItems from './components/ReportMenuItems'
-import { Switch } from 'react-router-dom'
+import { Redirect, Switch } from 'react-router-dom'
 import PaymentReport from './components/Account/PaymentReport'
 import FloatAgeingAnalysisReport from './components/Account/FloatAgeingAnalysisReport'
 import PettyCashPaymentReport from './components/Account/PettyCashPaymentReport'
@@ -21,6 +21,9 @@ const Report = (props) => {
         <Row>
           <Col span={24}>
             <Switch>
+              <AuthenticatedRoute path="/app/reports" exact>
+                <Redirect to="/app/reports/accounts/float-ageing-analysis" />
+              </AuthenticatedRoute>
               <AuthenticatedRoute path="/app/reports/accounts/payments" component={PaymentReport} {...props}  /> 
               <AuthenticatedRoute path="/app/reports/accounts/float-ageing-analysis" component={FloatAgeingAnalysisReport} {...props}  /> 
               <AuthenticatedRoute path="/app/reports/accounts/petty-cash-payments" component={PettyCashPaymentReport} {...props}  />  
