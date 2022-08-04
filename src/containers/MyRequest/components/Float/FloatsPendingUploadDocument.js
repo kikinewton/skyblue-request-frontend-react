@@ -113,7 +113,7 @@ const floatEntriesColumns = [
 
 const FloatsPendingUploadDocument = (props) => {
   const { fetchMyFloatRequests, fetching_float_requests, 
-    updateSingleFloatRequest, submiting_float_request, submit_float_request_success, fetchFloatOrders,  fetchFloatRequests,
+    updateSingleFloatRequest, submitting_float_request, submit_float_request_success, fetchFloatOrders,  fetchFloatRequests,
     float_orders, float_requests, resetFloatRequest, retireFloatOrder } = props
   const history = useHistory()
   const [visible, setVisible] = React.useState(false)
@@ -174,7 +174,7 @@ const FloatsPendingUploadDocument = (props) => {
 
   React.useEffect(() => {
     console.log("float submit status change")
-    if(!submiting_float_request && submit_float_request_success) {
+    if(!submitting_float_request && submit_float_request_success) {
       console.log("float submit successful hence lets update state")
       setVisible(false)
       setFiles([])
@@ -182,7 +182,7 @@ const FloatsPendingUploadDocument = (props) => {
       fetchFloatRequests({requestType: FETCH_FLOAT_REQUEST_TYPES.MY_AWAITING_RETIREMENT})
       //setSelectionDetails({type: SELECTION_TYPES.VIEW, row: null})
     }
-  }, [submit_float_request_success, submiting_float_request])
+  }, [submit_float_request_success, submitting_float_request])
 
   
 
@@ -247,7 +247,7 @@ const FloatsPendingUploadDocument = (props) => {
             <Row style={{marginBottom: 20}}>
               <Col span={24} style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
                 <Button type='primary'
-                  loading={submiting_float_request}
+                  loading={submitting_float_request}
                   disabled={!selectedFloatForRetirement?.fundsReceived || selectedFloatForRetirement.hasDocument || files.length < 1}
                   onClick={() => {
                     onSubmit()

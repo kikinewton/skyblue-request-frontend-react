@@ -1,5 +1,5 @@
 import { Result, Button } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { history } from '../../../util/browser-history'
 import AppLayout from '../../AppLayout'
 import PaymentsSubNav from './PaymentsSubNav'
@@ -9,6 +9,10 @@ const PaymentSuccess = (props) => {
   const {
     current_user
   } = props
+
+  useEffect(() => {
+    props.resetPayment()
+  }, [])
   return (
     <React.Fragment>
       <AppLayout

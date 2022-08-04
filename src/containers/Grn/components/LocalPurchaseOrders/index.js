@@ -16,7 +16,7 @@ const columns = (props) => [
     title: 'Supplier',
     dataIndex: 'supplierId',
     key: 'supplierId',
-    render: (text, row) => row?.quotation.supplier || 'N/A'
+    render: (text, row) => row?.quotation?.supplier || 'N/A'
   },
   {
     title: 'Created On',

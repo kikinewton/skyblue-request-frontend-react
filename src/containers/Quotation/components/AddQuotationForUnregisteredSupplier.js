@@ -101,12 +101,14 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
       supplier: {
         id: selectedSupplier?.supplierId,
         name: selectedSupplier?.supplierName,
-        phone_no: "0242688682",
+        phone_no: "0242688682", //TODO Get supplier phone number
       },
-      deliveryDate: "",
+      deliveryDate: "", 
       location: "",
-      phoneNo: "0242688682",
-      productDescription: selectedRequestItems.map(it => `${it.name} (GHS ${it.unitPrice})`).join(", "),
+      phoneNo: "0242688682", //TODO Get supplier phone number
+      items: selectedRequestItems.map(it => {
+        return {...it, estimatedPrice: it?.unitPrice, description: it?.name}
+      }),
     }
     try {
       const response = await generateQuotationForUnregisteredSupplier(payload)
@@ -328,12 +330,14 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
                 <FilesView files={files} />
               </Col>
             </Row>
-            <Row>
-              <Col>
-              <Button type="default" onClick={()=> setCurrent(2)}>
+            <Row style={{marginTop: 10}}>
+              <Col span={12} style={{textAlign: 'left'}}>
+                <Button type="default" onClick={()=> setCurrent(2)}>
                   <LeftOutlined />
                   Generate Supporting Document
                 </Button>
+              </Col>
+              <Col span={12} style={{textAlign: 'right'}}>
                 <Button
                   loading={quotationSubmitting}
                   type="primary"

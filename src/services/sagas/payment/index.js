@@ -163,16 +163,14 @@ export function* createPaymentDraft(action) {
     const response = yield call(createPaymentDraftApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
       yield put(Creators.createPaymentDraftSuccess(response.data))
-      message.success("Payment created successfully")
+      openNotification("success", "CREATE PAYMENT DRAFT", "PAYMENT DRAFT CREATED SUCCESSFULLY")
     } else {
-
-      message.error(response?.message)
+      openNotification("error", "CREATE PAYMENT DRAFT", response?.message)
       yield put(Creators.createPaymentDraftFailure(response.message))
     }
   } catch (error) {
-    console.log('err: ', error?.response)
-    const errors = error?.response?.data?.message || "Payment Fialed"
-    message.error(errors)
+    const errors = error?.response?.data?.message || "Payment Failed"
+    openNotification("error", "CREATE PAYMENT DRAFT", errors)
     yield put(Creators.createPaymentDraftFailure(errors))
   }
 }
