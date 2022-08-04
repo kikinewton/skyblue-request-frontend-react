@@ -39,7 +39,7 @@ const NewPayment = (props) => {
       paymentMethod,
       purchaseNumber,
       bank,
-      paymentAmount: parseInt(paymentAmount),
+      paymentAmount: parseFloat(paymentAmount),
       paymentStatus,
       currency: grn?.receivedItems[0]?.currency,
       withholdingTaxPercentage,
@@ -61,7 +61,6 @@ const NewPayment = (props) => {
   }
 
   React.useEffect(()=> {
-    console.log('==========ON NEW PAYMENT PAGE============')
     props.resetPayment()
     fetchGrn(grnId)
   }, [grnId])
