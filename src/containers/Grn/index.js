@@ -42,16 +42,10 @@ export const GRN_COLUMNS = [
     render: (text, row) => row?.finalSupplier?.name
   },
   {
-    title: "AMOUNT",
+    title: "INVOICE AMOUNT",
     dataIndex: "invoiceAmountPayable",
     key: "invoiceAmountPayable",
     render: (text, row) => formatCurrency(text, row?.receivedItems[0]?.currency || "GHS")
-  },
-  {
-    title: "ITEM COUNT",
-    dataIndex: "receivedItems",
-    key: "receivedItems",
-    render: (text, row) => row?.receivedItems.length
   },
 ]
 

@@ -12,18 +12,18 @@ import { EMPLOYEE_ROLE } from '../../../util/datas'
 
 const columns = (props) => GRN_COLUMNS.concat([
   {
-    title: "PAYMENT HISTORY",
+    title: "PAYMENT INITIATED",
     dataIndex: "hasPendingPaymentDraft",
     key: "hasPendingPaymentDraft",
     render: (text, row) => row?.hasPendingPaymentDraft ? (
       <>
         <Badge status="success" />
-        Has payment history
+        YES
       </>
     ) : (
       <>
         <Badge status="warning" />
-        No payment history
+        NO
       </>
     )
   },

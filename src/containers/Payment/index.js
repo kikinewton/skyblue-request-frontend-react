@@ -35,11 +35,7 @@ export const PAYMENT_COLUMNS = [
     key: "supplier",
     render: (text, record) => record?.goodsReceivedNote?.finalSupplier?.name
   },
-  {
-    title: "PAYMENT CHANNEL",
-    dataIndex: "paymentMethod",
-    key: "paymentMethod"
-  },
+
   {
     title: "AMOUNT",
     dataIndex: "paymentAmount",

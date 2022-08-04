@@ -42,15 +42,10 @@ const columns = [
   {
     title: "Endorsement Status",
     dataIndex: "approvedByHod",
-    key: "approvedbyHod",
+    key: "approvedByHod",
     render: text => text ? 'ENDORSED' : 'PENDING'
   },
-  {
-    title: "Approval Status",
-    dataIndex: "approvedByGm",
-    key: "approvedByGm",
-    render: text => text ? 'APPROVED' : 'PENDING'
-  },
+  
 ]
 
 

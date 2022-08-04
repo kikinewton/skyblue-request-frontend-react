@@ -35,7 +35,7 @@ const columns = [
     render: text => prettifyDateTime(text)
   },
   {
-    title: "Amount Payable",
+    title: "Amount Paid",
     dataIndex: "payableAmount",
     key: "payableAmount",
     render: text => formatCurrency(text)
@@ -45,18 +45,6 @@ const columns = [
     dataIndex: "withholdingTaxPercentage",
     key: "withholdingTaxPercentage",
     render: text => `${text}%`
-  },
-  {
-    title: "Withholding Tax amount",
-    dataIndex: "withholdingTaxAmount",
-    key: "withholdingTaxAmount",
-    render: text => formatCurrency(text)
-  },
-  {
-    title: "Amount After Tax",
-    dataIndex: "amountAfterTax",
-    key: "amountAfterTax",
-    render: text => formatCurrency(text)
   },
   {
     title: "Approved By (GM)",

@@ -24,7 +24,7 @@ const columns = [
   },
   {
     title: "Category",
-    dataIndex: "ctegory",
+    dataIndex: "category",
     key: "category"
   },
   {
@@ -40,11 +40,11 @@ const columns = [
   },
   {
     title: "Department",
-    dataIndex: "department",
+    dataIndex: "userDepartment",
     key: "department"
   },
   {
-    title: "Suplied By",
+    title: "Supplied By",
     dataIndex: "suppliedBy",
     key: "suppliedBy"
   },

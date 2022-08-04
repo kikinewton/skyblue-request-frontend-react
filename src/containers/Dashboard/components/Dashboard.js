@@ -91,12 +91,12 @@ const Dashboard = (props) => {
             </Row>
             <Row gutter={12} style={{marginTop: 20}}>
               <Col md={8} sm={24} xs={24}>
-                <Card style={{height: 350, marginBottom: 5}} title="APPROVED NUMBER OF REQUESTS PER DEPARTMENT" hoverable>
+                <Card style={{height: 350, marginBottom: 5}} title="SUPPLIER SPEND ANALYSIS" hoverable>
                   {(supplierSpendAnalysis || []).length < 1 ? "N/A" : 
                     <PieChart
                       type="doughnut"
                       maintainAspectRatio={false}
-                      label="APPROVED NUMBER OF REQUESTS PER DEPARTMENT"
+                      label="SUPPLIER SPEND ANALYSIS"
                       labels={(supplierSpendAnalysis || []).map(item=> item.name)}
                       data={(supplierSpendAnalysis || []).map(item=> item.paymentAmount)}
                     />
@@ -151,11 +151,11 @@ const Dashboard = (props) => {
                 </Card>
               </Col>
               <Col md={12} xs={24}>
-                <Card style={{height: 350, marginBottom: 5}} title="REQUEST PER CATEGORY FOR TODAY" hoverable>
+                <Card style={{height: 350, marginBottom: 5}} title="REQUEST PER CATEGORY" hoverable>
                   {(requestPerCategoryForToday || []).length < 1 ? "N/A" : 
                     <BarChart
                       maintainAspectRatio={false}
-                      label="REQUEST PER CATEGORY FOR TODAY"
+                      label="REQUEST PER CATEGORY"
                       labels={(requestPerCategoryForToday || []).map(item=> item.requestCategory)}
                       data={(requestPerCategoryForToday || []).map(item=> item.numOfRequest)}
                     />
