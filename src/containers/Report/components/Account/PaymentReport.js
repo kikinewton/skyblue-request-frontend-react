@@ -24,7 +24,7 @@ const columns = [
     key: "invoiceNo"
   },
   {
-    title: "Cheque Nuber",
+    title: "Cheque Number",
     dataIndex: "chequeNumber",
     key: "chequeNumber"
   },
