@@ -19,6 +19,8 @@ const ReportMenuItems = props => {
       setCurrent("/stores/goods-receive-notes")
     } else if(pathname.includes("/app/reports/procurement/items")) {
       setCurrent("/procurement/items")
+    } else if('/float-order-payment') {
+      setCurrent('/float-order-payment')
     }
     // eslint-disable-next-line
   }, [current])
@@ -48,6 +50,11 @@ const ReportMenuItems = props => {
           <Menu.Item key="/accounts/petty-cash-payments">
             <NavLink to="/app/reports/accounts/petty-cash-payments">
               Petty Cash Payments
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="/float-order-payment">
+            <NavLink to="/app/reports/accounts/float-order-payment">
+              Float payment report
             </NavLink>
           </Menu.Item>
         </Menu.SubMenu>

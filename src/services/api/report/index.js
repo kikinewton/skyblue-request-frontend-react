@@ -63,6 +63,7 @@ export function downloadGrnLink(query) {
   link.parentNode.removeChild(link)
 }
 
+//accounts
 export function generateAccountPaymentsReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
   if(query?.download) {
@@ -99,6 +100,17 @@ export function generateFloatAgeingAnalysisReport(query) {
 }
 
 
+export function generateFloatOrderPaymentReport(query) {
+  const queryStr = serializeQueryParamsNotNull(query)
+  const url = `${RESOURCE_BASE_URL}/accounts/floatOrderPaymentReport${queryStr}`
+  if(query.download) {
+    downloadFile(url)
+  } else {
+    return service({url: `/accounts/floatOrderPaymentReport${queryStr}`, method: "GET"})
+  }
+  
+}
+
 //store
 export function generateGoodsReceiveNotesReport(query) {
   const queryStr = serializeQueryParamsNotNull(query)
@@ -125,6 +137,8 @@ export function generateProcureItemsReportReport(query) {
     })
   }
 }
+
+
 
 export function downloadFile(url) {
   console.log('url', url)
