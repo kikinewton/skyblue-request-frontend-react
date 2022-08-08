@@ -1,71 +1,68 @@
 import { FileExcelOutlined, EyeOutlined } from '@ant-design/icons'
 import { Row, Col, Card, DatePicker, Button, message, Table, Pagination, Input } from 'antd'
 import React, { useState } from 'react'
-import { generateAccountPaymentsReport } from '../../../../services/api/report'
+import { generateFloatOrderPaymentReport } from '../../../../services/api/report'
 import MyPageHeader from "../../../../shared/MyPageHeader"
 import { formatCurrency, prettifyDateTime } from '../../../../util/common-helper'
 const { RangePicker } = DatePicker
 
 const columns = [
   {
-    title: "Supplier",
-    dataIndex: "supplier",
-    key: "supplier"
+    title: "Reference",
+    dataIndex: "floatOrderRef",
+    key: "floatOrderRef"
   },
   {
-    title: "Payment Date",
-    dataIndex: "paymentDate",
-    key: "paymentDate",
-    render: (text) => prettifyDateTime(text)
-  },
-  {
-    title: "Invoice Number",
-    dataIndex: "invoiceNo",
-    key: "invoiceNo"
-  },
-  {
-    title: "Cheque Number",
-    dataIndex: "chequeNumber",
-    key: "chequeNumber"
-  },
-  {
-    title: "Payment Due Data",
-    dataIndex: "paymentDueDate",
-    key: "PaymentDueDate",
+    title: "Requested On",
+    dataIndex: "requestedDate",
+    key: "requestedDate",
     render: text => prettifyDateTime(text)
   },
   {
-    title: "Amount Paid",
-    dataIndex: "payableAmount",
-    key: "payableAmount",
+    title: "Endoresed On",
+    dataIndex: "endorsementDate",
+    key: "endorsementDate",
+    render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "Approved On",
+    dataIndex: "approvalDate",
+    key: "approvalDate",
+    render: (text) => prettifyDateTime(text)
+  },
+  {
+    title: "Amount Requested",
+    dataIndex: "requestedAmount",
+    key: "requestedAmount",
     render: text => formatCurrency(text)
   },
   {
-    title: "Withholding Tax (%)",
-    dataIndex: "withholdingTaxPercentage",
-    key: "withholdingTaxPercentage",
-    render: text => `${text}%`
+    title: "Account Officer",
+    dataIndex: "accountOfficer",
+    key: "accountOfficer"
   },
   {
-    title: "Approved By (GM)",
-    dataIndex: "approvedByGm",
-    key: "approvedByGm"
+    title: "Funds Allocated On",
+    dataIndex: "fundsAllocatedDate",
+    key: "fundsAllocatedDate",
+    render: text => prettifyDateTime(text)
   },
   {
-    title: "Checked By (Auditor)",
-    dataIndex: "checkedByAuditor",
-    key: "checkedByAuditor"
+    title: "Amount Allocated",
+    dataIndex: "paidAmount",
+    key: "paidAmount",
+    render: text => formatCurrency(text)
   },
   {
-    title: "Payment Status",
-    dataIndex: "paymentStatus",
-    key: "paymentStatus"
+    title: "Retirement status",
+    dataIndex: "retired",
+    key: "retired",
+    render: (text,row) => text && row.retirementDate ? `Retired on ${prettifyDateTime(row?.retirementDate)}` : 'Not retired'
   },
 ]
 
-const PaymentReport = props => {
+const FloatOrderPaymentReport = props => {
   const [range, setRange] = useState([null, null])
-  const [supplier, setSupplier] = useState(null)
   const [loading, setLoading] = useState(false)
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [data, setData] = useState([])
@@ -78,7 +75,6 @@ const PaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      supplier,
     }
     if(type === 'download') {
       query['download'] = true;
@@ -86,7 +82,7 @@ const PaymentReport = props => {
       query['pageNo'] = 0
       query['pageSize'] = meta?.pageSize
     }
-    const result = await generateAccountPaymentsReport(query) 
+    const result = await generateFloatOrderPaymentReport(query) 
     if(type === 'get') {
       const { currentPage, pageSize, total, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
@@ -102,13 +98,12 @@ const PaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
-      supplier,
       pageNo: page - 1,
       pageSize: meta?.pageSize
     }
 
     try {
-      const result = await generateAccountPaymentsReport(query)
+      const result = await generateFloatOrderPaymentReport(query)
 
       const { currentPage, pageSize, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
@@ -123,7 +118,7 @@ const PaymentReport = props => {
   return (
     <>
       <MyPageHeader 
-        title="Payments" 
+        title="Float Order Payments" 
         extra={[
           <RangePicker 
             key="range"
@@ -131,13 +126,6 @@ const PaymentReport = props => {
             onChange={(momentArr, dateStrArr) => {
               setRange(momentArr)
             }} 
-          />,
-          <Input
-            onChange={e => setSupplier(e.target.value)}
-            value={supplier}
-            type="search"
-            style={{width: 200}}
-            placeholder='Supplier'
           />,
           <Button
             key="submit-btn-view"
@@ -192,4 +180,4 @@ const PaymentReport = props => {
   )
 }
 
-export default PaymentReport
+export default FloatOrderPaymentReport
