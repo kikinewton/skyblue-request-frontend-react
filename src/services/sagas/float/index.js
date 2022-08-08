@@ -92,16 +92,16 @@ export function* createFloatRequest(action) {
   try {
     const response = yield call(saveFloatRequestApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Float', response?.message)
+      openNotification('success', 'CREATE FLOAT', response?.message)
       yield put(Creators.createFloatRequestSuccess(response?.data))
     } else {
-      openNotification('error', 'Create Float', response?.message)
+      openNotification('error', 'CREATE FLOAT', response?.message)
       yield put(Creators.createFloatRequestFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
     console.log('errors', errorText)
-    openNotification('error', 'Create Float', errorText)
+    openNotification('error', 'CREATE FLOAT', errorText)
     yield put(Creators.createFloatRequestFailure(errorText))
   }
 }
@@ -111,15 +111,15 @@ export function* updateFloatOrderStatus(action) {
   try {
     const response = yield call(updateFloatOrderStatusApi, id, status)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Update Float', response?.message)
+      openNotification('success', 'UPDATE FLOAT', response?.message)
       yield put(Creators.updateFloatOrderStatusSuccess(response?.data))
     } else {
-      openNotification('error', 'Update Float Status', response?.message)
+      openNotification('error', 'UPDATE FLOAT STATUS', response?.message)
       yield put(Creators.updateFloatOrderStatusFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error?.response?.data?.errors || [])[0] || error?.response?.data?.message
-    openNotification('error', 'Update Float Status',errorText)
+    openNotification('error', 'UPDATE FLOAT STATUS',errorText)
     yield put(Creators.updateFloatOrderStatusFailure(errorText))
   }
 }

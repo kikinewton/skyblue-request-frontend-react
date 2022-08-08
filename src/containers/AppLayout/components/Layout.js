@@ -165,7 +165,7 @@ const CollapsibleLayout = (props) => {
               <Menu.Item key="request">
                 <NavLink to="/app/request-items">
                     <ReconciliationOutlined />
-                    <span>ITEM REQUESTS</span>
+                    <span>REQUESTS</span>
                     {notifications?.requestPendingEndorsementHOD || notifications.requestPendingApprovalGM || 
                      notifications.requestEndorsedByHOD ? <NotificationBadge /> : null} 
                 </NavLink>
