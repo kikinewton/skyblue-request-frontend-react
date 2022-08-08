@@ -35,6 +35,11 @@ const LocalPurchaseOrderDetails = (props) => {
                   <List.Item.Meta title="APPROVED BY" description={`${lpo?.approvedBy?.fullName}`} />
                 </List.Item>
               )}
+              {lpo?.isApproved && (
+                <List.Item>
+                  <List.Item.Meta title={`ENDORSED BY ${lpo?.department?.description} HOD`} description={`${lpo?.departmentHod}`} />
+                </List.Item>
+              )}
             </List>
           </Col>
         </Row>

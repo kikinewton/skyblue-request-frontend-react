@@ -21,4 +21,6 @@ FROM nginx:alpine
 
 #we copy the output from first stage that is our react build
 #into nginx html directory where it will serve our index file
+
+COPY default.conf /etc/nginx/cond.f
 COPY --from=build-stage /app/build/ /usr/share/nginx/html

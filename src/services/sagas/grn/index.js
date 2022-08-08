@@ -25,7 +25,7 @@ export function* fetchGrns(action) {
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Fetch Goods Received Notes'
-    openNotification('error', 'Fetch Goods Received Notes', errorText)
+    openNotification('error', 'Fetch GRN', errorText)
     yield put(Creators.fetchGrnsFailure(errorText))
   }
 }
@@ -42,7 +42,7 @@ export function* fetchGrn(action) {
       yield put(Creators.fetchGrnFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my float requests'
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to my GRN'
     openNotification('error', 'Fetch GRN', errorText)
     yield put(Creators.fetchGrnFailure(errorText))
   }
@@ -54,16 +54,16 @@ export function* createGrn(action) {
   try {
     const response = yield call(createGoodsReceiveNoteApi, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Create Supplier Goods Received Note', response?.message)
+      openNotification('success', 'Create Supplier GRN', response?.message)
       yield put(Creators.createGrnSuccess(response?.data))
       yield put(NotificationCreators.fetchNotifications())
     } else {
-      openNotification('error', 'Create Supplier Goods Received Note', response?.message)
+      openNotification('error', 'Create Supplier GRN', response?.message)
       yield put(Creators.createGrnFailure(response?.message))
     }
   } catch (error) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Create Supplier Goods Received Note'
-    openNotification('error', 'Create Supplier Goods Received Note', errorText)
+    openNotification('error', 'Create Supplier GRN', errorText)
     yield put(Creators.createGrnFailure(errorText))
   }
 }
@@ -74,16 +74,16 @@ export function* updateGrn(action) {
   try {
     const response = yield call(updateGoodsReceiveNoteApi, id, payload)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      openNotification('success', 'Update Supplier Goods Received Note', response?.message)
+      openNotification('success', 'Update Supplier GRN', response?.message)
       yield put(Creators.updateGrnSuccess(response?.data))
       yield put(NotificationCreators.fetchNotifications())
     } else {
-      openNotification('error', 'Update Supplier Goods Received Note', response?.message)
+      openNotification('error', 'Update Supplier GRN', response?.message)
       yield put(Creators.updateGrnFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Update Supplier Goods Received Note'
-    openNotification('error', 'Update Supplier Goods Received Note', errorText)
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Update Supplier GRN'
+    openNotification('error', 'Update Supplier GRN', errorText)
     yield put(Creators.updateGrnFailure(errorText))
   }
 }
