@@ -19,7 +19,17 @@ const columns = [
     render: text => prettifyDateTime(text)
   },
   {
-    title: "Endoresed On",
+    title: "Requester Staff Id",
+    dataIndex: "requesterStaffId",
+    key: "requesterStaffId",
+  },
+  {
+    title: "Created By",
+    dataIndex: "createdById",
+    key: "createdById",
+  },
+  {
+    title: "Endorsed On",
     dataIndex: "endorsementDate",
     key: "endorsementDate",
     render: (text) => prettifyDateTime(text)

@@ -443,7 +443,7 @@ export const FUNCTIONAL_ROLES = {
 
 
   requestMenu: [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_HOD],
-  report: [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_STORE_OFFICER]
+  report: [EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_AUDITOR, EMPLOYEE_ROLE.ROLE_ACCOUNT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_ADMIN]
 }
 
 
@@ -458,7 +458,7 @@ export const EXPANDED_PRODUCT_COLUMNS = (row) => {
   const expandedColumns = [
     {title: 'Description', dataIndex: 'name', key: 'name'},
     {title: 'Reason', dataIndex: 'reason', key: 'reason'},
-    {title: 'Qauntity', dataIndex: 'quantity', key: 'quantity'},
+    {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
     {title: "Unit Price", dataIndex: "unitPrice", key: "unitPrice", render: (text, row)=>`${formatCurrency(row?.unitPrice, row?.currency)}`},
     {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },
     {title: 'Status', dataIndex: 'status', key: 'status', render: (text) => (
