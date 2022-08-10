@@ -76,6 +76,7 @@ const FloatOrderPaymentReport = props => {
   const [loading, setLoading] = useState(false)
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
   const [data, setData] = useState([])
+  const [staffId, setStaffId] = useState("");
 
   const submit = async(type) => {
     if(!range[0] || !range[1]) {
@@ -85,6 +86,7 @@ const FloatOrderPaymentReport = props => {
     const query = {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
+      staffId
     }
     if(type === 'download') {
       query['download'] = true;
@@ -92,13 +94,19 @@ const FloatOrderPaymentReport = props => {
       query['pageNo'] = 0
       query['pageSize'] = meta?.pageSize
     }
-    const result = await generateFloatOrderPaymentReport(query) 
-    if(type === 'get') {
-      const { currentPage, pageSize, total, totalPages } = result?.meta
-      setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-      setData(result?.data)
+    try {
+      const result = await generateFloatOrderPaymentReport(query) 
+      if(type === 'get') {
+        const { currentPage, pageSize, total, totalPages } = result?.meta
+        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+        setData(result?.data)
+      }
+    } catch(e) {
+
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
+    
   }
 
   const handlePageChange = async(page, pageSize) => {
@@ -109,7 +117,8 @@ const FloatOrderPaymentReport = props => {
       periodStart: range[0]?.format("YYYY-MM-DD") || null,
       periodEnd: range[1]?.format("YYYY-MM-DD") || null,
       pageNo: page - 1,
-      pageSize: meta?.pageSize
+      pageSize: meta?.pageSize,
+      staffId: staffId
     }
 
     try {
@@ -130,6 +139,13 @@ const FloatOrderPaymentReport = props => {
       <MyPageHeader 
         title="Float Order Payments" 
         extra={[
+          <Input
+            onChange={e => setStaffId(e.target.value)}
+            value={staffId}
+            type="search"
+            style={{width: 200}}
+            placeholder='Staff ID'
+          />,
           <RangePicker 
             key="range"
             value={range} 
