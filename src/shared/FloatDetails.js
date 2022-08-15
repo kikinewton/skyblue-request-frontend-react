@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types"
 import { formatCurrency, prettifyDateTime } from '../util/common-helper';
-import { Row, Col, Table, List } from 'antd';
+import { Row, Col, Table, List, Card } from 'antd';
 import { PhoneOutlined, MoneyCollectOutlined, OneToOneOutlined, NumberOutlined, UserOutlined, CommentOutlined } from '@ant-design/icons';
 import FilesView from './FilesView';
 
@@ -49,7 +49,9 @@ function sumTotalAmount(arr) {
 }
 
 const FloatDetails = ({
-  floatOrder
+  floatOrder,
+  showSupportingDocument=true,
+  showItems=true,
 }) => {
 
   return (
@@ -94,7 +96,7 @@ const FloatDetails = ({
           </List>
         </Col>
       </Row>
-      {floatOrder?.floats.length > 0 && (
+      {showItems && floatOrder?.floats.length > 0 && (
         <>
           <Row style={{marginTop: 10}}>
             <Col span={24}>
@@ -115,17 +117,29 @@ const FloatDetails = ({
           </Row>
         </>
       )}
-      {floatOrder?.supportingDocument.length > 0 && (
-        <FilesView 
-          files={floatOrder?.supportingDocument}
-        />
+      {showSupportingDocument && floatOrder?.supportingDocument.length > 0 && (
+        <Row>
+          <Col span={24} style={{marginTop: 10}}>
+            <Card size='small' title="Float Supporting Document">
+              <Row>
+                <Col span={24}>
+                  <FilesView
+                    files={floatOrder?.supportingDocument}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        </Row>
       )}
     </>
   )
 }
 
 FloatDetails.propTypes = {
-  floatOrder: PropTypes.object.isRequired
+  floatOrder: PropTypes.object,
+  showSupportingDocument: PropTypes.bool,
+  showItems: PropTypes.bool,
 }
 
 export default FloatDetails
