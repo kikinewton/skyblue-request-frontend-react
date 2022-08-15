@@ -7,6 +7,9 @@ import {
   getGoodsReceiveNoteById as getGoodsReceiveNoteByIdApi,
   createGoodsReceiveNote as createGoodsReceiveNoteApi,
   updateGoodsReceiveNote as updateGoodsReceiveNoteApi,
+  createFloatGrn as createFloatGrnApi,
+  updateFloatGrn as updateFloatGrnApi,
+  fetchAllFloatGrns as fetchAllFloatGrnsApi,
 } from '../../api/goods-receive-note'
 
 import openNotification from '../../../util/notification'
@@ -27,6 +30,23 @@ export function* fetchGrns(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Fetch Goods Received Notes'
     openNotification('error', 'Fetch GRN', errorText)
     yield put(Creators.fetchGrnsFailure(errorText))
+  }
+}
+
+export function* fetchFloatGrns(action) {
+  const { query } = action
+  try {
+    const response = yield call(fetchAllFloatGrnsApi, query)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      yield put(Creators.fetchFloatGrnsSuccess(response?.data))
+    } else {
+      openNotification('error', 'FETCH FLOAT GRNS', response?.message)
+      yield put(Creators.fetchFloatGrnsFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Fetch Goods Received Notes'
+    openNotification('error', 'FETCH FLOAT GRNS', errorText)
+    yield put(Creators.fetchFloatGrnsFailure(errorText))
   }
 }
 
@@ -88,10 +108,54 @@ export function* updateGrn(action) {
   }
 }
 
+
+export function* createFloatGrn(action) {
+  const { payload } = action
+  try {
+    const response = yield call(createFloatGrnApi, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'CREATE FLOAT GRN', response?.message)
+      yield put(Creators.createFloatGrnSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
+    } else {
+      openNotification('error', 'CREATE FLOAT GRN', response?.message)
+      yield put(Creators.createFloatGrnFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'FAILED TO CREATE GRN FOR FLOAT'
+    openNotification('error', 'CREATE FLOAT GRN', errorText)
+    yield put(Creators.createFloatGrnFailure(errorText))
+  }
+}
+
+export function* updateFloatGrn(action) {
+  const { id, payload } = action
+  console.log('saga payload', payload)
+  try {
+    const response = yield call(updateFloatGrn, id, payload)
+    if(response.status === RESPONSE_SUCCESS_CODE) {
+      openNotification('success', 'UPDATE FLOAT GRN', response?.message)
+      yield put(Creators.updateFloatGrnSuccess(response?.data))
+      yield put(NotificationCreators.fetchNotifications())
+    } else {
+      openNotification('error', 'UPDATE FLOAT GRN', response?.message)
+      yield put(Creators.updateFLoatGrnFailure(response?.message))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed To Update Float GRN'
+    openNotification('error', 'UPDATE FLOAT GRN', errorText)
+    yield put(Creators.updateFLoatGrnFailure(errorText))
+  }
+}
+
 //watchers
 
 export function* watchFetchGrns(action) {
   yield takeLatest(Types.FETCH_GRNS, fetchGrns)
+}
+
+export function* watchFetchFloatGrns(action) {
+  yield takeLatest(Types.FETCH_FLOAT_GRNS, fetchFloatGrns)
 }
 
 export function* watchFetchGrn(action) {
@@ -104,4 +168,12 @@ export function* watchCreateGrn(action) {
 
 export function* watchUpdateGrn(action) {
   yield takeLeading(Types.UPDATE_GRN, updateGrn)
+}
+
+export function* watchCreateFloatGrn(action) {
+  yield takeLatest(Types.CREATE_FLOAT_GRN, createFloatGrn)
+}
+
+export function* watchUpdateFloatGrn(action) {
+  yield takeLeading(Types.UPDATE_FLOAT_GRN, updateFloatGrn)
 }

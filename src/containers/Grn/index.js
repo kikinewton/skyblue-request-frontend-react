@@ -22,6 +22,7 @@ import AllGrns from './components/AllGrns'
 import NotificationBadge from '../../shared/NotificationBadge'
 import { Creators as CommentCreators } from '../../services/redux/comment/actions'
 import GrnAwaitingPaymentList from './components/GrnAwaitingPaymentList'
+import FloatsAwaitingGrn from './components/FloatsAwaitingGrn'
 
 export const GRN_COLUMNS = [
   {
@@ -76,6 +77,8 @@ const GrnIndex = (props) => {
     const url = window.location.href
     if(url.includes("/app/grn/lpos-pending-grn")) {
       setKey("/app/grn/lpos-pending-grn")
+    } else if(url.includes("/app/grn/float-awaiting-grn")) {
+      setKey("/app/grn/float-awaiting-grn")
     } else if(url.includes("/app/grn/pending-endorsement")) {
       setKey("/app/grn/pending-endorsement")
     }  else if(url.includes("/app/grn/pending-approval")) {
@@ -115,7 +118,12 @@ const GrnIndex = (props) => {
                 </Menu.Item>
                 <Menu.Item key="/app/grn/all">
                   <NavLink to="/app/grn/all">
-                    All grns
+                    All LPO grns
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="/app/grn/float-awaiting-grn">
+                  <NavLink to="/app/grn/float-awaiting-grn">
+                    FLOATS AWAITING GRN
                   </NavLink>
                 </Menu.Item>
               </>
@@ -161,6 +169,7 @@ const GrnIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
+
           </Menu>
         )}
       >
@@ -177,6 +186,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/lpos-pending-grn`} component={LocalPurchaseOrders} {...props} />
           <AuthenticatedRoute path={`${path}/new-float-grn`} component={CreateFloatGrn} {...props} />
           <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
+          <AuthenticatedRoute path={`${path}/float-awaiting-grn`} component={FloatsAwaitingGrn} {...props}  />
           <AuthenticatedRoute path={`${path}/all`} component={AllGrns} {...props}  />
         </Switch>
       </AppLayout>
@@ -192,6 +202,7 @@ const mapStateToProps = (store) => ({
   submit_grn_success: store.grn.submit_success,
   grns: store.grn.grns,
   grn: store.grn.grn,
+  float_grns: store.grn.float_grns,
 
   local_purchase_orders: store.local_purchase_order.local_purchase_orders,
   local_purchase_order: store.local_purchase_order.local_purchase_order,
@@ -220,6 +231,9 @@ const mapActionsToProps = dispatch => ({
   createGrn: (payload) => dispatch(GrnCreators.createGrn(payload)),
   updateGrn: (id, payload) => dispatch(GrnCreators.updateGrn(id, payload)),
   resetGrn: () => dispatch(GrnCreators.resetGrn()),
+  createFloatGrn: (payload) => dispatch(GrnCreators.createFloatGrn(payload)),
+  updateFloatGrn: (id, payload) => dispatch(GrnCreators.updateFloatGrn(id, payload)),
+  fetchFloatGrns: query => dispatch(GrnCreators.fetchFloatGrns(query)),
 
   fetchLocalPurchaseOrders: (query) => dispatch(LpoCreators.fetchLocalPurchaseOrders(query)),
   fetchLocalPurchaseOrder: (id) => dispatch(LpoCreators.fetchLocalPurchaseOrder(id)),

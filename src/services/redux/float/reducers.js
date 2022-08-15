@@ -35,11 +35,11 @@ export const fetchFloatRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchFloatRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, requests: action.responseData, loading: false};
+  return { ...state, requests: action.responseData, loading: false, filtered_requests: action.responseData};
 };
 
 export const fetchFloatRequestsFailure = (state = INITIAL_STATE, action) => {
-  return { ...state, loading: false, error: action.error, requests: []};
+  return { ...state, loading: false, error: action.error, requests: [], filtered_requests: []};
 };
 
 //fetch orders
@@ -227,10 +227,17 @@ export const allocateFundsToFloatRequestFailure = (state = INITIAL_STATE, action
 //filter
 export const filterFloatRequests = (state = INITIAL_STATE, action) => {
   const {filter} = action
+  
+  const searchTerm = filter.toLowerCase()
+  console.log('filter', searchTerm)
   return{
     ...state,
     filtered_requests: state.requests.filter(rq => {
-      return rq?.createdBy?.fullName === filter || rq?.floatRef === filter
+      if(searchTerm) {
+        return rq?.createdBy?.fullName?.toLowerCase().includes(searchTerm) || rq?.floatRef?.toLowerCase().includes(searchTerm) || rq?.requestedBy?.toLowerCase().includes(searchTerm)
+      } else {
+        return state.requests
+      }
     })
   }
 }

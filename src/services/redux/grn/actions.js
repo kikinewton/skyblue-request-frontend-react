@@ -18,6 +18,18 @@ export const { Types, Creators } = createActions(
     updateGrnSuccess: ["responseData"],
     updateGrnFailure: ["error"],
 
+    updateFloatGrn: ["id", "payload"],
+    updateFloatGrnSuccess: ["responseData"],
+    updateFloatGrnFailure: ["error"],
+
+    fetchFloatGrns: ["query"],
+    fetchFloatGrnsSuccess: ["responseData"],
+    fetchFloatGrnsFailure: ["error"],
+
+    createFloatGrn: ["payload"],
+    createFloatGrnSuccess: ["responseData"],
+    createFloatGrnFailure: ["error"],
+
     setSelectedGrn: ["grns"],
 
     resetGrn: null

@@ -4,6 +4,7 @@ import Types from "./actionTypes";
 export const INITIAL_STATE = {
   errors: null,
   grns: [],
+  float_grns: [],
   grn: null,
   selected_grns: [],
   loading: false,
@@ -78,6 +79,48 @@ export const setSelectedGrns = (state = INITIAL_STATE, action) => {
   return { ...state, selected_grns: action?.grns};
 };
 
+//create
+export const createFloatGrn = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, submit_success: false };
+};
+
+export const createFloatGrnSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, submit_success: true};
+};
+
+export const createFloatGrnFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error};
+};
+
+export const updateFloatGrn = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: true, errors: null, loading: false, submit_success: false };
+};
+
+export const updateFloatGrnSuccess = (state = INITIAL_STATE, action) => {
+  return { 
+    ...state,
+    submitting: false,
+    submit_success: true
+  };
+};
+
+export const updateFloatGrnFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, submitting: false, error: action.error, submit_success: false};
+};
+
+//fetch
+export const fetchFloatGrns = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: true, errors: null, submitting: false };
+};
+
+export const fetchFloatGrnsSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, float_grns: action.responseData, loading: false};
+};
+
+export const fetchFloatGrnsFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, float_grns: []};
+};
+
 export const resetGrn = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -85,7 +128,8 @@ export const resetGrn = (state = INITIAL_STATE, action) => {
     grn: null,
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    float_grns: [],
   };
 };
 
@@ -93,6 +137,10 @@ export const HANDLERS = {
   [Types.FETCH_GRNS]: fetchGrns,
   [Types.FETCH_GRNS_SUCCESS]: fetchGrnsSuccess,
   [Types.FETCH_GRNS_FAILURE]: fetchGrnsFailure,
+
+  [Types.FETCH_FLOAT_GRNS]: fetchFloatGrns,
+  [Types.FETCH_FLOAT_GRNS_SUCCESS]: fetchFloatGrnsSuccess,
+  [Types.FETCH_FLOAT_GRNS_FAILURE]: fetchFloatGrnsFailure,
 
   [Types.FETCH_GRN]: fetchGrn,
   [Types.FETCH_GRN_SUCCESS]: fetchGrnSuccess,
@@ -102,9 +150,17 @@ export const HANDLERS = {
   [Types.CREATE_GRN_SUCCESS]: createGrnSuccess,
   [Types.CREATE_GRN_FAILURE]: createGrnFailure,
 
+  [Types.CREATE_FLOAT_GRN]: createFloatGrn,
+  [Types.CREATE_FLOAT_GRN_SUCCESS]: createFloatGrnSuccess,
+  [Types.CREATE_FLOAT_GRN_FAILURE]: createFloatGrnFailure,
+
   [Types.UPDATE_GRN]: updateGrn,
   [Types.UPDATE_GRN_SUCCESS]: updateGrnSuccess,
   [Types.UPDATE_GRN_FAILURE]: updateGrnFailure,
+
+  [Types.UPDATE_FLOAT_GRN]: updateFloatGrn,
+  [Types.UPDATE_FLOAT_GRN_SUCCESS]: updateFloatGrnSuccess,
+  [Types.UPDATE_FLOAT_GRN_FAILURE]: updateFloatGrnFailure,
 
   [Types.SET_SELECTED_GRNS]: setSelectedGrns,
   

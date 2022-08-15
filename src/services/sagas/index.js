@@ -96,9 +96,12 @@ import {
 } from "./comment"
 
 import {
+  watchCreateFloatGrn,
 	watchCreateGrn,
+	watchFetchFloatGrns,
 	watchFetchGrn,
 	watchFetchGrns,
+	watchUpdateFloatGrn,
 	watchUpdateGrn,
 } from "./grn"
 
@@ -194,6 +197,9 @@ export default function* rootSaga() {
 		watchUpdateGrn(),
 		watchFetchGrns(),
 		watchFetchGrn(),
+    watchCreateFloatGrn(),
+    watchUpdateFloatGrn(),
+    watchFetchFloatGrns(),
 
 		watchCreatePayment(),
 		watchFetchPayment(),
