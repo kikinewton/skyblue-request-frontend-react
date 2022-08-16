@@ -10,15 +10,15 @@ const columns = (props)=> SUPPLIER_COLUMNS.concat({
   render: (text, row) => {
     return (
       <Row>
-        <Col md={12} sm={12}>
+        <Col md={24} sm={24} style={{textAlign: "center"}}>
           <EditOutlined style={{cursor: 'pointer'}} onClick={()=> props.editRow(row)} />  
         </Col>
-        <Col md={12} sm={12}>
+        {/* <Col md={12} sm={12}>
           <DeleteOutlined
             style={{cursor: 'pointer'}} 
             onClick={() => props.deleteRow(row)} 
           />
-        </Col>
+        </Col> */}
       </Row>
     )
   }

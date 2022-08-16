@@ -48,11 +48,16 @@ function sumTotalAmount(arr) {
   //return 5
 }
 
-const FloatDetails = ({
-  floatOrder,
-  showSupportingDocument=true,
-  showItems=true,
-}) => {
+const FloatDetails = (props) => {
+
+  const {
+    floatOrder,
+    showSupportingDocument=true,
+    showItems=true,
+  } = props
+
+  console.log('floatsLength', floatOrder?.floats.length)
+  console.log('show floats')
 
   return (
     <>
@@ -96,7 +101,7 @@ const FloatDetails = ({
           </List>
         </Col>
       </Row>
-      {showItems && floatOrder?.floats.length > 0 && (
+      {(showItems && (floatOrder?.floats || []).length) > 0 ? (
         <>
           <Row style={{marginTop: 10}}>
             <Col span={24}>
@@ -116,8 +121,8 @@ const FloatDetails = ({
             </Col>
           </Row>
         </>
-      )}
-      {showSupportingDocument && floatOrder?.supportingDocument.length > 0 && (
+      ) : null}
+      {showSupportingDocument && floatOrder?.supportingDocument?.length > 0 && (
         <Row>
           <Col span={24} style={{marginTop: 10}}>
             <Card size='small' title="Float Supporting Document">

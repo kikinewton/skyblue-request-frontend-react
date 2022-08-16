@@ -89,6 +89,7 @@ const FloatsAwaitingGrn = (props) => {
     if (submit_grn_success && !submitting_grn) {
       setVisible(false)
       setSelectedFloat(null)
+      fetchFloatRequests({requestType: FETCH_FLOAT_REQUEST_TYPES.FLOAT_PENDING_GRN})
     }
   }, [submit_grn_success, submitting_grn])
 
@@ -121,6 +122,7 @@ const FloatsAwaitingGrn = (props) => {
             loading={fetching_float_requests}
             columns={columns({
               onCreateGrn: (float) => {
+                setSelectedItems([])
                 setSelectedFloat(float)
                 setVisible(true)
               }
