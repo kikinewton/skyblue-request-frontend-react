@@ -112,3 +112,10 @@ export function fetchAllFloatGrns(query) {
   })
 }
 
+export function approveFloatGrn(id, payload) {
+  return service({
+    url: `goodsReceivedNotes/floats/${id}`,
+    method: 'PUT',
+    data: payload
+  })
+}
