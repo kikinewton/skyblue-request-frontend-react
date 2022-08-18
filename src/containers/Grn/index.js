@@ -25,6 +25,7 @@ import GrnAwaitingPaymentList from './components/GrnAwaitingPaymentList'
 import FloatsAwaitingGrn from './components/FloatsAwaitingGrn'
 import FloatGrnsList from './components/FloatGrnsList'
 import { userHasAnyRole } from '../../services/api/auth'
+import FloatGrnHistory from './components/FloatGrnHistory'
 
 export const GRN_COLUMNS = [
   {
@@ -112,7 +113,9 @@ const GrnIndex = (props) => {
       setKey("/app/grn/pending-payment-advice")
     } else if(url.includes("/app/grn/pending-payment")) {
       setKey("/app/grn/pending-payment")
-    } else if(url.includes("/app/grn/all-float-grn")) {
+    } else if(url.includes("/app/grn/float-grn-history")) {
+      setKey("/app/grn/float-grn-history")
+    } else if(url.includes("all-float-grn")) {
         setKey("/app/grn/all-float-grn")
     } else if(url.includes("/app/grn/all")) {
       setKey("/app/grn/all")
@@ -134,7 +137,7 @@ const GrnIndex = (props) => {
         return "APPROVE FLOAT GRN"
         break;
       default:
-        return "FLOAT GRNS"
+        return "ALL FLOAT GRNS"
     }
   }
 
@@ -160,17 +163,20 @@ const GrnIndex = (props) => {
                     ) : (<span>lpos awaiting grn</span>)}
                   </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/app/grn/all">
-                  <NavLink to="/app/grn/all">
-                    All LPO grns
-                  </NavLink>
-                </Menu.Item>
                 <Menu.Item key="/app/grn/float-awaiting-grn">
                   <NavLink to="/app/grn/float-awaiting-grn">
                     FLOATS AWAITING GRN
                   </NavLink>
                 </Menu.Item>
               </>
+            )}
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_STORE_MANAGER, 
+              EMPLOYEE_ROLE.ROLE_ADMIN])  && (
+                <Menu.Item key="/app/grn/all">
+                  <NavLink to="/app/grn/all">
+                    All LPO grns
+                  </NavLink>
+                </Menu.Item>
             )}
             {currentUser.role === EMPLOYEE_ROLE.ROLE_HOD && (
             <Menu.Item key="/app/grn/pending-endorsement">
@@ -217,13 +223,19 @@ const GrnIndex = (props) => {
               <>
                 <Menu.Item key="/app/grn/all-float-grn">
                   <NavLink to="/app/grn/all-float-grn">
-                    {floatGrnsTabName()}
+                    FLOAT GRN AWAITING APPROVAL
                   </NavLink>
                 </Menu.Item>
               </>
             )}
+            {userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_MANAGER, EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_ADMIN]) && (
+              <Menu.Item key="/app/grn/float-grn-history">
+                <NavLink to="/app/grn/float-grn-history">
+                  ALL FLOAT GRNS
+                </NavLink>
+              </Menu.Item>
+            )}
             
-          
           </Menu>
         )}
       >
@@ -241,6 +253,7 @@ const GrnIndex = (props) => {
           <AuthenticatedRoute path={`${path}/new-float-grn`} component={CreateFloatGrn} {...props} />
           <AuthenticatedRoute path={`${path}/pending-payment-advice`} component={GrnPendingPaymentAdvice} {...props} />
           <AuthenticatedRoute path={`${path}/float-awaiting-grn`} component={FloatsAwaitingGrn} {...props}  />
+          <AuthenticatedRoute path={`${path}/float-grn-history`} component={FloatGrnHistory} {...props} />
           <AuthenticatedRoute path={`${path}/all-float-grn`} component={FloatGrnsList} {...props}  />
           <AuthenticatedRoute path={`${path}/all`} component={AllGrns} {...props}  />
         </Switch>
