@@ -51,6 +51,12 @@ export const GRN_COLUMNS = [
     key: "invoiceAmountPayable",
     render: (text, row) => formatCurrency(text, row?.receivedItems[0]?.currency || "GHS")
   },
+  {
+    title: "PAY BY",
+    dataIndex: "paymentDate",
+    key: "paymentDate",
+    render: (text) => prettifyDateTime(text)
+  },
 ]
 
 export const FLOAT_GRN_COLUMNS = [

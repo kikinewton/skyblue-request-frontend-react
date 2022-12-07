@@ -101,7 +101,7 @@ const selectedRequestsColumns = props => [
     key: "purpose"
   },
   {
-    title: "QUNATITY",
+    title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
   },
