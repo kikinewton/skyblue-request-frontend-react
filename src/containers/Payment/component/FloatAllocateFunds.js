@@ -33,7 +33,7 @@ const columns = props => FLOAT_ORDERS_COLUMN.concat([
 
 const floatEntriesColumns = [
   {
-    title: "Descrption",
+    title: "Description",
     dataIndex: "itemDescription",
     key: "itemDescription",
   },
