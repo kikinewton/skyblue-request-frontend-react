@@ -69,6 +69,10 @@ const RequestItemIndex = (props) => {
         return <Redirect to="/app/request-items/gm-pending-approve" />
       case EMPLOYEE_ROLE.ROLE_ADMIN:
         return <Redirect to="/app/request-items/all" />
+      case EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER:
+        return <Redirect to="/app/request-items/all" />
+      case EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER:
+        return <Redirect to="/app/request-items/all" />
       default:
         return <Redirect to="/app" />
     }
@@ -131,7 +135,7 @@ const RequestItemIndex = (props) => {
                 </NavLink>    
               </Menu.Item>
             )}
-            {[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN].includes(currentUser.role) && (
+            {[EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER].includes(currentUser.role) && (
               <Menu.Item key="/app/request-items/all">
                 <NavLink to="/app/request-items/all">
                   <span>REQUEST ITEMS</span>
@@ -163,7 +167,7 @@ const RequestItemIndex = (props) => {
             {...props}
           />
           <AuthenticatedRoute 
-            roles={[EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_HOD]}
+            roles={[EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]}
             exact
             path="/app/request-items/all"
             component={RequestItemHistory}

@@ -125,3 +125,10 @@ export function fetchQuotations(query) {
     method: 'GET'
   })
 }
+
+
+export function fetchRequestItemQuotations(requestItemId) {
+  return service({
+    url: `/requestItem/`
+  })
+}

@@ -3,7 +3,9 @@ import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Butto
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
+import { fetchRequestItemQuotations } from '../../../services/api/document'
 import { getAllItemRequests, getRequestItemStatus } from '../../../services/api/item-request'
+import RequestItemQuotationList from '../../../shared/RequestItemQuotationList'
 import { COMMENT_TYPES, REQUEST_COLUMNS } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import RequestItemStatus from './RequestItemStatus'
@@ -27,6 +29,9 @@ const RequestItemHistory = (props) => {
   const [visible, setVisible] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [downloading, setDownloading] = useState(false)
+  const [showAllDocumens, setShowAllDocuments] = useState(false)
+  const [loadingQuotationDocuments, setLoadingQuotationDocuments] = useState(false)
+  const [quotationDocuemnts, setQuotationDocuments] = useState([])
 
   // const resetPagination = () => {
   //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
@@ -48,6 +53,19 @@ const RequestItemHistory = (props) => {
       message.error("Error fetching Request Status")
     } finally {
       setLoadingStatus(false)
+    }
+  }
+
+  const fetchRequestItemQuotationDocuements = async (id) => {
+    setLoadingQuotationDocuments(true)
+    try {
+      const result = await fetchRequestItemQuotations(id)
+      console.log(`Request Item docs: ${result?.data}`)
+      setQuotationDocuments(result?.data)
+    } catch (error) {
+      message.error("Error fetching Request Documents")
+    } finally {
+      setLoadingQuotationDocuments(false)
     }
   }
 
@@ -73,6 +91,11 @@ const RequestItemHistory = (props) => {
     }
   }
  
+  const handleFetchQuotationDocumentClick = (requestItemId) => {
+    console.log(`Request Item ID: ${requestItemId}`)
+    setShowAllDocuments(true)
+    fetchRequestItemQuotationDocuements(requestItemId)
+  }
   
   // const fetchRequestItemHistory = async () => {
   //   setLoading(true)
@@ -129,6 +152,8 @@ const RequestItemHistory = (props) => {
   useEffect(() => {
     fetchRequestItemHistory()
   }, [])
+
+  
 
   return (
     <>
@@ -233,6 +258,19 @@ const RequestItemHistory = (props) => {
                 requestItemStatus={requestStatus}
                 requestItem={selectedRequest}
               />
+              <Row style={{marginTop: 5}}>
+                <Col><Button disabled={!userHasAnyRole([EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER])} onClick={() => handleFetchQuotationDocumentClick(selectedRequest?.id)}>VIEW ALL REQUEST QUOTATIONS</Button></Col>
+              </Row>
+              <Row style={{marginTop: 5}}>
+                <Col span={24}>
+                  {showAllDocumens && (
+                    <RequestItemQuotationList 
+                      quotations={quotationDocuemnts}
+                      loading={loadingQuotationDocuments}
+                    />
+                  )}
+                </Col>
+              </Row>
             </>
           )}
         </Drawer>

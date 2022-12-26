@@ -67,6 +67,14 @@ export function saveMultipleDocument(payload) {
   })
 }
 
+
+export function fetchRequestItemQuotations(requestItemId) {
+  return service({
+    url: `/requestDocuments/requestItems/${requestItemId}/quotations`,
+    method: 'GET'
+  })
+}
+
 // export function saveDocument(payload) {
 //   const fd = new FormData()
 //   console.log('file send', payload.file)
