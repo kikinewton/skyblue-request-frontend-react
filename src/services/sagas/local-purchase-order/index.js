@@ -24,7 +24,8 @@ export function* fetchLocalPurchaseOrders(action) {
       yield put(Creators.fetchLocalPurchaseOrdersFailure(response?.message))
     }
   } catch (error) {
-    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Failed to fetch float requests'
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 
+    (error?.response?.data?.errors[0]) || 'Failed to fetch float requests'
     openNotification('error', 'FETCH LPO', errorText)
     yield put(Creators.fetchLocalPurchaseOrdersFailure(errorText))
   }
