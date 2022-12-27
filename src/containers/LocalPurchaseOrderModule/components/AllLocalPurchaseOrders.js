@@ -1,5 +1,5 @@
 import { DownloadOutlined, EyeOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, Spin, Drawer } from 'antd'
+import { Badge, Button, Col, Row, Table, Spin, Drawer, Input } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
@@ -47,6 +47,7 @@ const AllLocalPurchaseOrders = (props) => {
   const [loading, setLoading] = React.useState(false)
   const [view, setView] = useState(false)
   const [selectedLpo, setSelectedLpo]= useState(null)
+  const [filter, setFilter] = useState('')
   const { history } = props
 
   const {
@@ -57,6 +58,10 @@ const AllLocalPurchaseOrders = (props) => {
     fetching_local_purchase_orders,
     resetLocalPurchaseOrder
   } = props
+
+  const handlefetch = (e) => {
+    fetchLocalPurchaseOrders({supplierName: filter})
+  }
 
   const handleCreateGrn = (row)=> {
     history.push(`/app/stores/lpos/${row.id}/create-goods-receive-note`)
@@ -92,11 +97,23 @@ const AllLocalPurchaseOrders = (props) => {
   return (
     <React.Fragment>
       <Row style={{marginBottom: 20}}>
-        <Col>
+        <Col span={12}>
           <span className="bs-page-title">ALL LOCAL PURCHASE ORDERS</span>
           <span style={{marginLeft: 5}}><SyncOutlined disabled={loading} spin={loading} onClick={()=> {
             fetchLocalPurchaseOrders({withGRN: false})
           }} /></span>
+        </Col>
+        <Col span={12}>
+          <Row>
+            <Col span={20}>
+              <Input type='search' value={filter} onChange={(e) => setFilter(e.target.value)}  />
+            </Col>
+            <Col span={4}>
+              <Button type='primary' onClick={handlefetch}>
+                Search
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
       <Row>
