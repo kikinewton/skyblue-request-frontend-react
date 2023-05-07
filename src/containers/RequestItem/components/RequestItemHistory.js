@@ -1,5 +1,5 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button } from 'antd'
+import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
@@ -32,6 +32,7 @@ const RequestItemHistory = (props) => {
   const [showAllDocumens, setShowAllDocuments] = useState(false)
   const [loadingQuotationDocuments, setLoadingQuotationDocuments] = useState(false)
   const [quotationDocuemnts, setQuotationDocuments] = useState([])
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
   // const resetPagination = () => {
   //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
@@ -69,27 +70,27 @@ const RequestItemHistory = (props) => {
     }
   }
 
-  const fetchRequestItemHistory = async () => {
-    setLoading(true)
-    const query = {
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
-      // reference: searchTerm ? searchTerm : null
-    }
-    try {
-      const result = await getAllItemRequests(query)
-      // if(result?.meta) {
-      //   const { currentPage, pageSize, total, totalPages } = result?.meta
-      //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-      // }
-      setRequests(result?.data)
-      setFilteredRequests(result?.data)
-    } catch (error) {
+  // const fetchRequestItemHistory = async () => {
+  //   setLoading(true)
+  //   const query = {
+  //     // toBeApproved: status === "toBeApproved",
+  //     // approved: status === "approved",
+  //     // reference: searchTerm ? searchTerm : null
+  //   }
+  //   try {
+  //     const result = await getAllItemRequests(query)
+  //     // if(result?.meta) {
+  //     //   const { currentPage, pageSize, total, totalPages } = result?.meta
+  //     //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+  //     // }
+  //     setRequests(result?.data)
+  //     setFilteredRequests(result?.data)
+  //   } catch (error) {
       
-    } finally {
-      setLoading(false)
-    }
-  }
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
  
   const handleFetchQuotationDocumentClick = (requestItemId) => {
     console.log(`Request Item ID: ${requestItemId}`)
@@ -97,53 +98,54 @@ const RequestItemHistory = (props) => {
     fetchRequestItemQuotationDocuements(requestItemId)
   }
   
-  // const fetchRequestItemHistory = async () => {
-  //   setLoading(true)
-  //   const query = {
-  //     pageSize: 400,
-  //       pageNo: 0,
-  //       toBeApproved: status === "toBeApproved",
-  //       approved: status === "approved",
-  //       reference: searchTerm ? searchTerm : null
-  //   }
+  const fetchRequestItemHistory = async () => {
+    setLoading(true)
+    const query = {
+      pageSize: 400,
+        pageNo: 0,
+        pageSize: meta?.pageSize,
+        // toBeApproved: status === "toBeApproved",
+        // approved: status === "approved",
+        // reference: searchTerm ? searchTerm : null
+    }
     
-  //   try {
-  //     const result = await getAllItemRequests(query)
-  //     if(result?.meta) {
-  //       const { currentPage, pageSize, total, totalPages } = result?.meta
-  //       setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-  //     }
+    try {
+      const result = await getAllItemRequests(query)
+      if(result?.meta) {
+        const { currentPage, pageSize, total, totalPages } = result?.meta
+        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      }
       
      
-  //     setRequests(result?.data)
-  //   } catch (error) {
+      setRequests(result?.data)
+    } catch (error) {
       
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  // const handlePageChange = async(page, pageSize) => {
-  //   setLoading(true)
-  //   setMeta({...meta, currentPage: page})
-  //   const query = {
-  //     toBeApproved: status === "toBeApproved",
-  //     approved: status === "approved",
-  //     pageNo: page - 1,
-  //     pageSize: meta?.pageSize
-  //   }
+  const handlePageChange = async(page, pageSize) => {
+    setLoading(true)
+    setMeta({...meta, currentPage: page})
+    const query = {
+      // toBeApproved: status === "toBeApproved",
+      // approved: status === "approved",
+      pageNo: page - 1,
+      pageSize: meta?.pageSize
+    }
 
-  //   try {
-  //     const result = await getAllItemRequests(query)
-  //     const { currentPage, pageSize, total, totalPages } = result?.meta
-  //     setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
-  //     setRequests(result?.data)
-  //   } catch (error) {
+    try {
+      const result = await getAllItemRequests(query)
+      const { currentPage, pageSize, total, totalPages } = result?.meta
+      setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
+      setRequests(result?.data)
+    } catch (error) {
       
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const onFilterBySearch = (value) => {
     setFilteredRequests(requests.filter(rq => rq?.requestItemRef.includes(value) || rq?.name?.toLowerCase().includes(value?.toLowerCase())))
@@ -157,13 +159,6 @@ const RequestItemHistory = (props) => {
 
   return (
     <>
-      {/* <MyPageHeader 
-        title={(
-          <>
-            <span style={{marginRight: 5}}>Recent Request Items</span>
-          </>
-        )}
-      /> */}
       <Row>
         <Col xs={24} sm={24} md={8}>
           <Breadcrumb>
@@ -201,16 +196,14 @@ const RequestItemHistory = (props) => {
                 }
               })}
               bordered
-              dataSource={filteredRequests}
-              pagination={{
-                pageSize: 30
-              }}
+              dataSource={requests}
+              pagination={false}
               rowKey="id"
               size='small'
             />
           </Col>
         </Row>
-        {/* <Row>
+        <Row>
           <Col span={24}>
             <Pagination 
               showSizeChanger={false}
@@ -223,7 +216,7 @@ const RequestItemHistory = (props) => {
               size='small'
             />
           </Col>
-        </Row> */}
+        </Row>
         <Drawer
           title="REQUEST STATUS"
           visible={visible}
