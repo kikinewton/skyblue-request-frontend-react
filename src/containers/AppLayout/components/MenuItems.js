@@ -81,6 +81,12 @@ const MenuItems = (props) => {
               <span>User Management</span>
             </NavLink>
           </Menu.Item>
+          <Menu.Item key="9">
+            <NavLink to="/app/store-list">
+              <ShopOutlined />
+              <span>Store List</span>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item key="/app/settings" icon={<SettingOutlined />}>
             <NavLink to="/app/settings">
               <span>Settings</span>

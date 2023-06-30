@@ -3,6 +3,8 @@ import { Card, Col, Steps, Table, Row, Button, Select, Divider, List, Drawer, Fo
 import React, { useEffect, useState } from 'react'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
+import DepartmentFilter from '../../../presentation/DepartmentFilter'
+
 const { Step } = Steps
 
 const requestColumns = props => [
@@ -53,6 +55,7 @@ const AssignSuppliersToRequests = (props) => {
   const [selectedUnregistredSupplierIds, setSelectedUnregisteredSupplierIds] = useState([])
   const [supplierDrawer, setSupplierDrawer] = useState(false)
   const [supplierForm] = Form.useForm()
+  const [departmentFilter, setDepertmentFilter] = useState("")
 
   const handleSelectSupplierChange = (event) => {
     setSelectedSupplierIds(event)
@@ -71,6 +74,7 @@ const AssignSuppliersToRequests = (props) => {
     fetchRequests({
       requestType: FETCH_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS
     })
+    props.fetchDepartments({})
   }, [])
 
   useEffect(() => {
@@ -131,6 +135,19 @@ const AssignSuppliersToRequests = (props) => {
         {current === 0 && (
           <Row>
             <Col span={24}>
+              <Row style={{ padding: 10 }}>
+                <Col>
+                  <DepartmentFilter 
+                    data={props.departments}
+                    loading={props.departmentsLoading}
+                    onChange={(v) => {
+                      setDepertmentFilter(v)
+                      props.filterRequestsByDepartment(v)
+                    }}
+                    value={departmentFilter}
+                  />
+                </Col>
+              </Row>
               <Row>
                 <Col span={24}>
                   <Table
@@ -143,7 +160,7 @@ const AssignSuppliersToRequests = (props) => {
                       pageSize: 30,
                       showSizeChanger: false,
                     }}
-                    dataSource={requests}
+                    dataSource={props.filtered_requests}
                     rowSelection={{
                       onChange: (selectedRowKeys, selectedRows) => {
                         setSelectedRequests(selectedRows)

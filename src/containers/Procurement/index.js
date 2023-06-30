@@ -3,6 +3,7 @@ import { Creators as SupplierCreators } from '../../services/redux/supplier/acti
 import { Creators as QuotationCreators } from '../../services/redux/quotation/actions'
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import {  Creators as RequestCategoryCreator } from '../../services/redux/request-category/actions'
+import { Creators as DepartmentCreators } from '../../services/redux/department/actions'
 import { connect } from 'react-redux'
 import { Switch, useRouteMatch } from 'react-router-dom'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
@@ -36,6 +37,7 @@ const Procurement = (props) => {
 const mapStateToProps = (store) => ({
   currentUser: store.auth.user,
   requests: store.request.requests,
+  filtered_requests: store.request.filtered_requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
   requestSubmitSuccess: store.request.submitSuccess,
@@ -58,7 +60,10 @@ const mapStateToProps = (store) => ({
   request_category_loading: store.requestCategory.loading,
   request_category_submit_success: store.requestCategory.submit_success,
   request_category_submitting: store.requestCategory.submitting,
-  request_category: store.requestCategory.request_category
+  request_category: store.requestCategory.request_category,
+
+  departments: store.department.departments,
+  departmentsLoading: store.department.loading
 })
 
 const mapActionsToState = (dispatch) => {
@@ -122,7 +127,9 @@ const mapActionsToState = (dispatch) => {
   },
   createQuotation: (payload) => {
     dispatch(QuotationCreators.createQuotation(payload))
-  }
+  },
+  filterRequestsByDepartment:  filter => dispatch(RequestCreators.filterRequestsByDepartment(filter)),
+  fetchDepartments: (query) => dispatch(DepartmentCreators.fetchDepartments(query))
 }}
 
 export default connect(mapStateToProps, mapActionsToState)(Procurement)

@@ -37,7 +37,11 @@ export default createTypes(
 
   FILTER_REQUESTS
 
+  FILTER_REQUESTS_BY_DEPARTMENT
+
   RESET_REQUEST
+
+  SET_MY_REQUEST_META
 
 `,
   {}

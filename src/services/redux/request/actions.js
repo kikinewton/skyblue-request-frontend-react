@@ -38,6 +38,10 @@ export const { Types, Creators } = createActions(
 
     filterRequests: ['filter'],
 
-    resetRequest: null
+    filterRequestsByDepartment: ['departmentId'],
+
+    resetRequest: null,
+
+    setMyRequestMeta: ["meta"]
   }
 )

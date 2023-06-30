@@ -36,6 +36,12 @@ const columns = props => [
     render: (text)=> text?.name
   },
   {
+    title: 'STORE',
+    dataIndex: 'store',
+    key: "store.id",
+    render: (text)=> text?.name || 'N/A'
+  },
+  {
     title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
@@ -55,17 +61,19 @@ const columns = props => [
 
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
-  const { departments, fetchDepartments, createRequest, departmentLoading, currentUser, requestSubmitting, submitSuccess } = props
+  const { departments, fetchDepartments, createRequest, departmentLoading, currentUser, 
+    requestSubmitting, submitSuccess, fetchStores, stores, loading_stores } = props
   const [ form ] = Form.useForm()
   const departmentFieldRef = React.createRef()
   const history = useHistory()
   const [requestType, setRequestType] = React.useState(REQUEST_TYPES[1]?.id)
 
   const addToEntires = (values) => {
-    const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel } = values
+    const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel, storeId } = values
     const department = departments.filter(item => item.id === departmentId)[0]
+    const store = stores.filter(item => item.id === storeId)[0]
     const id = requests.length + 2;
-    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel}
+    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel, store: store}
     if(requestType !== REQUEST_TYPES[1]?.id) {
       data["quantity"] = 1;
     }
@@ -84,6 +92,7 @@ const AddNewRequest = (props) => {
         if(it.requestType !== REQUEST_TYPES[1]?.id) {
           dt['quantity'] = 1
         }
+        dt['receivingStore'] = it.store
         return dt
       })
     }
@@ -112,6 +121,7 @@ const AddNewRequest = (props) => {
       setRequests(fd)
     }
     fetchDepartments({}) // eslint-disable-next-line
+    fetchStores({})
   }, [])
 
   return (
@@ -126,7 +136,7 @@ const AddNewRequest = (props) => {
           </Col>
         </Row>
         <Card 
-          title="CREATE NEW REQUEST"
+          title="CREATE NEW LPO REQUEST"
         >
           <Row gutter={24}>
             <Col md={6}>
@@ -138,7 +148,7 @@ const AddNewRequest = (props) => {
                     layout="vertical"
                     form={form}
                     name="request-entry"
-                    initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
+                    initialValues={{ name: "", reason: "", purpose: "", quantity: "", storeId: undefined,
                       requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL"}}
                     onFinish={addToEntires}
                   >
@@ -146,6 +156,13 @@ const AddNewRequest = (props) => {
                       <Select loading={departmentLoading}  ref={departmentFieldRef}>
                         {departments && departments.map(department=> (
                           <Select.Option key={`dept-option-${department.id}`} value={department.id}>{department.name}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="STORE" name="storeId" rules={[{ required: true, message: 'Store To receive Item required' }]}>
+                      <Select loading={loading_stores}>
+                        {stores && stores.map(store=> (
+                          <Select.Option key={`store-option-${store.id}`} value={store.id}>{store.name}</Select.Option>
                         ))}
                       </Select>
                     </Form.Item>

@@ -115,8 +115,6 @@ const RequestItemHistory = (props) => {
         const { currentPage, pageSize, total, totalPages } = result?.meta
         setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
       }
-      
-     
       setRequests(result?.data)
     } catch (error) {
       
@@ -148,14 +146,13 @@ const RequestItemHistory = (props) => {
   }
 
   const onFilterBySearch = (value) => {
+    console.log('filter', value)
     setFilteredRequests(requests.filter(rq => rq?.requestItemRef.includes(value) || rq?.name?.toLowerCase().includes(value?.toLowerCase())))
   }
 
   useEffect(() => {
     fetchRequestItemHistory()
   }, [])
-
-  
 
   return (
     <>
@@ -167,7 +164,7 @@ const RequestItemHistory = (props) => {
         </Col>
         <Col xs={24} sm={24} md={16} style={{textAlign: 'right'}}>
           <Input
-            type="search" 
+            type="search"
             value={searchTerm} 
             onChange={value => {
               setSearchTerm(value.target.value)

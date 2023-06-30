@@ -1,4 +1,4 @@
-import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge } from 'antd'
+import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination } from 'antd'
 import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
@@ -61,7 +61,7 @@ const columns = props => MY_REQUEST_COLUMNS.concat([
 
 const LpoList = (props) => {
   const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success, 
-    filtered_my_requests, filterMyRequests, fetchComments } = props
+    filtered_my_requests, filterMyRequests, fetchComments, my_request_meta,setMyRequestMeta } = props
 
   const [page, setPage] = React.useState(0)
   const history = useHistory()
@@ -70,6 +70,8 @@ const LpoList = (props) => {
   const [selectedRequest, setSelectedRequest] = React.useState(null)
   const [commentVisible, setCommentVisible] = useState(false)
   const [updatePriceForm] = Form.useForm()
+  
+  //const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -77,11 +79,25 @@ const LpoList = (props) => {
     filterMyRequests(value)
   } , 1000)
 
+  const handlePageChange = async(page, pageSize) => {
+    //setMeta({...meta, currentPage: page})
+    setMyRequestMeta({ ...my_request_meta, currentPage: page })
+    const query = {
+      // toBeApproved: status === "toBeApproved",
+      // approved: status === "approved",
+      pageNo: page - 1,
+      pageSize: my_request_meta?.pageSize
+    }
+    fetchMyRequests(query)
+  }
+
   React.useEffect(()=> {
     props.resetRequest()
-    fetchMyRequests({
-
-    })
+    fetchMyRequests({})
+    // fetchMyRequests({
+    //   pageSize: my_request_meta.pageSize,
+    //   pageNo: my_request_meta.currentPage - 1
+    // })
     // eslint-disable-next-line
   }, [])
 
@@ -154,10 +170,24 @@ const LpoList = (props) => {
                 size="small"
                 rowKey="id"
                 bordered
-                pagination={{pageSize: 20}}
+                pagination={{pageSize: 50}}
               />
             </Col>
           </Row>
+          {/* <Row>
+            <Col span={24}>
+              <Pagination 
+                showSizeChanger={false}
+                defaultCurrent={my_request_meta?.currentPage + 1}
+                total={my_request_meta?.total}
+                current={my_request_meta?.currentPage}
+                defaultPageSize={my_request_meta?.pageSize}
+                pageSize={my_request_meta?.pageSize}
+                onChange={handlePageChange}
+                size='small'
+              />
+            </Col>
+          </Row> */}
         </Card>
         <Drawer
           forceRender

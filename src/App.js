@@ -13,6 +13,7 @@ const Login = React.lazy(()=> import('./containers/Auth'))
 const Home = React.lazy(()=> import('./containers/Home'))
 const Department = React.lazy(()=> import('./containers/Department'))
 const Employee = React.lazy(() => import('./containers/Employee'))
+const StoreManagement = React.lazy(() => import('./containers/StoreManagement'))
 const MyRequest = React.lazy(()=> import('./containers/MyRequest'))
 const NotAuthorized = React.lazy(()=> import('./containers/NotAuthorized'))
 const Procurement = React.lazy(() => import('./containers/Procurement'))
@@ -51,6 +52,7 @@ function App(props) {
           <Route path={MY_REQUESTS_ROUTE} component={MyRequest} {...props} />
           <AuthenticatedRoute path={DEPARTMENTS_ROUTE} component={Department} />
           <AuthenticatedRoute path={EMPLOYEE_ROUTE}  component={Employee} />
+          <AuthenticatedRoute path="/app/stores-list" component={StoreManagement} />
           <AuthenticatedRoute exact path={HOME_ROUTE}  component={Home} />
           
           <AuthenticatedRoute path="/app/local-purchase-orders" component={LocalPurchaseOrderModule} />

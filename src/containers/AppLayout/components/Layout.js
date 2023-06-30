@@ -23,7 +23,7 @@ import {
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
-import { EMPLOYEE_ROLE } from '../../../util/datas';
+import { EMPLOYEE_ROLE, USER_ROLES } from '../../../util/datas';
 import PropTypes from "prop-types" 
 //const logo = require("../../../assets/logo.png")
 import logo from "../../../assets/logo512.png"
@@ -107,6 +107,8 @@ const CollapsibleLayout = (props) => {
       setKey("/app/payments")
     } else if(pathname.includes("/app/reports")) {
       setKey("/app/reports")
+    } else if(pathname.includes("/app/stores-list")) {
+      setKey("/app/store-management")
     }
     else {
       setKey("home")
@@ -285,6 +287,14 @@ const CollapsibleLayout = (props) => {
               <NavLink to="/app/employees">
                 <UsergroupAddOutlined />
                 <span>USERS</span>
+              </NavLink>
+            </Menu.Item>
+          }
+          {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listUserRoles) && 
+            <Menu.Item key="app/store-management">
+              <NavLink to="/app/stores-list">
+                <UsergroupAddOutlined />
+                <span>STORES</span>
               </NavLink>
             </Menu.Item>
           }
