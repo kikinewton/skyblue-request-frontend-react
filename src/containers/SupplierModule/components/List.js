@@ -67,7 +67,7 @@ const List = (props)=> {
       name,
       description,
       email,
-      phone_no: phoneNo,
+      phoneNo: phoneNo,
       bank,
       location,
       accountNumber,
