@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-const path = 'requestCategory'
+const path = 'requestCategories'
 
 export function getRequestCategories() {
   return service({

@@ -219,26 +219,31 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           )}
           {authService.userHasAnyRole(currentUser.role, 
-            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
+            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) && 
             <Menu.SubMenu
               key="procurement"
               icon={<ReconciliationOutlined />} 
               title="PROCUREMENT"
             >
-              <Menu.Item key="assign-suppliers">
-                <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
-                  {notifications.assignSupplierProcurement ? (
-                    <NotificationBadge count={notifications.assignSupplierProcurement}>
-                      ASSIGN SUPPLIER
-                    </NotificationBadge>
-                  ) : (<span>ASSIGN SUPPLIER</span>)}
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key={`procurement/rfqs`}>
-                <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
-                  RFQs
-                </NavLink>
-              </Menu.Item>
+              {authService.userHasAnyRole(currentUser.role, 
+              [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && (
+                <>
+                  <Menu.Item key="assign-suppliers">
+                    <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
+                      {notifications.assignSupplierProcurement ? (
+                        <NotificationBadge count={notifications.assignSupplierProcurement}>
+                          ASSIGN SUPPLIER
+                      </NotificationBadge>
+                      ) : (<span>ASSIGN SUPPLIER</span>)}
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item key={`procurement/rfqs`}>
+                    <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
+                      RFQs
+                    </NavLink>
+                  </Menu.Item>                    
+                </>
+              )}
               <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
                 CATEGORY
