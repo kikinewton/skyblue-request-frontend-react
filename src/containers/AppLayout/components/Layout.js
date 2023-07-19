@@ -24,7 +24,7 @@ import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
 import { EMPLOYEE_ROLE, USER_ROLES } from '../../../util/datas';
-import PropTypes from "prop-types" 
+import PropTypes from "prop-types"
 //const logo = require("../../../assets/logo.png")
 import logo from "../../../assets/logo512.png"
 import NotificationBadge from '../../../shared/NotificationBadge';
@@ -340,7 +340,7 @@ const CollapsibleLayout = (props) => {
               )}
             </Col>
             <Col span={8}>
-              <div 
+              <div
                 style={{float: 'right', marginRight: 10, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', 
                 alignItems: 'center', cursor: 'pointer', height: '100%'}}
               >

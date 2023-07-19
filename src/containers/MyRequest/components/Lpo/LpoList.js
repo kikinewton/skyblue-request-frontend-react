@@ -61,7 +61,7 @@ const columns = props => MY_REQUEST_COLUMNS.concat([
 
 const LpoList = (props) => {
   const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success, 
-    filtered_my_requests, filterMyRequests, fetchComments, my_request_meta,setMyRequestMeta } = props
+    filtered_my_requests, filterMyRequests, fetchComments, my_request_meta,setMyRequestMeta, resetRequest } = props
 
   const [page, setPage] = React.useState(0)
   const history = useHistory()
@@ -81,7 +81,8 @@ const LpoList = (props) => {
 
   const handlePageChange = async(page, pageSize) => {
     //setMeta({...meta, currentPage: page})
-    setMyRequestMeta({ ...my_request_meta, currentPage: page })
+    console.log('-------> page', page)
+    setMyRequestMeta({ ...my_request_meta, currentPage: page - 1 })
     const query = {
       // toBeApproved: status === "toBeApproved",
       // approved: status === "approved",
@@ -92,13 +93,13 @@ const LpoList = (props) => {
   }
 
   React.useEffect(()=> {
-    props.resetRequest()
-    fetchMyRequests({})
-    // fetchMyRequests({
-    //   pageSize: my_request_meta.pageSize,
-    //   pageNo: my_request_meta.currentPage - 1
-    // })
-    // eslint-disable-next-line
+    resetRequest()
+    //fetchMyRequests({})
+    fetchMyRequests({
+      pageSize: my_request_meta?.pageSize,
+      pageNo: my_request_meta?.currentPage - 1
+    })
+    //eslint-disable-next-line
   }, [])
 
   React.useEffect(() => {
@@ -110,7 +111,10 @@ const LpoList = (props) => {
         quantity: ""
       })
     }
-    fetchMyRequests({})
+    fetchMyRequests({
+      pageSize: my_request_meta?.pageSize,
+      pageNo: my_request_meta?.currentPage - 1
+    })
   }, [updating_request, update_request_success])
   
   return (
@@ -170,16 +174,16 @@ const LpoList = (props) => {
                 size="small"
                 rowKey="id"
                 bordered
-                pagination={{pageSize: 50}}
+                pagination={false}
               />
             </Col>
           </Row>
-          {/* <Row>
+          <Row>
             <Col span={24}>
               <Pagination 
                 showSizeChanger={false}
                 defaultCurrent={my_request_meta?.currentPage + 1}
-                total={my_request_meta?.total}
+                total={my_request_meta?.totalPages}
                 current={my_request_meta?.currentPage}
                 defaultPageSize={my_request_meta?.pageSize}
                 pageSize={my_request_meta?.pageSize}
@@ -187,7 +191,7 @@ const LpoList = (props) => {
                 size='small'
               />
             </Col>
-          </Row> */}
+          </Row>
         </Card>
         <Drawer
           forceRender

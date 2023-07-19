@@ -7,7 +7,6 @@ import { useHistory } from 'react-router'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import AppLayout from '../../../AppLayout'
 
-
 const columns = props => [
   {
     title: 'REQUEST TYPE',
@@ -120,8 +119,9 @@ const AddNewRequest = (props) => {
       const fd = JSON.parse(localData)
       setRequests(fd)
     }
-    fetchDepartments({}) // eslint-disable-next-line
+    fetchDepartments({})
     fetchStores({})
+    // eslint-disable-next-line
   }, [])
 
   return (

@@ -37,12 +37,13 @@ export const fetchMyRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyRequestsSuccess = (state = INITIAL_STATE, action) => {
+  console.log('response data', action.responseData)
   return { 
     ...state, 
-    my_requests: action.responseData, 
-    filtered_my_requests: action.responseData,
+    my_requests: action.responseData?.data, 
+    filtered_my_requests: action.responseData?.data,
     loading: false,
-    //my_request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage + 1}
+    my_request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
   };
 };
 
@@ -180,7 +181,7 @@ export const resetRequest = (state = INITIAL_STATE, action) => {
     requests: [],
     request: null,
     my_requests: [],
-    my_request_meta: null,
+    my_request_meta: {currentPage: 1, pageSize: 2, total: 0, totalPages: 0},
     selected_requests: [],
     error: null,
     loading: false,

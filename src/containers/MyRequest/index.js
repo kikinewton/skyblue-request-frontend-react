@@ -144,7 +144,6 @@ const mapActionsToProps = (dispatch) => {
       dispatch(RequestCreators.fetchRequests(query))
     },
     filterMyRequests: (query) => {
-      console.log('lets filter', query)
       dispatch(RequestCreators.filterMyRequests(query))
     },
     getRequest: (id) => {
