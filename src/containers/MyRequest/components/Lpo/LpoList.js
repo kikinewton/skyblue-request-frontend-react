@@ -1,7 +1,7 @@
 import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination } from 'antd'
 import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
-import { EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
 import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
@@ -10,6 +10,7 @@ import MyPageHeader from '../../../../shared/MyPageHeader'
 import { debounce } from 'lodash'
 import MyDrawer from '../../../../shared/MyDrawer'
 import RequestComment from '../../../../shared/RequestComment'
+import Search from 'antd/lib/input/Search'
 
 const columns = props => MY_REQUEST_COLUMNS.concat([
   // {
@@ -87,7 +88,8 @@ const LpoList = (props) => {
       // toBeApproved: status === "toBeApproved",
       // approved: status === "approved",
       pageNo: page - 1,
-      pageSize: my_request_meta?.pageSize
+      pageSize: my_request_meta?.pageSize,
+      requestItemName: searchTerm
     }
     fetchMyRequests(query)
   }
@@ -97,7 +99,8 @@ const LpoList = (props) => {
     //fetchMyRequests({})
     fetchMyRequests({
       pageSize: my_request_meta?.pageSize,
-      pageNo: my_request_meta?.currentPage - 1
+      pageNo: my_request_meta?.currentPage,
+      requestItemName: searchTerm
     })
     //eslint-disable-next-line
   }, [])
@@ -110,11 +113,12 @@ const LpoList = (props) => {
         name: "",
         quantity: ""
       })
+      fetchMyRequests({
+        pageSize: my_request_meta?.pageSize,
+        pageNo: my_request_meta?.currentPage,
+        requestItemName: searchTerm
+      })
     }
-    fetchMyRequests({
-      pageSize: my_request_meta?.pageSize,
-      pageNo: my_request_meta?.currentPage - 1
-    })
   }, [updating_request, update_request_success])
   
   return (
@@ -127,25 +131,25 @@ const LpoList = (props) => {
            extra={[
             <Button key="add-btn" type="default" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               ADD NEW LPO REQUEST
-            </Button>
+            </Button>,
+            <Search 
+              key="search"
+              placeholder='reference/description...'
+              allowClear
+              enterButton
+              onSearch={val => {
+                console.log('search', val)
+                setSearchTerm(val)
+                fetchMyRequests({
+                  pageSize: my_request_meta?.pageSize,
+                  pageNo: my_request_meta?.currentPage,
+                  requestItemName: val
+                })
+                //onFilter(val)
+              }}
+            />
           ]}
         />
-        <Card>
-          <Row>
-            <Col offset={16} span={8}>
-              <Input
-                allowClear
-                placeholder='reference/description...'
-                style={{width: "100%"}}
-                value={searchTerm} 
-                onChange={e => {
-                  setSearchTerm(e.target.value)
-                  onFilter(e.target.value)
-                }} 
-              />
-            </Col>
-          </Row>
-        </Card>
         <Card>
           <Row>
             <Col md={24}>

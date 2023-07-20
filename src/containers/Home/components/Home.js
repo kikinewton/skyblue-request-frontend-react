@@ -8,12 +8,16 @@ import { connect } from 'react-redux';
 
 
 const Home = (props) => {
-  const {fetchMyRequests, my_requests, fetching_my_requests, currentUser} = props
+  const {fetchMyRequests, my_requests, fetching_my_requests, currentUser, resetRequest} = props
 
   React.useEffect(() => {
+    resetRequest()
     //fetch my requests if user is a regular employee
     if(userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR])) {
-      fetchMyRequests({}) 
+      fetchMyRequests({
+        pageNo: 0,
+        pageSize: 5
+      }) 
     }
   }, [])
   

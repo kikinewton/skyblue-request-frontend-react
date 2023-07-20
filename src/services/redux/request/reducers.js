@@ -15,7 +15,7 @@ export const INITIAL_STATE = {
   updating: false,
   update_success: false,
   department: {},
-  my_request_meta: {currentPage: 1, pageSize: 2, total: 0, totalPages: 0}
+  my_request_meta: {currentPage: 0, pageSize: 2, total: 0, totalPages: 0}
 };
 
 //fetch
@@ -181,7 +181,7 @@ export const resetRequest = (state = INITIAL_STATE, action) => {
     requests: [],
     request: null,
     my_requests: [],
-    my_request_meta: {currentPage: 1, pageSize: 2, total: 0, totalPages: 0},
+    my_request_meta: {currentPage: 0, pageSize: 2, total: 0, totalPages: 0},
     selected_requests: [],
     error: null,
     loading: false,
