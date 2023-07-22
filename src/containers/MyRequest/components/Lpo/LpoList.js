@@ -1,4 +1,4 @@
-import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination } from 'antd'
+import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination, DatePicker } from 'antd'
 import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
@@ -131,6 +131,9 @@ const LpoList = (props) => {
             <Button key="add-btn" type="default" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               ADD NEW LPO REQUEST
             </Button>,
+            <DatePicker key='date-picker' 
+
+            />,
             <Search 
               key="search"
               placeholder='reference/description...'
@@ -189,13 +192,13 @@ const LpoList = (props) => {
             <Col span={24}>
               <Pagination 
                 showSizeChanger={false}
-                defaultCurrent={my_request_meta?.currentPage + 1}
-                total={my_request_meta?.totalPages}
-                current={my_request_meta?.currentPage + 1}
-                defaultPageSize={my_request_meta?.pageSize}
-                pageSize={my_request_meta?.pageSize}
-                onChange={handlePageChange}
+                defaultCurrent={my_request_meta.currentPage + 1}
+                total={my_request_meta.totalPages * my_request_meta.pageSize}
+                current={my_request_meta.currentPage + 1}
+                defaultPageSize={my_request_meta.pageSize}
+                pageSize={my_request_meta.pageSize}
                 size='small'
+                onChange={handlePageChange}
               />
             </Col>
           </Row>
