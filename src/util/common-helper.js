@@ -32,7 +32,7 @@ export function serializeQueryParams( obj ) {
 
 export function serializeQueryParamsNotNull( obj ) {
   return '?' + Object.keys(obj).reduce(function(a, k){
-    if(obj[k] || obj[k] === 0) {
+    if(obj[k] || obj[k] === 0 || obj[k] === '0') {
       a.push(k + '=' + encodeURIComponent(obj[k]));
     }
     //a.push(k + '=' + encodeURIComponent(obj[k]));
