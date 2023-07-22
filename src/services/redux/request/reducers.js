@@ -15,6 +15,7 @@ export const INITIAL_STATE = {
   updating: false,
   update_success: false,
   department: {},
+  request_meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
   my_request_meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0}
 };
 
@@ -24,7 +25,13 @@ export const fetchRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, requests: action.responseData, loading: false, filtered_requests: action.responseData };
+  return { 
+    ...state,
+    requests: action.responseData.data,
+    loading: false, 
+    filtered_requests: action.responseData.data,
+    request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+  };
 };
 
 export const fetchRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -181,7 +188,8 @@ export const resetRequest = (state = INITIAL_STATE, action) => {
     requests: [],
     request: null,
     my_requests: [],
-    my_request_meta: {currentPage: 0, pageSize: 2, total: 0, totalPages: 0},
+    my_request_meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
+    request_meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
     selected_requests: [],
     error: null,
     loading: false,
