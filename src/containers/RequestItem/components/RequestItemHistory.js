@@ -101,7 +101,7 @@ const RequestItemHistory = (props) => {
   const fetchRequestItemHistory = async () => {
     setLoading(true)
     const query = {
-      pageSize: 400,
+      pageSize: 100,
         pageNo: 0,
         pageSize: meta?.pageSize,
         // toBeApproved: status === "toBeApproved",

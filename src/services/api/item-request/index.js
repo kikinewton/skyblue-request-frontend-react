@@ -213,13 +213,12 @@ export function updateRequest(data) {
     case UPDATE_REQUEST_TYPES.HOD_ENDORSE:
       return service({url: '/requestItems/bulkEndorse', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_CANCEL:
-      return service({url: '/requestItems/updateStatus/CANCEL', method: "PUT", data: payload})
+      return service({url: 'requestItems/bulkCancel', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_COMMENT:
       return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REVIEW:
-      return service({url: '/requestItems/updateStatus/HOD_REVIEW', method: "PUT", data: payload})
+      return service({url: 'requestItems/bulkHodReview', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.GM_APPROVE:
-      // return service({url: '/requestItems/updateStatus/APPROVE', method: "PUT", data: payload})
       return service({url: '/requestItems/bulkApprove', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:
       return hodRejectBulkRequest(payload)
