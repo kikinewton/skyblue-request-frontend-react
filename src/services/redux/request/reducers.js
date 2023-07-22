@@ -15,7 +15,7 @@ export const INITIAL_STATE = {
   updating: false,
   update_success: false,
   department: {},
-  my_request_meta: {currentPage: 0, pageSize: 2, total: 0, totalPages: 0}
+  my_request_meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0}
 };
 
 //fetch

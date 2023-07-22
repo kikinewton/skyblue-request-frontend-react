@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
-import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
 import MyRequestMenu from '../MyRequestMenu'
 import MyPageHeader from '../../../../shared/MyPageHeader'
@@ -140,9 +139,13 @@ const LpoList = (props) => {
               onSearch={val => {
                 console.log('search', val)
                 setSearchTerm(val)
+                setMyRequestMeta({
+                  ...my_request_meta,
+                  currentPage: 0,
+                })
                 fetchMyRequests({
                   pageSize: my_request_meta?.pageSize,
-                  pageNo: my_request_meta?.currentPage,
+                  pageNo: 0,
                   requestItemName: val
                 })
                 //onFilter(val)
@@ -188,7 +191,7 @@ const LpoList = (props) => {
                 showSizeChanger={false}
                 defaultCurrent={my_request_meta?.currentPage + 1}
                 total={my_request_meta?.totalPages}
-                current={my_request_meta?.currentPage}
+                current={my_request_meta?.currentPage + 1}
                 defaultPageSize={my_request_meta?.pageSize}
                 pageSize={my_request_meta?.pageSize}
                 onChange={handlePageChange}

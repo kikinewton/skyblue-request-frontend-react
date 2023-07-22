@@ -31,6 +31,12 @@ export const REQUEST_TYPES = [
   {id: "PROJECT_AND_WORKS", label: "PROJECT_AND_WORKS"},
 ]
 
+export const REQUEST_TYPE = {
+  SERVICE_REQUEST: 'SERVICE_REQUEST',
+  GOODS_REQUEST: 'GOODS_REQUEST',
+  PROJECT_AND_WORKS: 'PROJECT_AND_WORKS'
+}
+
 export const REQUEST_REASONS = [
   {id: "Replace", label: "REPLACE"},
   {id: "Restock", label: "RESTOCK"},
