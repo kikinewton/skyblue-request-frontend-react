@@ -120,7 +120,6 @@ export function createQuotation(payload) {
 
 
 export function fetchQuotations(query) {
-  console.log('quotation api query', query)
   if(query?.approved) {
     query['approved'] = null
     const queryStr = serializeQueryParamsNotNull(query);
