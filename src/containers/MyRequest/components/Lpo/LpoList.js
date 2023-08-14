@@ -132,7 +132,7 @@ const LpoList = (props) => {
             </Button>,
             <DatePicker.RangePicker 
               key='date-picker' 
-              style={{ width: '100%' }}
+              style={{ width: '300px' }}
               allowClear
               bordered
               picker='date'
@@ -159,6 +159,7 @@ const LpoList = (props) => {
               placeholder='reference/description...'
               allowClear
               enterButton
+              style={{ width: '300px' }}
               onSearch={val => {
                 console.log('search', val)
                 setSearchTerm(val)
