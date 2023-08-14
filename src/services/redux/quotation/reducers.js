@@ -16,6 +16,7 @@ export const fetchQuotations = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchQuotationsSuccess = (state = INITIAL_STATE, action) => {
+  console.log('fetched quotations', action.responseData)
   return { ...state, quotations: action.responseData, loading: false, filtered_quotations: action.responseData};
 };
 
@@ -83,6 +84,8 @@ export const generateQuotationFailure = (state = INITIAL_STATE, action) => {
 export const filterQuotations = (state = INITIAL_STATE, action) => {
   const {filter} = action
   const lowerFiter = filter.toLowerCase()
+  console.log('filter', filter)
+  console.log('quotations', state.quotations)
   return {...state, 
     filtered_quotations: state.quotations.filter(it => it?.quotation?.quotationRef?.toLowerCase().includes(lowerFiter) || 
     it?.quotation?.supplier?.name?.toLowerCase().includes(filter) || it?.quotationRef?.toLowerCase().includes(lowerFiter) || 

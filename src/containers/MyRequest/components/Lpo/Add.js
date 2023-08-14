@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Select, Checkbox } from 'antd'
 import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
-import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
+import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPE, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { useHistory } from 'react-router'
 import MyPageHeader from '../../../../shared/MyPageHeader'
@@ -73,8 +73,9 @@ const AddNewRequest = (props) => {
     const store = stores.filter(item => item.id === storeId)[0]
     const id = requests.length + 2;
     const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel, store: store}
-    if(requestType !== REQUEST_TYPES[1]?.id) {
+    if(requestType !== REQUEST_TYPE.GOODS_REQUEST) {
       data["quantity"] = 1;
+      data["store"] = null;
     }
     const list = requests.concat([data])
     storeLocalState("NEW-REQUEST", list)
@@ -159,13 +160,6 @@ const AddNewRequest = (props) => {
                         ))}
                       </Select>
                     </Form.Item>
-                    <Form.Item label="STORE" name="storeId" rules={[{ required: true, message: 'Store To receive Item required' }]}>
-                      <Select loading={loading_stores}>
-                        {stores && stores.map(store=> (
-                          <Select.Option key={`store-option-${store.id}`} value={store.id}>{store.name}</Select.Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
                     <Form.Item label="REQUEST TYPE" name="requestType" rules={[{ required: true, message: 'Request Type required' }]}>
                       <Select onChange={(value) =>setRequestType(value)}>
                         {REQUEST_TYPES.map(rt => (
@@ -173,6 +167,15 @@ const AddNewRequest = (props) => {
                         ))}
                       </Select>
                     </Form.Item>
+                    {requestType === REQUEST_TYPE.GOODS_REQUEST && (
+                      <Form.Item label="STORE" name="storeId" rules={[{ required: true, message: 'Store To receive Item required' }]}>
+                        <Select loading={loading_stores}>
+                          {stores && stores.map(store=> (
+                            <Select.Option key={`store-option-${store.id}`} value={store.id}>{store.name}</Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    )}
                     <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
                       <Select >
                         {PRIORITY_LEVELS.map(it=> (

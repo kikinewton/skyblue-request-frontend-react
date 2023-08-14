@@ -24,7 +24,13 @@ export const fetchRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, requests: action.responseData, loading: false, filtered_requests: action.responseData };
+  return { 
+    ...state,
+    requests: action.responseData.data,
+    loading: false, 
+    filtered_requests: action.responseData.data,
+    request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+  };
 };
 
 export const fetchRequestsFailure = (state = INITIAL_STATE, action) => {

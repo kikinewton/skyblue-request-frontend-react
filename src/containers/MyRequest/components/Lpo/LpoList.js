@@ -1,9 +1,8 @@
-import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination } from 'antd'
+import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination, DatePicker } from 'antd'
 import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
 import { EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
-import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
 import MyRequestMenu from '../MyRequestMenu'
 import MyPageHeader from '../../../../shared/MyPageHeader'
@@ -71,22 +70,19 @@ const LpoList = (props) => {
   const [selectedRequest, setSelectedRequest] = React.useState(null)
   const [commentVisible, setCommentVisible] = useState(false)
   const [updatePriceForm] = Form.useForm()
-  
-  //const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [dateRange, setDateRange] = React.useState(['',''])
 
-  const onFilter = debounce((value) => {
-    filterMyRequests(value)
-  } , 1000)
+  // const onFilter = debounce((value) => {
+  //   filterMyRequests(value)
+  // } , 1000)
 
   const handlePageChange = async(page, pageSize) => {
-    //setMeta({...meta, currentPage: page})
-    console.log('-------> page', page)
     setMyRequestMeta({ ...my_request_meta, currentPage: page - 1 })
     const query = {
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
+      startDate: dateRange[0] || null,
+      endDate: dateRange[1] || null,
       pageNo: page - 1,
       pageSize: my_request_meta?.pageSize,
       requestItemName: searchTerm
@@ -98,6 +94,8 @@ const LpoList = (props) => {
     resetRequest()
     //fetchMyRequests({})
     fetchMyRequests({
+      startDate: dateRange[0] || null,
+      endDate: dateRange[1] || null,
       pageSize: my_request_meta?.pageSize,
       pageNo: my_request_meta?.currentPage,
       requestItemName: searchTerm
@@ -132,6 +130,30 @@ const LpoList = (props) => {
             <Button key="add-btn" type="default" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               ADD NEW LPO REQUEST
             </Button>,
+            <DatePicker.RangePicker 
+              key='date-picker' 
+              style={{ width: '100%' }}
+              allowClear
+              bordered
+              picker='date'
+              allowEmpty
+              format='YYYY-MM-DD'
+              onChange={(dateMoments, dateStrings, info) => {
+                console.log('date string', dateStrings, 'info', info)
+                setDateRange(dateStrings)
+                setMyRequestMeta({
+                  ...my_request_meta,
+                  currentPage: 0,
+                })
+                fetchMyRequests({
+                  startDate: dateStrings[0] || null,
+                  endDate: dateStrings[1] || null,
+                  pageSize: my_request_meta?.pageSize,
+                  pageNo: 0,
+                  requestItemName: searchTerm
+                })
+              }}
+            />,
             <Search 
               key="search"
               placeholder='reference/description...'
@@ -140,9 +162,15 @@ const LpoList = (props) => {
               onSearch={val => {
                 console.log('search', val)
                 setSearchTerm(val)
+                setMyRequestMeta({
+                  ...my_request_meta,
+                  currentPage: 0,
+                })
                 fetchMyRequests({
+                  startDate: dateRange[0] || null,
+                  endDate: dateRange[1] || null,
                   pageSize: my_request_meta?.pageSize,
-                  pageNo: my_request_meta?.currentPage,
+                  pageNo: 0,
                   requestItemName: val
                 })
                 //onFilter(val)
@@ -186,13 +214,13 @@ const LpoList = (props) => {
             <Col span={24}>
               <Pagination 
                 showSizeChanger={false}
-                defaultCurrent={my_request_meta?.currentPage + 1}
-                total={my_request_meta?.totalPages}
-                current={my_request_meta?.currentPage}
-                defaultPageSize={my_request_meta?.pageSize}
-                pageSize={my_request_meta?.pageSize}
-                onChange={handlePageChange}
+                defaultCurrent={my_request_meta.currentPage + 1}
+                total={my_request_meta.totalPages * my_request_meta.pageSize}
+                current={my_request_meta.currentPage + 1}
+                defaultPageSize={my_request_meta.pageSize}
+                pageSize={my_request_meta.pageSize}
                 size='small'
+                onChange={handlePageChange}
               />
             </Col>
           </Row>

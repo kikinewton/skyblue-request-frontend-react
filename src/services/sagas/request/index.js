@@ -19,8 +19,8 @@ export function* fetchRequests(action) {
   try {
     const response = yield call(fetchRequestsApi, action.query)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
-      const responseData = response?.data || []
-      yield put(Creators.fetchRequestsSuccess(responseData))
+      //const responseData = response || {}
+      yield put(Creators.fetchRequestsSuccess(response))
     } else {
       openNotification('error', 'Fetch Request', response.message || "Failed to fetch Requests")
       yield put(Creators.fetchRequestsFailure(response.message || "Failed to fetch requests!"))

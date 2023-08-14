@@ -285,7 +285,7 @@ export function getRequestDocs(id) {
 
 
 export function fetchAllRequests(query) {
-  const queryStr = serializeQueryParams(query)
+  const queryStr = serializeQueryParamsNotNull(query)
   return service({
     url: `/requestItems${queryStr}`,
     method: 'GET'

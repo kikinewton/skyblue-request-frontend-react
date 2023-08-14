@@ -120,13 +120,16 @@ export function createQuotation(payload) {
 
 
 export function fetchQuotations(query) {
-  const queryStr = serializeQueryParams(query);
   if(query?.approved) {
+    query['approved'] = null
+    const queryStr = serializeQueryParamsNotNull(query);
+    
     return service({
-      url: `/quotations/approved`,
+      url: `/quotations/approved${queryStr}`,
       method: 'GET'
     })
   } else {
+    const queryStr = serializeQueryParamsNotNull(query);
     return service({
       url: `/quotations${queryStr}`,
       method: 'GET'
