@@ -1,9 +1,9 @@
 import service from '../apiRequest'
-import { serializeQueryParams } from '../../../util/common-helper'
+import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 import { FETCH_REQUEST_TYPES, UPDATE_REQUEST_TYPES } from '../../../util/request-types'
 
 export function fetchMyRequests(query) {
-  const queryStr = serializeQueryParams(query)
+  const queryStr = serializeQueryParamsNotNull(query)
   return service({
     url: `/requestItemsForEmployee${queryStr}`,
     method: 'get'
@@ -211,15 +211,15 @@ export function updateRequest(data) {
   console.log('----------->update request payload', data)
   switch (updateType) {
     case UPDATE_REQUEST_TYPES.HOD_ENDORSE:
-      return service({url: '/requestItems/updateStatus/ENDORSE', method: "PUT", data: payload})
+      return service({url: '/requestItems/bulkEndorse', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_CANCEL:
-      return service({url: '/requestItems/updateStatus/CANCEL', method: "PUT", data: payload})
+      return service({url: 'requestItems/bulkCancel', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_COMMENT:
       return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REVIEW:
-      return service({url: '/requestItems/updateStatus/HOD_REVIEW', method: "PUT", data: payload})
+      return service({url: 'requestItems/bulkHodReview', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.GM_APPROVE:
-      return service({url: '/requestItems/updateStatus/APPROVE', method: "PUT", data: payload})
+      return service({url: '/requestItems/bulkApprove', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:
       return hodRejectBulkRequest(payload)
     case UPDATE_REQUEST_TYPES.PROCUREMENT_PENDING_ASSIGN_SUPPLIER_REQUESTS:
@@ -285,7 +285,7 @@ export function getRequestDocs(id) {
 
 
 export function fetchAllRequests(query) {
-  const queryStr = serializeQueryParams(query)
+  const queryStr = serializeQueryParamsNotNull(query)
   return service({
     url: `/requestItems${queryStr}`,
     method: 'GET'

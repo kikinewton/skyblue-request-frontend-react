@@ -270,7 +270,9 @@ const mapActionsToProps = (dispatch) => {
     resetComment: () => {
       dispatch(CommentCreators.resetComment())
     },
-
+    filterRequestsByDepartment: (departmentId) => {
+      dispatch(RequestCreators.filterRequestsByDepartment(departmentId))
+    },
     fetchLocalPurchaseOrderDrafts: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrderDrafts(query)),
   }
 }

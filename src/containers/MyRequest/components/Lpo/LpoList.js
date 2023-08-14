@@ -1,15 +1,15 @@
-import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge } from 'antd'
+import { Col, Table, Row, Button, Card, Form, Drawer, Input, List, Badge, Pagination, DatePicker } from 'antd'
 import React, { useState } from 'react'
 import { COMMENT_PROCESS_VALUES, COMMENT_TYPES, MY_REQUEST_COLUMNS } from '../../../../util/constants'
-import { EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useHistory, useRouteMatch } from 'react-router'
-import { prettifyDateTime } from '../../../../util/common-helper'
 import AppLayout from '../../../AppLayout'
 import MyRequestMenu from '../MyRequestMenu'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import { debounce } from 'lodash'
 import MyDrawer from '../../../../shared/MyDrawer'
 import RequestComment from '../../../../shared/RequestComment'
+import Search from 'antd/lib/input/Search'
 
 const columns = props => MY_REQUEST_COLUMNS.concat([
   // {
@@ -61,7 +61,7 @@ const columns = props => MY_REQUEST_COLUMNS.concat([
 
 const LpoList = (props) => {
   const { fetchMyRequests, requestLoading, my_requests, updateSingleRequest, updating_request, update_request_success, 
-    filtered_my_requests, filterMyRequests, fetchComments } = props
+    filtered_my_requests, filterMyRequests, fetchComments, my_request_meta,setMyRequestMeta, resetRequest } = props
 
   const [page, setPage] = React.useState(0)
   const history = useHistory()
@@ -72,17 +72,35 @@ const LpoList = (props) => {
   const [updatePriceForm] = Form.useForm()
 
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [dateRange, setDateRange] = React.useState(['',''])
 
-  const onFilter = debounce((value) => {
-    filterMyRequests(value)
-  } , 1000)
+  // const onFilter = debounce((value) => {
+  //   filterMyRequests(value)
+  // } , 1000)
+
+  const handlePageChange = async(page, pageSize) => {
+    setMyRequestMeta({ ...my_request_meta, currentPage: page - 1 })
+    const query = {
+      startDate: dateRange[0] || null,
+      endDate: dateRange[1] || null,
+      pageNo: page - 1,
+      pageSize: my_request_meta?.pageSize,
+      requestItemName: searchTerm
+    }
+    fetchMyRequests(query)
+  }
 
   React.useEffect(()=> {
-    props.resetRequest()
+    resetRequest()
+    //fetchMyRequests({})
     fetchMyRequests({
-
+      startDate: dateRange[0] || null,
+      endDate: dateRange[1] || null,
+      pageSize: my_request_meta?.pageSize,
+      pageNo: my_request_meta?.currentPage,
+      requestItemName: searchTerm
     })
-    // eslint-disable-next-line
+    //eslint-disable-next-line
   }, [])
 
   React.useEffect(() => {
@@ -93,8 +111,12 @@ const LpoList = (props) => {
         name: "",
         quantity: ""
       })
+      fetchMyRequests({
+        pageSize: my_request_meta?.pageSize,
+        pageNo: my_request_meta?.currentPage,
+        requestItemName: searchTerm
+      })
     }
-    fetchMyRequests({})
   }, [updating_request, update_request_success])
   
   return (
@@ -107,25 +129,56 @@ const LpoList = (props) => {
            extra={[
             <Button key="add-btn" type="default" onClick={()=> history.push("/app/my-requests/lpos/add-new")}>
               ADD NEW LPO REQUEST
-            </Button>
+            </Button>,
+            <DatePicker.RangePicker 
+              key='date-picker' 
+              style={{ width: '300px' }}
+              allowClear
+              bordered
+              picker='date'
+              allowEmpty
+              format='YYYY-MM-DD'
+              onChange={(dateMoments, dateStrings, info) => {
+                console.log('date string', dateStrings, 'info', info)
+                setDateRange(dateStrings)
+                setMyRequestMeta({
+                  ...my_request_meta,
+                  currentPage: 0,
+                })
+                fetchMyRequests({
+                  startDate: dateStrings[0] || null,
+                  endDate: dateStrings[1] || null,
+                  pageSize: my_request_meta?.pageSize,
+                  pageNo: 0,
+                  requestItemName: searchTerm
+                })
+              }}
+            />,
+            <Search 
+              key="search"
+              placeholder='reference/description...'
+              allowClear
+              enterButton
+              style={{ width: '300px' }}
+              onSearch={val => {
+                console.log('search', val)
+                setSearchTerm(val)
+                setMyRequestMeta({
+                  ...my_request_meta,
+                  currentPage: 0,
+                })
+                fetchMyRequests({
+                  startDate: dateRange[0] || null,
+                  endDate: dateRange[1] || null,
+                  pageSize: my_request_meta?.pageSize,
+                  pageNo: 0,
+                  requestItemName: val
+                })
+                //onFilter(val)
+              }}
+            />
           ]}
         />
-        <Card>
-          <Row>
-            <Col offset={16} span={8}>
-              <Input
-                allowClear
-                placeholder='reference/description...'
-                style={{width: "100%"}}
-                value={searchTerm} 
-                onChange={e => {
-                  setSearchTerm(e.target.value)
-                  onFilter(e.target.value)
-                }} 
-              />
-            </Col>
-          </Row>
-        </Card>
         <Card>
           <Row>
             <Col md={24}>
@@ -154,7 +207,21 @@ const LpoList = (props) => {
                 size="small"
                 rowKey="id"
                 bordered
-                pagination={{pageSize: 20}}
+                pagination={false}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Pagination 
+                showSizeChanger={false}
+                defaultCurrent={my_request_meta.currentPage + 1}
+                total={my_request_meta.totalPages * my_request_meta.pageSize}
+                current={my_request_meta.currentPage + 1}
+                defaultPageSize={my_request_meta.pageSize}
+                pageSize={my_request_meta.pageSize}
+                size='small'
+                onChange={handlePageChange}
               />
             </Col>
           </Row>

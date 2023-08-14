@@ -5,6 +5,7 @@ import { Creators as DepartmentCreators  } from '../../services/redux/department
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import { Creators as FloatCreators } from "../../services/redux/float/actions"
 import { Creators as PettyCashCreators } from "../../services/redux/petty-cash/actions"
+import { Creators as StoreCreators } from '../../services/redux/store/actions'
 import AppLayout from '../AppLayout'
 import MyRequestsIndex from './components'
 import { Menu } from 'antd'
@@ -105,6 +106,7 @@ const mapStateToProps = (store) => ({
   update_request_success: store.request.update_success,
   updating_request: store.request.updating,
   request: store.request.request,
+  my_request_meta: store.request.my_request_meta,
 
   my_petty_cash_requests: store.petty_cash.my_requests,
   fetching_petty_cash_requests: store.petty_cash.loading,
@@ -124,6 +126,9 @@ const mapStateToProps = (store) => ({
   submitting_comment: store.comment.submitting,
   submit_comment_success: store.comment.submit_success,
   new_comment: store.comment.new_comment,
+
+  stores: store.store.stores,
+  loading_stores: store.store.loading
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -139,7 +144,6 @@ const mapActionsToProps = (dispatch) => {
       dispatch(RequestCreators.fetchRequests(query))
     },
     filterMyRequests: (query) => {
-      console.log('lets filter', query)
       dispatch(RequestCreators.filterMyRequests(query))
     },
     getRequest: (id) => {
@@ -198,7 +202,9 @@ const mapActionsToProps = (dispatch) => {
     },
     fetchComments: (itemId, commentType) => {
       dispatch(CommentCreators.fetchComments(itemId, commentType))
-    }
+    },
+    setMyRequestMeta: meta => dispatch(RequestCreators.setMyRequestMeta(meta)),
+    fetchStores: query => dispatch(StoreCreators.fetchStores(query)),
   }
 }
 export default connect(mapStateToProps, mapActionsToProps)(MyRequest)

@@ -1,5 +1,5 @@
 import { DownloadOutlined, EyeOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, Spin, Drawer, Input } from 'antd'
+import { Badge, Button, Col, Row, Table, Spin, Drawer, Input, AutoComplete } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
@@ -56,7 +56,10 @@ const AllLocalPurchaseOrders = (props) => {
     local_purchase_orders,
     local_purchase_order_drafts,
     fetching_local_purchase_orders,
-    resetLocalPurchaseOrder
+    resetLocalPurchaseOrder,
+    fetchSuppliers,
+    fetching_suppliers,
+    suppliers
   } = props
 
   const handlefetch = (e) => {
@@ -65,6 +68,17 @@ const AllLocalPurchaseOrders = (props) => {
 
   const handleCreateGrn = (row)=> {
     history.push(`/app/stores/lpos/${row.id}/create-goods-receive-note`)
+  }
+
+  const handleOnSearch = (value) => {
+    console.log('filter value', value)
+    setFilter(value)
+    if(value) {
+      fetchLocalPurchaseOrders({supplierName: value})
+    } else {
+      fetchLocalPurchaseOrders({})
+    }
+    
   }
 
   const onViewClick = (row)=> {
@@ -78,6 +92,7 @@ const AllLocalPurchaseOrders = (props) => {
     //fetchLpos()
     resetLocalPurchaseOrder()
     fetchLocalPurchaseOrders({})
+    fetchSuppliers({})
   }, [])
 
   const expandedRowRender = (row) => {
@@ -105,7 +120,20 @@ const AllLocalPurchaseOrders = (props) => {
           }} /></span>
         </Col>
         <Col span={12}>
-          <Row>
+          <AutoComplete
+            options={suppliers.map(supplier => {
+              return {label: supplier?.name, value:supplier?.name}
+            })}
+            dropdownMatchSelectWidth={500}
+            style={{width: 400}}
+            onSelect={value => handleOnSearch(value)}
+            value={filter}
+            onClear={value => handleOnSearch(null)}
+            allowClear
+          >
+            <Input.Search placeholder='supplier name' />
+          </AutoComplete>
+          {/* <Row>
             <Col span={20}>
               <Input type='search' value={filter} onChange={(e) => setFilter(e.target.value)}  />
             </Col>
@@ -114,7 +142,7 @@ const AllLocalPurchaseOrders = (props) => {
                 Search
               </Button>
             </Col>
-          </Row>
+          </Row> */}
         </Col>
       </Row>
       <Row>

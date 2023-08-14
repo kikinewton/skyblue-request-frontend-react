@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, CommentOutlined } from '@ant-design/icons';
-import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message, Badge, List } from 'antd';
+import { Button, Col, Table, Row, Input, Tag, Drawer, Divider, Card, PageHeader, message, Badge, List, Select, Typography, Breadcrumb, Space } from 'antd';
 import React, {useState } from 'react';
 import RequestDocumentReview from '../../../presentation/RequestDocumentReview';
 import MyDrawer from '../../../shared/MyDrawer';
@@ -184,13 +184,15 @@ const selectedRequestsColumnsForReject = props => [
   }
 ]
 
+//componet starts
+
 const ApprovePendingList = (props) => {
   const {
     selected_requests,
     setSelectedRequests,
     resetRequest,
     fetching_requests,
-    requests,
+    filtered_requests,
     updateRequest,
     updating_request,
     update_request_success,
@@ -204,6 +206,7 @@ const ApprovePendingList = (props) => {
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [commentVisible, setCommentVisible] = useState(false)
   const [cancelVisible, setCancelVisible] = useState(false)
+  const [selectedDepartment, setSelectedDepartment] = useState("")
 
   const submit = () => {
     if((actionType === UPDATE_REQUEST_TYPES.GM_CANCEL || actionType === UPDATE_REQUEST_TYPES.GM_COMMENT) && selected_requests.filter(it => !it.comment).length > 0) {
@@ -244,6 +247,7 @@ const ApprovePendingList = (props) => {
 
   React.useEffect(()=> {
     resetRequest()
+    props.fetchDepartments({})
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.GENERAL_MANAGER_PENDING_APPROVE_REQUESTS
     })
@@ -277,48 +281,56 @@ const ApprovePendingList = (props) => {
 
   return (
     <>
-      <PageHeader title="REQUESTS AWAITING APPROVAL" extra={[
-        (
-          <Row style={{marginBottom: 10}} key="actions">
-            <Col span={24} style={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end", alignContent: 'center'}}>
-              {/* <Button
-                disabled={selected_requests.length < 1} 
-                style={{marginRight: 5}}
-                type="default"
-                onClick={() => {
-                  setActionType(UPDATE_REQUEST_TYPES.GM_COMMENT)
-                  setConfirmDrawer(true)
-                }}
-              >
-                <CommentOutlined /> Comment Selected List
-              </Button> */}
-              {/* <Button
-                style={{marginRight: 5}} 
-                type="default"
-                disabled={selected_requests.length < 1}
-                onClick={() => {
-                  setActionType(UPDATE_REQUEST_TYPES.GM_CANCEL)
-                  setConfirmDrawer(true)
-                }}
-              >
-                <CloseOutlined />
-                CANCEL SELECTED REQUESTS
-              </Button> */}
-              <Button 
-                disabled={selected_requests.length < 1} 
-                type="primary" style={{marginRight: 5}} 
-                onClick={() => {
-                  setActionType(UPDATE_REQUEST_TYPES.GM_APPROVE)
-                  setConfirmDrawer(true)
-                }}
-              >
-                <CheckOutlined />
-                APPROVE SELECTED REQUESTS
-              </Button>
-            </Col>
-          </Row>
-        )
-      ]} />
+      <Row style={{ marginBottom: 10 }}>
+        <Col span={6}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              REQUESTS AWAITING APPROVAL
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </Col>
+        <Col span={18} style={{ display: 'flex', flexDirection: 'row', justifyContent:'flex-end' }}>
+          <Space>
+            <Select
+              placeholder="department"
+              style={{ minWidth: 200 }}
+              onChange={(val) => {
+                //console.log('e', e)
+                setSelectedDepartment(val)
+                props.filterRequestsByDepartment(val)
+              }}
+              loading={props?.departmentsLoading}
+              value={selectedDepartment}
+            >
+              <Select.Option value="">
+                All departments
+              </Select.Option>
+              {props?.departments?.map(it => (
+                <Select.Option key={it.id} value={it.id}>
+                  {it.name}
+                </Select.Option>
+              ))}
+            </Select>
+            <Input 
+              placeholder='Search by description...'
+              onChange={e => {
+                props.filterRequests(e.target.value)
+              }}
+            />
+            <Button 
+              disabled={selected_requests.length < 1} 
+              type="primary" style={{marginRight: 5}} 
+              onClick={() => {
+                setActionType(UPDATE_REQUEST_TYPES.GM_APPROVE)
+                setConfirmDrawer(true)
+              }}
+            >
+              <CheckOutlined />
+              APPROVE SELECTED REQUESTS
+            </Button>
+          </Space>
+        </Col>
+      </Row>
       <Card>
         <Row>
           <Col span={24}>
@@ -341,7 +353,7 @@ const ApprovePendingList = (props) => {
                   setCancelVisible(true)
                 }
               })}
-              dataSource={requests}
+              dataSource={filtered_requests}
               rowKey="id"
               bordered
               pagination={{
@@ -353,6 +365,7 @@ const ApprovePendingList = (props) => {
                 },
                 selectedRowKeys: selected_requests?.map(it=> it.id),
               }}
+              
             />
           </Col>
         </Row>

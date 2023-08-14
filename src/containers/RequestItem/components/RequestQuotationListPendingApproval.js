@@ -27,7 +27,7 @@ const RequestQuotationListPendingApproval = (props) => {
               })}
               rowKey='id'
               pagination={{
-                pageSize: 20
+                pageSize: 30
               }}
             />
           </Col>

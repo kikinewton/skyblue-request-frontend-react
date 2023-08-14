@@ -65,7 +65,7 @@ export function* createPettyCashRequest(action) {
     }
   } catch (error) {
     const errorTxt = (error && error.response.data && error.response.data.error) || 'Failed to fetch departments'
-    openNotification('error', 'Login', errorTxt)
+    openNotification('error', 'CREATE PETTY CASH', errorTxt)
     yield put(Creators.createPettyCashRequestFailure(errorTxt))
   }
 }

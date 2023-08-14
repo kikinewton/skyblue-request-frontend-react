@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Col, Form, Row, Table, Input, Button, Select, Checkbox } from 'antd'
 import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
-import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPES } from '../../../../util/datas'
+import { PRIORITY_LEVELS, REQUEST_REASONS, REQUEST_TYPE, REQUEST_TYPES } from '../../../../util/datas'
 import { clearLocalState, getLocalState, storeLocalState } from '../../../../services/app-storage'
 import { useHistory } from 'react-router'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import AppLayout from '../../../AppLayout'
-
 
 const columns = props => [
   {
@@ -36,6 +35,12 @@ const columns = props => [
     render: (text)=> text?.name
   },
   {
+    title: 'STORE',
+    dataIndex: 'store',
+    key: "store.id",
+    render: (text)=> text?.name || 'N/A'
+  },
+  {
     title: 'PURPOSE',
     dataIndex: 'purpose',
     key: "purpose"
@@ -55,19 +60,22 @@ const columns = props => [
 
 const AddNewRequest = (props) => {
   const [requests, setRequests] = React.useState([])
-  const { departments, fetchDepartments, createRequest, departmentLoading, currentUser, requestSubmitting, submitSuccess } = props
+  const { departments, fetchDepartments, createRequest, departmentLoading, currentUser, 
+    requestSubmitting, submitSuccess, fetchStores, stores, loading_stores } = props
   const [ form ] = Form.useForm()
   const departmentFieldRef = React.createRef()
   const history = useHistory()
   const [requestType, setRequestType] = React.useState(REQUEST_TYPES[1]?.id)
 
   const addToEntires = (values) => {
-    const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel } = values
+    const { name, reason, purpose, requestType, departmentId, quantity, priorityLevel, storeId } = values
     const department = departments.filter(item => item.id === departmentId)[0]
+    const store = stores.filter(item => item.id === storeId)[0]
     const id = requests.length + 2;
-    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel}
-    if(requestType !== REQUEST_TYPES[1]?.id) {
+    const data = {id: id, name, reason, purpose, requestType, userDepartment: department, quantity, priorityLevel, store: store}
+    if(requestType !== REQUEST_TYPE.GOODS_REQUEST) {
       data["quantity"] = 1;
+      data["store"] = null;
     }
     const list = requests.concat([data])
     storeLocalState("NEW-REQUEST", list)
@@ -84,6 +92,7 @@ const AddNewRequest = (props) => {
         if(it.requestType !== REQUEST_TYPES[1]?.id) {
           dt['quantity'] = 1
         }
+        dt['receivingStore'] = it.store
         return dt
       })
     }
@@ -111,7 +120,9 @@ const AddNewRequest = (props) => {
       const fd = JSON.parse(localData)
       setRequests(fd)
     }
-    fetchDepartments({}) // eslint-disable-next-line
+    fetchDepartments({})
+    fetchStores({})
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -126,7 +137,7 @@ const AddNewRequest = (props) => {
           </Col>
         </Row>
         <Card 
-          title="CREATE NEW REQUEST"
+          title="CREATE NEW LPO REQUEST"
         >
           <Row gutter={24}>
             <Col md={6}>
@@ -138,7 +149,7 @@ const AddNewRequest = (props) => {
                     layout="vertical"
                     form={form}
                     name="request-entry"
-                    initialValues={{ name: "", reason: "", purpose: "", quantity: "", 
+                    initialValues={{ name: "", reason: "", purpose: "", quantity: "", storeId: undefined,
                       requestType: REQUEST_TYPES[1]?.id, departmentId: currentUser?.department?.id || undefined, priorityLevel: "NORMAL"}}
                     onFinish={addToEntires}
                   >
@@ -156,6 +167,15 @@ const AddNewRequest = (props) => {
                         ))}
                       </Select>
                     </Form.Item>
+                    {requestType === REQUEST_TYPE.GOODS_REQUEST && (
+                      <Form.Item label="STORE" name="storeId" rules={[{ required: true, message: 'Store To receive Item required' }]}>
+                        <Select loading={loading_stores}>
+                          {stores && stores.map(store=> (
+                            <Select.Option key={`store-option-${store.id}`} value={store.id}>{store.name}</Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    )}
                     <Form.Item label="PRIORITY" name="priorityLevel" rules={[{ required: true, message: 'Priority required' }]}>
                       <Select >
                         {PRIORITY_LEVELS.map(it=> (

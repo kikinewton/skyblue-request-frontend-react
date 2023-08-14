@@ -8,14 +8,16 @@ import { connect } from 'react-redux';
 
 
 const Home = (props) => {
-  const {fetchMyRequests, my_requests, fetching_my_requests, currentUser} = props
-
-  console.log("user current", currentUser)
+  const {fetchMyRequests, my_requests, fetching_my_requests, currentUser, resetRequest} = props
 
   React.useEffect(() => {
+    resetRequest()
     //fetch my requests if user is a regular employee
     if(userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR])) {
-      fetchMyRequests({}) 
+      fetchMyRequests({
+        pageNo: 0,
+        pageSize: 20
+      }) 
     }
   }, [])
   
@@ -34,7 +36,7 @@ const Home = (props) => {
                   <Table 
                     loading={fetching_my_requests}
                     columns={REQUEST_COLUMNS}
-                    dataSource={my_requests?.slice(0, 5)}
+                    dataSource={my_requests?.slice(0, 10)}
                     rowKey="id"
                     pagination={false}
                     size="small"

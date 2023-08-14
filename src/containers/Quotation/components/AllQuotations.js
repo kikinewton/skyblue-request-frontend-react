@@ -1,5 +1,5 @@
 import { FileExcelOutlined, InfoOutlined } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge, Pagination } from 'antd'
+import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge, Pagination, Breadcrumb, Space } from 'antd'
 import Meta from 'antd/lib/card/Meta'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
@@ -10,6 +10,8 @@ import QuotationDetails from '../../../shared/QuotationDetails'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_TYPES } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
+import Search from 'antd/lib/input/Search'
+import { filter } from 'lodash'
 
 const columns = (props) => [
   {
@@ -57,13 +59,15 @@ const columns = (props) => [
 const ListAllQuotations = (props) => {
   const [quotationViewVisible, setQuotationViewVisible] = useState(false)
   const [selectedQuotation, setSelectedQuotation] = useState(null)
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 20, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
   const [quotations, setQuotations] = useState([])
+  const [filteredQuotations, setFilteredQuotations] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
   const history = useHistory()
 
   const handlePageChange = (page, pageSize) => {
-    const queryObj = {...Meta, currentPage: page - 1, pageSize}
+    const queryObj = {...meta, currentPage: page - 1, pageSize, approved: true, supplierName: searchTerm}
     fetchData(queryObj)
   }
 
@@ -72,6 +76,7 @@ const ListAllQuotations = (props) => {
     setLoading(true)
     const queryObj = {
       approved: true,
+      supplierName: query.supplierName,
       pageNo: query.currentPage,
       pageSize: query.pageSize
     }
@@ -83,6 +88,7 @@ const ListAllQuotations = (props) => {
         setMeta({...meta, currentPage, total: total * totalPages, pageSize, totalPages})
       }
       setQuotations(result?.data)
+      setFilteredQuotations(result?.data)
     } catch (error) {
       
     } finally {
@@ -91,34 +97,54 @@ const ListAllQuotations = (props) => {
   }
 
   useEffect(() => {
-    fetchData({pageSize: meta.pageSize, currentPage: meta.currentPage})
+    fetchData({
+      pageSize: meta.pageSize, 
+      currentPage: meta.currentPage, 
+      supplierName: searchTerm
+    })
     // eslint-disable-next-line
   }, [])
 
   return (
     <>
-      <Row>
-        <Col span={24}>
-          <PageHeader 
-            title="All Supplier Quotations"
-            extra={[
-              <Input
-                type="search"
-                style={{width: 300}}
-                placeholder="search by supplier"
-                key="input-search"
-                onChange={(event) => props.filterQuotations(event.target.value)}
-              />,
-              <Button 
-                type="primary" 
-                onClick={() => history.push("/app/quotations/add-new")} 
-                key="add-button"
-                disabled={!userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER])}
-              >
-                  ADD NEW QUOTATION
-                </Button>
-            ]}
-          />
+      <Row style={{ marginBottom: 10 }}>
+        <Col span={12}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              All Supplier Quotations
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </Col>
+        <Col span={12} style={{ display:'flex', flexDirection:'row', justifyContent:'flex-end' }}>
+          <Space>
+            <Search 
+              placeholder='Search...'
+              enterButton
+              allowClear
+              onSearch={val => {
+                console.log('quotation query', {
+                  pageNoss: 12,
+                  pageSize: meta.pageSize,
+                  supplierName: val,
+                  approved: true
+                })
+                fetchData({
+                  currentPage: meta.currentPage,
+                  pageSize: meta.pageSize,
+                  supplierName: val,
+                  approved: true
+                })
+              }}
+            />
+            <Button 
+              type="primary" 
+              onClick={() => history.push("/app/quotations/add-new")} 
+              key="add-button"
+              disabled={!userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER])}
+            >
+              ADD NEW QUOTATION
+            </Button>
+          </Space>
         </Col>
       </Row>
 
@@ -133,7 +159,7 @@ const ListAllQuotations = (props) => {
             }
           })}
           loading={loading}
-          dataSource={quotations}
+          dataSource={filteredQuotations}
           size="small"
           rowKey="id"
           bordered

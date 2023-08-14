@@ -29,7 +29,7 @@ const QuotationList = (props) => {
             rowKey="id"
             size="small"
             pagination={{
-              pageSize: 20
+              pageSize: 30
             }}
           />
         </Col>

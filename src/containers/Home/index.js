@@ -23,7 +23,8 @@ const mapStateToProps = (store) => ({
 const mapActionsToProps = (dispatch) => ({
   fetchMyRequests: (query) => {
     dispatch(RequestCreators.fetchMyRequests(query))
-  }
+  },
+  resetRequest: () => dispatch(RequestCreators.resetRequest())
 })
 
 export default connect(mapStateToProps, mapActionsToProps)(HomePage)

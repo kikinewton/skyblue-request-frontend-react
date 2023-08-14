@@ -1,8 +1,9 @@
-import { Col, Table, Row, Drawer, Card } from 'antd';
+import { Col, Table, Row, Drawer, Card, Select } from 'antd';
 import React, {useState } from 'react';
 import MyPageHeader from '../../../shared/MyPageHeader';
 import { REQUEST_COLUMNS } from '../../../util/constants';
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types';
+import DepartmentFilter from '../../../presentation/DepartmentFilter';
 
 const columns = REQUEST_COLUMNS.concat([])
 
@@ -12,16 +13,19 @@ const EndorsedItemRequest = (props) => {
     resetRequest,
     fetching_requests,
     requests,
+    departments,
+    departmentsLoading
   } = props
 
   const [viewDrawer, setViewDrawer] = useState(false)
-
+  const [departmentFilter, setDepartmentFilter] = useState("")
 
   React.useEffect(()=> {
     resetRequest()
     props.fetchRequests({
       requestType: FETCH_REQUEST_TYPES.DEPARTMENT_ENDORSED_REQUESTS
     })
+    props.fetchDepartments({})
     // eslint-disable-next-line
   }, [])
 
@@ -29,6 +33,18 @@ const EndorsedItemRequest = (props) => {
     <>
       <MyPageHeader 
         title="Endorserd Request Items"
+        extra={[
+          <DepartmentFilter
+            key="department-filter" 
+            data={props.departments}
+            loading={departmentsLoading}
+            onChange={(v) => {
+              setDepartmentFilter(v)
+              props.filterRequestsByDepartment(v)
+            }}
+            value={departmentFilter}
+          />
+        ]}
       />
       <Card>
         <Row>
@@ -37,7 +53,7 @@ const EndorsedItemRequest = (props) => {
               loading={fetching_requests}
               size="small"
               columns={columns}
-              dataSource={requests}
+              dataSource={props.filtered_requests}
               rowKey="id"
               bordered
               pagination={{

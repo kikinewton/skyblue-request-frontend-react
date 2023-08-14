@@ -47,7 +47,7 @@ const AllPaymentDrafts = (props) => {
   const fetchPaymentDraftHistory = async () => {
     setLoading(true)
     const query = {
-      pageSize: 5,
+      pageSize: 20,
         pageNo: 0,
         reference: grnRef ? grnRef : null,
         paymentRef: paymentRef ? paymentRef : null,

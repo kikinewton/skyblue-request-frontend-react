@@ -4,7 +4,7 @@ import { FETCH_PETTY_CASH_REQUEST_TYPES } from '../../../util/request-types'
 
 export function savePettyCashRequest(payload){
   return service({
-    url: `/bulkFloatOrPettyCash/PETTY_CASH`,
+    url: `/bulkPettyCash`,
     method: 'POST',
     data: payload
   })

@@ -4,7 +4,7 @@ import { serializeQueryParams } from '../../../util/common-helper'
 
 export function saveFloatRequest(payload){
   return service({
-    url: `/bulkFloatOrPettyCash/FLOAT`,
+    url: `/bulkFloat`,
     method: 'POST',
     data: payload
   })

@@ -21,3 +21,6 @@ export const QUOTATION_ENDPOINT = "/quotations"
 
 //users endpoint
 export const EMPLOYEE_ENDPOINT = "/employees/"
+
+//stores
+export const STORES_ENDPOINT = "/stores"

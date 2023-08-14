@@ -1,5 +1,5 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination } from 'antd'
+import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination, Pagination } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
@@ -9,6 +9,7 @@ import RequestItemQuotationList from '../../../shared/RequestItemQuotationList'
 import { COMMENT_TYPES, REQUEST_COLUMNS } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import RequestItemStatus from './RequestItemStatus'
+import Search from 'antd/lib/input/Search'
 
 const columns = (props) => REQUEST_COLUMNS.concat([
   {
@@ -32,6 +33,7 @@ const RequestItemHistory = (props) => {
   const [showAllDocumens, setShowAllDocuments] = useState(false)
   const [loadingQuotationDocuments, setLoadingQuotationDocuments] = useState(false)
   const [quotationDocuemnts, setQuotationDocuments] = useState([])
+  const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
   // const resetPagination = () => {
@@ -98,12 +100,42 @@ const RequestItemHistory = (props) => {
     fetchRequestItemQuotationDocuements(requestItemId)
   }
   
+
+  // const fetchRequestItemHistory = async () => {
+  //   setLoading(true)
+  //   const query = {
+  //     // toBeApproved: status === "toBeApproved",
+  //     // approved: status === "approved",
+  //     // reference: searchTerm ? searchTerm : null
+  //   }
+  //   try {
+  //     const result = await getAllItemRequests(query)
+  //     // if(result?.meta) {
+  //     //   const { currentPage, pageSize, total, totalPages } = result?.meta
+  //     //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+  //     // }
+  //     setRequests(result?.data)
+  //     setFilteredRequests(result?.data)
+  //   } catch (error) {
+      
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+ 
+  const handleFetchQuotationDocumentClick = (requestItemId) => {
+    console.log(`Request Item ID: ${requestItemId}`)
+    setShowAllDocuments(true)
+    fetchRequestItemQuotationDocuements(requestItemId)
+  }
+  
   const fetchRequestItemHistory = async () => {
     setLoading(true)
     const query = {
-      pageSize: 400,
+      pageSize: 100,
         pageNo: 0,
         pageSize: meta?.pageSize,
+        requestItemName: searchTerm
         // toBeApproved: status === "toBeApproved",
         // approved: status === "approved",
         // reference: searchTerm ? searchTerm : null
@@ -115,8 +147,32 @@ const RequestItemHistory = (props) => {
         const { currentPage, pageSize, total, totalPages } = result?.meta
         setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
       }
+      setRequests(result?.data)
+    } catch (error) {
       
-     
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchRequestItemHistoryBySearchTerm = async (filter) => {
+    setLoading(true)
+    const query = {
+      pageSize: 400,
+        pageNo: 0,
+        pageSize: meta?.pageSize,
+        requestItemName: filter
+        // toBeApproved: status === "toBeApproved",
+        // approved: status === "approved",
+        // reference: searchTerm ? searchTerm : null
+    }
+    
+    try {
+      const result = await getAllItemRequests(query)
+      if(result?.meta) {
+        const { currentPage, pageSize, total, totalPages } = result?.meta
+        setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
+      }
       setRequests(result?.data)
     } catch (error) {
       
@@ -132,7 +188,8 @@ const RequestItemHistory = (props) => {
       // toBeApproved: status === "toBeApproved",
       // approved: status === "approved",
       pageNo: page - 1,
-      pageSize: meta?.pageSize
+      pageSize: meta?.pageSize,
+      requestItemName: searchTerm
     }
 
     try {
@@ -148,14 +205,13 @@ const RequestItemHistory = (props) => {
   }
 
   const onFilterBySearch = (value) => {
+    console.log('filter', value)
     setFilteredRequests(requests.filter(rq => rq?.requestItemRef.includes(value) || rq?.name?.toLowerCase().includes(value?.toLowerCase())))
   }
 
   useEffect(() => {
     fetchRequestItemHistory()
   }, [])
-
-  
 
   return (
     <>
@@ -166,16 +222,15 @@ const RequestItemHistory = (props) => {
           </Breadcrumb>
         </Col>
         <Col xs={24} sm={24} md={16} style={{textAlign: 'right'}}>
-          <Input
-            type="search" 
-            value={searchTerm} 
-            onChange={value => {
-              setSearchTerm(value.target.value)
-              onFilterBySearch(value.target.value)
-            }}
-            placeholder="Search"
+          <Search 
+            placeholder='Search...'
             allowClear
-            style={{width: 400}}
+            onSearch={val => {
+              setSearchTerm(val)
+              fetchRequestItemHistoryBySearchTerm(val)
+            }}
+            enterButton
+            style={{ width: 300 }}
           />
         </Col>
       </Row>

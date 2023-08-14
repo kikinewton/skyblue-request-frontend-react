@@ -28,7 +28,6 @@ const HodReviewPendingList = (props) => {
   } = props
   const [drawer, setDrawer] = React.useState(false)
   const [selectedRequest, setSelectedRequest] = React.useState(null)
-
   // const submit = () => {
   //   updateRequest({
   //     updateType: "HOD_REVIEW",

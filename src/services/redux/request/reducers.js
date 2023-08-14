@@ -14,7 +14,8 @@ export const INITIAL_STATE = {
   submitSuccess: false,
   updating: false,
   update_success: false,
-  department: {}
+  department: {},
+  my_request_meta: {currentPage: 0, pageSize: 200, total: 0, totalPages: 0}
 };
 
 //fetch
@@ -23,7 +24,13 @@ export const fetchRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, requests: action.responseData, loading: false, filtered_requests: action.responseData };
+  return { 
+    ...state,
+    requests: action.responseData.data,
+    loading: false, 
+    filtered_requests: action.responseData.data,
+    request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+  };
 };
 
 export const fetchRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -36,7 +43,14 @@ export const fetchMyRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyRequestsSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, my_requests: action.responseData, filtered_my_requests: action.responseData,loading: false};
+  console.log('response data', action.responseData)
+  return { 
+    ...state, 
+    my_requests: action.responseData?.data, 
+    filtered_my_requests: action.responseData?.data,
+    loading: false,
+    my_request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+  };
 };
 
 export const fetchMyRequestsFailure = (state = INITIAL_STATE, action) => {
@@ -149,12 +163,31 @@ export const filterRequests = (state = INITIAL_STATE, action) => {
   return { ...state, filtered_requests: filtered }
 }
 
+export const filterRequestsByDepartment = (state = INITIAL_STATE, action) => {
+  const {departmentId} = action
+  let filtered = state.requests
+  
+  if(departmentId) {
+    filtered = state.requests.filter(item => {
+        return item?.userDepartment?.id === departmentId
+    })
+  }
+
+  return { ...state, filtered_requests: filtered}
+}
+
+export const setMyRequestMeta = (state = INITIAL_STATE, action) => {
+  const {meta} = action
+  return { ...state, my_request_meta: meta}
+}
+
 export const resetRequest = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     requests: [],
     request: null,
     my_requests: [],
+    my_request_meta: {currentPage: 0, pageSize: 200, total: 0, totalPages: 0},
     selected_requests: [],
     error: null,
     loading: false,
@@ -197,8 +230,10 @@ export const HANDLERS = {
 
   [Types.FILTER_REQUESTS]: filterRequests,
 
+  [Types.FILTER_REQUESTS_BY_DEPARTMENT]: filterRequestsByDepartment,
 
-  
+
+  [Types.SET_MY_REQUEST_META]: setMyRequestMeta,
   [Types.RESET_REQUEST]: resetRequest
 };
 

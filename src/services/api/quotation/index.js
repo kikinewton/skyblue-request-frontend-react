@@ -72,11 +72,12 @@ export function getAllQuotations(query) {
     case QUOTATIONS_BY_SUPPLIER:
       return getQuotationBySupplier(query)
     case NOT_LINKED_TO_LPO:
-      return service({url: `/quotations?linkedToLpo=${false}`, method: "GET"})
+      // return service({url: `/quotations?linkedToLpo=${false}`, method: "GET"})
+      return service({url: `/quotations/notLinkedToLpo`, method: "GET"})
     case LINKED_TO_LPO:
-      return service({url: `/quotations?linkedToLpo=${true}`, method: "GET"})
+      return service({url: `/quotations/linkedToLpo`, method: "GET"})
     case UNDER_REVIEW:
-      return service({url: `/quotations?underReview=${true}`, method: "GET"})
+      return service({url: `/quotations/underReview`, method: "GET"})
     default:
       return getQuotations()
   }
@@ -119,11 +120,21 @@ export function createQuotation(payload) {
 
 
 export function fetchQuotations(query) {
-  const queryStr = serializeQueryParams(query);
-  return service({
-    url: `/quotations${queryStr}`,
-    method: 'GET'
-  })
+  if(query?.approved) {
+    query['approved'] = null
+    const queryStr = serializeQueryParamsNotNull(query);
+    
+    return service({
+      url: `/quotations/approved${queryStr}`,
+      method: 'GET'
+    })
+  } else {
+    const queryStr = serializeQueryParamsNotNull(query);
+    return service({
+      url: `/quotations${queryStr}`,
+      method: 'GET'
+    })
+  }
 }
 
 

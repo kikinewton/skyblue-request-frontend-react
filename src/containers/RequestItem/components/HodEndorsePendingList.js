@@ -36,10 +36,10 @@ const columns = props => HOD_REQUEST_COLUMNS.concat([
     key: 'actions',
     render: (text, row) => (
       <>
-        <Button type='default' onClick={() => props.onComment(row)}>
+        <Button size='small' type='default' onClick={() => props.onComment(row)}>
           <CommentOutlined />
         </Button>
-        <Button type='default' onClick={() => props.onCancel(row)}>
+        <Button size='small' type='default' onClick={() => props.onCancel(row)} style={{ marginLeft: 1 }}>
           <CloseOutlined />
         </Button>
       </>

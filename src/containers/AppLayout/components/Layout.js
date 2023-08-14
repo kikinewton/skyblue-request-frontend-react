@@ -23,8 +23,8 @@ import {
 import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { PROCUREMENT_ROUTE } from '../../../util/routes';
 import { FUNCTIONAL_ROLES } from '../../../util/constants';
-import { EMPLOYEE_ROLE } from '../../../util/datas';
-import PropTypes from "prop-types" 
+import { EMPLOYEE_ROLE, USER_ROLES } from '../../../util/datas';
+import PropTypes from "prop-types"
 //const logo = require("../../../assets/logo.png")
 import logo from "../../../assets/logo512.png"
 import NotificationBadge from '../../../shared/NotificationBadge';
@@ -107,6 +107,8 @@ const CollapsibleLayout = (props) => {
       setKey("/app/payments")
     } else if(pathname.includes("/app/reports")) {
       setKey("/app/reports")
+    } else if(pathname.includes("/app/stores-list")) {
+      setKey("/app/store-management")
     }
     else {
       setKey("home")
@@ -217,26 +219,31 @@ const CollapsibleLayout = (props) => {
             </Menu.Item>
           )}
           {authService.userHasAnyRole(currentUser.role, 
-            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && 
+            [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) && 
             <Menu.SubMenu
               key="procurement"
               icon={<ReconciliationOutlined />} 
               title="PROCUREMENT"
             >
-              <Menu.Item key="assign-suppliers">
-                <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
-                  {notifications.assignSupplierProcurement ? (
-                    <NotificationBadge count={notifications.assignSupplierProcurement}>
-                      ASSIGN SUPPLIER
-                    </NotificationBadge>
-                  ) : (<span>ASSIGN SUPPLIER</span>)}
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key={`procurement/rfqs`}>
-                <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
-                  RFQs
-                </NavLink>
-              </Menu.Item>
+              {authService.userHasAnyRole(currentUser.role, 
+              [EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER]) && (
+                <>
+                  <Menu.Item key="assign-suppliers">
+                    <NavLink to={`${PROCUREMENT_ROUTE}/assign-suppliers`}>
+                      {notifications.assignSupplierProcurement ? (
+                        <NotificationBadge count={notifications.assignSupplierProcurement}>
+                          ASSIGN SUPPLIER
+                      </NotificationBadge>
+                      ) : (<span>ASSIGN SUPPLIER</span>)}
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item key={`procurement/rfqs`}>
+                    <NavLink to={`${PROCUREMENT_ROUTE}/rfqs`}>
+                      RFQs
+                    </NavLink>
+                  </Menu.Item>                    
+                </>
+              )}
               <Menu.Item key={`procurement/request-categories`}>
                 <NavLink to={`${PROCUREMENT_ROUTE}/request-categories`}>
                 CATEGORY
@@ -288,6 +295,14 @@ const CollapsibleLayout = (props) => {
               </NavLink>
             </Menu.Item>
           }
+          {authService.userHasAnyRole(currentUser.role, FUNCTIONAL_ROLES.listUserRoles) && 
+            <Menu.Item key="app/store-management">
+              <NavLink to="/app/stores-list">
+                <UsergroupAddOutlined />
+                <span>STORES</span>
+              </NavLink>
+            </Menu.Item>
+          }
           <Menu.Item key="setting" icon={<SettingOutlined />}>
             <NavLink to="/app/settings">
               <span>SETTINGS</span>
@@ -325,7 +340,7 @@ const CollapsibleLayout = (props) => {
               )}
             </Col>
             <Col span={8}>
-              <div 
+              <div
                 style={{float: 'right', marginRight: 10, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', 
                 alignItems: 'center', cursor: 'pointer', height: '100%'}}
               >
