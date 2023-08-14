@@ -1,5 +1,5 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination, Pagination } from 'antd'
+import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
@@ -34,16 +34,7 @@ const RequestItemHistory = (props) => {
   const [loadingQuotationDocuments, setLoadingQuotationDocuments] = useState(false)
   const [quotationDocuemnts, setQuotationDocuments] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
-  const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
-  // const resetPagination = () => {
-  //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
-  // }
-
-  // const handleChange = () => {
-  //   //resetPagination()
-  //   fetchRequestItemHistory()
-  // }
 
 
 
@@ -71,35 +62,6 @@ const RequestItemHistory = (props) => {
       setLoadingQuotationDocuments(false)
     }
   }
-
-  // const fetchRequestItemHistory = async () => {
-  //   setLoading(true)
-  //   const query = {
-  //     // toBeApproved: status === "toBeApproved",
-  //     // approved: status === "approved",
-  //     // reference: searchTerm ? searchTerm : null
-  //   }
-  //   try {
-  //     const result = await getAllItemRequests(query)
-  //     // if(result?.meta) {
-  //     //   const { currentPage, pageSize, total, totalPages } = result?.meta
-  //     //   setMeta({...meta, currentPage: currentPage + 1, total: total * totalPages, pageSize, totalPages})
-  //     // }
-  //     setRequests(result?.data)
-  //     setFilteredRequests(result?.data)
-  //   } catch (error) {
-      
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
- 
-  const handleFetchQuotationDocumentClick = (requestItemId) => {
-    console.log(`Request Item ID: ${requestItemId}`)
-    setShowAllDocuments(true)
-    fetchRequestItemQuotationDocuements(requestItemId)
-  }
-  
 
   // const fetchRequestItemHistory = async () => {
   //   setLoading(true)
@@ -162,9 +124,7 @@ const RequestItemHistory = (props) => {
         pageNo: 0,
         pageSize: meta?.pageSize,
         requestItemName: filter
-        // toBeApproved: status === "toBeApproved",
-        // approved: status === "approved",
-        // reference: searchTerm ? searchTerm : null
+      
     }
     
     try {
@@ -185,8 +145,7 @@ const RequestItemHistory = (props) => {
     setLoading(true)
     setMeta({...meta, currentPage: page})
     const query = {
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
+    
       pageNo: page - 1,
       pageSize: meta?.pageSize,
       requestItemName: searchTerm

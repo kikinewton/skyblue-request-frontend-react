@@ -156,7 +156,7 @@ const LpoList = (props) => {
             />,
             <Search 
               key="search"
-              placeholder='reference/description...'
+              placeholder='description...'
               allowClear
               enterButton
               style={{ width: '300px' }}
