@@ -239,6 +239,9 @@ const mapActionsToProps = (dispatch) => {
     fetchRequests: (query) => {
       dispatch(RequestCreators.fetchRequests(query))
     },
+    fetchRequestsWithPagination: (query) => {
+      dispatch(RequestCreators.fetchRequestsWithPagination(query))
+    },
     filterRequests: (filter) => {
       dispatch(RequestCreators.filterRequests(filter))
     },

@@ -6,6 +6,10 @@ export const { Types, Creators } = createActions(
     fetchRequestsSuccess: ["responseData"],
     fetchRequestsFailure: ["error"],
 
+    fetchRequestsWithPagination: ["query"],
+    fetchRequestsWithPaginationSuccess: ["responseData"],
+    fetchRequestsWithPaginationFailure: ["error"],
+
     fetchMyRequests: ["query"],
     fetchMyRequestsSuccess: ["responseData"],
     fetchMyRequestsFailure: ["error"],

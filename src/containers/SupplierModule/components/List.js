@@ -1,7 +1,7 @@
 import { Button, Col, Row, Table, Form, Input, Card, PageHeader } from 'antd'
 import React from 'react'
 import { SUPPLIER_COLUMNS } from '../../../util/constants'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
 import MySwal from '../../../util/sweet-alert'
 import Modal from 'antd/lib/modal/Modal'
 
@@ -78,7 +78,6 @@ const List = (props)=> {
   }
 
   const handleEditSubmit = async (values) => {
-    console.log('values', values, 'supplieId', editData.id)
     const { name, email, phoneNo, location, description, bank, accountNumber } = values
     const payload = {
       name,

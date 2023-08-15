@@ -1,4 +1,4 @@
-import { Card, Col, List, Row, Spin } from 'antd'
+import { Col, Row, Spin } from 'antd'
 import React from 'react'
 import FilesView from './FilesView'
 

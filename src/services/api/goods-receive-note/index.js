@@ -1,4 +1,4 @@
-import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
+import { serializeQueryParams } from '../../../util/common-helper'
 import service from '../apiRequest'
 import { BASE_URL } from '../urls'
 const path = "/goodsReceivedNotes"
@@ -105,7 +105,6 @@ export function updateFloatGrn(id, payload) {
 }
 
 export function fetchAllFloatGrns(query) {
-  const queryStr = serializeQueryParamsNotNull(query)
   return service({
     url: `goodsReceivedNotes`,
     method: 'GET'

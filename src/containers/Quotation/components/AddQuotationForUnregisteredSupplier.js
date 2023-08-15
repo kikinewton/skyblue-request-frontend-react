@@ -133,17 +133,11 @@ const AddQuotationFOrUnregisteredSupplier = (props) => {
     if(!document) {
       return message.error("Supporting document not available!")
     }
-    const payload = {
-      supplier: selectedSupplier,
-      productDescription: selectedRequestItems.map(it => `${it.name} (GHS ${it.unitPrice})`).join(", "),
-    }
     createQuotation({
       documentId: document?.id,
       requestItemIds: selectedRequestItems.map(it => it.id), 
       supplierId: selectedSupplier.supplierId
     })
-    
-    
   }
 
   React.useEffect(()=> {

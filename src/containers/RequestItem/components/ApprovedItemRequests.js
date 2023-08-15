@@ -1,5 +1,5 @@
 import { InfoOutlined } from '@ant-design/icons';
-import { Col, Table, Row, Drawer, Card, Breadcrumb, Input, Tooltip, Button, message, Spin } from 'antd';
+import { Col, Table, Row, Drawer, Card, Breadcrumb, Tooltip, Button, message, Spin } from 'antd';
 import Search from 'antd/lib/input/Search';
 import React, {useState } from 'react';
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest';
@@ -33,7 +33,6 @@ const myCol = props => REQUEST_COLUMNS.concat([
 
 const ApprovedItemRequest = (props) => {
   const {
-    setSelectedRequests,
     resetRequest,
     fetching_requests,
     filtered_requests,

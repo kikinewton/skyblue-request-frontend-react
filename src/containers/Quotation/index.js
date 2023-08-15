@@ -4,7 +4,7 @@ import { Creators as QuotationCreators } from '../../services/redux/quotation/ac
 import { Creators as RequestCreators } from '../../services/redux/request/actions'
 import {  Creators as RequestCategoryCreator } from '../../services/redux/request-category/actions'
 import { connect } from 'react-redux'
-import { Switch, useRouteMatch, NavLink, useLocation, Redirect } from 'react-router-dom'
+import { Switch, useRouteMatch, NavLink, useLocation } from 'react-router-dom'
 import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import AppLayout from '../AppLayout'
 import ListQuotations from './components/List'
@@ -61,6 +61,7 @@ const Quotation = (props) => {
     if(userHasAnyRole(props.currentUser?.role, [EMPLOYEE_ROLE.ROLE_ADMIN])) {
       history.push("/app/quotations/all")
     }
+    //eslint-disable-next-line
   }, [])
   
 

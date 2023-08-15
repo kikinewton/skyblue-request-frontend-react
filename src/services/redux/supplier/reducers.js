@@ -112,14 +112,23 @@ export const setSelectedSuppliers = (state = INITIAL_STATE, action) => {
 }
 
 export const filterSuppliers = (state = INITIAL_STATE, action) => {
-  console.log('action serac', action)
+  console.log('action serac', action?.search)
+  const filter = action?.search?.toLowerCase()
+  const filtered = state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(filter) !== -1 || 
+    it?.phoneNo?.toLowerCase().indexOf(filter) !== -1 || 
+    it?.description?.toLowerCase().indexOf(filter) !== -1 )
   return {
     ...state,
-    filtered_suppliers: state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
-      it?.phone_no?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
-      it?.description?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1
-    )
+    filtered_suppliers: filtered
   }
+
+  // return {
+  //   ...state,
+  //   filtered_suppliers: state.suppliers.filter(it => it?.name?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
+  //     it?.phone_no?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1 || 
+  //     it?.description?.toLowerCase().indexOf(action?.search?.toLowerCase()) !== -1
+  //   )
+  // }
 }
 
 export const resetSuppliers = (state = INITIAL_STATE, action) => {

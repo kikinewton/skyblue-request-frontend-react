@@ -21,7 +21,6 @@ const store = createStore(
   rootReducer,
   applyMiddleware(...middlewares)
 )
-// console.log(process.env);
 
 sagaMiddleware.run(rootSaga);
 

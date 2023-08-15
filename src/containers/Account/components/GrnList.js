@@ -1,4 +1,4 @@
-import { Button, Col, Row, Spin, Table } from 'antd'
+import { Button, Col, Row, Table } from 'antd'
 import React from 'react'
 import { history } from '../../../util/browser-history'
 import { GRN_COLUMNS } from '../../Grn'
@@ -24,7 +24,6 @@ const GrnList = (props) => {
     grns,
     fetchGrns,
   } = props
-  const [ loading, setLoading ] = React.useState(false)
 
   const handleGoToNewPayment = (row) => {
     history.push(`/app/account/goods-receive-notes/${row.id}/add-new-payment`)
@@ -45,17 +44,13 @@ const GrnList = (props) => {
       </Row>
       <Row>
         <Col md={24}>
-          {loading ? <Spin /> : 
-            (
-              <Table 
-                columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
-                dataSource={grns}
-                size="small"
-                rowKey="id"
-                bordered
-              />
-            )
-          }
+          <Table 
+            columns={columns({...props, onNewPaymentClick: (row)=> handleGoToNewPayment(row)})}
+            dataSource={grns}
+            size="small"
+            rowKey="id"
+            bordered
+          />
         </Col>
       </Row>
     </React.Fragment>

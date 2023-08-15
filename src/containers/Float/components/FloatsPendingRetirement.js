@@ -26,7 +26,6 @@ const FloatsPendingRetirement = (props) => {
   } = props
 
   const initPage = () => {
-    console.log('init page')
   }
 
   useEffect(() => {

@@ -275,8 +275,8 @@ export const SUPPLIER_COLUMNS = [
   },
   {
     title: 'PHONE NUMBER',
-    dataIndex: 'phone_no',
-    key: 'phone_no'
+    dataIndex: 'phoneNo',
+    key: 'phoneNo'
   },
   {
     title: 'REGISTRATION STATUS',

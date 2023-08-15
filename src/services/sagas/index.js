@@ -37,6 +37,7 @@ import {
 	watchFetchMyRequests,
 	watchGetRequest,
 	watchUpdateSingleRequest,
+  watchFetchRequestsWithPagination,
 } from './request'
 
 import {
@@ -151,6 +152,7 @@ export default function* rootSaga() {
 		watchFetchMyRequests(),
 		watchGetRequest(),
 		watchUpdateSingleRequest(),
+    watchFetchRequestsWithPagination(),
 
 		watchFetchQuotations(),
 		watchUpdateQuotation(),

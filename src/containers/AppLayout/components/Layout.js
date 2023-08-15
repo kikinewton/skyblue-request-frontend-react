@@ -43,7 +43,7 @@ const CollapsibleLayout = (props) => {
   }
 
   const handleMenuClick = () => {
-    console.log('menu click')
+    
   }
 
   const profileMenu = (
@@ -63,7 +63,6 @@ const CollapsibleLayout = (props) => {
   }, [])
 
   React.useEffect(()=> {
-    console.log("pathname", location.pathname)
     const { pathname } = location
     if(pathname.includes("/app/my-requests")) {
       setKey("my-requests")
@@ -207,7 +206,7 @@ const CollapsibleLayout = (props) => {
                 </NavLink>
               </Menu.Item>
            )}
-          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_HOD, EMPLOYEE_ROLE.ROLE_GENERAL_MANAGER, EMPLOYEE_ROLE.ROLE_STORE_MANAGER,
+          {authService.userHasAnyRole(currentUser.role, [EMPLOYEE_ROLE.ROLE_STORE_MANAGER,
             EMPLOYEE_ROLE.ROLE_STORE_OFFICER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_ADMIN]) && (
             <Menu.Item key="/app/grn">
               <NavLink to="/app/grn">

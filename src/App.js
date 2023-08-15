@@ -35,10 +35,6 @@ const PaymentsModule = React.lazy(() => import("./containers/Payment"))
 
 function App(props) {
   const { authUser, fetchNotifications } = props
-  // useEffect(() => {
-  //   console.log("Lets run application and fetch notifications")
-  //   fetchNotifications();
-  // }, [])
   return (
     <>
       <React.Suspense fallback={<Spin />}>

@@ -1,6 +1,5 @@
 import { FileExcelOutlined, InfoOutlined } from '@ant-design/icons'
-import { Card, PageHeader, Input, Button, Table, Row, Col, Drawer, Badge, Pagination, Breadcrumb, Space } from 'antd'
-import Meta from 'antd/lib/card/Meta'
+import { Card, Button, Table, Row, Col, Drawer, Badge, Pagination, Breadcrumb, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { userHasAnyRole } from '../../../services/api/auth'
@@ -11,7 +10,6 @@ import { prettifyDateTime } from '../../../util/common-helper'
 import { COMMENT_TYPES } from '../../../util/constants'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import Search from 'antd/lib/input/Search'
-import { filter } from 'lodash'
 
 const columns = (props) => [
   {
@@ -62,7 +60,6 @@ const ListAllQuotations = (props) => {
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 20, total: 0, totalPages: 0})
   const [loading, setLoading] = useState(false)
   const [quotations, setQuotations] = useState([])
-  const [filteredQuotations, setFilteredQuotations] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const history = useHistory()
 
@@ -88,7 +85,7 @@ const ListAllQuotations = (props) => {
         setMeta({...meta, currentPage, total: total * totalPages, pageSize, totalPages})
       }
       setQuotations(result?.data)
-      setFilteredQuotations(result?.data)
+      //setFilteredQuotations(result?.data)
     } catch (error) {
       
     } finally {
@@ -122,12 +119,7 @@ const ListAllQuotations = (props) => {
               enterButton
               allowClear
               onSearch={val => {
-                console.log('quotation query', {
-                  pageNoss: 12,
-                  pageSize: meta.pageSize,
-                  supplierName: val,
-                  approved: true
-                })
+                setSearchTerm(val)
                 fetchData({
                   currentPage: meta.currentPage,
                   pageSize: meta.pageSize,
@@ -159,7 +151,7 @@ const ListAllQuotations = (props) => {
             }
           })}
           loading={loading}
-          dataSource={filteredQuotations}
+          dataSource={quotations}
           size="small"
           rowKey="id"
           bordered

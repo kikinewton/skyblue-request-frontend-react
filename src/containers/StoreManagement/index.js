@@ -19,7 +19,6 @@ const StoreManagementIndex = (props) => {
   } = props
   const [addVisible, setAddVisible] = useState(false)
   const [editVisible, setEditVisible] = useState(false)
-  const [confirmVisible, setConfirmVisible] = useState(false)
   const [addForm] = Form.useForm()
   const [editForm] = Form.useForm()
   const [selectedRow, setSelectedRow] = useState(null)
@@ -28,6 +27,7 @@ const StoreManagementIndex = (props) => {
     if(!loadingStores) {
       fetchStores({})
     }
+    //eslint-disable-next-line
   }, [])
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const StoreManagementIndex = (props) => {
       fetchStores({})
       setAddVisible(false)
       setEditVisible(false)
-      setConfirmVisible(false)
+      //setConfirmVisible(false)
       addForm.setFieldsValue({
         name: ""
       })
@@ -44,6 +44,7 @@ const StoreManagementIndex = (props) => {
       })
       setSelectedRow(null)
     }
+    //eslint-disable-next-line
   }, [submitting_store, submit_store_success])
 
   return (

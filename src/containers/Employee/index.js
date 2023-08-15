@@ -10,7 +10,6 @@ import { Creators as RoleCreators } from "../../services/redux/role/actions"
 
 const Employee = (props) => {
   const { path } = useRouteMatch()
-  console.log('path', `${path}/add-new`)
   return (
     <>
       <AppLayout>

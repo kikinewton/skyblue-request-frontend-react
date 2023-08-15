@@ -6,7 +6,6 @@ const StoreForm = props => {
   const {
     initialValues,
     onSubmit,
-    submitting,
     submitText = "SUBMIT",
     form
   } = props

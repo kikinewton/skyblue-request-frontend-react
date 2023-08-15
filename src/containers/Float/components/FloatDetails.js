@@ -41,9 +41,7 @@ const floatItemsColumns = [
 function sumTotalAmount(arr) {
   let entries = arr.map(it => it.estimatedUnitPrice)
   
-  console.log('entries', entries)
   let result = entries.reduce((prev, curr) => prev + curr, 0)
-  console.log('result: ', result)
   return result;
   //return 5
 }

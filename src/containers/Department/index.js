@@ -7,9 +7,7 @@ import AuthenticatedRoute from '../../presentation/AuthenticatedRoute'
 import { Creators } from '../../services/redux/department/actions'
 
 const Department = (props) => {
-  console.log('MA PROPS', props)
   const { path } = useRouteMatch()
-  console.log('path', path)
   return (
     <>
       <AppLayout>

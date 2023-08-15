@@ -1,6 +1,6 @@
 import { serializeQueryParams } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
-import { BASE_URL, RESOURCE_BASE_URL, SUPPLIERS_ENDPOINT } from "../urls";
+import { RESOURCE_BASE_URL, SUPPLIERS_ENDPOINT } from "../urls";
 
 export function getSuppliers(query) {
   const queryStr = serializeQueryParams(query)

@@ -1,5 +1,5 @@
 import { EyeOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { Table , Card, Row, Col, Drawer, message, Spin, Input, Breadcrumb, Button, Pagination } from 'antd'
+import { Table , Card, Row, Col, Drawer, message, Spin, Breadcrumb, Button, Pagination } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userHasAnyRole } from '../../../services/api/auth'
 import { downloadComments } from '../../../services/api/comment'
@@ -22,7 +22,6 @@ const columns = (props) => REQUEST_COLUMNS.concat([
 
 const RequestItemHistory = (props) => {
   const [requests, setRequests] = useState([])
-  const [filteredRequests, setFilteredRequests] = useState([])
   const [loading, setLoading] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [requestStatus, setRequestStatus] = useState(null)
@@ -102,13 +101,12 @@ const RequestItemHistory = (props) => {
   const fetchRequestItemHistory = async () => {
     setLoading(true)
     const query = {
-      pageSize: 400,
-        pageNo: 0,
-        pageSize: meta?.pageSize,
-        requestItemName: searchTerm
-        // toBeApproved: status === "toBeApproved",
-        // approved: status === "approved",
-        // reference: searchTerm ? searchTerm : null
+      pageNo: 0,
+      pageSize: meta?.pageSize,
+      requestItemName: searchTerm
+      // toBeApproved: status === "toBeApproved",
+      // approved: status === "approved",
+      // reference: searchTerm ? searchTerm : null
     }
     
     try {
@@ -128,13 +126,12 @@ const RequestItemHistory = (props) => {
   const fetchRequestItemHistoryBySearchTerm = async (filter) => {
     setLoading(true)
     const query = {
-      pageSize: 400,
-        pageNo: 0,
-        pageSize: meta?.pageSize,
-        requestItemName: filter
-        // toBeApproved: status === "toBeApproved",
-        // approved: status === "approved",
-        // reference: searchTerm ? searchTerm : null
+      pageNo: 0,
+      pageSize: meta?.pageSize,
+      requestItemName: filter
+      // toBeApproved: status === "toBeApproved",
+      // approved: status === "approved",
+      // reference: searchTerm ? searchTerm : null
     }
     
     try {
@@ -164,7 +161,7 @@ const RequestItemHistory = (props) => {
 
     try {
       const result = await getAllItemRequests(query)
-      const { currentPage, pageSize, total, totalPages } = result?.meta
+      const { currentPage, pageSize, totalPages } = result?.meta
       setMeta({...meta, currentPage: currentPage + 1, pageSize, totalPages})
       setRequests(result?.data)
     } catch (error) {
@@ -174,13 +171,9 @@ const RequestItemHistory = (props) => {
     }
   }
 
-  const onFilterBySearch = (value) => {
-    console.log('filter', value)
-    setFilteredRequests(requests.filter(rq => rq?.requestItemRef.includes(value) || rq?.name?.toLowerCase().includes(value?.toLowerCase())))
-  }
-
   useEffect(() => {
     fetchRequestItemHistory()
+    //eslint-disable-next-line
   }, [])
 
   return (

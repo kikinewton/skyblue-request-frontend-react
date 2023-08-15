@@ -25,6 +25,36 @@ export const fetchRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchRequestsSuccess = (state = INITIAL_STATE, action) => {
+  const {responseData} = action
+  if(responseData?.meta) {
+    return { 
+      ...state,
+      requests: action.responseData.data,
+      loading: false, 
+      filtered_requests: action.responseData.data,
+      request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+    };
+  } else {
+    return { 
+      ...state,
+      requests: action.responseData.data,
+      loading: false, 
+      filtered_requests: action.responseData.data,
+    };
+  }
+ 
+};
+
+export const fetchRequestsWithPaginationFailure = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: false, error: action.error, requests: [], filterRequests: [] };
+};
+
+//fetch
+export const fetchRequestsWithPagination = (state = INITIAL_STATE, action) => {
+  return { ...state, loading: true, errors: null, submitting: false };
+};
+
+export const fetchRequestsPaginatiionSuccess = (state = INITIAL_STATE, action) => {
   return { 
     ...state,
     requests: action.responseData.data,
@@ -44,7 +74,6 @@ export const fetchMyRequests = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchMyRequestsSuccess = (state = INITIAL_STATE, action) => {
-  console.log('response data', action.responseData)
   return { 
     ...state, 
     my_requests: action.responseData?.data, 

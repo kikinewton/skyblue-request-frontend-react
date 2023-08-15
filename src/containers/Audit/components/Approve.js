@@ -96,7 +96,6 @@ const Approve = (props) => {
 
   const handleSubmit = async () => {
     const payload = { comment, status: payment.actionType === 'approve' }
-    console.log('query payload', payload)
     setSubmitting(true)
     try {
       const response = await paymentApi.approvePaymentDraft(payment?.id, payload)

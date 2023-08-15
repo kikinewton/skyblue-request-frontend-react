@@ -1,4 +1,4 @@
-import { Col, Table, Row, Drawer, Card, Select } from 'antd';
+import { Col, Table, Row, Drawer, Card } from 'antd';
 import React, {useState } from 'react';
 import MyPageHeader from '../../../shared/MyPageHeader';
 import { REQUEST_COLUMNS } from '../../../util/constants';
@@ -12,8 +12,6 @@ const EndorsedItemRequest = (props) => {
     setSelectedRequests,
     resetRequest,
     fetching_requests,
-    requests,
-    departments,
     departmentsLoading
   } = props
 

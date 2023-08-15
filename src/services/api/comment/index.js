@@ -1,5 +1,5 @@
 import service from '../apiRequest'
-import { BASE_URL, RESOURCE_BASE_URL } from '../urls'
+import { RESOURCE_BASE_URL } from '../urls'
 
 export function fetchComments(query) {
   return service({

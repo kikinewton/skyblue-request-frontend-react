@@ -1,6 +1,6 @@
 import { serializeQueryParams, serializeQueryParamsNotNull } from '../../../util/common-helper'
 import service from '../apiNoAuthRequest'
-import { BASE_URL, RESOURCE_BASE_URL } from '../urls'
+import { RESOURCE_BASE_URL } from '../urls'
 
 export function downloadPaymentsReport(query) {
   const queryStr = serializeQueryParams(query)

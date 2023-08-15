@@ -56,7 +56,7 @@ const List = (props)=> {
       if(result.isConfirmed) {
         deleteEmployee(row.id)
       } else {
-        console.log('cancel delete')
+        
       }
     })
   }
@@ -94,7 +94,6 @@ const List = (props)=> {
   }
 
   const handleEditSubmit = async (values) => {
-    console.log('values', values)
     const { firstName, lastName, email, phoneNo, departmentId, role } = values
     const dpt = {id: departmentId, name: ""}
     const empRole = [{id: role}]

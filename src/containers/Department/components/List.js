@@ -46,7 +46,6 @@ const List = (props)=> {
   }
 
   const handleEdit = (row) => {
-    console.log('row', row)
     setEditData(row)
     editForm.setFieldsValue({
       name: row.name,
@@ -62,7 +61,6 @@ const List = (props)=> {
   }
 
   const handleEditSubmit = (values) => {
-    console.log('values', values, 'dpt id', editData.id)
     const { name, description } = values
     const payload = {name, description}
     updateDepartment(editData.id, payload)
@@ -70,7 +68,6 @@ const List = (props)=> {
 
 
   React.useEffect(()=> {
-    console.log('loading', loading)
     props.resetDepartment()
     fetchDepartments({})
    // eslint-disable-next-line

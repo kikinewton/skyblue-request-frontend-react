@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, Col, List, Row, Table } from 'antd'
-import FloatDetails, { floatItemsColumns } from './FloatDetails'
+import FloatDetails from './FloatDetails'
 import { formatCurrency, prettifyDateTime } from '../util/common-helper'
 
 const columns = [

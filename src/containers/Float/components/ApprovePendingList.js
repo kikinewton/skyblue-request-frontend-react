@@ -174,7 +174,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload ----', payload)
       props.createComment("FLOAT", payload)
     } else if(actionType === UPDATE_FLOAT_REQUEST_TYPES.HOD_CANCEL) {
       const comments = selected_float_requests.map(it => {
@@ -186,7 +185,6 @@ const ApprovePendingList = (props) => {
         return data
       })
       const payload = {comments: comments, procurementType: "FLOAT"}
-      console.log('payload ----', payload)
       props.createComment("FLOAT", payload)
     } else {
       const payload = {

@@ -18,6 +18,7 @@ import { RESPONSE_SUCCESS_CODE } from '../../api/apiRequest'
 export function* fetchRequests(action) {
   try {
     const response = yield call(fetchRequestsApi, action.query)
+    console.log('response', response)
     if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
       //const responseData = response || {}
       yield put(Creators.fetchRequestsSuccess(response))
@@ -29,6 +30,22 @@ export function* fetchRequests(action) {
     const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Internal server error'
     openNotification('error', 'Fetch Request', errorText)
     yield put(Creators.fetchRequestsFailure(errorText))
+  }
+}
+
+export function* fetchRequestsWithPagination(action) {
+  try {
+    const response = yield call(fetchRequestsApi, action.query)
+    if(["OK", "SUCCESS", "FOUND"].includes(response.status)) {
+      yield put(Creators.fetchRequestsWithPaginationSuccess(response))
+    } else {
+      openNotification('error', 'Fetch Request', response.message || "Failed to fetch Requests")
+      yield put(Creators.fetchRequestsWithPaginationFailure(response.message || "Failed to fetch requests!"))
+    }
+  } catch (error) {
+    const errorText = (error && error?.response?.data && error?.response?.data?.error) || 'Internal server error'
+    openNotification('error', 'Fetch Request', errorText)
+    yield put(Creators.fetchRequestsWithPaginationFailure(errorText))
   }
 }
 
@@ -134,6 +151,10 @@ export function* watchGetRequest(action) {
 
 export function* watchFetchRequests(action) {
   yield takeLatest(Types.FETCH_REQUESTS, fetchRequests)
+}
+
+export function* watchFetchRequestsWithPagination(action) {
+  yield takeLatest(Types.FETCH_REQUESTS_WITH_PAGINATION, fetchRequestsWithPagination)
 }
 
 export function* watchFetchMyRequests(action) {
