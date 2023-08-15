@@ -16,7 +16,7 @@ const Home = (props) => {
     if(userHasAnyRole(currentUser?.role, [EMPLOYEE_ROLE.ROLE_REGULAR])) {
       fetchMyRequests({
         pageNo: 0,
-        pageSize: 5
+        pageSize: 20
       }) 
     }
   }, [])

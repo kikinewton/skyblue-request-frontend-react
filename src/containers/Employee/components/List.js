@@ -296,7 +296,7 @@ const List = (props)=> {
               onClick={e => resetEmployeePassword(selectedEmployee?.id)}
             >
               <SyncOutlined />
-              RESET USER
+              RESET PASSWORD
             </Button>
           </Col>
         </Row>

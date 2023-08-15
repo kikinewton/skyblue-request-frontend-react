@@ -99,6 +99,7 @@ const AllLocalPurchaseOrders = (props) => {
     const expandedColumns = [
       {title: 'Description', dataIndex: 'name', key: 'name'},
       {title: 'Reason', dataIndex: 'reason', key: 'reason'},
+      {title: 'Purpose', dataIndex: 'purpose', key: 'purpose'},
       {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'},
       {title: 'Unit Price', dataIndex: 'unitPrice', key: 'unitPrice', render: (text, row) => text ? formatCurrency(row?.unitPrice, row?.currency): "N/A"},
       {title: 'Request Date', dataIndex: 'requestDate', key: 'requestDate', render: (text)=> prettifyDateTime(text) },

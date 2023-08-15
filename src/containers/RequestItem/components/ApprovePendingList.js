@@ -32,6 +32,12 @@ const columns = props => [
     key: "quantity"
   },
   {
+    title: "DEPARTMENT",
+    dataIndex: "userDepartment",
+    key: "userDepartment",
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
     title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
@@ -106,6 +112,12 @@ const selectedRequestsColumns = props => [
     key: "quantity"
   },
   {
+    title: "DEPARTMENT",
+    dataIndex: "userDepartment",
+    key: "userDepartment",
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
     title: "PRIORITY",
     dataIndex: "priorityLevel",
     key: "priorityLevel",
@@ -136,9 +148,21 @@ const selectedRequestsColumnsForReject = props => [
     key: "purpose"
   },
   {
+    title: "DEPARTMENT",
+    dataIndex: "userDepartment",
+    key: "userDepartment",
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
     title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
+  },
+  {
+    title: "DEPARTMENT",
+    dataIndex: "userDepartment",
+    key: "userDepartment",
+    render: (text, row) => row?.userDepartment?.name
   },
   {
     title: "PRIORITY",

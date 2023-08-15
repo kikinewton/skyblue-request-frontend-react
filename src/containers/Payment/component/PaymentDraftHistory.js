@@ -222,7 +222,7 @@ const PaymentDraftHistory = (props) => {
                 })}
                 dataSource={filteredData}
                 pagination={{
-                  pageSize: 10
+                  pageSize: 20
                 }}
                 rowKey="id"
                 size='small'

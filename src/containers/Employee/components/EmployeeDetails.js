@@ -28,10 +28,10 @@ const EmployeeDetails = ({employee}) => {
               <List.Item.Meta title="DEPARTMENT" description={employee?.department?.name} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="STATUS" description={employee?.enabled ? 'Acivated' : 'Deactivated'} />
+              <List.Item.Meta title="STATUS" description={employee?.enabled ? 'Activated' : 'Deactivated'} />
             </List.Item>
             <List.Item>
-              <List.Item.Meta title="PASSWORD STATUS" description={employee?.changedDefaultPassword ? "Valid Pasword" : "Password Needs Changing"} />
+              <List.Item.Meta title="PASSWORD STATUS" description={employee?.changedDefaultPassword ? "Valid Password" : "Password Needs Changing"} />
             </List.Item>
           </List>
         </Col>

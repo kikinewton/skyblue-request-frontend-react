@@ -34,14 +34,6 @@ const RequestItemHistory = (props) => {
   const [quotationDocuemnts, setQuotationDocuments] = useState([])
   const [meta, setMeta] = useState({currentPage: 0, pageSize: 100, total: 0, totalPages: 0})
 
-  // const resetPagination = () => {
-  //   setMeta({currentPage: 0, pageSize: 30, total: 0, totalPages: 0})
-  // }
-
-  // const handleChange = () => {
-  //   //resetPagination()
-  //   fetchRequestItemHistory()
-  // }
 
 
 
@@ -101,12 +93,13 @@ const RequestItemHistory = (props) => {
   const fetchRequestItemHistory = async () => {
     setLoading(true)
     const query = {
-      pageNo: 0,
-      pageSize: meta?.pageSize,
-      requestItemName: searchTerm
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
-      // reference: searchTerm ? searchTerm : null
+      pageSize: 100,
+        pageNo: 0,
+        pageSize: meta?.pageSize,
+        requestItemName: searchTerm
+        // toBeApproved: status === "toBeApproved",
+        // approved: status === "approved",
+        // reference: searchTerm ? searchTerm : null
     }
     
     try {
@@ -126,12 +119,11 @@ const RequestItemHistory = (props) => {
   const fetchRequestItemHistoryBySearchTerm = async (filter) => {
     setLoading(true)
     const query = {
-      pageNo: 0,
-      pageSize: meta?.pageSize,
-      requestItemName: filter
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
-      // reference: searchTerm ? searchTerm : null
+      pageSize: 400,
+        pageNo: 0,
+        pageSize: meta?.pageSize,
+        requestItemName: filter
+      
     }
     
     try {
@@ -152,8 +144,7 @@ const RequestItemHistory = (props) => {
     setLoading(true)
     setMeta({...meta, currentPage: page})
     const query = {
-      // toBeApproved: status === "toBeApproved",
-      // approved: status === "approved",
+    
       pageNo: page - 1,
       pageSize: meta?.pageSize,
       requestItemName: searchTerm

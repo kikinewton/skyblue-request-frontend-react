@@ -19,6 +19,17 @@ const requestColumns = props => [
     key: "name"
   },
   {
+    title: "PURPOSE",
+    dataIndex: "purpose",
+    key: "purpose"
+  },
+  {
+    title: "DEPARTMENT",
+    dataIndex: "userDepartment",
+    key: "userDepartment",
+    render: (text, row) => row?.userDepartment?.name
+  },
+  {
     title: "QUANTITY",
     dataIndex: "quantity",
     key: "quantity"
