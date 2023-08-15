@@ -49,7 +49,7 @@ export const GRN_COLUMNS = [
     title: "INVOICE AMOUNT",
     dataIndex: "invoiceAmountPayable",
     key: "invoiceAmountPayable",
-    render: (text, row) => formatCurrency(text, row?.receivedItems[0]?.currency || "GHS")
+    render: (text, row) => formatCurrency(text, (row?.receivedItems || [])[0]?.currency || "GHS")
   },
   {
     title: "PAY BY",
