@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import MyPageHeader from '../../../shared/MyPageHeader'
-import { Button, Card, Col, List, Row, Table, Tooltip } from 'antd'
+import { Button, Card, Col, Input, List, Row, Select, Table, Tooltip } from 'antd'
 import { prettifyDateTime } from '../../../util/common-helper'
 import { CheckOutlined, CommentOutlined, InfoOutlined } from '@ant-design/icons'
 import MyDrawer from '../../../shared/MyDrawer'
@@ -9,6 +9,7 @@ import { COMMENT_PROCESS_VALUES, COMMENT_TYPES } from '../../../util/constants'
 import GenericComment from '../../../shared/GenericComment'
 import { EMPLOYEE_ROLE } from '../../../util/datas'
 import { UPDATE_REQUEST_TYPES } from '../../../util/request-types'
+import Search from 'antd/lib/transfer/search'
 
 const columns = (props) => [
   {
@@ -73,6 +74,12 @@ const RequestPendingQuotationReview = (props) => {
   const [selectedRow, setSelectedRow] = useState(null)
   const [visible, setVisible] = useState(false)
   const [commentVisible, setCommentVisible] = useState(false)
+  const [filter, setFilter] = useState('')
+  
+  const {
+    filterLocalPurchaseOrderDrafts,
+    filtered_local_purchase_order_drafts
+  } = props
 
   // const fetchRequestPendingQuotationReview = () => {
   //   try {
@@ -101,6 +108,16 @@ const RequestPendingQuotationReview = (props) => {
     <>
       <MyPageHeader
         title="QUOTATIONS AWAITING REVIEW"
+        extra={[
+          <Search 
+            placeholder='supplier...'
+            onChange={e => {
+              const value = e.target.value
+              console.log('value filter', value)
+              filterLocalPurchaseOrderDrafts(value)
+            }}
+          />
+        ]}
       />
       <Card>
         <Row>
@@ -120,10 +137,11 @@ const RequestPendingQuotationReview = (props) => {
                   setCommentVisible(true)
                 }
               })}
-              dataSource={props.local_purchase_order_drafts}
+              dataSource={filtered_local_purchase_order_drafts}
               rowKey="id"
               size='small'
               bordered
+              pagination={{ pageSize: 30 }}
             />
           </Col>
         </Row>

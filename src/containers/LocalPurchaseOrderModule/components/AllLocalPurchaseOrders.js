@@ -64,7 +64,6 @@ const AllLocalPurchaseOrders = (props) => {
   // }
 
   const handleOnSearch = (value) => {
-    console.log('filter value', value)
     setFilter(value)
     let query = {
       supplierName: value,

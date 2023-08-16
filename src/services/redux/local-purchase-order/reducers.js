@@ -6,6 +6,7 @@ export const INITIAL_STATE = {
   local_purchase_orders: [],
   local_purchase_order: null,
   local_purchase_order_drafts: [],
+  filtered_local_purchase_order_drafts: [],
   filtered_local_purchase_orders: [],
   loading: false,
   submitting: false,
@@ -70,16 +71,16 @@ export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => 
 };
 
 export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, action) => {
-  console.log('actions succes fetch dafts', action)
   const { responseData } = action
   if(responseData?.meta) {
     return { 
       ...state, 
       local_purchase_order_drafts: responseData?.data, 
+      filtered_local_purchase_order_drafts: responseData?.data, 
       loading: false,
       meta: {
         ...state.meta,
-        currentPage: responseData.meta.currentPage, 
+        currentPage: responseData.meta.currentPage,
         pageSize: responseData.meta.pageSize,
         total: responseData.meta.total,
         totalPages: responseData.meta.totalPages
@@ -89,6 +90,7 @@ export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, acti
     return {
       ...state, 
       local_purchase_order_drafts: action.responseData?.data, 
+      filtered_local_purchase_order_drafts: responseData?.data, 
       loading: false
     };
   }
@@ -135,6 +137,18 @@ export const filterLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
 }
 
 
+
+export const filterLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => {
+  const {filter} = action
+  const filteredResult = state.local_purchase_order_drafts.filter(lpo => {
+    const supplier = lpo?.quotation?.supplier?.toLowerCase()
+    return supplier.includes(filter.toLowerCase()) 
+    }
+    ) || []
+  return { ...state, filtered_local_purchase_order_drafts:  filteredResult}
+}
+
+
 export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -170,6 +184,7 @@ export const HANDLERS = {
   [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_FAILURE]: createLocalPurchaseOrderDraftFailure,
 
   [Types.FILTER_LOCAL_PURCHASE_ORDERS]: filterLocalPurchaseOrders,
+  [Types.FILTER_LOCAL_PURCHASE_ORDER_DRAFTS]: filterLocalPurchaseOrderDrafts,
   
   [Types.RESET_LOCAL_PURCHASE_ORDER]: resetLocalPurchaseOrder
 };
