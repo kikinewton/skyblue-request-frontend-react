@@ -18,7 +18,7 @@ export function* fetchLocalPurchaseOrders(action) {
   try {
     const response = yield call(fetchLocalPurchaseOrdersApi, query)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      yield put(Creators.fetchLocalPurchaseOrdersSuccess(response?.data))
+      yield put(Creators.fetchLocalPurchaseOrdersSuccess(response))
     } else {
       openNotification('error', 'FETCH LPO', response?.message)
       yield put(Creators.fetchLocalPurchaseOrdersFailure(response?.message))

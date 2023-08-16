@@ -132,16 +132,6 @@ const AllLocalPurchaseOrders = (props) => {
           >
             <Input.Search placeholder='supplier name' />
           </AutoComplete>
-          {/* <Row>
-            <Col span={20}>
-              <Input type='search' value={filter} onChange={(e) => setFilter(e.target.value)}  />
-            </Col>
-            <Col span={4}>
-              <Button type='primary' onClick={handlefetch}>
-                Search
-              </Button>
-            </Col>
-          </Row> */}
         </Col>
       </Row>
       <Row>

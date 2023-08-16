@@ -10,6 +10,7 @@ export const INITIAL_STATE = {
   loading: false,
   submitting: false,
   submit_success: false,
+  meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
 };
 
 //fetch
@@ -18,7 +19,24 @@ export const fetchLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, local_purchase_orders: action.responseData, loading: false, filtered_local_purchase_orders: action.responseData};
+  const { responseData } = action
+  if(responseData?.meta) {
+    return {
+      ...state, 
+      local_purchase_orders: action.responseData.data, 
+      loading: false, 
+      filtered_local_purchase_orders: action.responseData,
+      request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+    };
+  } else {
+    return {
+      ...state, 
+      local_purchase_orders: action.responseData, 
+      loading: false, 
+      filtered_local_purchase_orders: action.responseData,
+    };
+  }
+
 };
 
 export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) => {
@@ -99,7 +117,8 @@ export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
     local_purchase_order_drafts: [],
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
   };
 };
 
