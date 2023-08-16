@@ -10,7 +10,7 @@ export const INITIAL_STATE = {
   loading: false,
   submitting: false,
   submit_success: false,
-  meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
+  meta: {currentPage: 0, pageSize: 20, total: 0, totalPages: 0},
 };
 
 //fetch
@@ -26,7 +26,13 @@ export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) =
       local_purchase_orders: action.responseData.data, 
       loading: false, 
       filtered_local_purchase_orders: action.responseData,
-      request_meta: {...action?.responseData?.meta, currentPage: action.responseData.meta.currentPage}
+      meta: {
+        ...action?.responseData?.meta, 
+        currentPage: action.responseData.meta.currentPage, 
+        pageSize: action.responseData.meta.pageSize,
+        total: action.responseData.meta.total,
+        totalPages: action.responseData.meta.totalPages
+      }
     };
   } else {
     return {

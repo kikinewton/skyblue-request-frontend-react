@@ -1,5 +1,5 @@
 import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, AutoComplete, Input, Select } from 'antd'
+import { Badge, Button, Col, Row, Table, Pagination, Select } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import { prettifyDateTime } from '../../../util/common-helper'
@@ -56,6 +56,7 @@ const List = (props) => {
     resetLocalPurchaseOrder,
     fetchSuppliers,
     fetching_suppliers,
+    local_purchase_orders_meta,
     suppliers
   } = props
 
@@ -76,19 +77,41 @@ const List = (props) => {
   const handleOnSearch = (value) => {
     console.log('filter value', value)
     setFilter(value)
-    if(value) {
-      fetchLocalPurchaseOrders({supplierName: value})
-    } else {
-      fetchLocalPurchaseOrders({})
+    let query = {
+      supplierName: value,
+      pageNo: 0,
+      pageSize: local_purchase_orders_meta?.pageSize,
+      lpoWithoutGRN: true,
     }
-    
+    if(value) {
+      fetchLocalPurchaseOrders({...query, })
+    } else {
+      fetchLocalPurchaseOrders({...query})
+    }
+  }
+
+  const handlePageChange = async(page, pageSize) => {
+    // setMyRequestMeta({ ...local_purchase_orders_meta, currentPage: page - 1 })
+    resetLocalPurchaseOrder()
+    const query = {
+      supplierName: filter,
+      pageNo: page - 1,
+      pageSize: local_purchase_orders_meta?.pageSize,
+      lpoWithoutGRN: true,
+    }
+    fetchLocalPurchaseOrders(query)
   }
 
   React.useEffect(()=> {
     //fetchLpos()
-    fetchSuppliers({})
     resetLocalPurchaseOrder()
-    fetchLocalPurchaseOrders({lpoWithoutGRN: true})
+    fetchSuppliers({})
+    fetchLocalPurchaseOrders({
+      lpoWithoutGRN: true,
+      supplierName: filter,
+      pageSize: local_purchase_orders_meta?.pageSize,
+      pageNo: local_purchase_orders_meta?.currentPage,
+    })
   }, [])
 
   const expandedRowRender = (row) => {
@@ -129,6 +152,10 @@ const List = (props) => {
             value={filter}
             allowClear
             onSelect={value => handleOnSearch(value)}
+            onClear={() => {
+              setFilter('')
+              handleOnSearch('')
+            }}
           />
           {/* <AutoComplete
             options={suppliers.map(supplier => {
@@ -159,6 +186,21 @@ const List = (props) => {
             expandable={{expandedRowRender}}
             bordered
             loading={fetching_local_purchase_orders}
+            pagination={false}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Pagination 
+            showSizeChanger={false}
+            defaultCurrent={local_purchase_orders_meta.currentPage + 1}
+            total={local_purchase_orders_meta.totalPages * local_purchase_orders_meta.pageSize}
+            current={local_purchase_orders_meta.currentPage + 1}
+            defaultPageSize={local_purchase_orders_meta.pageSize}
+            pageSize={local_purchase_orders_meta.pageSize}
+            size='small'
+            onChange={handlePageChange}
           />
         </Col>
       </Row>

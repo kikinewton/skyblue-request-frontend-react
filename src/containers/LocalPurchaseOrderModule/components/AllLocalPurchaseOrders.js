@@ -1,7 +1,6 @@
-import { DownloadOutlined, EyeOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, Spin, Drawer, Input, AutoComplete } from 'antd'
+import { EyeOutlined, SyncOutlined } from '@ant-design/icons'
+import { Badge, Button, Col, Row, Table, Pagination, Drawer, Select } from 'antd'
 import React, { useState } from 'react'
-import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import LocalPurchaseOrderDetails from '../../../shared/LocalPurchaseOrderDetails'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
 
@@ -52,46 +51,55 @@ const AllLocalPurchaseOrders = (props) => {
 
   const {
     fetchLocalPurchaseOrders,
-    fetchLocalPurchaseOrderDrafts,
     local_purchase_orders,
-    local_purchase_order_drafts,
     fetching_local_purchase_orders,
     resetLocalPurchaseOrder,
     fetchSuppliers,
-    fetching_suppliers,
+    local_purchase_orders_meta,
     suppliers
   } = props
 
-  const handlefetch = (e) => {
-    fetchLocalPurchaseOrders({supplierName: filter})
-  }
-
-  const handleCreateGrn = (row)=> {
-    history.push(`/app/stores/lpos/${row.id}/create-goods-receive-note`)
-  }
+  // const handleCreateGrn = (row)=> {
+  //   history.push(`/app/stores/lpos/${row.id}/create-goods-receive-note`)
+  // }
 
   const handleOnSearch = (value) => {
     console.log('filter value', value)
     setFilter(value)
-    if(value) {
-      fetchLocalPurchaseOrders({supplierName: value})
-    } else {
-      fetchLocalPurchaseOrders({})
+    let query = {
+      supplierName: value,
+      pageNo: 0,
+      pageSize: local_purchase_orders_meta?.pageSize,
     }
-    
+    if(value) {
+      fetchLocalPurchaseOrders({...query, })
+    } else {
+      fetchLocalPurchaseOrders({...query})
+    }
+  }
+
+  const handlePageChange = async(page, pageSize) => {
+    resetLocalPurchaseOrder()
+    const query = {
+      supplierName: filter,
+      pageNo: page - 1,
+      pageSize: local_purchase_orders_meta?.pageSize,
+    }
+    fetchLocalPurchaseOrders(query)
   }
 
   const onViewClick = (row)=> {
-    //console.log('lets download pdf', row)
-    //const response = await grnService.getLpoDocument(row.id)
     setSelectedLpo(row)
     setView(true)
   }
 
   React.useEffect(()=> {
-    //fetchLpos()
     resetLocalPurchaseOrder()
-    fetchLocalPurchaseOrders({})
+    fetchLocalPurchaseOrders({
+      supplierName: filter,
+      pageSize: local_purchase_orders_meta?.pageSize,
+      pageNo: local_purchase_orders_meta?.currentPage,
+    })
     fetchSuppliers({})
   }, [])
 
@@ -119,19 +127,26 @@ const AllLocalPurchaseOrders = (props) => {
           }} /></span>
         </Col>
         <Col span={12}>
-          <AutoComplete
+          <Select 
+            showSearch
+            style={{width: 400}}
+            placeholder="Search to Select"
+            optionFilterProp="children"
             options={suppliers.map(supplier => {
               return {label: supplier?.name, value:supplier?.name}
             })}
-            dropdownMatchSelectWidth={500}
-            style={{width: 400}}
-            onSelect={value => handleOnSearch(value)}
+            filterOption={(input, option) => {
+              setFilter(input || '')
+              return option?.label?.toLowerCase().includes(input?.toLowerCase())
+            }}
             value={filter}
-            onClear={value => handleOnSearch(null)}
             allowClear
-          >
-            <Input.Search placeholder='supplier name' />
-          </AutoComplete>
+            onSelect={value => handleOnSearch(value)}
+            onClear={() => {
+              setFilter('')
+              handleOnSearch('')
+            }}
+          />
         </Col>
       </Row>
       <Row>
@@ -144,6 +159,21 @@ const AllLocalPurchaseOrders = (props) => {
             expandable={{expandedRowRender}}
             bordered
             loading={fetching_local_purchase_orders}
+            pagination={false}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Pagination 
+            showSizeChanger={false}
+            defaultCurrent={local_purchase_orders_meta.currentPage + 1}
+            total={local_purchase_orders_meta.totalPages * local_purchase_orders_meta.pageSize}
+            current={local_purchase_orders_meta.currentPage + 1}
+            defaultPageSize={local_purchase_orders_meta.pageSize}
+            pageSize={local_purchase_orders_meta.pageSize}
+            size='small'
+            onChange={handlePageChange}
           />
         </Col>
       </Row>
