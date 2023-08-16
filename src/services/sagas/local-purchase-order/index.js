@@ -54,7 +54,7 @@ export function* fetchLocalPurchaseOrderDrafts(action) {
   try {
     const response = yield call(fetchLocalPurchaseOrderDraftApi, query)
     if(response.status === RESPONSE_SUCCESS_CODE) {
-      yield put(Creators.fetchLocalPurchaseOrderDraftsSuccess(response?.data))
+      yield put(Creators.fetchLocalPurchaseOrderDraftsSuccess(response))
     } else {
       openNotification('error', 'FETCH LPO', response?.message)
       yield put(Creators.fetchLocalPurchaseOrderDraftsFailure(response?.message))

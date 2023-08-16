@@ -71,7 +71,27 @@ export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => 
 
 export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, action) => {
   console.log('actions succes fetch dafts', action)
-  return { ...state, local_purchase_order_drafts: action.responseData, loading: false};
+  const { responseData } = action
+  if(responseData?.meta) {
+    return { 
+      ...state, 
+      local_purchase_order_drafts: responseData?.data, 
+      loading: false,
+      meta: {
+        ...state.meta,
+        currentPage: responseData.meta.currentPage, 
+        pageSize: responseData.meta.pageSize,
+        total: responseData.meta.total,
+        totalPages: responseData.meta.totalPages
+      }
+    };
+  } else {
+    return {
+      ...state, 
+      local_purchase_order_drafts: action.responseData?.data, 
+      loading: false
+    };
+  }
 };
 
 export const fetchLocalPurchaseOrderDraftsFailure = (state = INITIAL_STATE, action) => {

@@ -1,11 +1,10 @@
-import { DownloadOutlined, SyncOutlined } from '@ant-design/icons'
-import { Badge, Button, Col, Row, Table, Drawer, List, message, Divider } from 'antd'
+import { SyncOutlined } from '@ant-design/icons'
+import { Badge, Button, Col, Row, Table, Drawer, Pagination, message, Divider } from 'antd'
 import React, { useState } from 'react'
 import { downloadLPODocument } from '../../../services/api/local-purchase-order'
 import MyPageHeader from '../../../shared/MyPageHeader'
 import QuotationDetails from '../../../shared/QuotationDetails'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
-import { REQUEST_COLUMNS } from '../../../util/constants'
 
 const columns = (props) => [
   {
@@ -102,6 +101,7 @@ const CreateLPO = (props) => {
   const [loading, setLoading] = React.useState(false)
   const [visible, setVisible] = useState(false)
   const [selectedDraft, setSelectedDraft] = useState(null)
+  const [filter, setFilter] = useState('')
   const { history } = props
 
   const {
@@ -112,6 +112,7 @@ const CreateLPO = (props) => {
     createLocalPurchaseOrder,
     submitting_local_purchase_order,
     submit_local_purchase_order_success,
+    local_purchase_orders_meta,
   } = props
 
   const handleCreateLocalPurchaseOrder = (row)=> {
@@ -135,10 +136,39 @@ const CreateLPO = (props) => {
     }
   }
 
+  const handleOnSearch = (value) => {
+    console.log('filter value', value)
+    setFilter(value)
+    let query = {
+      supplierName: value,
+      pageNo: 0,
+      pageSize: local_purchase_orders_meta?.pageSize,
+    }
+    if(value) {
+      fetchLocalPurchaseOrderDrafts({...query, })
+    } else {
+      fetchLocalPurchaseOrderDrafts({...query})
+    }
+  }
+
+  const handlePageChange = async(page, pageSize) => {
+    resetLocalPurchaseOrder()
+    const query = {
+      draftAwaitingApproval: true,
+      pageNo: page - 1,
+      pageSize: local_purchase_orders_meta?.pageSize,
+    }
+    fetchLocalPurchaseOrderDrafts(query)
+  }
+
   React.useEffect(()=> {
     //fetchLpos()
     resetLocalPurchaseOrder()
-    fetchLocalPurchaseOrderDrafts({draftAwaitingApproval: true})
+    fetchLocalPurchaseOrderDrafts({
+      draftAwaitingApproval: true,
+      pageSize: local_purchase_orders_meta?.pageSize,
+      pageNo: local_purchase_orders_meta?.currentPage,
+    })
   }, [])
 
   React.useEffect(() => {
@@ -199,6 +229,20 @@ const CreateLPO = (props) => {
             bordered
             loading={fetching_local_purchase_orders}
             pagination={false}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Pagination 
+            showSizeChanger={false}
+            defaultCurrent={local_purchase_orders_meta.currentPage + 1}
+            total={local_purchase_orders_meta.totalPages * local_purchase_orders_meta.pageSize}
+            current={local_purchase_orders_meta.currentPage + 1}
+            defaultPageSize={local_purchase_orders_meta.pageSize}
+            pageSize={local_purchase_orders_meta.pageSize}
+            size='small'
+            onChange={handlePageChange}
           />
         </Col>
       </Row>
