@@ -8,7 +8,7 @@ import { BASE_URL, RESOURCE_BASE_URL } from '../../../services/api/urls'
 import { filterQuotations } from '../../../services/redux/quotation/reducers'
 import FilesView from '../../../shared/FilesView'
 import { formatCurrency, prettifyDateTime } from '../../../util/common-helper'
-import { CURRENCY_CODE } from '../../../util/constants'
+import { CURRENCY_CODE, PAGE_SIZE } from '../../../util/constants'
 import { CURRENCIES } from '../../../util/datas'
 import { NOT_LINKED_TO_LPO, QUOTATIONS_BY_SUPPLIER } from '../../../util/quotation-types'
 // import { Document, Page } from "react-pdf"
@@ -281,7 +281,7 @@ const CreateLPO = (props) => {
                   loading={fetching_quotations}
                   size="small"
                   dataSource={filtered_quotations}
-                  pagination={false}
+                  pagination={{ pageSize: PAGE_SIZE }}
                   bordered
                 />
               </Col>

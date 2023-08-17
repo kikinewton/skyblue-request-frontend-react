@@ -1,5 +1,6 @@
 import { createReducer } from "reduxsauce";
 import Types from "./actionTypes";
+import { PAGE_SIZE } from "../../../util/constants";
 
 export const INITIAL_STATE = {
   errors: null,
@@ -11,7 +12,7 @@ export const INITIAL_STATE = {
   loading: false,
   submitting: false,
   submit_success: false,
-  meta: {currentPage: 0, pageSize: 20, total: 0, totalPages: 0},
+  meta: {currentPage: 0, pageSize: PAGE_SIZE, total: 0, totalPages: 0},
 };
 
 //fetch
@@ -21,29 +22,29 @@ export const fetchLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
 
 export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) => {
   const { responseData } = action
+  console.log('-------> response data', responseData)
   if(responseData?.meta) {
     return {
       ...state, 
-      local_purchase_orders: action.responseData.data, 
+      local_purchase_orders: responseData.data, 
       loading: false, 
-      filtered_local_purchase_orders: action.responseData,
+      filtered_local_purchase_orders: responseData.data,
       meta: {
         ...action?.responseData?.meta, 
-        currentPage: action.responseData.meta.currentPage, 
-        pageSize: action.responseData.meta.pageSize,
-        total: action.responseData.meta.total,
-        totalPages: action.responseData.meta.totalPages
+        currentPage: responseData.meta.currentPage, 
+        pageSize: responseData.meta.pageSize,
+        total: responseData.meta.total,
+        totalPages: responseData.meta.totalPages
       }
     };
   } else {
     return {
       ...state, 
-      local_purchase_orders: action.responseData, 
+      local_purchase_orders: responseData.data, 
       loading: false, 
-      filtered_local_purchase_orders: action.responseData,
+      filtered_local_purchase_orders: responseData.data,
     };
   }
-
 };
 
 export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) => {
@@ -129,7 +130,7 @@ export const createLocalPurchaseOrderDraftFailure = (state = INITIAL_STATE, acti
 export const filterLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
   const {filter} = action
   const filteredResult = state.local_purchase_orders.filter(lpo => {
-    const supplier = lpo?.quotation?.supplier?.name.toLowerCase()
+    const supplier = lpo?.quotation?.supplier?.toLowerCase()
       return lpo?.referenceNumber?.toLowerCase().includes(filter.toLowerCase()) || supplier.includes(filter.toLowerCase()) 
     }
     ) || []

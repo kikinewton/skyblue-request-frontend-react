@@ -5,7 +5,7 @@ import React, {useState } from 'react';
 import { RESPONSE_SUCCESS_CODE } from '../../../services/api/apiRequest';
 import { getRequestDocs } from '../../../services/api/item-request';
 import FilesView from '../../../shared/FilesView';
-import { REQUEST_COLUMNS } from '../../../util/constants';
+import { PAGE_SIZE, REQUEST_COLUMNS } from '../../../util/constants';
 import { FETCH_REQUEST_TYPES } from '../../../util/request-types';
 
 
@@ -85,6 +85,7 @@ const ApprovedItemRequest = (props) => {
               console.log('value', e.target.value)
               props.filterRequests(e.target.value)
             }}
+            style={{ width: 300 }}
           />
         </Col>
       </Row>
@@ -104,7 +105,7 @@ const ApprovedItemRequest = (props) => {
               rowKey="id"
               bordered
               pagination={{
-                pageSize: 30
+                pageSize: PAGE_SIZE
               }}
             />
           </Col>

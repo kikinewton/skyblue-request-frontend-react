@@ -206,6 +206,7 @@ const mapStateToProps = (store) => ({
   departmentsLoading: store.department.loading,
   currentUser: store.auth.user,
   requests: store.request.requests,
+  request_meta: store.request.request_meta,
   filtered_requests: store.request.filtered_requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
