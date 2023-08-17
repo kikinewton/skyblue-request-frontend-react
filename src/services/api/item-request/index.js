@@ -217,7 +217,7 @@ export function updateRequest(data) {
     case UPDATE_REQUEST_TYPES.HOD_COMMENT:
       return service({url: '/requestItems/updateStatus/COMMENT', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REVIEW:
-      return service({url: 'requestItems/bulkHodReview', method: "PUT", data: payload})
+      return service({url: '/requestItems/bulkHodReview', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.GM_APPROVE:
       return service({url: '/requestItems/bulkApprove', method: "PUT", data: payload})
     case UPDATE_REQUEST_TYPES.HOD_REJECT:

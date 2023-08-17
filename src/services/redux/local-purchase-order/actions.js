@@ -24,6 +24,8 @@ export const { Types, Creators } = createActions(
 
     filterLocalPurchaseOrders: ["filter"],
 
+    filterLocalPurchaseOrderDrafts: ['filter'],
+
     resetLocalPurchaseOrder: null
   }
 )

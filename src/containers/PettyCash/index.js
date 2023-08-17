@@ -94,7 +94,7 @@ const PettyCashIndex = (props) => {
                 </NavLink>
               </Menu.Item>
             )}
-            {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_ADMIN]) && (
+            {userHasAnyRole(authUser.role, [EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]) && (
               <Menu.Item key="/petty-cash-all">
                 <NavLink to="/app/petty-cash/all">
                   <span>ALL PETTY CASH REQUESTS</span>
@@ -127,7 +127,7 @@ const PettyCashIndex = (props) => {
             exact
             path={`${path}/all`}
             component={AllPettyCash}
-            roles={[EMPLOYEE_ROLE.ROLE_ADMIN]} 
+            roles={[EMPLOYEE_ROLE.ROLE_ADMIN, EMPLOYEE_ROLE.ROLE_PROCUREMENT_MANAGER, EMPLOYEE_ROLE.ROLE_PROCUREMENT_OFFICER]} 
             {...props}
           />
           <AuthenticatedRoute path={`${path}/gm-approve-list`} component={ApprovePendingList} {...props} />

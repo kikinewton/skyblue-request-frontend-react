@@ -12,7 +12,8 @@ const EndorsedItemRequest = (props) => {
     setSelectedRequests,
     resetRequest,
     fetching_requests,
-    departmentsLoading
+    departmentsLoading,
+    request_meta
   } = props
 
   const [viewDrawer, setViewDrawer] = useState(false)

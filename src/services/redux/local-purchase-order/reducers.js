@@ -1,15 +1,18 @@
 import { createReducer } from "reduxsauce";
 import Types from "./actionTypes";
+import { PAGE_SIZE } from "../../../util/constants";
 
 export const INITIAL_STATE = {
   errors: null,
   local_purchase_orders: [],
   local_purchase_order: null,
   local_purchase_order_drafts: [],
+  filtered_local_purchase_order_drafts: [],
   filtered_local_purchase_orders: [],
   loading: false,
   submitting: false,
   submit_success: false,
+  meta: {currentPage: 0, pageSize: PAGE_SIZE, total: 0, totalPages: 0},
 };
 
 //fetch
@@ -18,7 +21,30 @@ export const fetchLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchLocalPurchaseOrdersSuccess = (state = INITIAL_STATE, action) => {
-  return { ...state, local_purchase_orders: action.responseData, loading: false, filtered_local_purchase_orders: action.responseData};
+  const { responseData } = action
+  console.log('-------> response data', responseData)
+  if(responseData?.meta) {
+    return {
+      ...state, 
+      local_purchase_orders: responseData.data, 
+      loading: false, 
+      filtered_local_purchase_orders: responseData.data,
+      meta: {
+        ...action?.responseData?.meta, 
+        currentPage: responseData.meta.currentPage, 
+        pageSize: responseData.meta.pageSize,
+        total: responseData.meta.total,
+        totalPages: responseData.meta.totalPages
+      }
+    };
+  } else {
+    return {
+      ...state, 
+      local_purchase_orders: responseData.data, 
+      loading: false, 
+      filtered_local_purchase_orders: responseData.data,
+    };
+  }
 };
 
 export const fetchLocalPurchaseOrdersFailure = (state = INITIAL_STATE, action) => {
@@ -46,8 +72,29 @@ export const fetchLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => 
 };
 
 export const fetchLocalPurchaseOrderDraftsSuccess = (state = INITIAL_STATE, action) => {
-  console.log('actions succes fetch dafts', action)
-  return { ...state, local_purchase_order_drafts: action.responseData, loading: false};
+  const { responseData } = action
+  if(responseData?.meta) {
+    return { 
+      ...state, 
+      local_purchase_order_drafts: responseData?.data, 
+      filtered_local_purchase_order_drafts: responseData?.data, 
+      loading: false,
+      meta: {
+        ...state.meta,
+        currentPage: responseData.meta.currentPage,
+        pageSize: responseData.meta.pageSize,
+        total: responseData.meta.total,
+        totalPages: responseData.meta.totalPages
+      }
+    };
+  } else {
+    return {
+      ...state, 
+      local_purchase_order_drafts: action.responseData?.data, 
+      filtered_local_purchase_order_drafts: responseData?.data, 
+      loading: false
+    };
+  }
 };
 
 export const fetchLocalPurchaseOrderDraftsFailure = (state = INITIAL_STATE, action) => {
@@ -83,11 +130,23 @@ export const createLocalPurchaseOrderDraftFailure = (state = INITIAL_STATE, acti
 export const filterLocalPurchaseOrders = (state = INITIAL_STATE, action) => {
   const {filter} = action
   const filteredResult = state.local_purchase_orders.filter(lpo => {
-    const supplier = lpo?.quotation?.supplier?.name.toLowerCase()
+    const supplier = lpo?.quotation?.supplier?.toLowerCase()
       return lpo?.referenceNumber?.toLowerCase().includes(filter.toLowerCase()) || supplier.includes(filter.toLowerCase()) 
     }
     ) || []
   return { ...state, filtered_local_purchase_orders:  filteredResult}
+}
+
+
+
+export const filterLocalPurchaseOrderDrafts = (state = INITIAL_STATE, action) => {
+  const {filter} = action
+  const filteredResult = state.local_purchase_order_drafts.filter(lpo => {
+    const supplier = lpo?.quotation?.supplier?.toLowerCase()
+    return supplier.includes(filter.toLowerCase()) 
+    }
+    ) || []
+  return { ...state, filtered_local_purchase_order_drafts:  filteredResult}
 }
 
 
@@ -99,7 +158,8 @@ export const resetLocalPurchaseOrder = (state = INITIAL_STATE, action) => {
     local_purchase_order_drafts: [],
     error: null,
     loading: false,
-    submitting: false
+    submitting: false,
+    meta: {currentPage: 0, pageSize: 10, total: 0, totalPages: 0},
   };
 };
 
@@ -125,6 +185,7 @@ export const HANDLERS = {
   [Types.CREATE_LOCAL_PURCHASE_ORDER_DRAFT_FAILURE]: createLocalPurchaseOrderDraftFailure,
 
   [Types.FILTER_LOCAL_PURCHASE_ORDERS]: filterLocalPurchaseOrders,
+  [Types.FILTER_LOCAL_PURCHASE_ORDER_DRAFTS]: filterLocalPurchaseOrderDrafts,
   
   [Types.RESET_LOCAL_PURCHASE_ORDER]: resetLocalPurchaseOrder
 };

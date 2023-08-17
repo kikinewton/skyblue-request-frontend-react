@@ -1,5 +1,6 @@
 import { createReducer } from "reduxsauce";
 import Types from "./actionTypes";
+import { PAGE_SIZE } from "../../../util/constants";
 
 export const INITIAL_STATE = {
   errors: null,
@@ -15,7 +16,8 @@ export const INITIAL_STATE = {
   updating: false,
   update_success: false,
   department: {},
-  my_request_meta: {currentPage: 0, pageSize: 200, total: 0, totalPages: 0}
+  request_meta: {currentPage: 0, pageSize: PAGE_SIZE, total: 0, totalPages: 0},
+  my_request_meta: {currentPage: 0, pageSize: PAGE_SIZE, total: 0, totalPages: 0}
 };
 
 //fetch

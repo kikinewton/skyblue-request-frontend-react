@@ -206,6 +206,7 @@ const mapStateToProps = (store) => ({
   departmentsLoading: store.department.loading,
   currentUser: store.auth.user,
   requests: store.request.requests,
+  request_meta: store.request.request_meta,
   filtered_requests: store.request.filtered_requests,
   requestLoading: store.request.loading,
   requestSubmitting: store.request.submitting,
@@ -225,7 +226,8 @@ const mapStateToProps = (store) => ({
   notifications: store.notification.notifications || {},
 
   local_purchase_order_drafts: store.local_purchase_order.local_purchase_order_drafts,
-  local_purchase_order_drafts_loading: store.local_purchase_order.loading
+  local_purchase_order_drafts_loading: store.local_purchase_order.loading,
+  filtered_local_purchase_order_drafts: store.local_purchase_order.filtered_local_purchase_order_drafts,
 })
 
 const mapActionsToProps = (dispatch) => {
@@ -277,6 +279,7 @@ const mapActionsToProps = (dispatch) => {
       dispatch(RequestCreators.filterRequestsByDepartment(departmentId))
     },
     fetchLocalPurchaseOrderDrafts: (query) => dispatch(LocalPurchaseOrderCreators.fetchLocalPurchaseOrderDrafts(query)),
+    filterLocalPurchaseOrderDrafts: query => dispatch(LocalPurchaseOrderCreators.filterLocalPurchaseOrderDrafts(query)),
   }
 }
 

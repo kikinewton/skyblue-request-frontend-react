@@ -5,6 +5,7 @@ import { RESPONSE_SUCCESS_CODE } from '../../../../services/api/apiRequest'
 import * as grnService from '../../../../services/api/goods-receive-note'
 import MyPageHeader from '../../../../shared/MyPageHeader'
 import { prettifyDateTime } from '../../../../util/common-helper'
+import { PAGE_SIZE } from '../../../../util/constants'
 
 const columns = (props) => [
   {
@@ -124,10 +125,12 @@ const LocalPurchaseOrders = (props) => {
               expandable={{ expandedRowRender }}
               bordered
               loading={fetching_local_purchase_orders}
+              pagination={{ pageSize: PAGE_SIZE }}
             />
           }
         </Col>
       </Row>
+      
     </React.Fragment>
   )
 }

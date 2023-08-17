@@ -99,6 +99,7 @@ const mapStateToProps = store => ({
   fetching_local_purchase_orders: store.local_purchase_order.loading,
   submit_local_purchase_order_success: store.local_purchase_order.submit_success,
   submitting_local_purchase_order: store.local_purchase_order.submitting,
+  local_purchase_orders_meta: store.local_purchase_order.meta,
 
   suppliers: store.supplier.suppliers,
   fetching_suppliers: store.supplier.loading,

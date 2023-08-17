@@ -1,9 +1,9 @@
-import { serializeQueryParams } from "../../../util/common-helper";
+import { serializeQueryParams, serializeQueryParamsNotNull } from "../../../util/common-helper";
 import apiRequest from "../apiRequest";
 import { RESOURCE_BASE_URL } from "../urls";
 
 export function fetchLocalPurchaseOrders(query) {
-  const queryStr = serializeQueryParams(query)
+  const queryStr = serializeQueryParamsNotNull(query)
   return apiRequest({
     method: "GET",
     url: `/localPurchaseOrders${queryStr}`
