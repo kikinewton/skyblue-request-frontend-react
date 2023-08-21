@@ -17,6 +17,6 @@ jobs:
 
       - name: Publish to Docker Hub
         run: |
-          docker login -u kikinewton -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker login -u kikinewton -p ${{ secrets.BSUPPLY }}
           docker push kikinewton/bsupply-frontend:latest 
         
