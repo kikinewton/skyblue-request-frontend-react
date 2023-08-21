@@ -1,0 +1,22 @@
+name: Build and Publish Docker Image
+
+on:
+   [workflow_dispatch]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Docker Build
+        run: |
+          docker build  -t kikinewton/bsupply-frontend:latest skyblue-request-frontend-react/
+
+      - name: Publish to Docker Hub
+        run: |
+          docker login -u kikinewton -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push kikinewton/bsupply-frontend:latest 
+        
