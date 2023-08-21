@@ -13,7 +13,7 @@ jobs:
 
       - name: Docker Build
         run: |
-          docker build  -t kikinewton/bsupply-frontend:latest skyblue-request-frontend-react/
+          docker build  -t kikinewton/bsupply-frontend:latest .
 
       - name: Publish to Docker Hub
         run: |
